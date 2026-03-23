@@ -208,7 +208,6 @@ int main(int argc, char** argv) {
 #endif
 
 	ImGuiIO& io = ImGui::GetIO();
-	io.ConfigErrorRecoveryEnableAssert = false;
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 #ifndef TILING
 	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
