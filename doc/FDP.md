@@ -15,7 +15,7 @@
 | str  | Must be "FDProj". If it's not this, isn't an .fdp file |
 | int  | Version major |
 | int  | Version minor |
-| unsigned long | Length of animation in frames |
+| unsigned long  | Length of animation in frames |
 | int  | Animation width |
 | int  | Animation height |
 | int  | Animation FPS |
@@ -23,7 +23,7 @@
 | str  | Animation description, terminating with byte 0 |
 | str  | Animation author, terminating with byte 0 |
 | [col](#Color) | BG color |
-| int | palette length |
+| int | Palette length |
   
 
 ## <span style="color: cyan;">Palette</span>

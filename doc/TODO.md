@@ -5,7 +5,7 @@
 - [x] normal tests
 - [x] make it so you can select stuff
 - [x] gui tests with imgui automation thing
-- [ ] modifying keybinds (wip)
+- [x] modifying keybinds
 - [ ] make it so you can do more stuff with selection, not just rotation and deletion
 - [ ] i18n
 - [ ] fix infinite tech debt (wip)

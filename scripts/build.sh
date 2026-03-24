@@ -63,7 +63,7 @@ fi
 
 mkdir -p "$bin_dir" || exit -1
 pushd "$bin_dir" >/dev/null || exit -1
-cmake -DCMAKE_BUILD_TYPE=$arg1 -DISTILING=$( (( arg2 == "true" )) && echo "ON" || echo "OFF" ) -DBUILD_TESTS=OFF "$root_dir" || exit -1
+cmake -DCMAKE_BUILD_TYPE=$arg1 -DISTILING=$( (( arg2 == "true" )) && echo "ON" || echo "OFF" ) -DBUILD_TESTS=OFF -DBUILD_IMTESTS=OFF "$root_dir" || exit -1
 jobs=$(( ($(nproc) + 2) / 2 ))
 make -j"$jobs" || exit -1
 cp -r "$root_dir/assets" . || exit -1
