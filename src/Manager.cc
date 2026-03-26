@@ -26,10 +26,12 @@ namespace FuncDoodle {
 		  m_EditorController(editorController), m_AssetLoader(assetLoader),
 		  m_Keybinds(keybinds),
 		  m_ToolManager(std::make_unique<ToolManager>(keybinds)) {
-		m_FrameRenderer = std::make_unique<FrameRenderer>(
-			nullptr, -1, m_ToolManager.get(), m_Player.get(), m_EditorController, prevEnabled);
-		m_TimelineFrameRenderer = std::make_unique<FrameRenderer>(
-			nullptr, -1, m_ToolManager.get(), m_Player.get(), m_EditorController, prevEnabled);
+		m_FrameRenderer =
+			std::make_unique<FrameRenderer>(nullptr, -1, m_ToolManager.get(),
+				m_Player.get(), m_EditorController, prevEnabled);
+		m_TimelineFrameRenderer =
+			std::make_unique<FrameRenderer>(nullptr, -1, m_ToolManager.get(),
+				m_Player.get(), m_EditorController, prevEnabled);
 		m_FrameRenderer->SetUndoByStroke(m_UndoByStroke);
 	}
 
@@ -100,23 +102,20 @@ namespace FuncDoodle {
 
 			if (m_TimelineFrameRenderer->Ctx()->Frame !=
 				m_Proj->AnimFrames()->Get(i)) {
-				m_TimelineFrameRenderer->Ctx()->Frame = m_Proj->AnimFrames()->Get(i);
+				m_TimelineFrameRenderer->Ctx()->Frame =
+					m_Proj->AnimFrames()->Get(i);
 			}
-
 
 			float width = bottomRight.x - topLeft.x;
 			float height = bottomRight.y - topLeft.y;
 			float scaleX = width / frameWidth;
 			float scaleY = width / frameHeight;
 
-			m_TimelineFrameRenderer->Ctx()->PixelScale = std::min<float>(scaleX, scaleY);
+			m_TimelineFrameRenderer->Ctx()->PixelScale =
+				std::min<float>(scaleX, scaleY);
 
 			m_TimelineFrameRenderer->RenderFramePixels(
-				topLeft.x,
-				topLeft.y,
-				ImGui::GetWindowDrawList(),
-				true
-			);
+				topLeft.x, topLeft.y, ImGui::GetWindowDrawList(), true);
 
 			if ((m_Player->Playing() && m_Player->CurFrame() == i) ||
 				(!m_Player->Playing() && m_SelectedFrame == i)) {
@@ -211,7 +210,6 @@ namespace FuncDoodle {
 		ImGui::End();
 
 		m_ToolManager->RenderTools();
-		m_FrameRenderer->RenderStatusBar();
 	}
 
 	void AnimationManager::RenderControls() {

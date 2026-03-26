@@ -21,7 +21,7 @@
 namespace FuncDoodle {
 	void FrameRenderer::RenderFrame() {
 		ImGui::SetNextWindowPos(ImVec2(0, 32), ImGuiCond_FirstUseEver);
-		ImGui::SetNextWindowSize(ImVec2(1073, 886), ImGuiCond_FirstUseEver);
+		ImGui::SetNextWindowSize(ImVec2(1073, 862), ImGuiCond_FirstUseEver);
 		ImGui::Begin("Frame");
 
 		if (!m_Ctx.Frame || !m_Ctx.ToolManager) {
@@ -30,7 +30,8 @@ namespace FuncDoodle {
 		}
 
 		if (!m_Ctx.Grid) {
-			m_Ctx.Grid = std::make_unique<Grid>(m_Ctx.Frame->Width(), m_Ctx.Frame->Height(), m_Ctx.Player->Proj()->BgCol());
+			m_Ctx.Grid = std::make_unique<Grid>(m_Ctx.Frame->Width(),
+				m_Ctx.Frame->Height(), m_Ctx.Player->Proj()->BgCol());
 		}
 
 		if (ImGui::BeginPopupContextWindow()) {
@@ -65,26 +66,28 @@ namespace FuncDoodle {
 
 		ImGui::End();
 
-		// RenderStatusBar();
+		RenderStatusBar();
 	}
 
 	void FrameRenderer::RenderStatusBar() {
-		ImGuiViewport* viewport = ImGui::GetMainViewport();
-		ImGui::SetNextWindowPos(ImVec2(viewport->Pos.x, viewport->Pos.y + viewport->Size.y - 24));
-		ImGui::SetNextWindowSize(ImVec2(viewport->Size.x, 24));
-		ImGui::SetNextWindowBgAlpha(1.0f);
-		ImGui::Begin("##statusbar", nullptr, ImGuiWindowFlags_NoDecoration | 
-				ImGuiWindowFlags_NoInputs |
-				ImGuiWindowFlags_NoMove | 
-				ImGuiWindowFlags_NoBringToFrontOnFocus);
+		ImGuiWindow* frameWindow = ImGui::FindWindowByName("Frame");
+		if (!frameWindow) {
+			return;
+		}
 
-		ImGui::Text("Frame %lu | %dx%d | Zoom: %dx | X: %f, Y: %f", 
-			m_Ctx.Index,
-			m_Ctx.Frame->Width(),
-			m_Ctx.Frame->Height(),
-			m_Ctx.PixelScale,
-			m_Ctx.LastMousePos->x,
-			m_Ctx.LastMousePos->y);
+		ImGui::SetNextWindowPos(ImVec2(frameWindow->Pos.x, frameWindow->Pos.y + frameWindow->Size.y));
+		ImGui::SetNextWindowSize(ImVec2(frameWindow->Size.x, 24));
+		ImGui::SetNextWindowBgAlpha(1.0f);
+		ImGui::Begin("##statusbar", nullptr,
+			ImGuiWindowFlags_NoDecoration | 
+			ImGuiWindowFlags_NoInputs |
+			// ImGuiWindowFlags_NoMove |
+			ImGuiWindowFlags_NoBringToFrontOnFocus);
+
+		ImGui::Text("Frame %lu | %dx%d | Zoom: %dx | X: %.0f, Y: %.0f",
+			m_Ctx.Index, m_Ctx.Frame->Width(), m_Ctx.Frame->Height(),
+			m_Ctx.PixelScale, m_Ctx.LastMousePos ? m_Ctx.LastMousePos->x : 0,
+			m_Ctx.LastMousePos ? m_Ctx.LastMousePos->y : 0);
 
 		ImGui::End();
 	}
@@ -108,8 +111,8 @@ namespace FuncDoodle {
 
 				ImVec2 topLeft, bottomRight;
 				if (usePrevPxScale) {
-					topLeft = ImVec2(
-						startX + x * m_Ctx.PixelScale, startY + y * m_Ctx.PixelScale);
+					topLeft = ImVec2(startX + x * m_Ctx.PixelScale,
+						startY + y * m_Ctx.PixelScale);
 					bottomRight = ImVec2(startX + (x + 1) * m_Ctx.PixelScale,
 						startY + (y + 1) * m_Ctx.PixelScale);
 				} else {
