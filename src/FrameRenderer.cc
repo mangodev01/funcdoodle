@@ -78,15 +78,26 @@ namespace FuncDoodle {
 		ImGui::SetNextWindowPos(ImVec2(frameWindow->Pos.x, frameWindow->Pos.y + frameWindow->Size.y));
 		ImGui::SetNextWindowSize(ImVec2(frameWindow->Size.x, 24));
 		ImGui::SetNextWindowBgAlpha(1.0f);
+
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0);
+
 		ImGui::Begin("##statusbar", nullptr,
 			ImGuiWindowFlags_NoDecoration | 
 			ImGuiWindowFlags_NoInputs |
-			// ImGuiWindowFlags_NoMove |
-			ImGuiWindowFlags_NoBringToFrontOnFocus);
+			ImGuiWindowFlags_NoMove |
+			ImGuiWindowFlags_NoBringToFrontOnFocus |
+			ImGuiWindowFlags_NoDocking);
 
-		ImGui::Text("Frame %lu | %dx%d | Zoom: %dx | X: %.0f, Y: %.0f",
-			m_Ctx.Index, m_Ctx.Frame->Width(), m_Ctx.Frame->Height(),
-			m_Ctx.PixelScale, m_Ctx.LastMousePos ? m_Ctx.LastMousePos->x : 0,
+		ImGui::PopStyleVar();
+
+		ImGui::Text("Frame %lu | %dx%d | Zoom: %dx | X: %.0f, Y: %.0f | Draw X: %.0f, Draw Y: %.0f",
+			m_Ctx.Index,
+			m_Ctx.Frame->Width(),
+			m_Ctx.Frame->Height(),
+			m_Ctx.PixelScale, 
+			m_Ctx.LastHoverMousePos ? m_Ctx.LastHoverMousePos->x : 0,
+			m_Ctx.LastHoverMousePos ? m_Ctx.LastHoverMousePos->y : 0,
+			m_Ctx.LastMousePos ? m_Ctx.LastMousePos->x : 0,
 			m_Ctx.LastMousePos ? m_Ctx.LastMousePos->y : 0);
 
 		ImGui::End();

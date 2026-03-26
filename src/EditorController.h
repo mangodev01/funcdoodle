@@ -25,6 +25,7 @@ namespace FuncDoodle {
 				UniquePtr<Grid> Grid = nullptr;
 				int PixelScale = 8;
 				ImVec2* LastMousePos = nullptr;
+				ImVec2* LastHoverMousePos = nullptr;
 				bool PrevEnabled = false;
 			};
 

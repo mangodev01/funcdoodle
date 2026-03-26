@@ -32,12 +32,18 @@ namespace FuncDoodle {
 				m_Ctx.LastMousePos->x = -1;
 				m_Ctx.LastMousePos->y = -1;
 
+				// disgusting
+				m_Ctx.LastHoverMousePos = new ImVec2();
+				m_Ctx.LastHoverMousePos->x = -1;
+				m_Ctx.LastHoverMousePos->y = -1;
+
 				m_Ctx.PrevEnabled = prevEnabled;
 
 				m_EditorController = editorController;
 			}
 			~FrameRenderer() {
 				delete m_Ctx.LastMousePos;
+				delete m_Ctx.LastHoverMousePos;
 			}
 			void RenderFrame();
 			void RenderStatusBar();

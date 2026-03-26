@@ -397,10 +397,16 @@ namespace FuncDoodle {
 					}
 				}
 				*context.LastMousePos = currentPixel;
+				*context.LastHoverMousePos = currentPixel;
 			}
 		} else if (!ImGui::IsMouseDown(0) ||
 				   !ImGui::IsMouseHoveringRect(frameMin, frameMax)) {
+			const ImVec2 currentPixel(
+				(mousePos.x - startX) / context.PixelScale,
+				(mousePos.y - startY) / context.PixelScale);
+
 			*context.LastMousePos = ImVec2(-1, -1);
+			*context.LastHoverMousePos = currentPixel;
 		}
 
 		if (context.ToolManager->SelectedTool() == ToolType::Select &&
