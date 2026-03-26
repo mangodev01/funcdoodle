@@ -17,16 +17,15 @@ namespace FuncDoodle {
 	class EditorController {
 		public:
 			struct CanvasContext {
-					Frame* frame = nullptr;
-					Frame* previousFrame = nullptr;
-					int index = 0;
-					ToolManager* toolManager = nullptr;
-					AnimationPlayer* player = nullptr;
-					Grid* grid = nullptr;
-					int* pixelScale = nullptr;
-					ImVec2* lastMousePos = nullptr;
-					unsigned long frameI = 0;
-					bool prevEnabled = false;
+				class Frame* Frame = nullptr;
+				class Frame* PreviousFrame = nullptr;
+				unsigned long Index = 0;
+				ToolManager* ToolManager = nullptr;
+				AnimationPlayer* Player = nullptr;
+				UniquePtr<Grid> Grid = nullptr;
+				int PixelScale = 8;
+				ImVec2* LastMousePos = nullptr;
+				bool PrevEnabled = false;
 			};
 
 			EditorController();

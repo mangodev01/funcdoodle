@@ -28,13 +28,11 @@ namespace FuncDoodle {
 			}
 			const int Size() const { return m_Size; }
 			void SetSize(int size) { m_Size = size; }
-			const bool PickerSelected() { return m_PickerSelected; }
 
 		private:
 			ToolType m_SelectedTool = ToolType::Pencil;
 			float m_Col[3] = {0.0f, 0.0f, 0.0f};
 			int m_Size = 1;
-			bool m_PickerSelected = false;
 			KeybindsRegistry& m_Keybinds;
 	};
 }  // namespace FuncDoodle

@@ -13,53 +13,50 @@
 #include <memory>
 
 #include "EditorController.h"
+#include "imgui.h"
 
 namespace FuncDoodle {
 	class FrameRenderer {
 		public:
-			FrameRenderer(Frame* frame, ToolManager* manager,
-				AnimationPlayer* player,
-				const SharedPtr<EditorController>& editorController)
-				: m_Frame(frame), m_ToolManager(manager), m_Grid(nullptr),
-				  m_Player(player), m_EditorController(editorController) {}
-			~FrameRenderer() {}
-			void RenderFrame(unsigned long frameI, bool prevEnabled);
-			void InitPixels(unsigned long frameI, bool prevEnabled);
+			FrameRenderer(Frame* frame, unsigned long index, ToolManager* manager, AnimationPlayer* player, const SharedPtr<EditorController>& editorController, bool prevEnabled) {
+				m_Ctx = EditorController::CanvasContext();
+				m_Ctx.Frame = frame;
+				m_Ctx.PreviousFrame = nullptr;
+				m_Ctx.Index = index;
+				m_Ctx.ToolManager = manager;
+				m_Ctx.Player = player;
+				m_Ctx.Grid = nullptr;
 
-			inline const Frame* AnimFrame() const { return m_Frame; }
-			void SetFrame(Frame* frame) { m_Frame = frame; }
-			inline const ToolManager* GetToolManager() const {
-				return m_ToolManager;
+				// disgusting
+				m_Ctx.LastMousePos = new ImVec2();
+				m_Ctx.LastMousePos->x = -1;
+				m_Ctx.LastMousePos->y = -1;
+
+				m_Ctx.PrevEnabled = prevEnabled;
+
+				m_EditorController = editorController;
 			}
-			void SetToolManager(ToolManager* toolManager) {
-				m_ToolManager = toolManager;
+			~FrameRenderer() {
+				delete m_Ctx.LastMousePos;
 			}
-			const int Index() const { return m_Index; }
-			void SetIndex(int index) { m_Index = index; }
-			void SetPreviousFrame(Frame* frame) { m_PreviousFrame = frame; }
-			void SetPlayer(AnimationPlayer* player) { m_Player = player; }
-			const Frame* PreviousFrame() const { return m_PreviousFrame; }
-			inline void SetPixelScale(int pixelScale) {
-				m_PixelScale = pixelScale;
+			void RenderFrame();
+			void RenderStatusBar();
+			void InitPixels();
+
+			inline EditorController::CanvasContext* Ctx() {
+				return &m_Ctx;
 			}
 			void SetUndoByStroke(bool undoByStroke) {
 				if (m_EditorController) {
-					m_EditorController->SetUndoByStroke(undoByStroke, m_Player);
+					m_EditorController->SetUndoByStroke(undoByStroke, m_Ctx.Player);
 				}
 			}
 			void RenderFramePixels(int startX, int startY, ImDrawList* drawList,
 				bool usePrevPxScale = true, bool renderPreview = true);
 
 		private:
-			Frame* m_Frame;
-			Frame* m_PreviousFrame;
+			EditorController::CanvasContext m_Ctx;
 			SharedPtr<EditorController> m_EditorController;
-			int m_Index;
-			ToolManager* m_ToolManager;
-			int m_PixelScale = 8;
-			ImVec2 m_LastMousePos = ImVec2(-1, -1);
-			UniquePtr<Grid> m_Grid;
-			AnimationPlayer* m_Player;
-			ImVec2 m_LastHoverMousePos = ImVec2(-1, -1);
+			// ImVec2 m_LastHoverMousePos = ImVec2(-1, -1);
 	};
 }  // namespace FuncDoodle

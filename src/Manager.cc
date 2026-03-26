@@ -21,15 +21,15 @@
 namespace FuncDoodle {
 	AnimationManager::AnimationManager(SharedPtr<ProjectFile> proj,
 		AssetLoader* assetLoader, SharedPtr<EditorController> editorController,
-		KeybindsRegistry& keybinds)
+		KeybindsRegistry& keybinds, bool prevEnabled)
 		: m_Proj(proj), m_SelectedFrame(0), m_Player(new AnimationPlayer(proj)),
 		  m_EditorController(editorController), m_AssetLoader(assetLoader),
 		  m_Keybinds(keybinds),
 		  m_ToolManager(std::make_unique<ToolManager>(keybinds)) {
 		m_FrameRenderer = std::make_unique<FrameRenderer>(
-			nullptr, m_ToolManager.get(), m_Player.get(), m_EditorController);
-		m_TimelineFrameRenderer.reset(new FrameRenderer(
-			nullptr, m_ToolManager.get(), m_Player.get(), m_EditorController));
+			nullptr, -1, m_ToolManager.get(), m_Player.get(), m_EditorController, prevEnabled);
+		m_TimelineFrameRenderer = std::make_unique<FrameRenderer>(
+			nullptr, -1, m_ToolManager.get(), m_Player.get(), m_EditorController, prevEnabled);
 		m_FrameRenderer->SetUndoByStroke(m_UndoByStroke);
 	}
 
@@ -81,10 +81,10 @@ namespace FuncDoodle {
 		float fontSize = ImGui::GetFontSize();
 
 		TimelineKeyContext keyContext;
-		keyContext.proj = m_Proj;
-		keyContext.player = m_Player.get();
-		keyContext.frameRenderer = m_FrameRenderer.get();
-		keyContext.selectedFrame = &m_SelectedFrame;
+		keyContext.Proj = m_Proj;
+		keyContext.Player = m_Player.get();
+		keyContext.FrameRenderer = m_FrameRenderer.get();
+		keyContext.SelectedFrame = &m_SelectedFrame;
 		KeyHandler::HandleTimelineShortcuts(keyContext, m_Keybinds);
 		if (m_SelectedFrame >= m_Proj->AnimFrameCount()) {
 			m_SelectedFrame = m_Proj->AnimFrameCount() - 1;
@@ -98,30 +98,39 @@ namespace FuncDoodle {
 					: ImVec2(topLeft.x + frameWidth / 2, bottomRight.y),
 				IM_COL32(255, 255, 255, 255), std::to_string(i).c_str());
 
-			if (m_TimelineFrameRenderer->AnimFrame() !=
+			if (m_TimelineFrameRenderer->Ctx()->Frame !=
 				m_Proj->AnimFrames()->Get(i)) {
-				m_TimelineFrameRenderer->SetFrame(m_Proj->AnimFrames()->Get(i));
+				m_TimelineFrameRenderer->Ctx()->Frame = m_Proj->AnimFrames()->Get(i);
 			}
+
 
 			float width = bottomRight.x - topLeft.x;
 			float height = bottomRight.y - topLeft.y;
 			float scaleX = width / frameWidth;
 			float scaleY = width / frameHeight;
-			m_TimelineFrameRenderer->SetPixelScale(
-				std::min<float>(scaleX, scaleY));
+
+			m_TimelineFrameRenderer->Ctx()->PixelScale = std::min<float>(scaleX, scaleY);
+
 			m_TimelineFrameRenderer->RenderFramePixels(
-				topLeft.x, topLeft.y, ImGui::GetWindowDrawList(), true);
+				topLeft.x,
+				topLeft.y,
+				ImGui::GetWindowDrawList(),
+				true
+			);
 
 			if ((m_Player->Playing() && m_Player->CurFrame() == i) ||
 				(!m_Player->Playing() && m_SelectedFrame == i)) {
+
 				const auto frames = m_Proj->AnimFrames();
-				if (m_FrameRenderer->AnimFrame() != frames->Get(i))
-					m_FrameRenderer->SetFrame(frames->Get(i));
-				m_FrameRenderer->SetIndex(i);
+				if (m_FrameRenderer->Ctx()->Frame != frames->Get(i))
+					m_FrameRenderer->Ctx()->Frame = frames->Get(i);
+
+				m_FrameRenderer->Ctx()->Index = i;
+
 				if (i > 0) {
-					m_FrameRenderer->SetPreviousFrame(frames->Get(i - 1));
+					m_FrameRenderer->Ctx()->PreviousFrame = frames->Get(i - 1);
 				}
-				m_FrameRenderer->RenderFrame(i, prevEnabled);
+				m_FrameRenderer->RenderFrame();
 				drawList->AddRect(topLeft, ImVec2(bottomRight.x, bottomRight.y),
 					IM_COL32(255, 0, 0, 255),  // Red color
 					0.0f,					   // rounding
@@ -202,6 +211,7 @@ namespace FuncDoodle {
 		ImGui::End();
 
 		m_ToolManager->RenderTools();
+		m_FrameRenderer->RenderStatusBar();
 	}
 
 	void AnimationManager::RenderControls() {

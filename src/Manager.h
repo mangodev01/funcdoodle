@@ -21,7 +21,8 @@ namespace FuncDoodle {
 			AnimationManager(SharedPtr<ProjectFile> proj,
 				AssetLoader* assetLoader,
 				SharedPtr<EditorController> editorController,
-				KeybindsRegistry& keybinds);
+				KeybindsRegistry& keybinds,
+				bool prevEnabled);
 			~AnimationManager();
 			void RegisterKeybinds();
 			void RenderTimeline(bool prevEnabled);

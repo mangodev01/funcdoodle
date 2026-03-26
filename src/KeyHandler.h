@@ -8,10 +8,10 @@
 
 namespace FuncDoodle {
 	struct TimelineKeyContext {
-			SharedPtr<ProjectFile> proj;
-			AnimationPlayer* player = nullptr;
-			FrameRenderer* frameRenderer = nullptr;
-			unsigned long* selectedFrame = nullptr;
+		SharedPtr<ProjectFile> Proj;
+		AnimationPlayer* Player = nullptr;
+		FrameRenderer* FrameRenderer = nullptr;
+		unsigned long* SelectedFrame = nullptr;
 	};
 
 	class KeyHandler {

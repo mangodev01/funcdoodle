@@ -42,7 +42,7 @@ namespace FuncDoodle {
 		  m_Theme(UUID::FromString("d0c1a009-d09c-4fe6-84f8-eddcb2da38f9")),
 		  m_Keybinds(rootPath) {
 		m_Manager = std::make_unique<AnimationManager>(
-			nullptr, assetLoader, m_EditorController, m_Keybinds),
+			nullptr, assetLoader, m_EditorController, m_Keybinds, m_PrevEnabled),
 		m_Manager->SetUndoByStroke(m_UndoByStroke);
 
 		RegisterKeybinds();
@@ -589,7 +589,7 @@ namespace FuncDoodle {
 				ImGui::IsKeyPressed(ImGuiKey_KeypadEnter, false)) {
 				m_CurrentProj = m_CacheProj;
 				m_Manager = std::make_unique<AnimationManager>(m_CurrentProj,
-					m_AssetLoader, m_EditorController, m_Keybinds);
+					m_AssetLoader, m_EditorController, m_Keybinds, m_PrevEnabled);
 				m_Manager->SetUndoByStroke(m_UndoByStroke);
 				m_Popups.Close("new");
 			}

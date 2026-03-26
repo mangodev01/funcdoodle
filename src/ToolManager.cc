@@ -41,9 +41,8 @@ namespace FuncDoodle {
 			ImGui::InputInt("##SizeText", &m_Size, 1, 100, 0);
 		}
 
-		if (m_SelectedTool != ToolType::Eraser) {
+		if (m_SelectedTool != ToolType::Eraser && m_SelectedTool != ToolType::Select) {
 			ImGui::ColorPicker3("Col", m_Col);
-			// TODO: change m_PickerSelected
 		}
 
 		if (m_Size < 1)
