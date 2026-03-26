@@ -14,3 +14,4 @@
 - [ ] add text functionality
 - [ ] bug fixing
 - [ ] gzip compression for .fdp
+- [ ] shader system where you can select some frames, right click, click add shader, then literally **type out a GLSL shader** and AS you update it, the shader system will literally compile **what you're typing** and provide *real-time* ***imgui sliders and or imgui inputs***
