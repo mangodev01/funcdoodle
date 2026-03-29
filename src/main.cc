@@ -214,6 +214,7 @@ int main(int argc, char** argv) {
 #endif
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+	io.ConfigErrorRecovery = true;
 	io.ConfigWindowsMoveFromTitleBarOnly = true;
 	float xScale, yScale;
 	glfwGetWindowContentScale(win, &xScale, &yScale);

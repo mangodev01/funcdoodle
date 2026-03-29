@@ -23,6 +23,15 @@ detect_platform() {
 	esac
 }
 
+nproc_compat() {
+	if command -v nproc >/dev/null 2>&1; then
+		nproc
+	else
+		# macOS (and BSD fallback)
+		sysctl -n hw.ncpu 2>/dev/null || echo 1
+	fi
+}
+
 platform="$(detect_platform)"
 bin_dir="$root_dir/bin/$platform"
 
@@ -64,7 +73,7 @@ fi
 mkdir -p "$bin_dir" || exit -1
 pushd "$bin_dir" >/dev/null || exit -1
 cmake -DCMAKE_BUILD_TYPE=$arg1 -DISTILING=$( (( arg2 == "true" )) && echo "ON" || echo "OFF" ) -DBUILD_TESTS=OFF -DBUILD_IMTESTS=OFF "$root_dir" || exit -1
-jobs=$(( ($(nproc) + 2) / 2 ))
+jobs=$(( ($(nproc_compat) + 2) / 2 ))
 make -j"$jobs" || exit -1
 cp -r "$root_dir/assets" . || exit -1
 cp -r "$root_dir/themes" . || exit -1

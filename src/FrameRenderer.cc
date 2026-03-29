@@ -19,15 +19,29 @@
 #include <cmath>
 
 namespace FuncDoodle {
+	const float c_StatusBarHeight = 24.0f;
+
 	void FrameRenderer::RenderFrame() {
 		ImGui::SetNextWindowPos(ImVec2(0, 32), ImGuiCond_FirstUseEver);
 		ImGui::SetNextWindowSize(ImVec2(1073, 862), ImGuiCond_FirstUseEver);
-		ImGui::Begin("Frame");
+		ImGui::Begin("Frame", 
+			0,
+			ImGuiWindowFlags_NoScrollbar |
+			ImGuiWindowFlags_NoScrollWithMouse);
 
 		if (!m_Ctx.Frame || !m_Ctx.ToolManager) {
 			ImGui::End();
 			return;
 		}
+
+		// reserve space for the status bar
+		ImGui::BeginChild("Content", 
+			ImVec2(0, -c_StatusBarHeight),
+			false,
+			ImGuiWindowFlags_NoScrollbar |
+			ImGuiWindowFlags_NoScrollWithMouse |
+			ImGuiWindowFlags_NoTitleBar);
+
 
 		if (!m_Ctx.Grid) {
 			m_Ctx.Grid = std::make_unique<Grid>(m_Ctx.Frame->Width(),
@@ -64,31 +78,27 @@ namespace FuncDoodle {
 		}
 		InitPixels();
 
-		ImGui::End();
+		ImGui::EndChild();
 
 		RenderStatusBar();
+
+		ImGui::End();
 	}
 
 	void FrameRenderer::RenderStatusBar() {
-		ImGuiWindow* frameWindow = ImGui::FindWindowByName("Frame");
-		if (!frameWindow) {
-			return;
-		}
-
-		ImGui::SetNextWindowPos(ImVec2(frameWindow->Pos.x, frameWindow->Pos.y + frameWindow->Size.y));
-		ImGui::SetNextWindowSize(ImVec2(frameWindow->Size.x, 24));
-		ImGui::SetNextWindowBgAlpha(1.0f);
+		// ImGui::SetNextWindowPos(ImVec2(frameWindow->Pos.x, frameWindow->Pos.y + frameWindow->Size.y));
+		// ImGui::SetNextWindowSize(ImVec2(frameWindow->Size.x, 24));
+		// ImGui::SetNextWindowBgAlpha(1.0f);
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0);
 
-		ImGui::Begin("##statusbar", nullptr,
-			ImGuiWindowFlags_NoDecoration | 
+		ImGui::BeginChild("##statusbar", 
+			ImVec2(0, c_StatusBarHeight),
+			false, 
+			ImGuiWindowFlags_NoScrollbar |
+			ImGuiWindowFlags_NoScrollWithMouse |
 			ImGuiWindowFlags_NoInputs |
-			ImGuiWindowFlags_NoMove |
-			ImGuiWindowFlags_NoBringToFrontOnFocus |
-			ImGuiWindowFlags_NoDocking);
-
-		ImGui::PopStyleVar();
+			ImGuiWindowFlags_NoTitleBar);
 
 		ImGui::Text("Frame %lu | %dx%d | Zoom: %dx | X: %.0f, Y: %.0f | Draw X: %.0f, Draw Y: %.0f",
 			m_Ctx.Index,
@@ -100,7 +110,9 @@ namespace FuncDoodle {
 			m_Ctx.LastMousePos ? m_Ctx.LastMousePos->x : 0,
 			m_Ctx.LastMousePos ? m_Ctx.LastMousePos->y : 0);
 
-		ImGui::End();
+		ImGui::EndChild();
+
+		ImGui::PopStyleVar();
 	}
 
 	void FrameRenderer::InitPixels() {
