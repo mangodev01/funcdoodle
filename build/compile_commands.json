@@ -1,0 +1,362 @@
+[
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build",
+  "command": "/usr/bin/clang -DDEBUG -DIMGUI_ENABLE_TEST_ENGINE -DIMGUI_TEST_ENGINE_ENABLE_COROUTINE_STDTHREAD_IMPL=1 -D__WINE__ -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/usr/local/opt/portaudio/include -I/Users/antzhdanov/code/funcdoodle/lib/imgui -I/Users/antzhdanov/code/funcdoodle/lib/imgui/backends -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/glad/include -I/Users/antzhdanov/code/funcdoodle/lib/nfd/src/include -I/Users/antzhdanov/code/funcdoodle/lib/stb -I/Users/antzhdanov/code/funcdoodle/lib -I/Users/antzhdanov/code/funcdoodle/lib/toml++ -I/Users/antzhdanov/code/funcdoodle/src -I/Users/antzhdanov/code/funcdoodle/test -g -arch arm64 -fcolor-diagnostics -g -gdwarf-4 -fsanitize=address -fno-omit-frame-pointer -o CMakeFiles/FuncDoodle.dir/lib/glad/src/glad.c.o -c /Users/antzhdanov/code/funcdoodle/lib/glad/src/glad.c",
+  "file": "/Users/antzhdanov/code/funcdoodle/lib/glad/src/glad.c",
+  "output": "CMakeFiles/FuncDoodle.dir/lib/glad/src/glad.c.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DIMGUI_ENABLE_TEST_ENGINE -DIMGUI_TEST_ENGINE_ENABLE_COROUTINE_STDTHREAD_IMPL=1 -D__WINE__ -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/usr/local/opt/portaudio/include -I/Users/antzhdanov/code/funcdoodle/lib/imgui -I/Users/antzhdanov/code/funcdoodle/lib/imgui/backends -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/glad/include -I/Users/antzhdanov/code/funcdoodle/lib/nfd/src/include -I/Users/antzhdanov/code/funcdoodle/lib/stb -I/Users/antzhdanov/code/funcdoodle/lib -I/Users/antzhdanov/code/funcdoodle/lib/toml++ -I/Users/antzhdanov/code/funcdoodle/src -I/Users/antzhdanov/code/funcdoodle/test  -fdiagnostics-color=always -Wno-error=deprecated-declarations -Werror -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -g -gdwarf-4 -fsanitize=address -fno-omit-frame-pointer -o CMakeFiles/FuncDoodle.dir/lib/imgui/imgui.cpp.o -c /Users/antzhdanov/code/funcdoodle/lib/imgui/imgui.cpp",
+  "file": "/Users/antzhdanov/code/funcdoodle/lib/imgui/imgui.cpp",
+  "output": "CMakeFiles/FuncDoodle.dir/lib/imgui/imgui.cpp.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DIMGUI_ENABLE_TEST_ENGINE -DIMGUI_TEST_ENGINE_ENABLE_COROUTINE_STDTHREAD_IMPL=1 -D__WINE__ -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/usr/local/opt/portaudio/include -I/Users/antzhdanov/code/funcdoodle/lib/imgui -I/Users/antzhdanov/code/funcdoodle/lib/imgui/backends -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/glad/include -I/Users/antzhdanov/code/funcdoodle/lib/nfd/src/include -I/Users/antzhdanov/code/funcdoodle/lib/stb -I/Users/antzhdanov/code/funcdoodle/lib -I/Users/antzhdanov/code/funcdoodle/lib/toml++ -I/Users/antzhdanov/code/funcdoodle/src -I/Users/antzhdanov/code/funcdoodle/test  -fdiagnostics-color=always -Wno-error=deprecated-declarations -Werror -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -g -gdwarf-4 -fsanitize=address -fno-omit-frame-pointer -o CMakeFiles/FuncDoodle.dir/lib/imgui/imgui_draw.cpp.o -c /Users/antzhdanov/code/funcdoodle/lib/imgui/imgui_draw.cpp",
+  "file": "/Users/antzhdanov/code/funcdoodle/lib/imgui/imgui_draw.cpp",
+  "output": "CMakeFiles/FuncDoodle.dir/lib/imgui/imgui_draw.cpp.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DIMGUI_ENABLE_TEST_ENGINE -DIMGUI_TEST_ENGINE_ENABLE_COROUTINE_STDTHREAD_IMPL=1 -D__WINE__ -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/usr/local/opt/portaudio/include -I/Users/antzhdanov/code/funcdoodle/lib/imgui -I/Users/antzhdanov/code/funcdoodle/lib/imgui/backends -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/glad/include -I/Users/antzhdanov/code/funcdoodle/lib/nfd/src/include -I/Users/antzhdanov/code/funcdoodle/lib/stb -I/Users/antzhdanov/code/funcdoodle/lib -I/Users/antzhdanov/code/funcdoodle/lib/toml++ -I/Users/antzhdanov/code/funcdoodle/src -I/Users/antzhdanov/code/funcdoodle/test  -fdiagnostics-color=always -Wno-error=deprecated-declarations -Werror -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -g -gdwarf-4 -fsanitize=address -fno-omit-frame-pointer -o CMakeFiles/FuncDoodle.dir/lib/imgui/imgui_widgets.cpp.o -c /Users/antzhdanov/code/funcdoodle/lib/imgui/imgui_widgets.cpp",
+  "file": "/Users/antzhdanov/code/funcdoodle/lib/imgui/imgui_widgets.cpp",
+  "output": "CMakeFiles/FuncDoodle.dir/lib/imgui/imgui_widgets.cpp.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DIMGUI_ENABLE_TEST_ENGINE -DIMGUI_TEST_ENGINE_ENABLE_COROUTINE_STDTHREAD_IMPL=1 -D__WINE__ -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/usr/local/opt/portaudio/include -I/Users/antzhdanov/code/funcdoodle/lib/imgui -I/Users/antzhdanov/code/funcdoodle/lib/imgui/backends -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/glad/include -I/Users/antzhdanov/code/funcdoodle/lib/nfd/src/include -I/Users/antzhdanov/code/funcdoodle/lib/stb -I/Users/antzhdanov/code/funcdoodle/lib -I/Users/antzhdanov/code/funcdoodle/lib/toml++ -I/Users/antzhdanov/code/funcdoodle/src -I/Users/antzhdanov/code/funcdoodle/test  -fdiagnostics-color=always -Wno-error=deprecated-declarations -Werror -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -g -gdwarf-4 -fsanitize=address -fno-omit-frame-pointer -o CMakeFiles/FuncDoodle.dir/lib/imgui/imgui_demo.cpp.o -c /Users/antzhdanov/code/funcdoodle/lib/imgui/imgui_demo.cpp",
+  "file": "/Users/antzhdanov/code/funcdoodle/lib/imgui/imgui_demo.cpp",
+  "output": "CMakeFiles/FuncDoodle.dir/lib/imgui/imgui_demo.cpp.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DIMGUI_ENABLE_TEST_ENGINE -DIMGUI_TEST_ENGINE_ENABLE_COROUTINE_STDTHREAD_IMPL=1 -D__WINE__ -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/usr/local/opt/portaudio/include -I/Users/antzhdanov/code/funcdoodle/lib/imgui -I/Users/antzhdanov/code/funcdoodle/lib/imgui/backends -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/glad/include -I/Users/antzhdanov/code/funcdoodle/lib/nfd/src/include -I/Users/antzhdanov/code/funcdoodle/lib/stb -I/Users/antzhdanov/code/funcdoodle/lib -I/Users/antzhdanov/code/funcdoodle/lib/toml++ -I/Users/antzhdanov/code/funcdoodle/src -I/Users/antzhdanov/code/funcdoodle/test  -fdiagnostics-color=always -Wno-error=deprecated-declarations -Werror -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -g -gdwarf-4 -fsanitize=address -fno-omit-frame-pointer -o CMakeFiles/FuncDoodle.dir/lib/imgui/imgui_tables.cpp.o -c /Users/antzhdanov/code/funcdoodle/lib/imgui/imgui_tables.cpp",
+  "file": "/Users/antzhdanov/code/funcdoodle/lib/imgui/imgui_tables.cpp",
+  "output": "CMakeFiles/FuncDoodle.dir/lib/imgui/imgui_tables.cpp.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DIMGUI_ENABLE_TEST_ENGINE -DIMGUI_TEST_ENGINE_ENABLE_COROUTINE_STDTHREAD_IMPL=1 -D__WINE__ -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/usr/local/opt/portaudio/include -I/Users/antzhdanov/code/funcdoodle/lib/imgui -I/Users/antzhdanov/code/funcdoodle/lib/imgui/backends -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/glad/include -I/Users/antzhdanov/code/funcdoodle/lib/nfd/src/include -I/Users/antzhdanov/code/funcdoodle/lib/stb -I/Users/antzhdanov/code/funcdoodle/lib -I/Users/antzhdanov/code/funcdoodle/lib/toml++ -I/Users/antzhdanov/code/funcdoodle/src -I/Users/antzhdanov/code/funcdoodle/test  -fdiagnostics-color=always -Wno-error=deprecated-declarations -Werror -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -g -gdwarf-4 -fsanitize=address -fno-omit-frame-pointer -o CMakeFiles/FuncDoodle.dir/lib/imgui/backends/imgui_impl_glfw.cpp.o -c /Users/antzhdanov/code/funcdoodle/lib/imgui/backends/imgui_impl_glfw.cpp",
+  "file": "/Users/antzhdanov/code/funcdoodle/lib/imgui/backends/imgui_impl_glfw.cpp",
+  "output": "CMakeFiles/FuncDoodle.dir/lib/imgui/backends/imgui_impl_glfw.cpp.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DIMGUI_ENABLE_TEST_ENGINE -DIMGUI_TEST_ENGINE_ENABLE_COROUTINE_STDTHREAD_IMPL=1 -D__WINE__ -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/usr/local/opt/portaudio/include -I/Users/antzhdanov/code/funcdoodle/lib/imgui -I/Users/antzhdanov/code/funcdoodle/lib/imgui/backends -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/glad/include -I/Users/antzhdanov/code/funcdoodle/lib/nfd/src/include -I/Users/antzhdanov/code/funcdoodle/lib/stb -I/Users/antzhdanov/code/funcdoodle/lib -I/Users/antzhdanov/code/funcdoodle/lib/toml++ -I/Users/antzhdanov/code/funcdoodle/src -I/Users/antzhdanov/code/funcdoodle/test  -fdiagnostics-color=always -Wno-error=deprecated-declarations -Werror -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -g -gdwarf-4 -fsanitize=address -fno-omit-frame-pointer -o CMakeFiles/FuncDoodle.dir/lib/imgui/backends/imgui_impl_opengl3.cpp.o -c /Users/antzhdanov/code/funcdoodle/lib/imgui/backends/imgui_impl_opengl3.cpp",
+  "file": "/Users/antzhdanov/code/funcdoodle/lib/imgui/backends/imgui_impl_opengl3.cpp",
+  "output": "CMakeFiles/FuncDoodle.dir/lib/imgui/backends/imgui_impl_opengl3.cpp.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DIMGUI_ENABLE_TEST_ENGINE -DIMGUI_TEST_ENGINE_ENABLE_COROUTINE_STDTHREAD_IMPL=1 -D__WINE__ -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/usr/local/opt/portaudio/include -I/Users/antzhdanov/code/funcdoodle/lib/imgui -I/Users/antzhdanov/code/funcdoodle/lib/imgui/backends -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/glad/include -I/Users/antzhdanov/code/funcdoodle/lib/nfd/src/include -I/Users/antzhdanov/code/funcdoodle/lib/stb -I/Users/antzhdanov/code/funcdoodle/lib -I/Users/antzhdanov/code/funcdoodle/lib/toml++ -I/Users/antzhdanov/code/funcdoodle/src -I/Users/antzhdanov/code/funcdoodle/test  -fdiagnostics-color=always -Wno-error=deprecated-declarations -Werror -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -g -gdwarf-4 -fsanitize=address -fno-omit-frame-pointer -o CMakeFiles/FuncDoodle.dir/lib/imgui_test_engine/imgui_test_engine/imgui_capture_tool.cpp.o -c /Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine/imgui_capture_tool.cpp",
+  "file": "/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine/imgui_capture_tool.cpp",
+  "output": "CMakeFiles/FuncDoodle.dir/lib/imgui_test_engine/imgui_test_engine/imgui_capture_tool.cpp.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DIMGUI_ENABLE_TEST_ENGINE -DIMGUI_TEST_ENGINE_ENABLE_COROUTINE_STDTHREAD_IMPL=1 -D__WINE__ -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/usr/local/opt/portaudio/include -I/Users/antzhdanov/code/funcdoodle/lib/imgui -I/Users/antzhdanov/code/funcdoodle/lib/imgui/backends -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/glad/include -I/Users/antzhdanov/code/funcdoodle/lib/nfd/src/include -I/Users/antzhdanov/code/funcdoodle/lib/stb -I/Users/antzhdanov/code/funcdoodle/lib -I/Users/antzhdanov/code/funcdoodle/lib/toml++ -I/Users/antzhdanov/code/funcdoodle/src -I/Users/antzhdanov/code/funcdoodle/test  -fdiagnostics-color=always -Wno-error=deprecated-declarations -Werror -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -g -gdwarf-4 -fsanitize=address -fno-omit-frame-pointer -o CMakeFiles/FuncDoodle.dir/lib/imgui_test_engine/imgui_test_engine/imgui_te_context.cpp.o -c /Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine/imgui_te_context.cpp",
+  "file": "/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine/imgui_te_context.cpp",
+  "output": "CMakeFiles/FuncDoodle.dir/lib/imgui_test_engine/imgui_test_engine/imgui_te_context.cpp.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DIMGUI_ENABLE_TEST_ENGINE -DIMGUI_TEST_ENGINE_ENABLE_COROUTINE_STDTHREAD_IMPL=1 -D__WINE__ -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/usr/local/opt/portaudio/include -I/Users/antzhdanov/code/funcdoodle/lib/imgui -I/Users/antzhdanov/code/funcdoodle/lib/imgui/backends -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/glad/include -I/Users/antzhdanov/code/funcdoodle/lib/nfd/src/include -I/Users/antzhdanov/code/funcdoodle/lib/stb -I/Users/antzhdanov/code/funcdoodle/lib -I/Users/antzhdanov/code/funcdoodle/lib/toml++ -I/Users/antzhdanov/code/funcdoodle/src -I/Users/antzhdanov/code/funcdoodle/test  -fdiagnostics-color=always -Wno-error=deprecated-declarations -Werror -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -g -gdwarf-4 -fsanitize=address -fno-omit-frame-pointer -o CMakeFiles/FuncDoodle.dir/lib/imgui_test_engine/imgui_test_engine/imgui_te_coroutine.cpp.o -c /Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine/imgui_te_coroutine.cpp",
+  "file": "/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine/imgui_te_coroutine.cpp",
+  "output": "CMakeFiles/FuncDoodle.dir/lib/imgui_test_engine/imgui_test_engine/imgui_te_coroutine.cpp.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DIMGUI_ENABLE_TEST_ENGINE -DIMGUI_TEST_ENGINE_ENABLE_COROUTINE_STDTHREAD_IMPL=1 -D__WINE__ -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/usr/local/opt/portaudio/include -I/Users/antzhdanov/code/funcdoodle/lib/imgui -I/Users/antzhdanov/code/funcdoodle/lib/imgui/backends -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/glad/include -I/Users/antzhdanov/code/funcdoodle/lib/nfd/src/include -I/Users/antzhdanov/code/funcdoodle/lib/stb -I/Users/antzhdanov/code/funcdoodle/lib -I/Users/antzhdanov/code/funcdoodle/lib/toml++ -I/Users/antzhdanov/code/funcdoodle/src -I/Users/antzhdanov/code/funcdoodle/test  -fdiagnostics-color=always -Wno-error=deprecated-declarations -Werror -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -g -gdwarf-4 -fsanitize=address -fno-omit-frame-pointer -o CMakeFiles/FuncDoodle.dir/lib/imgui_test_engine/imgui_test_engine/imgui_te_engine.cpp.o -c /Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine/imgui_te_engine.cpp",
+  "file": "/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine/imgui_te_engine.cpp",
+  "output": "CMakeFiles/FuncDoodle.dir/lib/imgui_test_engine/imgui_test_engine/imgui_te_engine.cpp.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DIMGUI_ENABLE_TEST_ENGINE -DIMGUI_TEST_ENGINE_ENABLE_COROUTINE_STDTHREAD_IMPL=1 -D__WINE__ -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/usr/local/opt/portaudio/include -I/Users/antzhdanov/code/funcdoodle/lib/imgui -I/Users/antzhdanov/code/funcdoodle/lib/imgui/backends -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/glad/include -I/Users/antzhdanov/code/funcdoodle/lib/nfd/src/include -I/Users/antzhdanov/code/funcdoodle/lib/stb -I/Users/antzhdanov/code/funcdoodle/lib -I/Users/antzhdanov/code/funcdoodle/lib/toml++ -I/Users/antzhdanov/code/funcdoodle/src -I/Users/antzhdanov/code/funcdoodle/test  -fdiagnostics-color=always -Wno-error=deprecated-declarations -Werror -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -g -gdwarf-4 -fsanitize=address -fno-omit-frame-pointer -o CMakeFiles/FuncDoodle.dir/lib/imgui_test_engine/imgui_test_engine/imgui_te_exporters.cpp.o -c /Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine/imgui_te_exporters.cpp",
+  "file": "/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine/imgui_te_exporters.cpp",
+  "output": "CMakeFiles/FuncDoodle.dir/lib/imgui_test_engine/imgui_test_engine/imgui_te_exporters.cpp.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DIMGUI_ENABLE_TEST_ENGINE -DIMGUI_TEST_ENGINE_ENABLE_COROUTINE_STDTHREAD_IMPL=1 -D__WINE__ -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/usr/local/opt/portaudio/include -I/Users/antzhdanov/code/funcdoodle/lib/imgui -I/Users/antzhdanov/code/funcdoodle/lib/imgui/backends -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/glad/include -I/Users/antzhdanov/code/funcdoodle/lib/nfd/src/include -I/Users/antzhdanov/code/funcdoodle/lib/stb -I/Users/antzhdanov/code/funcdoodle/lib -I/Users/antzhdanov/code/funcdoodle/lib/toml++ -I/Users/antzhdanov/code/funcdoodle/src -I/Users/antzhdanov/code/funcdoodle/test  -fdiagnostics-color=always -Wno-error=deprecated-declarations -Werror -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -g -gdwarf-4 -fsanitize=address -fno-omit-frame-pointer -o CMakeFiles/FuncDoodle.dir/lib/imgui_test_engine/imgui_test_engine/imgui_te_perftool.cpp.o -c /Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine/imgui_te_perftool.cpp",
+  "file": "/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine/imgui_te_perftool.cpp",
+  "output": "CMakeFiles/FuncDoodle.dir/lib/imgui_test_engine/imgui_test_engine/imgui_te_perftool.cpp.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DIMGUI_ENABLE_TEST_ENGINE -DIMGUI_TEST_ENGINE_ENABLE_COROUTINE_STDTHREAD_IMPL=1 -D__WINE__ -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/usr/local/opt/portaudio/include -I/Users/antzhdanov/code/funcdoodle/lib/imgui -I/Users/antzhdanov/code/funcdoodle/lib/imgui/backends -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/glad/include -I/Users/antzhdanov/code/funcdoodle/lib/nfd/src/include -I/Users/antzhdanov/code/funcdoodle/lib/stb -I/Users/antzhdanov/code/funcdoodle/lib -I/Users/antzhdanov/code/funcdoodle/lib/toml++ -I/Users/antzhdanov/code/funcdoodle/src -I/Users/antzhdanov/code/funcdoodle/test  -fdiagnostics-color=always -Wno-error=deprecated-declarations -Werror -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -g -gdwarf-4 -fsanitize=address -fno-omit-frame-pointer -o CMakeFiles/FuncDoodle.dir/lib/imgui_test_engine/imgui_test_engine/imgui_te_ui.cpp.o -c /Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine/imgui_te_ui.cpp",
+  "file": "/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine/imgui_te_ui.cpp",
+  "output": "CMakeFiles/FuncDoodle.dir/lib/imgui_test_engine/imgui_test_engine/imgui_te_ui.cpp.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DIMGUI_ENABLE_TEST_ENGINE -DIMGUI_TEST_ENGINE_ENABLE_COROUTINE_STDTHREAD_IMPL=1 -D__WINE__ -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/usr/local/opt/portaudio/include -I/Users/antzhdanov/code/funcdoodle/lib/imgui -I/Users/antzhdanov/code/funcdoodle/lib/imgui/backends -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/glad/include -I/Users/antzhdanov/code/funcdoodle/lib/nfd/src/include -I/Users/antzhdanov/code/funcdoodle/lib/stb -I/Users/antzhdanov/code/funcdoodle/lib -I/Users/antzhdanov/code/funcdoodle/lib/toml++ -I/Users/antzhdanov/code/funcdoodle/src -I/Users/antzhdanov/code/funcdoodle/test  -fdiagnostics-color=always -Wno-error=deprecated-declarations -Werror -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -g -gdwarf-4 -fsanitize=address -fno-omit-frame-pointer -o CMakeFiles/FuncDoodle.dir/lib/imgui_test_engine/imgui_test_engine/imgui_te_utils.cpp.o -c /Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine/imgui_te_utils.cpp",
+  "file": "/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine/imgui_te_utils.cpp",
+  "output": "CMakeFiles/FuncDoodle.dir/lib/imgui_test_engine/imgui_test_engine/imgui_te_utils.cpp.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build",
+  "command": "/usr/bin/clang -DDEBUG -DIMGUI_ENABLE_TEST_ENGINE -DIMGUI_TEST_ENGINE_ENABLE_COROUTINE_STDTHREAD_IMPL=1 -D__WINE__ -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/usr/local/opt/portaudio/include -I/Users/antzhdanov/code/funcdoodle/lib/imgui -I/Users/antzhdanov/code/funcdoodle/lib/imgui/backends -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/glad/include -I/Users/antzhdanov/code/funcdoodle/lib/nfd/src/include -I/Users/antzhdanov/code/funcdoodle/lib/stb -I/Users/antzhdanov/code/funcdoodle/lib -I/Users/antzhdanov/code/funcdoodle/lib/toml++ -I/Users/antzhdanov/code/funcdoodle/src -I/Users/antzhdanov/code/funcdoodle/test -x objective-c -g -std=gnu17 -arch arm64 -fcolor-diagnostics -g -gdwarf-4 -fsanitize=address -fno-omit-frame-pointer -o CMakeFiles/FuncDoodle.dir/lib/nfd/src/nfd_cocoa.m.o -c /Users/antzhdanov/code/funcdoodle/lib/nfd/src/nfd_cocoa.m",
+  "file": "/Users/antzhdanov/code/funcdoodle/lib/nfd/src/nfd_cocoa.m",
+  "output": "CMakeFiles/FuncDoodle.dir/lib/nfd/src/nfd_cocoa.m.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build",
+  "command": "/usr/bin/clang -DDEBUG -DIMGUI_ENABLE_TEST_ENGINE -DIMGUI_TEST_ENGINE_ENABLE_COROUTINE_STDTHREAD_IMPL=1 -D__WINE__ -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/usr/local/opt/portaudio/include -I/Users/antzhdanov/code/funcdoodle/lib/imgui -I/Users/antzhdanov/code/funcdoodle/lib/imgui/backends -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/glad/include -I/Users/antzhdanov/code/funcdoodle/lib/nfd/src/include -I/Users/antzhdanov/code/funcdoodle/lib/stb -I/Users/antzhdanov/code/funcdoodle/lib -I/Users/antzhdanov/code/funcdoodle/lib/toml++ -I/Users/antzhdanov/code/funcdoodle/src -I/Users/antzhdanov/code/funcdoodle/test -g -arch arm64 -fcolor-diagnostics -g -gdwarf-4 -fsanitize=address -fno-omit-frame-pointer -o CMakeFiles/FuncDoodle.dir/lib/nfd/src/nfd_common.c.o -c /Users/antzhdanov/code/funcdoodle/lib/nfd/src/nfd_common.c",
+  "file": "/Users/antzhdanov/code/funcdoodle/lib/nfd/src/nfd_common.c",
+  "output": "CMakeFiles/FuncDoodle.dir/lib/nfd/src/nfd_common.c.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DIMGUI_ENABLE_TEST_ENGINE -DIMGUI_TEST_ENGINE_ENABLE_COROUTINE_STDTHREAD_IMPL=1 -D__WINE__ -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/usr/local/opt/portaudio/include -I/Users/antzhdanov/code/funcdoodle/lib/imgui -I/Users/antzhdanov/code/funcdoodle/lib/imgui/backends -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/glad/include -I/Users/antzhdanov/code/funcdoodle/lib/nfd/src/include -I/Users/antzhdanov/code/funcdoodle/lib/stb -I/Users/antzhdanov/code/funcdoodle/lib -I/Users/antzhdanov/code/funcdoodle/lib/toml++ -I/Users/antzhdanov/code/funcdoodle/src -I/Users/antzhdanov/code/funcdoodle/test  -fdiagnostics-color=always -Wno-error=deprecated-declarations -Werror -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -g -gdwarf-4 -fsanitize=address -fno-omit-frame-pointer -o CMakeFiles/FuncDoodle.dir/src/Action.cc.o -c /Users/antzhdanov/code/funcdoodle/src/Action.cc",
+  "file": "/Users/antzhdanov/code/funcdoodle/src/Action.cc",
+  "output": "CMakeFiles/FuncDoodle.dir/src/Action.cc.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DIMGUI_ENABLE_TEST_ENGINE -DIMGUI_TEST_ENGINE_ENABLE_COROUTINE_STDTHREAD_IMPL=1 -D__WINE__ -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/usr/local/opt/portaudio/include -I/Users/antzhdanov/code/funcdoodle/lib/imgui -I/Users/antzhdanov/code/funcdoodle/lib/imgui/backends -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/glad/include -I/Users/antzhdanov/code/funcdoodle/lib/nfd/src/include -I/Users/antzhdanov/code/funcdoodle/lib/stb -I/Users/antzhdanov/code/funcdoodle/lib -I/Users/antzhdanov/code/funcdoodle/lib/toml++ -I/Users/antzhdanov/code/funcdoodle/src -I/Users/antzhdanov/code/funcdoodle/test  -fdiagnostics-color=always -Wno-error=deprecated-declarations -Werror -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -g -gdwarf-4 -fsanitize=address -fno-omit-frame-pointer -o CMakeFiles/FuncDoodle.dir/src/App.cc.o -c /Users/antzhdanov/code/funcdoodle/src/App.cc",
+  "file": "/Users/antzhdanov/code/funcdoodle/src/App.cc",
+  "output": "CMakeFiles/FuncDoodle.dir/src/App.cc.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DIMGUI_ENABLE_TEST_ENGINE -DIMGUI_TEST_ENGINE_ENABLE_COROUTINE_STDTHREAD_IMPL=1 -D__WINE__ -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/usr/local/opt/portaudio/include -I/Users/antzhdanov/code/funcdoodle/lib/imgui -I/Users/antzhdanov/code/funcdoodle/lib/imgui/backends -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/glad/include -I/Users/antzhdanov/code/funcdoodle/lib/nfd/src/include -I/Users/antzhdanov/code/funcdoodle/lib/stb -I/Users/antzhdanov/code/funcdoodle/lib -I/Users/antzhdanov/code/funcdoodle/lib/toml++ -I/Users/antzhdanov/code/funcdoodle/src -I/Users/antzhdanov/code/funcdoodle/test  -fdiagnostics-color=always -Wno-error=deprecated-declarations -Werror -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -g -gdwarf-4 -fsanitize=address -fno-omit-frame-pointer -o CMakeFiles/FuncDoodle.dir/src/AssetLoader.cc.o -c /Users/antzhdanov/code/funcdoodle/src/AssetLoader.cc",
+  "file": "/Users/antzhdanov/code/funcdoodle/src/AssetLoader.cc",
+  "output": "CMakeFiles/FuncDoodle.dir/src/AssetLoader.cc.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DIMGUI_ENABLE_TEST_ENGINE -DIMGUI_TEST_ENGINE_ENABLE_COROUTINE_STDTHREAD_IMPL=1 -D__WINE__ -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/usr/local/opt/portaudio/include -I/Users/antzhdanov/code/funcdoodle/lib/imgui -I/Users/antzhdanov/code/funcdoodle/lib/imgui/backends -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/glad/include -I/Users/antzhdanov/code/funcdoodle/lib/nfd/src/include -I/Users/antzhdanov/code/funcdoodle/lib/stb -I/Users/antzhdanov/code/funcdoodle/lib -I/Users/antzhdanov/code/funcdoodle/lib/toml++ -I/Users/antzhdanov/code/funcdoodle/src -I/Users/antzhdanov/code/funcdoodle/test  -fdiagnostics-color=always -Wno-error=deprecated-declarations -Werror -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -g -gdwarf-4 -fsanitize=address -fno-omit-frame-pointer -o CMakeFiles/FuncDoodle.dir/src/AudioManager.cc.o -c /Users/antzhdanov/code/funcdoodle/src/AudioManager.cc",
+  "file": "/Users/antzhdanov/code/funcdoodle/src/AudioManager.cc",
+  "output": "CMakeFiles/FuncDoodle.dir/src/AudioManager.cc.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DIMGUI_ENABLE_TEST_ENGINE -DIMGUI_TEST_ENGINE_ENABLE_COROUTINE_STDTHREAD_IMPL=1 -D__WINE__ -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/usr/local/opt/portaudio/include -I/Users/antzhdanov/code/funcdoodle/lib/imgui -I/Users/antzhdanov/code/funcdoodle/lib/imgui/backends -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/glad/include -I/Users/antzhdanov/code/funcdoodle/lib/nfd/src/include -I/Users/antzhdanov/code/funcdoodle/lib/stb -I/Users/antzhdanov/code/funcdoodle/lib -I/Users/antzhdanov/code/funcdoodle/lib/toml++ -I/Users/antzhdanov/code/funcdoodle/src -I/Users/antzhdanov/code/funcdoodle/test  -fdiagnostics-color=always -Wno-error=deprecated-declarations -Werror -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -g -gdwarf-4 -fsanitize=address -fno-omit-frame-pointer -o CMakeFiles/FuncDoodle.dir/src/DynArr.cc.o -c /Users/antzhdanov/code/funcdoodle/src/DynArr.cc",
+  "file": "/Users/antzhdanov/code/funcdoodle/src/DynArr.cc",
+  "output": "CMakeFiles/FuncDoodle.dir/src/DynArr.cc.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DIMGUI_ENABLE_TEST_ENGINE -DIMGUI_TEST_ENGINE_ENABLE_COROUTINE_STDTHREAD_IMPL=1 -D__WINE__ -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/usr/local/opt/portaudio/include -I/Users/antzhdanov/code/funcdoodle/lib/imgui -I/Users/antzhdanov/code/funcdoodle/lib/imgui/backends -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/glad/include -I/Users/antzhdanov/code/funcdoodle/lib/nfd/src/include -I/Users/antzhdanov/code/funcdoodle/lib/stb -I/Users/antzhdanov/code/funcdoodle/lib -I/Users/antzhdanov/code/funcdoodle/lib/toml++ -I/Users/antzhdanov/code/funcdoodle/src -I/Users/antzhdanov/code/funcdoodle/test  -fdiagnostics-color=always -Wno-error=deprecated-declarations -Werror -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -g -gdwarf-4 -fsanitize=address -fno-omit-frame-pointer -o CMakeFiles/FuncDoodle.dir/src/EditorController.cc.o -c /Users/antzhdanov/code/funcdoodle/src/EditorController.cc",
+  "file": "/Users/antzhdanov/code/funcdoodle/src/EditorController.cc",
+  "output": "CMakeFiles/FuncDoodle.dir/src/EditorController.cc.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DIMGUI_ENABLE_TEST_ENGINE -DIMGUI_TEST_ENGINE_ENABLE_COROUTINE_STDTHREAD_IMPL=1 -D__WINE__ -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/usr/local/opt/portaudio/include -I/Users/antzhdanov/code/funcdoodle/lib/imgui -I/Users/antzhdanov/code/funcdoodle/lib/imgui/backends -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/glad/include -I/Users/antzhdanov/code/funcdoodle/lib/nfd/src/include -I/Users/antzhdanov/code/funcdoodle/lib/stb -I/Users/antzhdanov/code/funcdoodle/lib -I/Users/antzhdanov/code/funcdoodle/lib/toml++ -I/Users/antzhdanov/code/funcdoodle/src -I/Users/antzhdanov/code/funcdoodle/test  -fdiagnostics-color=always -Wno-error=deprecated-declarations -Werror -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -g -gdwarf-4 -fsanitize=address -fno-omit-frame-pointer -o CMakeFiles/FuncDoodle.dir/src/Frame.cc.o -c /Users/antzhdanov/code/funcdoodle/src/Frame.cc",
+  "file": "/Users/antzhdanov/code/funcdoodle/src/Frame.cc",
+  "output": "CMakeFiles/FuncDoodle.dir/src/Frame.cc.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DIMGUI_ENABLE_TEST_ENGINE -DIMGUI_TEST_ENGINE_ENABLE_COROUTINE_STDTHREAD_IMPL=1 -D__WINE__ -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/usr/local/opt/portaudio/include -I/Users/antzhdanov/code/funcdoodle/lib/imgui -I/Users/antzhdanov/code/funcdoodle/lib/imgui/backends -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/glad/include -I/Users/antzhdanov/code/funcdoodle/lib/nfd/src/include -I/Users/antzhdanov/code/funcdoodle/lib/stb -I/Users/antzhdanov/code/funcdoodle/lib -I/Users/antzhdanov/code/funcdoodle/lib/toml++ -I/Users/antzhdanov/code/funcdoodle/src -I/Users/antzhdanov/code/funcdoodle/test  -fdiagnostics-color=always -Wno-error=deprecated-declarations -Werror -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -g -gdwarf-4 -fsanitize=address -fno-omit-frame-pointer -o CMakeFiles/FuncDoodle.dir/src/FrameRenderer.cc.o -c /Users/antzhdanov/code/funcdoodle/src/FrameRenderer.cc",
+  "file": "/Users/antzhdanov/code/funcdoodle/src/FrameRenderer.cc",
+  "output": "CMakeFiles/FuncDoodle.dir/src/FrameRenderer.cc.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DIMGUI_ENABLE_TEST_ENGINE -DIMGUI_TEST_ENGINE_ENABLE_COROUTINE_STDTHREAD_IMPL=1 -D__WINE__ -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/usr/local/opt/portaudio/include -I/Users/antzhdanov/code/funcdoodle/lib/imgui -I/Users/antzhdanov/code/funcdoodle/lib/imgui/backends -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/glad/include -I/Users/antzhdanov/code/funcdoodle/lib/nfd/src/include -I/Users/antzhdanov/code/funcdoodle/lib/stb -I/Users/antzhdanov/code/funcdoodle/lib -I/Users/antzhdanov/code/funcdoodle/lib/toml++ -I/Users/antzhdanov/code/funcdoodle/src -I/Users/antzhdanov/code/funcdoodle/test  -fdiagnostics-color=always -Wno-error=deprecated-declarations -Werror -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -g -gdwarf-4 -fsanitize=address -fno-omit-frame-pointer -o CMakeFiles/FuncDoodle.dir/src/Grid.cc.o -c /Users/antzhdanov/code/funcdoodle/src/Grid.cc",
+  "file": "/Users/antzhdanov/code/funcdoodle/src/Grid.cc",
+  "output": "CMakeFiles/FuncDoodle.dir/src/Grid.cc.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DIMGUI_ENABLE_TEST_ENGINE -DIMGUI_TEST_ENGINE_ENABLE_COROUTINE_STDTHREAD_IMPL=1 -D__WINE__ -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/usr/local/opt/portaudio/include -I/Users/antzhdanov/code/funcdoodle/lib/imgui -I/Users/antzhdanov/code/funcdoodle/lib/imgui/backends -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/glad/include -I/Users/antzhdanov/code/funcdoodle/lib/nfd/src/include -I/Users/antzhdanov/code/funcdoodle/lib/stb -I/Users/antzhdanov/code/funcdoodle/lib -I/Users/antzhdanov/code/funcdoodle/lib/toml++ -I/Users/antzhdanov/code/funcdoodle/src -I/Users/antzhdanov/code/funcdoodle/test  -fdiagnostics-color=always -Wno-error=deprecated-declarations -Werror -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -g -gdwarf-4 -fsanitize=address -fno-omit-frame-pointer -o CMakeFiles/FuncDoodle.dir/src/KeyHandler.cc.o -c /Users/antzhdanov/code/funcdoodle/src/KeyHandler.cc",
+  "file": "/Users/antzhdanov/code/funcdoodle/src/KeyHandler.cc",
+  "output": "CMakeFiles/FuncDoodle.dir/src/KeyHandler.cc.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DIMGUI_ENABLE_TEST_ENGINE -DIMGUI_TEST_ENGINE_ENABLE_COROUTINE_STDTHREAD_IMPL=1 -D__WINE__ -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/usr/local/opt/portaudio/include -I/Users/antzhdanov/code/funcdoodle/lib/imgui -I/Users/antzhdanov/code/funcdoodle/lib/imgui/backends -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/glad/include -I/Users/antzhdanov/code/funcdoodle/lib/nfd/src/include -I/Users/antzhdanov/code/funcdoodle/lib/stb -I/Users/antzhdanov/code/funcdoodle/lib -I/Users/antzhdanov/code/funcdoodle/lib/toml++ -I/Users/antzhdanov/code/funcdoodle/src -I/Users/antzhdanov/code/funcdoodle/test  -fdiagnostics-color=always -Wno-error=deprecated-declarations -Werror -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -g -gdwarf-4 -fsanitize=address -fno-omit-frame-pointer -o CMakeFiles/FuncDoodle.dir/src/Keybinds.cc.o -c /Users/antzhdanov/code/funcdoodle/src/Keybinds.cc",
+  "file": "/Users/antzhdanov/code/funcdoodle/src/Keybinds.cc",
+  "output": "CMakeFiles/FuncDoodle.dir/src/Keybinds.cc.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DIMGUI_ENABLE_TEST_ENGINE -DIMGUI_TEST_ENGINE_ENABLE_COROUTINE_STDTHREAD_IMPL=1 -D__WINE__ -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/usr/local/opt/portaudio/include -I/Users/antzhdanov/code/funcdoodle/lib/imgui -I/Users/antzhdanov/code/funcdoodle/lib/imgui/backends -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/glad/include -I/Users/antzhdanov/code/funcdoodle/lib/nfd/src/include -I/Users/antzhdanov/code/funcdoodle/lib/stb -I/Users/antzhdanov/code/funcdoodle/lib -I/Users/antzhdanov/code/funcdoodle/lib/toml++ -I/Users/antzhdanov/code/funcdoodle/src -I/Users/antzhdanov/code/funcdoodle/test  -fdiagnostics-color=always -Wno-error=deprecated-declarations -Werror -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -g -gdwarf-4 -fsanitize=address -fno-omit-frame-pointer -o CMakeFiles/FuncDoodle.dir/src/LoadedAssets.cc.o -c /Users/antzhdanov/code/funcdoodle/src/LoadedAssets.cc",
+  "file": "/Users/antzhdanov/code/funcdoodle/src/LoadedAssets.cc",
+  "output": "CMakeFiles/FuncDoodle.dir/src/LoadedAssets.cc.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DIMGUI_ENABLE_TEST_ENGINE -DIMGUI_TEST_ENGINE_ENABLE_COROUTINE_STDTHREAD_IMPL=1 -D__WINE__ -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/usr/local/opt/portaudio/include -I/Users/antzhdanov/code/funcdoodle/lib/imgui -I/Users/antzhdanov/code/funcdoodle/lib/imgui/backends -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/glad/include -I/Users/antzhdanov/code/funcdoodle/lib/nfd/src/include -I/Users/antzhdanov/code/funcdoodle/lib/stb -I/Users/antzhdanov/code/funcdoodle/lib -I/Users/antzhdanov/code/funcdoodle/lib/toml++ -I/Users/antzhdanov/code/funcdoodle/src -I/Users/antzhdanov/code/funcdoodle/test  -fdiagnostics-color=always -Wno-error=deprecated-declarations -Werror -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -g -gdwarf-4 -fsanitize=address -fno-omit-frame-pointer -o CMakeFiles/FuncDoodle.dir/src/MacroUtils.cc.o -c /Users/antzhdanov/code/funcdoodle/src/MacroUtils.cc",
+  "file": "/Users/antzhdanov/code/funcdoodle/src/MacroUtils.cc",
+  "output": "CMakeFiles/FuncDoodle.dir/src/MacroUtils.cc.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DIMGUI_ENABLE_TEST_ENGINE -DIMGUI_TEST_ENGINE_ENABLE_COROUTINE_STDTHREAD_IMPL=1 -D__WINE__ -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/usr/local/opt/portaudio/include -I/Users/antzhdanov/code/funcdoodle/lib/imgui -I/Users/antzhdanov/code/funcdoodle/lib/imgui/backends -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/glad/include -I/Users/antzhdanov/code/funcdoodle/lib/nfd/src/include -I/Users/antzhdanov/code/funcdoodle/lib/stb -I/Users/antzhdanov/code/funcdoodle/lib -I/Users/antzhdanov/code/funcdoodle/lib/toml++ -I/Users/antzhdanov/code/funcdoodle/src -I/Users/antzhdanov/code/funcdoodle/test  -fdiagnostics-color=always -Wno-error=deprecated-declarations -Werror -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -g -gdwarf-4 -fsanitize=address -fno-omit-frame-pointer -o CMakeFiles/FuncDoodle.dir/src/Manager.cc.o -c /Users/antzhdanov/code/funcdoodle/src/Manager.cc",
+  "file": "/Users/antzhdanov/code/funcdoodle/src/Manager.cc",
+  "output": "CMakeFiles/FuncDoodle.dir/src/Manager.cc.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DIMGUI_ENABLE_TEST_ENGINE -DIMGUI_TEST_ENGINE_ENABLE_COROUTINE_STDTHREAD_IMPL=1 -D__WINE__ -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/usr/local/opt/portaudio/include -I/Users/antzhdanov/code/funcdoodle/lib/imgui -I/Users/antzhdanov/code/funcdoodle/lib/imgui/backends -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/glad/include -I/Users/antzhdanov/code/funcdoodle/lib/nfd/src/include -I/Users/antzhdanov/code/funcdoodle/lib/stb -I/Users/antzhdanov/code/funcdoodle/lib -I/Users/antzhdanov/code/funcdoodle/lib/toml++ -I/Users/antzhdanov/code/funcdoodle/src -I/Users/antzhdanov/code/funcdoodle/test  -fdiagnostics-color=always -Wno-error=deprecated-declarations -Werror -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -g -gdwarf-4 -fsanitize=address -fno-omit-frame-pointer -o CMakeFiles/FuncDoodle.dir/src/Player.cc.o -c /Users/antzhdanov/code/funcdoodle/src/Player.cc",
+  "file": "/Users/antzhdanov/code/funcdoodle/src/Player.cc",
+  "output": "CMakeFiles/FuncDoodle.dir/src/Player.cc.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DIMGUI_ENABLE_TEST_ENGINE -DIMGUI_TEST_ENGINE_ENABLE_COROUTINE_STDTHREAD_IMPL=1 -D__WINE__ -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/usr/local/opt/portaudio/include -I/Users/antzhdanov/code/funcdoodle/lib/imgui -I/Users/antzhdanov/code/funcdoodle/lib/imgui/backends -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/glad/include -I/Users/antzhdanov/code/funcdoodle/lib/nfd/src/include -I/Users/antzhdanov/code/funcdoodle/lib/stb -I/Users/antzhdanov/code/funcdoodle/lib -I/Users/antzhdanov/code/funcdoodle/lib/toml++ -I/Users/antzhdanov/code/funcdoodle/src -I/Users/antzhdanov/code/funcdoodle/test  -fdiagnostics-color=always -Wno-error=deprecated-declarations -Werror -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -g -gdwarf-4 -fsanitize=address -fno-omit-frame-pointer -o CMakeFiles/FuncDoodle.dir/src/PopupRegistry.cc.o -c /Users/antzhdanov/code/funcdoodle/src/PopupRegistry.cc",
+  "file": "/Users/antzhdanov/code/funcdoodle/src/PopupRegistry.cc",
+  "output": "CMakeFiles/FuncDoodle.dir/src/PopupRegistry.cc.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DIMGUI_ENABLE_TEST_ENGINE -DIMGUI_TEST_ENGINE_ENABLE_COROUTINE_STDTHREAD_IMPL=1 -D__WINE__ -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/usr/local/opt/portaudio/include -I/Users/antzhdanov/code/funcdoodle/lib/imgui -I/Users/antzhdanov/code/funcdoodle/lib/imgui/backends -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/glad/include -I/Users/antzhdanov/code/funcdoodle/lib/nfd/src/include -I/Users/antzhdanov/code/funcdoodle/lib/stb -I/Users/antzhdanov/code/funcdoodle/lib -I/Users/antzhdanov/code/funcdoodle/lib/toml++ -I/Users/antzhdanov/code/funcdoodle/src -I/Users/antzhdanov/code/funcdoodle/test  -fdiagnostics-color=always -Wno-error=deprecated-declarations -Werror -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -g -gdwarf-4 -fsanitize=address -fno-omit-frame-pointer -o CMakeFiles/FuncDoodle.dir/src/Project.cc.o -c /Users/antzhdanov/code/funcdoodle/src/Project.cc",
+  "file": "/Users/antzhdanov/code/funcdoodle/src/Project.cc",
+  "output": "CMakeFiles/FuncDoodle.dir/src/Project.cc.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DIMGUI_ENABLE_TEST_ENGINE -DIMGUI_TEST_ENGINE_ENABLE_COROUTINE_STDTHREAD_IMPL=1 -D__WINE__ -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/usr/local/opt/portaudio/include -I/Users/antzhdanov/code/funcdoodle/lib/imgui -I/Users/antzhdanov/code/funcdoodle/lib/imgui/backends -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/glad/include -I/Users/antzhdanov/code/funcdoodle/lib/nfd/src/include -I/Users/antzhdanov/code/funcdoodle/lib/stb -I/Users/antzhdanov/code/funcdoodle/lib -I/Users/antzhdanov/code/funcdoodle/lib/toml++ -I/Users/antzhdanov/code/funcdoodle/src -I/Users/antzhdanov/code/funcdoodle/test  -fdiagnostics-color=always -Wno-error=deprecated-declarations -Werror -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -g -gdwarf-4 -fsanitize=address -fno-omit-frame-pointer -o CMakeFiles/FuncDoodle.dir/src/Selection.cc.o -c /Users/antzhdanov/code/funcdoodle/src/Selection.cc",
+  "file": "/Users/antzhdanov/code/funcdoodle/src/Selection.cc",
+  "output": "CMakeFiles/FuncDoodle.dir/src/Selection.cc.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DIMGUI_ENABLE_TEST_ENGINE -DIMGUI_TEST_ENGINE_ENABLE_COROUTINE_STDTHREAD_IMPL=1 -D__WINE__ -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/usr/local/opt/portaudio/include -I/Users/antzhdanov/code/funcdoodle/lib/imgui -I/Users/antzhdanov/code/funcdoodle/lib/imgui/backends -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/glad/include -I/Users/antzhdanov/code/funcdoodle/lib/nfd/src/include -I/Users/antzhdanov/code/funcdoodle/lib/stb -I/Users/antzhdanov/code/funcdoodle/lib -I/Users/antzhdanov/code/funcdoodle/lib/toml++ -I/Users/antzhdanov/code/funcdoodle/src -I/Users/antzhdanov/code/funcdoodle/test  -fdiagnostics-color=always -Wno-error=deprecated-declarations -Werror -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -g -gdwarf-4 -fsanitize=address -fno-omit-frame-pointer -o CMakeFiles/FuncDoodle.dir/src/ToolManager.cc.o -c /Users/antzhdanov/code/funcdoodle/src/ToolManager.cc",
+  "file": "/Users/antzhdanov/code/funcdoodle/src/ToolManager.cc",
+  "output": "CMakeFiles/FuncDoodle.dir/src/ToolManager.cc.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DIMGUI_ENABLE_TEST_ENGINE -DIMGUI_TEST_ENGINE_ENABLE_COROUTINE_STDTHREAD_IMPL=1 -D__WINE__ -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/usr/local/opt/portaudio/include -I/Users/antzhdanov/code/funcdoodle/lib/imgui -I/Users/antzhdanov/code/funcdoodle/lib/imgui/backends -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/glad/include -I/Users/antzhdanov/code/funcdoodle/lib/nfd/src/include -I/Users/antzhdanov/code/funcdoodle/lib/stb -I/Users/antzhdanov/code/funcdoodle/lib -I/Users/antzhdanov/code/funcdoodle/lib/toml++ -I/Users/antzhdanov/code/funcdoodle/src -I/Users/antzhdanov/code/funcdoodle/test  -fdiagnostics-color=always -Wno-error=deprecated-declarations -Werror -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -g -gdwarf-4 -fsanitize=address -fno-omit-frame-pointer -o CMakeFiles/FuncDoodle.dir/src/UUID.cc.o -c /Users/antzhdanov/code/funcdoodle/src/UUID.cc",
+  "file": "/Users/antzhdanov/code/funcdoodle/src/UUID.cc",
+  "output": "CMakeFiles/FuncDoodle.dir/src/UUID.cc.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build",
+  "command": "/usr/bin/clang++ -DDEBUG -DIMGUI_ENABLE_TEST_ENGINE -DIMGUI_TEST_ENGINE_ENABLE_COROUTINE_STDTHREAD_IMPL=1 -D__WINE__ -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/usr/local/opt/portaudio/include -I/Users/antzhdanov/code/funcdoodle/lib/imgui -I/Users/antzhdanov/code/funcdoodle/lib/imgui/backends -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/imgui_test_engine/imgui_test_engine -I/Users/antzhdanov/code/funcdoodle/lib/glad/include -I/Users/antzhdanov/code/funcdoodle/lib/nfd/src/include -I/Users/antzhdanov/code/funcdoodle/lib/stb -I/Users/antzhdanov/code/funcdoodle/lib -I/Users/antzhdanov/code/funcdoodle/lib/toml++ -I/Users/antzhdanov/code/funcdoodle/src -I/Users/antzhdanov/code/funcdoodle/test  -fdiagnostics-color=always -Wno-error=deprecated-declarations -Werror -g -std=gnu++20 -arch arm64 -fcolor-diagnostics -g -gdwarf-4 -fsanitize=address -fno-omit-frame-pointer -o CMakeFiles/FuncDoodle.dir/src/main.cc.o -c /Users/antzhdanov/code/funcdoodle/src/main.cc",
+  "file": "/Users/antzhdanov/code/funcdoodle/src/main.cc",
+  "output": "CMakeFiles/FuncDoodle.dir/src/main.cc.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build/lib/glfw/src",
+  "command": "/usr/bin/clang -D_GLFW_COCOA -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/Users/antzhdanov/code/funcdoodle/lib/glfw/src -I/Users/antzhdanov/code/funcdoodle/build/lib/glfw/src -g -std=c99 -arch arm64 -fPIC -fcolor-diagnostics -Wall -o CMakeFiles/glfw.dir/context.c.o -c /Users/antzhdanov/code/funcdoodle/lib/glfw/src/context.c",
+  "file": "/Users/antzhdanov/code/funcdoodle/lib/glfw/src/context.c",
+  "output": "lib/glfw/src/CMakeFiles/glfw.dir/context.c.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build/lib/glfw/src",
+  "command": "/usr/bin/clang -D_GLFW_COCOA -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/Users/antzhdanov/code/funcdoodle/lib/glfw/src -I/Users/antzhdanov/code/funcdoodle/build/lib/glfw/src -g -std=c99 -arch arm64 -fPIC -fcolor-diagnostics -Wall -o CMakeFiles/glfw.dir/init.c.o -c /Users/antzhdanov/code/funcdoodle/lib/glfw/src/init.c",
+  "file": "/Users/antzhdanov/code/funcdoodle/lib/glfw/src/init.c",
+  "output": "lib/glfw/src/CMakeFiles/glfw.dir/init.c.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build/lib/glfw/src",
+  "command": "/usr/bin/clang -D_GLFW_COCOA -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/Users/antzhdanov/code/funcdoodle/lib/glfw/src -I/Users/antzhdanov/code/funcdoodle/build/lib/glfw/src -g -std=c99 -arch arm64 -fPIC -fcolor-diagnostics -Wall -o CMakeFiles/glfw.dir/input.c.o -c /Users/antzhdanov/code/funcdoodle/lib/glfw/src/input.c",
+  "file": "/Users/antzhdanov/code/funcdoodle/lib/glfw/src/input.c",
+  "output": "lib/glfw/src/CMakeFiles/glfw.dir/input.c.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build/lib/glfw/src",
+  "command": "/usr/bin/clang -D_GLFW_COCOA -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/Users/antzhdanov/code/funcdoodle/lib/glfw/src -I/Users/antzhdanov/code/funcdoodle/build/lib/glfw/src -g -std=c99 -arch arm64 -fPIC -fcolor-diagnostics -Wall -o CMakeFiles/glfw.dir/monitor.c.o -c /Users/antzhdanov/code/funcdoodle/lib/glfw/src/monitor.c",
+  "file": "/Users/antzhdanov/code/funcdoodle/lib/glfw/src/monitor.c",
+  "output": "lib/glfw/src/CMakeFiles/glfw.dir/monitor.c.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build/lib/glfw/src",
+  "command": "/usr/bin/clang -D_GLFW_COCOA -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/Users/antzhdanov/code/funcdoodle/lib/glfw/src -I/Users/antzhdanov/code/funcdoodle/build/lib/glfw/src -g -std=c99 -arch arm64 -fPIC -fcolor-diagnostics -Wall -o CMakeFiles/glfw.dir/platform.c.o -c /Users/antzhdanov/code/funcdoodle/lib/glfw/src/platform.c",
+  "file": "/Users/antzhdanov/code/funcdoodle/lib/glfw/src/platform.c",
+  "output": "lib/glfw/src/CMakeFiles/glfw.dir/platform.c.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build/lib/glfw/src",
+  "command": "/usr/bin/clang -D_GLFW_COCOA -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/Users/antzhdanov/code/funcdoodle/lib/glfw/src -I/Users/antzhdanov/code/funcdoodle/build/lib/glfw/src -g -std=c99 -arch arm64 -fPIC -fcolor-diagnostics -Wall -o CMakeFiles/glfw.dir/vulkan.c.o -c /Users/antzhdanov/code/funcdoodle/lib/glfw/src/vulkan.c",
+  "file": "/Users/antzhdanov/code/funcdoodle/lib/glfw/src/vulkan.c",
+  "output": "lib/glfw/src/CMakeFiles/glfw.dir/vulkan.c.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build/lib/glfw/src",
+  "command": "/usr/bin/clang -D_GLFW_COCOA -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/Users/antzhdanov/code/funcdoodle/lib/glfw/src -I/Users/antzhdanov/code/funcdoodle/build/lib/glfw/src -g -std=c99 -arch arm64 -fPIC -fcolor-diagnostics -Wall -o CMakeFiles/glfw.dir/window.c.o -c /Users/antzhdanov/code/funcdoodle/lib/glfw/src/window.c",
+  "file": "/Users/antzhdanov/code/funcdoodle/lib/glfw/src/window.c",
+  "output": "lib/glfw/src/CMakeFiles/glfw.dir/window.c.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build/lib/glfw/src",
+  "command": "/usr/bin/clang -D_GLFW_COCOA -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/Users/antzhdanov/code/funcdoodle/lib/glfw/src -I/Users/antzhdanov/code/funcdoodle/build/lib/glfw/src -g -std=c99 -arch arm64 -fPIC -fcolor-diagnostics -Wall -o CMakeFiles/glfw.dir/egl_context.c.o -c /Users/antzhdanov/code/funcdoodle/lib/glfw/src/egl_context.c",
+  "file": "/Users/antzhdanov/code/funcdoodle/lib/glfw/src/egl_context.c",
+  "output": "lib/glfw/src/CMakeFiles/glfw.dir/egl_context.c.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build/lib/glfw/src",
+  "command": "/usr/bin/clang -D_GLFW_COCOA -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/Users/antzhdanov/code/funcdoodle/lib/glfw/src -I/Users/antzhdanov/code/funcdoodle/build/lib/glfw/src -g -std=c99 -arch arm64 -fPIC -fcolor-diagnostics -Wall -o CMakeFiles/glfw.dir/osmesa_context.c.o -c /Users/antzhdanov/code/funcdoodle/lib/glfw/src/osmesa_context.c",
+  "file": "/Users/antzhdanov/code/funcdoodle/lib/glfw/src/osmesa_context.c",
+  "output": "lib/glfw/src/CMakeFiles/glfw.dir/osmesa_context.c.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build/lib/glfw/src",
+  "command": "/usr/bin/clang -D_GLFW_COCOA -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/Users/antzhdanov/code/funcdoodle/lib/glfw/src -I/Users/antzhdanov/code/funcdoodle/build/lib/glfw/src -g -std=c99 -arch arm64 -fPIC -fcolor-diagnostics -Wall -o CMakeFiles/glfw.dir/null_init.c.o -c /Users/antzhdanov/code/funcdoodle/lib/glfw/src/null_init.c",
+  "file": "/Users/antzhdanov/code/funcdoodle/lib/glfw/src/null_init.c",
+  "output": "lib/glfw/src/CMakeFiles/glfw.dir/null_init.c.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build/lib/glfw/src",
+  "command": "/usr/bin/clang -D_GLFW_COCOA -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/Users/antzhdanov/code/funcdoodle/lib/glfw/src -I/Users/antzhdanov/code/funcdoodle/build/lib/glfw/src -g -std=c99 -arch arm64 -fPIC -fcolor-diagnostics -Wall -o CMakeFiles/glfw.dir/null_monitor.c.o -c /Users/antzhdanov/code/funcdoodle/lib/glfw/src/null_monitor.c",
+  "file": "/Users/antzhdanov/code/funcdoodle/lib/glfw/src/null_monitor.c",
+  "output": "lib/glfw/src/CMakeFiles/glfw.dir/null_monitor.c.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build/lib/glfw/src",
+  "command": "/usr/bin/clang -D_GLFW_COCOA -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/Users/antzhdanov/code/funcdoodle/lib/glfw/src -I/Users/antzhdanov/code/funcdoodle/build/lib/glfw/src -g -std=c99 -arch arm64 -fPIC -fcolor-diagnostics -Wall -o CMakeFiles/glfw.dir/null_window.c.o -c /Users/antzhdanov/code/funcdoodle/lib/glfw/src/null_window.c",
+  "file": "/Users/antzhdanov/code/funcdoodle/lib/glfw/src/null_window.c",
+  "output": "lib/glfw/src/CMakeFiles/glfw.dir/null_window.c.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build/lib/glfw/src",
+  "command": "/usr/bin/clang -D_GLFW_COCOA -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/Users/antzhdanov/code/funcdoodle/lib/glfw/src -I/Users/antzhdanov/code/funcdoodle/build/lib/glfw/src -g -std=c99 -arch arm64 -fPIC -fcolor-diagnostics -Wall -o CMakeFiles/glfw.dir/null_joystick.c.o -c /Users/antzhdanov/code/funcdoodle/lib/glfw/src/null_joystick.c",
+  "file": "/Users/antzhdanov/code/funcdoodle/lib/glfw/src/null_joystick.c",
+  "output": "lib/glfw/src/CMakeFiles/glfw.dir/null_joystick.c.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build/lib/glfw/src",
+  "command": "/usr/bin/clang -D_GLFW_COCOA -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/Users/antzhdanov/code/funcdoodle/lib/glfw/src -I/Users/antzhdanov/code/funcdoodle/build/lib/glfw/src -g -std=c99 -arch arm64 -fPIC -fcolor-diagnostics -Wall -o CMakeFiles/glfw.dir/macos_time.c.o -c /Users/antzhdanov/code/funcdoodle/lib/glfw/src/macos_time.c",
+  "file": "/Users/antzhdanov/code/funcdoodle/lib/glfw/src/macos_time.c",
+  "output": "lib/glfw/src/CMakeFiles/glfw.dir/macos_time.c.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build/lib/glfw/src",
+  "command": "/usr/bin/clang -D_GLFW_COCOA -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/Users/antzhdanov/code/funcdoodle/lib/glfw/src -I/Users/antzhdanov/code/funcdoodle/build/lib/glfw/src -g -std=c99 -arch arm64 -fPIC -fcolor-diagnostics -Wall -o CMakeFiles/glfw.dir/posix_module.c.o -c /Users/antzhdanov/code/funcdoodle/lib/glfw/src/posix_module.c",
+  "file": "/Users/antzhdanov/code/funcdoodle/lib/glfw/src/posix_module.c",
+  "output": "lib/glfw/src/CMakeFiles/glfw.dir/posix_module.c.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build/lib/glfw/src",
+  "command": "/usr/bin/clang -D_GLFW_COCOA -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/Users/antzhdanov/code/funcdoodle/lib/glfw/src -I/Users/antzhdanov/code/funcdoodle/build/lib/glfw/src -g -std=c99 -arch arm64 -fPIC -fcolor-diagnostics -Wall -o CMakeFiles/glfw.dir/posix_thread.c.o -c /Users/antzhdanov/code/funcdoodle/lib/glfw/src/posix_thread.c",
+  "file": "/Users/antzhdanov/code/funcdoodle/lib/glfw/src/posix_thread.c",
+  "output": "lib/glfw/src/CMakeFiles/glfw.dir/posix_thread.c.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build/lib/glfw/src",
+  "command": "/usr/bin/clang -D_GLFW_COCOA -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/Users/antzhdanov/code/funcdoodle/lib/glfw/src -I/Users/antzhdanov/code/funcdoodle/build/lib/glfw/src -x objective-c -g -std=c99 -arch arm64 -fPIC -fcolor-diagnostics -Wall -o CMakeFiles/glfw.dir/cocoa_init.m.o -c /Users/antzhdanov/code/funcdoodle/lib/glfw/src/cocoa_init.m",
+  "file": "/Users/antzhdanov/code/funcdoodle/lib/glfw/src/cocoa_init.m",
+  "output": "lib/glfw/src/CMakeFiles/glfw.dir/cocoa_init.m.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build/lib/glfw/src",
+  "command": "/usr/bin/clang -D_GLFW_COCOA -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/Users/antzhdanov/code/funcdoodle/lib/glfw/src -I/Users/antzhdanov/code/funcdoodle/build/lib/glfw/src -x objective-c -g -std=c99 -arch arm64 -fPIC -fcolor-diagnostics -Wall -o CMakeFiles/glfw.dir/cocoa_joystick.m.o -c /Users/antzhdanov/code/funcdoodle/lib/glfw/src/cocoa_joystick.m",
+  "file": "/Users/antzhdanov/code/funcdoodle/lib/glfw/src/cocoa_joystick.m",
+  "output": "lib/glfw/src/CMakeFiles/glfw.dir/cocoa_joystick.m.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build/lib/glfw/src",
+  "command": "/usr/bin/clang -D_GLFW_COCOA -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/Users/antzhdanov/code/funcdoodle/lib/glfw/src -I/Users/antzhdanov/code/funcdoodle/build/lib/glfw/src -x objective-c -g -std=c99 -arch arm64 -fPIC -fcolor-diagnostics -Wall -o CMakeFiles/glfw.dir/cocoa_monitor.m.o -c /Users/antzhdanov/code/funcdoodle/lib/glfw/src/cocoa_monitor.m",
+  "file": "/Users/antzhdanov/code/funcdoodle/lib/glfw/src/cocoa_monitor.m",
+  "output": "lib/glfw/src/CMakeFiles/glfw.dir/cocoa_monitor.m.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build/lib/glfw/src",
+  "command": "/usr/bin/clang -D_GLFW_COCOA -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/Users/antzhdanov/code/funcdoodle/lib/glfw/src -I/Users/antzhdanov/code/funcdoodle/build/lib/glfw/src -x objective-c -g -std=c99 -arch arm64 -fPIC -fcolor-diagnostics -Wall -o CMakeFiles/glfw.dir/cocoa_window.m.o -c /Users/antzhdanov/code/funcdoodle/lib/glfw/src/cocoa_window.m",
+  "file": "/Users/antzhdanov/code/funcdoodle/lib/glfw/src/cocoa_window.m",
+  "output": "lib/glfw/src/CMakeFiles/glfw.dir/cocoa_window.m.o"
+},
+{
+  "directory": "/Users/antzhdanov/code/funcdoodle/build/lib/glfw/src",
+  "command": "/usr/bin/clang -D_GLFW_COCOA -I/Users/antzhdanov/code/funcdoodle/lib/glfw/include -I/Users/antzhdanov/code/funcdoodle/lib/glfw/src -I/Users/antzhdanov/code/funcdoodle/build/lib/glfw/src -x objective-c -g -std=c99 -arch arm64 -fPIC -fcolor-diagnostics -Wall -o CMakeFiles/glfw.dir/nsgl_context.m.o -c /Users/antzhdanov/code/funcdoodle/lib/glfw/src/nsgl_context.m",
+  "file": "/Users/antzhdanov/code/funcdoodle/lib/glfw/src/nsgl_context.m",
+  "output": "lib/glfw/src/CMakeFiles/glfw.dir/nsgl_context.m.o"
+}
+]

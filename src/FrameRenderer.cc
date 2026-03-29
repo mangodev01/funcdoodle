@@ -34,15 +34,6 @@ namespace FuncDoodle {
 			return;
 		}
 
-		// reserve space for the status bar
-		ImGui::BeginChild("Content", 
-			ImVec2(0, -c_StatusBarHeight),
-			false,
-			ImGuiWindowFlags_NoScrollbar |
-			ImGuiWindowFlags_NoScrollWithMouse |
-			ImGuiWindowFlags_NoTitleBar);
-
-
 		if (!m_Ctx.Grid) {
 			m_Ctx.Grid = std::make_unique<Grid>(m_Ctx.Frame->Width(),
 				m_Ctx.Frame->Height(), m_Ctx.Player->Proj()->BgCol());
@@ -64,11 +55,11 @@ namespace FuncDoodle {
 				else
 					m_Ctx.Grid->ShowGrid();
 			}
-			if (ImGui::MenuItem("Make grid width bigger", "Y")) {
+			if (ImGui::MenuItem("Increase grid size", "Y")) {
 				m_Ctx.Grid->SetGridWidth(m_Ctx.Grid->GridWidth() + 1);
 				m_Ctx.Grid->SetGridHeight(m_Ctx.Grid->GridHeight() + 1);
 			}
-			if (ImGui::MenuItem("Make grid width smaller", "T")) {
+			if (ImGui::MenuItem("Decrease grid size", "T")) {
 				if (m_Ctx.Grid->GridWidth() > 1)
 					m_Ctx.Grid->SetGridWidth(m_Ctx.Grid->GridWidth() - 1);
 				if (m_Ctx.Grid->GridHeight() > 1)
@@ -78,27 +69,16 @@ namespace FuncDoodle {
 		}
 		InitPixels();
 
-		ImGui::EndChild();
-
 		RenderStatusBar();
 
 		ImGui::End();
 	}
 
 	void FrameRenderer::RenderStatusBar() {
-		// ImGui::SetNextWindowPos(ImVec2(frameWindow->Pos.x, frameWindow->Pos.y + frameWindow->Size.y));
-		// ImGui::SetNextWindowSize(ImVec2(frameWindow->Size.x, 24));
-		// ImGui::SetNextWindowBgAlpha(1.0f);
+		float availY = ImGui::GetContentRegionAvail().y;
+		ImGui::SetCursorPosY(ImGui::GetCursorPosY() + availY - c_StatusBarHeight);
 
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0);
-
-		ImGui::BeginChild("##statusbar", 
-			ImVec2(0, c_StatusBarHeight),
-			false, 
-			ImGuiWindowFlags_NoScrollbar |
-			ImGuiWindowFlags_NoScrollWithMouse |
-			ImGuiWindowFlags_NoInputs |
-			ImGuiWindowFlags_NoTitleBar);
+		ImGui::Separator();
 
 		ImGui::Text("Frame %lu | %dx%d | Zoom: %dx | X: %.0f, Y: %.0f | Draw X: %.0f, Draw Y: %.0f",
 			m_Ctx.Index,
@@ -109,10 +89,6 @@ namespace FuncDoodle {
 			m_Ctx.LastHoverMousePos ? m_Ctx.LastHoverMousePos->y : 0,
 			m_Ctx.LastMousePos ? m_Ctx.LastMousePos->x : 0,
 			m_Ctx.LastMousePos ? m_Ctx.LastMousePos->y : 0);
-
-		ImGui::EndChild();
-
-		ImGui::PopStyleVar();
 	}
 
 	void FrameRenderer::InitPixels() {

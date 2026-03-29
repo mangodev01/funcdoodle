@@ -13,6 +13,8 @@
 #include <stack>
 
 namespace FuncDoodle {
+	const float c_StatusBarHeight = 20.0f;
+
 	EditorController::EditorController() {}
 
 	bool EditorController::Paint(Frame* frame, unsigned long frameI,
@@ -302,7 +304,7 @@ namespace FuncDoodle {
 		const float startX =
 			windowPos.x + (contentRegion.x - frameWidth) * 0.5f + 9;
 		const float startY =
-			windowPos.y + (contentRegion.y - frameHeight) * 0.5f + 41;
+			windowPos.y + ((contentRegion.y - c_StatusBarHeight) - frameHeight) * 0.5f + 41;
 		ImDrawList* drawList = ImGui::GetWindowDrawList();
 
 		ApplyToolAt(context, pixels, startX, startY, frameWidth, frameHeight);
