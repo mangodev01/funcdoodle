@@ -55,50 +55,54 @@ namespace FuncDoodle {
 			g_Themes.clear();
 		}
 		inline void ThemeEditor() {
-			if (g_ThemeEditorOpen) {
-				if (ImGui::Begin("Theme editor", &g_ThemeEditorOpen,
-						ImGuiWindowFlags_NoCollapse)) {
-					ImGuiStyle& style = ImGui::GetStyle();
-
-					ImVec2 windowSize = ImGui::GetWindowSize();
-					float windowWidth = windowSize.x;
-
-					// Calculate the number of col based on the window width
-					int numCol = static_cast<int>(
-						windowWidth /
-						200);  // Each column has a minimum width of 100px
-					numCol = ImMax(1, numCol);
-
-					ImGui::Columns(numCol, nullptr, false);
-					for (unsigned char col = 0; col < ImGuiCol_COUNT; ++col) {
-						ImGui::PushID(col);
-						ImVec4& color = style.Colors[col];
-
-						if (ImGui::ColorEdit4(ImGui::GetStyleColorName(col),
-								(float*)&color)) {
-							style.Colors[col] = color;
-						}
-
-						if ((col + 1) % numCol == 0) {
-							ImGui::NextColumn();
-						}
-
-						ImGui::PopID();
-					}
-
-					// End the cols
-					ImGui::Columns(1);
-
-					if (ImGui::Button("Close") ||
-						ImGui::IsKeyPressed(ImGuiKey_Escape) ||
-						ImGui::IsKeyPressed(ImGuiKey_Enter) ||
-						ImGui::IsKeyPressed(ImGuiKey_KeypadEnter)) {
-						g_ThemeEditorOpen = false;
-					}
-
-					ImGui::End();
-				}
+			if (!g_ThemeEditorOpen) {
+				return;
 			}
+			ImGui::ShowStyleEditor(&ImGui::GetStyle());
+			// if (g_ThemeEditorOpen) {
+				// ImGui::Begin("Theme editor", &g_ThemeEditorOpen,
+						// ImGuiWindowFlags_NoCollapse);
+//
+				// ImGuiStyle& style = ImGui::GetStyle();
+//
+				// ImVec2 windowSize = ImGui::GetWindowSize();
+				// float windowWidth = windowSize.x;
+//
+				// Calculate the number of col based on the window width
+				// int numCol = static_cast<int>(
+					// windowWidth /
+					// 200);  // Each column has a minimum width of 100px
+				// numCol = ImMax(1, numCol);
+//
+				// ImGui::Columns(numCol, nullptr, false);
+				// for (unsigned char col = 0; col < ImGuiCol_COUNT; ++col) {
+					// ImGui::PushID(col);
+					// ImVec4& color = style.Colors[col];
+//
+					// if (ImGui::ColorEdit4(ImGui::GetStyleColorName(col),
+							// (float*)&color)) {
+						// style.Colors[col] = color;
+					// }
+//
+					// if ((col + 1) % numCol == 0) {
+						// ImGui::NextColumn();
+					// }
+//
+					// ImGui::PopID();
+				// }
+//
+				// End the cols
+				// ImGui::Columns(1);
+//
+				// if (ImGui::Button("Close") ||
+					// ImGui::IsKeyPressed(ImGuiKey_Escape) ||
+					// ImGui::IsKeyPressed(ImGuiKey_Enter) ||
+					// ImGui::IsKeyPressed(ImGuiKey_KeypadEnter)) {
+					// g_ThemeEditorOpen = false;
+				// }
+//
+				// ImGui::End();
+			// }
 		}
 		inline CustomTheme g_LastLoadedTheme;
 		inline CustomTheme* LoadThemeFromFile(const char* path) {
@@ -223,6 +227,12 @@ namespace FuncDoodle {
 			// intentionally omitted here.
 		}
 		inline void SaveCurrentTheme() {
+			// Save macros for ImGuiStyle fields
+			#define SAVE_FLOAT(field) other.insert(#field, style.field)
+			#define SAVE_VEC2(field) other.insert(#field, toml::array{style.field.x, style.field.y})
+			#define SAVE_BOOL(field) other.insert(#field, style.field)
+			#define SAVE_ENUM(field) other.insert(#field, static_cast<int>(style.field))
+
 			if (g_SaveThemeOpen) {
 				ImGui::Begin("Save current theme", &g_SaveThemeOpen);
 				static char themeName[100] = "";
@@ -255,6 +265,74 @@ namespace FuncDoodle {
 						}
 
 						theme.insert("colors"sv, colors);
+
+						toml::table other = toml::table();
+						
+						SAVE_FLOAT(Alpha);
+						SAVE_FLOAT(DisabledAlpha);
+						SAVE_VEC2(WindowPadding);
+						SAVE_FLOAT(WindowRounding);
+						SAVE_FLOAT(WindowBorderSize);
+						SAVE_FLOAT(WindowBorderHoverPadding);
+						SAVE_VEC2(WindowMinSize);
+						SAVE_VEC2(WindowTitleAlign);
+						SAVE_ENUM(WindowMenuButtonPosition);
+						SAVE_FLOAT(ChildRounding);
+						SAVE_FLOAT(ChildBorderSize);
+						SAVE_FLOAT(PopupRounding);
+						SAVE_FLOAT(PopupBorderSize);
+						SAVE_VEC2(FramePadding);
+						SAVE_FLOAT(FrameRounding);
+						SAVE_FLOAT(FrameBorderSize);
+						SAVE_VEC2(ItemSpacing);
+						SAVE_VEC2(ItemInnerSpacing);
+						SAVE_VEC2(CellPadding);
+						SAVE_VEC2(TouchExtraPadding);
+						SAVE_FLOAT(IndentSpacing);
+						SAVE_FLOAT(ColumnsMinSpacing);
+						SAVE_FLOAT(ScrollbarSize);
+						SAVE_FLOAT(ScrollbarRounding);
+						SAVE_FLOAT(ScrollbarPadding);
+						SAVE_FLOAT(GrabMinSize);
+						SAVE_FLOAT(GrabRounding);
+						SAVE_FLOAT(LogSliderDeadzone);
+						SAVE_FLOAT(ImageRounding);
+						SAVE_FLOAT(ImageBorderSize);
+						SAVE_FLOAT(TabRounding);
+						SAVE_FLOAT(TabBorderSize);
+						SAVE_FLOAT(TabMinWidthBase);
+						SAVE_FLOAT(TabMinWidthShrink);
+						SAVE_FLOAT(TabCloseButtonMinWidthSelected);
+						SAVE_FLOAT(TabCloseButtonMinWidthUnselected);
+						SAVE_FLOAT(TabBarBorderSize);
+						SAVE_FLOAT(TabBarOverlineSize);
+						SAVE_FLOAT(TableAngledHeadersAngle);
+						SAVE_VEC2(TableAngledHeadersTextAlign);
+						SAVE_ENUM(TreeLinesFlags);
+						SAVE_FLOAT(TreeLinesSize);
+						SAVE_FLOAT(TreeLinesRounding);
+						SAVE_FLOAT(DragDropTargetRounding);
+						SAVE_FLOAT(DragDropTargetBorderSize);
+						SAVE_FLOAT(DragDropTargetPadding);
+						SAVE_FLOAT(ColorMarkerSize);
+						SAVE_ENUM(ColorButtonPosition);
+						SAVE_VEC2(ButtonTextAlign);
+						SAVE_VEC2(SelectableTextAlign);
+						SAVE_FLOAT(SeparatorSize);
+						SAVE_FLOAT(SeparatorTextBorderSize);
+						SAVE_VEC2(SeparatorTextAlign);
+						SAVE_VEC2(SeparatorTextPadding);
+						SAVE_VEC2(DisplayWindowPadding);
+						SAVE_VEC2(DisplaySafeAreaPadding);
+						SAVE_BOOL(DockingNodeHasCloseButton);
+						SAVE_FLOAT(DockingSeparatorSize);
+						SAVE_FLOAT(MouseCursorScale);
+						SAVE_BOOL(AntiAliasedLines);
+						SAVE_BOOL(AntiAliasedLinesUseTex);
+						SAVE_BOOL(AntiAliasedFill);
+						SAVE_FLOAT(CurveTessellationTol);
+						SAVE_FLOAT(CircleTessellationMaxError);
+
 
 						std::ofstream f(savePath);
 						if (!f) {

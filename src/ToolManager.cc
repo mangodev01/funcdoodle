@@ -4,6 +4,7 @@
 #include "Tool.h"
 
 #include "MacroUtils.h"
+#include "imgui.h"
 
 namespace FuncDoodle {
 	ToolManager::ToolManager(KeybindsRegistry& keybinds)
@@ -40,7 +41,9 @@ namespace FuncDoodle {
 		}
 
 		if (m_SelectedTool != ToolType::Eraser && m_SelectedTool != ToolType::Select) {
+			ImGui::PushItemWidth(250);
 			ImGui::ColorPicker3("Color", m_Col, ImGuiColorEditFlags_NoSidePreview);
+			ImGui::PopItemWidth();
 		}
 
 		if (m_Size < 1)
