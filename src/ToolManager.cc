@@ -37,12 +37,10 @@ namespace FuncDoodle {
 		if (m_SelectedTool == ToolType::Pencil ||
 			m_SelectedTool == ToolType::Eraser) {
 			ImGui::SliderInt("##Size", &m_Size, 1, 100, "%dpx");
-			ImGui::SameLine();
-			ImGui::InputInt("##SizeText", &m_Size, 1, 100, 0);
 		}
 
 		if (m_SelectedTool != ToolType::Eraser && m_SelectedTool != ToolType::Select) {
-			ImGui::ColorPicker3("Col", m_Col);
+			ImGui::ColorPicker3("Color", m_Col, ImGuiColorEditFlags_NoSidePreview);
 		}
 
 		if (m_Size < 1)
