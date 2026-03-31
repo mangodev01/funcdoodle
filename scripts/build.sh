@@ -40,6 +40,48 @@ if [[ "$platform" == "unknown" ]]; then
 	exit -1
 fi
 
+detect_pa_libdir() {
+	if [[ -n "${PORTAUDIO_LIBDIR:-}" ]]; then
+		echo "$PORTAUDIO_LIBDIR"
+		return
+	fi
+	for d in /lib64 /usr/lib64 /usr/lib /usr/local/lib; do
+		if [[ -f "$d/libportaudio.so" || -f "$d/libportaudio.dylib" || -f "$d/libportaudio.a" ]]; then
+			echo "$d"
+			return
+		fi
+	done
+	echo "/usr/lib"
+}
+
+detect_pa_incldir() {
+	if [[ -n "${PORTAUDIO_INCLDIR:-}" ]]; then
+		echo "$PORTAUDIO_INCLDIR"
+		return
+	fi
+	if [[ -f "/usr/include/portaudio.h" ]]; then
+		echo "/usr/include"
+		return
+	fi
+	if [[ -f "/usr/local/include/portaudio.h" ]]; then
+		echo "/usr/local/include"
+		return
+	fi
+	echo ""
+}
+
+pa_libdir="$(detect_pa_libdir)"
+pa_incldir="$(detect_pa_incldir)"
+pa_static="${PORTAUDIO_STATIC:-}"
+if [[ -z "$pa_static" ]]; then
+	pa_static="ON"
+fi
+if [[ "$pa_static" == "ON" && ! -f "$pa_libdir/libportaudio.a" ]]; then
+	echo "Static PortAudio not found at $pa_libdir/libportaudio.a"
+	echo "Install/build static PortAudio or set PORTAUDIO_LIBDIR to its location."
+	exit -1
+fi
+
 if [[ $# -eq 0 ]]; then
 	arg1="debug"
 	arg2="true"
@@ -72,7 +114,18 @@ fi
 
 mkdir -p "$bin_dir" || exit -1
 pushd "$bin_dir" >/dev/null || exit -1
-cmake -DCMAKE_BUILD_TYPE=$arg1 -DISTILING=$( (( arg2 == "true" )) && echo "ON" || echo "OFF" ) -DBUILD_TESTS=OFF -DBUILD_IMTESTS=OFF "$root_dir" || exit -1
+cmake_args=(
+	-DCMAKE_BUILD_TYPE=$arg1
+	-DISTILING=$( (( arg2 == "true" )) && echo "ON" || echo "OFF" )
+	-DBUILD_TESTS=OFF
+	-DBUILD_IMTESTS=OFF
+	-DPORTAUDIO_LIBDIR="$pa_libdir"
+	-DPORTAUDIO_STATIC="$pa_static"
+)
+if [[ -n "$pa_incldir" ]]; then
+	cmake_args+=(-DPORTAUDIO_INCLDIR="$pa_incldir")
+fi
+cmake "${cmake_args[@]}" "$root_dir" || exit -1
 jobs=$(( ($(nproc_compat) + 2) / 2 ))
 make -j"$jobs" || exit -1
 cp -r "$root_dir/assets" . || exit -1

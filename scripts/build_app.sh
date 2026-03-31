@@ -35,6 +35,11 @@ fi
 cp "$BINARY" "$MACOS_DIR/$APP_NAME"
 chmod +x "$MACOS_DIR/$APP_NAME"
 
+if [[ -n "$PORTAUDIO_DYLIB" && "$PORTAUDIO_DYLIB" != *.dylib ]]; then
+	echo "Static PortAudio is required; don't pass a dylib to build_app.sh."
+	exit 1
+fi
+
 if [ -n "$PORTAUDIO_DYLIB" ]; then
     if [ ! -f "$PORTAUDIO_DYLIB" ]; then
         echo "PortAudio dylib not found: $PORTAUDIO_DYLIB"

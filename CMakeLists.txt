@@ -36,26 +36,14 @@ endif()
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(FuncDoodleSources)
+include(FuncDoodleIncludes)
 include(FuncDoodlePlatform)
 include(FuncDoodleBuild)
 
 funcdoodle_set_nfd_sources(NFD_SOURCES)
 funcdoodle_set_portaudio_defaults()
 
-add_subdirectory(lib/glfw)
-file(GLOB SRC "src/*.cc")
-
-file(GLOB IMGUI_TEST_ENGINE_SOURCES
-	"lib/imgui_test_engine/imgui_test_engine/*.cpp"
-)
-
-add_executable(FuncDoodle
-	${FUNCDOODLE_GLAD_SOURCES}
-	${FUNCDOODLE_IMGUI_SOURCES}
-	${IMGUI_TEST_ENGINE_SOURCES}
-	${NFD_SOURCES}
-	${SRC}
-)
+funcdoodle_sources()
 
 if(BUILD_TESTS AND NOT CMAKE_CROSSCOMPILING)
 	file(GLOB TEST_SOURCES "test/*.cc")
@@ -71,22 +59,7 @@ if(BUILD_IMTESTS AND NOT CMAKE_CROSSCOMPILING)
 	message(STATUS "BUILD_IMTESTS enabled -- imtest sources: ${IMTEST_SOURCES}")
 endif()
 
-target_include_directories(FuncDoodle PRIVATE
-	lib/glfw/include/
-	${PORTAUDIO_INCLDIR}
-	lib/imgui
-	lib/imgui/backends
-	lib/imgui_test_engine
-	lib/imgui_test_engine/imgui_test_engine
-	lib/glad/include
-	lib/nfd/src/include
-	lib/stb/
-	lib/
-	lib/toml++/
-	src/
-	test/
-)
-
+funcdoodle_includes()
 funcdoodle_apply_platform_links(FuncDoodle)
 
 add_compile_definitions(__WINE__)

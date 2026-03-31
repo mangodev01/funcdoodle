@@ -23,3 +23,20 @@ function(funcdoodle_set_nfd_sources out_var)
 
 	set(${out_var} ${_nfd} PARENT_SCOPE)
 endfunction()
+
+function(funcdoodle_sources)
+	add_subdirectory(lib/glfw)
+	file(GLOB SRC "src/*.cc")
+
+	file(GLOB IMGUI_TEST_ENGINE_SOURCES
+		"lib/imgui_test_engine/imgui_test_engine/*.cpp"
+	)
+
+	add_executable(FuncDoodle
+		${FUNCDOODLE_GLAD_SOURCES}
+		${FUNCDOODLE_IMGUI_SOURCES}
+		${IMGUI_TEST_ENGINE_SOURCES}
+		${NFD_SOURCES}
+		${SRC}
+	)
+endfunction()
