@@ -18,6 +18,7 @@
 #include <string>
 
 #include "LoadedAssets.h"
+#include "TextUtil.h"
 
 #include "MacroUtils.h"
 
@@ -284,11 +285,10 @@ namespace FuncDoodle {
 	void Application::RenderOptions() {
 		ImGuiViewport* vp = ImGui::GetMainViewport();
 		ImVec2 size = vp->Size;
-
 		ImVec2 safe = ImGui::GetStyle().DisplaySafeAreaPadding;
 
-		float menuBarHeight = ImGui::GetFrameHeight(); // main menu bar height
-		ImGui::SetNextWindowPos(ImVec2(safe.x - 2, menuBarHeight + safe.y - 3)); // offset by safe area + menu bar
+		float menuBarHeight = ImGui::GetFrameHeight();
+		ImGui::SetNextWindowPos(ImVec2(safe.x - 2, menuBarHeight + safe.y - 3));
 		size.y -= menuBarHeight;
 		ImGui::SetNextWindowSize(size, ImGuiCond_Always);
 		ImGui::SetNextWindowViewport(vp->ID);
@@ -306,127 +306,88 @@ namespace FuncDoodle {
 
 		ImGui::BeginGroup();
 
-		float groupWidth = 0.0f;
-		float groupHeight = 0.0f;
+		const ImVec2 btnSize(50, 50);
+		const float titleFontSize = 25.0f;
+		const float descFontSize = 18.0f;
+		const float descYOffset = 12.0f;
+		const float openTextYOffset = 4.0f;
+		const float rowGapExtra = 14.0f;
 
-		ImVec2 btnSize = ImVec2(50, 50);
-		float spacing = ImGui::GetStyle().ItemSpacing.y;
-
-		groupWidth = btnSize.x;
-		float rowGapExtra = 20.0f;
-		float rowGap = spacing + rowGapExtra;
-		groupHeight = btnSize.y * 2 + rowGap;
-
-		float titleFontSize = 25.0f;
-		float descFontSize = 18.0f;
 		ImFont* titleFont = m_AssetLoader && m_AssetLoader->GetFontBold()
 			? m_AssetLoader->GetFontBold()
 			: ImGui::GetFont();
 
-		ImVec2 padding = ImGui::GetStyle().FramePadding;
-		float textGap = ImGui::GetStyle().ItemSpacing.x;
+		const float spacingY = ImGui::GetStyle().ItemSpacing.y;
+		const float textGap = ImGui::GetStyle().ItemSpacing.x;
+		const float rowGap = spacingY + rowGapExtra;
 
 		const char* newProjTitle = "New project";
 		const char* newProjDesc = "Create a new FuncDoodle project";
 		const char* openProjTitle = "Open project";
 		const char* openProjDesc = "Open an existing FuncDoodle project";
 
-		float maxWidth;
-		{
-			ImGui::PushFont(titleFont, titleFontSize);
-			float t1 = ImGui::CalcTextSize(newProjTitle).x;
-			float t2 = ImGui::CalcTextSize(openProjTitle).x;
-			ImGui::PopFont();
+		float maxWidth = TextUtil::MaxWidth(titleFont, titleFontSize,
+			newProjTitle, openProjTitle, nullptr, descFontSize, newProjDesc,
+			openProjDesc);
 
-			ImGui::PushFont(0, descFontSize);
-			float d1 = ImGui::CalcTextSize(newProjDesc).x;
-			float d2 = ImGui::CalcTextSize(openProjDesc).x;
-			ImGui::PopFont();
-
-			maxWidth = std::max({ t1, t2, d1, d2 });
-		}
-
-		ImGui::PushFont(titleFont, titleFontSize);
-		float titleLineHeight = ImGui::GetTextLineHeight();
+		float groupWidth = btnSize.x;
+		float groupHeight = btnSize.y * 2 + rowGap;
 
 		float windowWidth = ImGui::GetWindowSize().x;
-		ImGui::SetCursorPosX((windowWidth - groupWidth) / 2 - maxWidth);
+		ImGui::SetCursorPosX((windowWidth - groupWidth) * 0.5f - maxWidth);
+		float rowStartX = ImGui::GetCursorPosX();
 
-		float textXPos = ImGui::GetCursorPosX();
 		ImVec2 windowPos = ImGui::GetWindowPos();
-
 		ImVec2 avail = ImGui::GetContentRegionAvail();
-		ImGui::SetCursorPosY((avail.y - groupHeight) * 0.5f);
-		float rowTopY = ImGui::GetCursorPosY();
+		float rowTopY = (avail.y - groupHeight) * 0.5f;
+		ImGui::SetCursorPosY(rowTopY);
 
-		if (ImGui::ImageButton(newProjTitle, (ImTextureID)(intptr_t)s_AddTexId, btnSize)) {
+		auto renderOptionRow = [&](const char* title, const char* desc,
+								   uint32_t texId, float textYOffset,
+								   const std::function<void()>& onClick) {
+			if (ImGui::ImageButton(title, (ImTextureID)(intptr_t)texId, btnSize)) {
+				onClick();
+			}
+
+			ImVec2 btnMin = ImGui::GetItemRectMin();
+			ImVec2 btnMax = ImGui::GetItemRectMax();
+			float btnTopY = btnMin.y - windowPos.y;
+			float btnBottomY = btnMax.y - windowPos.y;
+			float textX = btnMax.x - windowPos.x + textGap;
+
+			ImGui::SameLine();
+
+			ImGui::PushFont(titleFont, titleFontSize);
+			float titleHeight =
+				TextUtil::TextHeight(titleFont, titleFontSize, title);
+			ImGui::SetCursorPosX(textX);
+			ImGui::SetCursorPosY(btnTopY + (btnSize.y - titleHeight) * 0.5f -
+				textYOffset);
+			ImGui::Text("%s", title);
+			ImGui::PopFont();
+
+			ImGui::PushFont(nullptr, descFontSize);
+			float descLineHeight = ImGui::GetTextLineHeight();
+			ImGui::SetCursorPosX(textX);
+			ImGui::SetCursorPosY(btnBottomY - descLineHeight - descYOffset -
+				textYOffset);
+			ImGui::Text("%s", desc);
+			ImGui::PopFont();
+		};
+
+		renderOptionRow(newProjTitle, newProjDesc, s_AddTexId, 0.0f, [&]() {
 			if (m_SFXEnabled)
 				m_AssetLoader->PlaySound(s_ProjCreateSound);
 			m_Popups.Open("new");
-		}
-		float newBtnTopY = ImGui::GetItemRectMin().y - windowPos.y;
-		float newBtnBottomY = ImGui::GetItemRectMax().y - windowPos.y;
-		float newBtnRightX = ImGui::GetItemRectMax().x - windowPos.x;
-		float newTextX = newBtnRightX + textGap;
-		float newTitleHeight = ImGui::CalcTextSize(newProjTitle).y;
-		float newTitleY = newBtnTopY + (btnSize.y - newTitleHeight) * 0.5f;
+		});
 
-		ImGui::SameLine();
+		ImGui::SetCursorPosX(rowStartX);
+		ImGui::SetCursorPosY(rowTopY + btnSize.y + rowGap);
 
-		ImGui::SetCursorPosX(newTextX);
-		ImGui::SetCursorPosY(newTitleY);
-
-		ImGui::Text("%s", newProjTitle);
-
-		ImGui::PopFont();
-
-		ImGui::PushFont(0, descFontSize);
-
-		float descLineHeight = ImGui::GetTextLineHeight();
-		float descYOffset = 12.0f;
-		ImGui::SetCursorPosX(newTextX);
-		ImGui::SetCursorPosY(newBtnBottomY - descLineHeight - descYOffset);
-		ImGui::Text("%s", newProjDesc);
-
-		ImGui::PopFont();
-
-		ImGui::SetCursorPosX(textXPos);
-		ImGui::SetCursorPosY(rowTopY + btnSize.y + rowGap - 6.0f);
-
-		if (ImGui::ImageButton(openProjTitle, (ImTextureID)(intptr_t)s_OpenTexId, btnSize)) {
-			OpenFileDialog([&]() { this->ReadProjectFile(); });
-		}
-		float openBtnTopY = ImGui::GetItemRectMin().y - windowPos.y;
-		float openBtnBottomY = ImGui::GetItemRectMax().y - windowPos.y;
-		float openBtnRightX = ImGui::GetItemRectMax().x - windowPos.x;
-		float openTextX = openBtnRightX + textGap;
-		float openTitleHeight = ImGui::CalcTextSize(openProjTitle).y;
-		float openTextYOffset = 4.0f;
-		float openTitleY = openBtnTopY + (btnSize.y - openTitleHeight) * 0.5f -
-			openTextYOffset;
-
-		ImGui::SameLine();
-
-		ImGui::SetCursorPosX(openTextX);
-		ImGui::SetCursorPosY(openTitleY);
-
-		ImGui::PushFont(titleFont, titleFontSize);
-
-		ImGui::Text("%s", openProjTitle);
-
-		ImGui::PopFont();
-
-		ImGui::PushFont(0, descFontSize);
-
-		ImGui::SetCursorPosX(openTextX);
-		ImGui::SetCursorPosY(openBtnBottomY - descLineHeight - descYOffset -
-			openTextYOffset);
-		ImGui::Text("%s", openProjDesc);
-
-		ImGui::PopFont();
+		renderOptionRow(openProjTitle, openProjDesc, s_OpenTexId, openTextYOffset,
+			[&]() { OpenFileDialog([&]() { this->ReadProjectFile(); }); });
 
 		ImGui::EndGroup();
-
 		ImGui::End();
 		ImGui::PopStyleVar(2);
 	}
