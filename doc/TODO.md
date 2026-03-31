@@ -6,6 +6,8 @@
 - [x] make it so you can select stuff
 - [x] gui tests with imgui automation thing
 - [x] modifying keybinds
+- [x] make portaudio a submodule
+- [x] make a better startup screen
 - [ ] make it so you can do more stuff with selection, not just rotation and deletion
 - [ ] i18n
 - [ ] fix infinite tech debt (wip)
