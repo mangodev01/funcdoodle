@@ -1,7 +1,6 @@
 function(funcdoodle_includes)
 	target_include_directories(FuncDoodle PRIVATE
 		lib/glfw/include/
-		${PORTAUDIO_INCLDIR}
 		lib/imgui
 		lib/imgui/backends
 		lib/imgui_test_engine
@@ -14,4 +13,7 @@ function(funcdoodle_includes)
 		src/
 		test/
 	)
+	if(NOT FUNCDOODLE_USE_BUNDLED_PORTAUDIO)
+		target_include_directories(FuncDoodle PRIVATE ${PORTAUDIO_INCLDIR})
+	endif()
 endfunction()

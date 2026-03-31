@@ -73,7 +73,7 @@ endfunction()
 
 function(funcdoodle_apply_platform_links target)
 	if(UNIX)
-		target_link_libraries(${target}
+		target_link_libraries(${target} PRIVATE
 			glfw
 			${CMAKE_DL_LIBS}
 			m
@@ -81,7 +81,7 @@ function(funcdoodle_apply_platform_links target)
 			dl
 		)
 	elseif(WIN32)
-		target_link_libraries(${target}
+		target_link_libraries(${target} PRIVATE
 			glfw
 			${CMAKE_DL_LIBS}
 		)
@@ -90,29 +90,32 @@ function(funcdoodle_apply_platform_links target)
 	if(UNIX AND NOT APPLE)
 		find_package(PkgConfig REQUIRED)
 		pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
-		target_link_libraries(${target} ${GTK3_LIBRARIES})
+		target_link_libraries(${target} PRIVATE ${GTK3_LIBRARIES})
 		target_include_directories(${target} PRIVATE ${GTK3_INCLUDE_DIRS})
 	endif()
 
-	funcdoodle_find_portaudio(PORTAUDIO_LIB)
+	if(NOT FUNCDOODLE_USE_BUNDLED_PORTAUDIO)
+		funcdoodle_find_portaudio(PORTAUDIO_LIB)
 
-	if(APPLE)
-		target_link_libraries(${target}
-			${PORTAUDIO_LIB}
-			"-framework OpenGL"
-			"-framework Cocoa"
-			"-framework IOKit"
-			"-framework CoreFoundation"
-			"-framework AppKit"
-		)
-	elseif(UNIX AND NOT APPLE)
-		target_link_libraries(${target}
-			${PORTAUDIO_LIB}
-		)
-	elseif(WIN32)
-		target_link_libraries(${target}
-			${CMAKE_DL_LIBS}
-			${PORTAUDIO_LIB}
-		)
+		if(APPLE)
+			target_link_libraries(${target}
+				PRIVATE
+				${PORTAUDIO_LIB}
+				"-framework OpenGL"
+				"-framework Cocoa"
+				"-framework IOKit"
+				"-framework CoreFoundation"
+				"-framework AppKit"
+			)
+		elseif(UNIX AND NOT APPLE)
+			target_link_libraries(${target} PRIVATE
+				${PORTAUDIO_LIB}
+			)
+		elseif(WIN32)
+			target_link_libraries(${target} PRIVATE
+				${CMAKE_DL_LIBS}
+				${PORTAUDIO_LIB}
+			)
+		endif()
 	endif()
 endfunction()

@@ -70,16 +70,25 @@ detect_pa_incldir() {
 	echo ""
 }
 
-pa_libdir="$(detect_pa_libdir)"
-pa_incldir="$(detect_pa_incldir)"
-pa_static="${PORTAUDIO_STATIC:-}"
-if [[ -z "$pa_static" ]]; then
-	pa_static="ON"
+use_bundled="${FUNCDOODLE_USE_BUNDLED_PORTAUDIO:-}"
+if [[ -z "$use_bundled" && -f "$root_dir/lib/portaudio/CMakeLists.txt" ]]; then
+	use_bundled="ON"
 fi
-if [[ "$pa_static" == "ON" && ! -f "$pa_libdir/libportaudio.a" ]]; then
-	echo "Static PortAudio not found at $pa_libdir/libportaudio.a"
-	echo "Install/build static PortAudio or set PORTAUDIO_LIBDIR to its location."
-	exit -1
+
+pa_libdir=""
+pa_incldir=""
+pa_static="${PORTAUDIO_STATIC:-}"
+if [[ "$use_bundled" != "ON" ]]; then
+	pa_libdir="$(detect_pa_libdir)"
+	pa_incldir="$(detect_pa_incldir)"
+	if [[ -z "$pa_static" ]]; then
+		pa_static="ON"
+	fi
+	if [[ "$pa_static" == "ON" && ! -f "$pa_libdir/libportaudio.a" ]]; then
+		echo "Static PortAudio not found at $pa_libdir/libportaudio.a"
+		echo "Install/build static PortAudio or set PORTAUDIO_LIBDIR to its location."
+		exit -1
+	fi
 fi
 
 if [[ $# -eq 0 ]]; then
@@ -119,11 +128,13 @@ cmake_args=(
 	-DISTILING=$( (( arg2 == "true" )) && echo "ON" || echo "OFF" )
 	-DBUILD_TESTS=OFF
 	-DBUILD_IMTESTS=OFF
-	-DPORTAUDIO_LIBDIR="$pa_libdir"
-	-DPORTAUDIO_STATIC="$pa_static"
+	-DFUNCDOODLE_USE_BUNDLED_PORTAUDIO="${use_bundled:-OFF}"
 )
-if [[ -n "$pa_incldir" ]]; then
-	cmake_args+=(-DPORTAUDIO_INCLDIR="$pa_incldir")
+if [[ "${use_bundled:-OFF}" != "ON" ]]; then
+	cmake_args+=(-DPORTAUDIO_LIBDIR="$pa_libdir" -DPORTAUDIO_STATIC="$pa_static")
+	if [[ -n "$pa_incldir" ]]; then
+		cmake_args+=(-DPORTAUDIO_INCLDIR="$pa_incldir")
+	fi
 fi
 cmake "${cmake_args[@]}" "$root_dir" || exit -1
 jobs=$(( ($(nproc_compat) + 2) / 2 ))

@@ -4,6 +4,10 @@ if [[ $# -ne 8 ]]; then
 fi
 
 root_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+use_bundled="${FUNCDOODLE_USE_BUNDLED_PORTAUDIO:-}"
+if [[ -z "$use_bundled" && -f "$root_dir/lib/portaudio/CMakeLists.txt" ]]; then
+	use_bundled="ON"
+fi
 
 arg1=$(echo "$1" | tr '[:upper:]' '[:lower:]')
 arg2=$(echo "$2" | tr '[:upper:]' '[:lower:]')
@@ -41,28 +45,38 @@ fi
 mkdir -p "$root_dir/bin/microslop" || exit -1
 pushd "$root_dir/bin/microslop" >/dev/null || exit -1
 mkdir -p incl
-cp "$arg4" incl/ || exit -1
-win_pa_base="$(basename "$win_pa_path")"
-win_pa_name="${win_pa_base%.*}"
-win_pa_name="${win_pa_name#lib}"
-win_pa_static="ON"
-if [[ -n "$pa_static_override" ]]; then
-	win_pa_static="$pa_static_override"
-elif [[ "$win_pa_base" != *static* && "$win_pa_base" != *.a ]]; then
-	win_pa_static="OFF"
+if [[ "$use_bundled" != "ON" ]]; then
+	cp "$arg4" incl/ || exit -1
 fi
-if [[ "$win_pa_static" != "ON" ]]; then
-	echo "Static PortAudio is required. Provide a static Windows library."
-	exit -1
+
+cmake_args=(
+	-DCMAKE_TOOLCHAIN_FILE="$root_dir/mingw.cmake"
+	-DCMAKE_BUILD_TYPE="$arg1"
+	-DFUNCDOODLE_USE_BUNDLED_PORTAUDIO="$use_bundled"
+)
+if [[ "$use_bundled" != "ON" ]]; then
+	win_pa_base="$(basename "$win_pa_path")"
+	win_pa_name="${win_pa_base%.*}"
+	win_pa_name="${win_pa_name#lib}"
+	win_pa_static="ON"
+	if [[ -n "$pa_static_override" ]]; then
+		win_pa_static="$pa_static_override"
+	elif [[ "$win_pa_base" != *static* && "$win_pa_base" != *.a ]]; then
+		win_pa_static="OFF"
+	fi
+	if [[ "$win_pa_static" != "ON" ]]; then
+		echo "Static PortAudio is required. Provide a static Windows library."
+		exit -1
+	fi
+	cp "$win_pa_path" "$win_pa_base" || exit -1
+	cmake_args+=(
+		-DPORTAUDIO_INCLDIR="$root_dir/bin/microslop/incl/"
+		-DPORTAUDIO_LIBDIR="$root_dir/bin/microslop/"
+		-DPORTAUDIO_LIBNAME="$win_pa_name"
+		-DPORTAUDIO_STATIC="$win_pa_static"
+	)
 fi
-cp "$win_pa_path" "$win_pa_base" || exit -1
-cmake -DCMAKE_TOOLCHAIN_FILE="$root_dir/mingw.cmake" \
-	-DCMAKE_BUILD_TYPE="$arg1" \
-	-DPORTAUDIO_INCLDIR="$root_dir/bin/microslop/incl/" \
-	-DPORTAUDIO_LIBDIR="$root_dir/bin/microslop/" \
-	-DPORTAUDIO_LIBNAME="$win_pa_name" \
-	-DPORTAUDIO_STATIC="$win_pa_static" \
-	"$root_dir" || exit -1
+cmake "${cmake_args[@]}" "$root_dir" || exit -1
 mkdir -p CMakeFiles/FuncDoodle.dir/src \
 	CMakeFiles/FuncDoodle.dir/lib/glad/src \
 	CMakeFiles/FuncDoodle.dir/lib/imgui \
@@ -97,7 +111,7 @@ if [[ -n "$mac_pa_lib_arm" ]]; then
 	mac_pa_lib_arm="${mac_pa_lib_arm%/}/"
 fi
 
-if [[ -n "$mac_pa_incl" && -n "$mac_pa_lib_x86" && -n "$mac_pa_lib_arm" ]]; then
+if [[ "$use_bundled" == "ON" || ( -n "$mac_pa_incl" && -n "$mac_pa_lib_x86" && -n "$mac_pa_lib_arm" ) ]]; then
 	mac_x86_name=""
 	mac_arm_name=""
 	mac_x86_static="ON"
@@ -122,9 +136,11 @@ if [[ -n "$mac_pa_incl" && -n "$mac_pa_lib_x86" && -n "$mac_pa_lib_arm" ]]; then
 		mac_x86_static="$pa_static_override"
 		mac_arm_static="$pa_static_override"
 	fi
-	if [[ "$mac_x86_static" != "ON" || "$mac_arm_static" != "ON" ]]; then
-		echo "Static PortAudio is required for macOS builds. Provide .a libs."
-		exit -1
+	if [[ "$use_bundled" != "ON" ]]; then
+		if [[ "$mac_x86_static" != "ON" || "$mac_arm_static" != "ON" ]]; then
+			echo "Static PortAudio is required for macOS builds. Provide .a libs."
+			exit -1
+		fi
 	fi
 	build_macos() {
 		local arch="$1"
@@ -135,14 +151,21 @@ if [[ -n "$mac_pa_incl" && -n "$mac_pa_lib_x86" && -n "$mac_pa_lib_arm" ]]; then
 
 		mkdir -p "$outdir" || exit -1
 		pushd "$outdir" >/dev/null || exit -1
-		cmake -DCMAKE_TOOLCHAIN_FILE="$root_dir/macos.cmake" \
-			-DCMAKE_BUILD_TYPE="$arg1" \
-			-DCMAKE_OSX_ARCHITECTURES="$arch" \
-			-DPORTAUDIO_INCLDIR="$mac_pa_incl" \
-			-DPORTAUDIO_LIBDIR="$libdir" \
-			-DPORTAUDIO_LIBNAME="$libname" \
-			-DPORTAUDIO_STATIC="$static" \
-			"$root_dir" || exit -1
+		cmake_args=(
+			-DCMAKE_TOOLCHAIN_FILE="$root_dir/macos.cmake"
+			-DCMAKE_BUILD_TYPE="$arg1"
+			-DCMAKE_OSX_ARCHITECTURES="$arch"
+			-DFUNCDOODLE_USE_BUNDLED_PORTAUDIO="$use_bundled"
+		)
+		if [[ "$use_bundled" != "ON" ]]; then
+			cmake_args+=(
+				-DPORTAUDIO_INCLDIR="$mac_pa_incl"
+				-DPORTAUDIO_LIBDIR="$libdir"
+				-DPORTAUDIO_LIBNAME="$libname"
+				-DPORTAUDIO_STATIC="$static"
+			)
+		fi
+		cmake "${cmake_args[@]}" "$root_dir" || exit -1
 		mkdir -p CMakeFiles/FuncDoodle.dir/src \
 			CMakeFiles/FuncDoodle.dir/lib/glad/src \
 			CMakeFiles/FuncDoodle.dir/lib/imgui \
