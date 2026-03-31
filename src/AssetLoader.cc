@@ -31,6 +31,22 @@ namespace FuncDoodle {
 			FUNC_FATAL("Failed to find assets path -- " << m_AssetsPath
 														<< " doesn't exist");
 		}
+
+		ImGuiIO& io = ImGui::GetIO();
+		ImFontConfig fontConfig;
+		fontConfig.OversampleH = 4;
+		fontConfig.OversampleV = 4;
+		fontConfig.PixelSnapH = true;
+
+		m_FontRegular = io.Fonts->AddFontFromFileTTF(
+			(m_AssetsPath / "Roboto" / "Roboto-Medium.ttf").string().c_str(),
+			16.0f, &fontConfig);
+		m_FontBold = io.Fonts->AddFontFromFileTTF(
+			(m_AssetsPath / "Roboto" / "Roboto-Bold.ttf").string().c_str(),
+			16.0f, &fontConfig);
+		if (m_FontRegular) {
+			io.FontDefault = m_FontRegular;
+		}
 	}
 	void AssetLoader::UnloadAssets() {}
 

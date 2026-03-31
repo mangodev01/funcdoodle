@@ -26,9 +26,13 @@ namespace FuncDoodle {
 			uint32_t LoadImage(const char* name);
 			AudioData LoadSound(std::filesystem::path soundName);
 			void PlaySound(AudioData data);
+			inline ImFont* GetFontRegular() const { return m_FontRegular; }
+			inline ImFont* GetFontBold() const { return m_FontBold; }
 
 		private:
 			std::filesystem::path m_AssetsPath;
 			UniquePtr<AudioManager> m_AudioManager;
+			ImFont* m_FontRegular = nullptr;
+			ImFont* m_FontBold = nullptr;
 	};
 }  // namespace FuncDoodle

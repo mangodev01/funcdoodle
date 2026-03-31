@@ -219,14 +219,6 @@ int main(int argc, char** argv) {
 	float xScale, yScale;
 	glfwGetWindowContentScale(win, &xScale, &yScale);
 	float dpiScale = xScale;
-	ImFontConfig fontConfig;
-	fontConfig.OversampleH = 4;
-	fontConfig.OversampleV = 4;
-	fontConfig.PixelSnapH = true;
-
-	io.Fonts->AddFontFromFileTTF(
-		(assetsPath / "Roboto" / "Roboto-Medium.ttf").string().c_str(), 16.0,
-		&fontConfig);
 
 	ImGui::GetStyle().ScaleAllSizes(1.0f / dpiScale);
 

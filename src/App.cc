@@ -186,7 +186,6 @@ namespace FuncDoodle {
 			ImGuiTestEngine_ShowTestEngineWindows(s_TestEngine, &m_ShowTests);
 		#endif
 
-
 		if (!m_CurrentProj)
 			RenderOptions();
 
@@ -281,84 +280,158 @@ namespace FuncDoodle {
 		}
 		m_CurrentProj->Write(m_FilePath.c_str());
 	}
+
 	void Application::RenderOptions() {
-		// Get the viewport dimensions
-		ImGuiViewport* viewport = ImGui::GetMainViewport();
-		ImVec2 viewportPos = viewport->WorkPos;
-		ImVec2 viewportSize = viewport->WorkSize;
-		float menuBarHeight = ImGui::GetFrameHeight();
+		ImGuiViewport* vp = ImGui::GetMainViewport();
+		ImVec2 size = vp->Size;
 
-		// Calculate center of viewport
-		ImVec2 center(viewportPos.x + (viewportSize.x * 0.5f),
-			viewportPos.y + (viewportSize.y * 0.5f));
+		ImVec2 safe = ImGui::GetStyle().DisplaySafeAreaPadding;
 
-		ImVec4 btnNewCol = ImVec4(1, 1, 1, 1);
-		ImVec4 btnOpenCol = ImVec4(1, 1, 1, 1);
-		ImVec4 tintNew = ImVec4(0, 0, 0, 1);
-		ImVec4 tintOpen = ImVec4(0, 0, 0, 1);
+		float menuBarHeight = ImGui::GetFrameHeight(); // main menu bar height
+		ImGui::SetNextWindowPos(ImVec2(safe.x - 2, menuBarHeight + safe.y - 3)); // offset by safe area + menu bar
+		size.y -= menuBarHeight;
+		ImGui::SetNextWindowSize(size, ImGuiCond_Always);
+		ImGui::SetNextWindowViewport(vp->ID);
 
-		// Get the draw list for the viewport
-		ImDrawList* drawList = ImGui::GetBackgroundDrawList();
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0);
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
 
-		auto invertColor = [](ImVec4& col) {
-			col.x = 1.0f - col.x;
-			col.y = 1.0f - col.y;
-			col.z = 1.0f - col.z;
-			col.w = 1.0f;
-		};
+		ImGui::Begin("Options", 0, ImGuiWindowFlags_NoTitleBar |
+			ImGuiWindowFlags_NoResize |
+			ImGuiWindowFlags_NoScrollbar |
+			ImGuiWindowFlags_NoScrollWithMouse |
+			ImGuiWindowFlags_NoMove |
+			ImGuiWindowFlags_NoCollapse |
+			ImGuiWindowFlags_NoDecoration);
 
-		int btnWidth = 50;
-		int btnHeight = 50;
+		ImGui::BeginGroup();
 
-		ImVec2 safePosAdd = ImVec2(viewportPos.x, viewportPos.y);
-		ImVec2 safePosAddMax =
-			ImVec2(safePosAdd.x + btnWidth, safePosAdd.y + btnHeight);
+		float groupWidth = 0.0f;
+		float groupHeight = 0.0f;
 
-		ImVec2 safePosOpen = ImVec2(viewportPos.x, viewportPos.y + 55);
-		ImVec2 safePosOpenMax =
-			ImVec2(safePosOpen.x + btnWidth, safePosOpen.y + btnHeight);
+		ImVec2 btnSize = ImVec2(50, 50);
+		float spacing = ImGui::GetStyle().ItemSpacing.y;
 
-		drawList->AddRectFilled(viewportPos,
-			ImVec2(
-				viewportPos.x + viewportSize.x, viewportPos.y + viewportSize.y),
-			IM_COL32(50, 50, 50, 255));
+		groupWidth = btnSize.x;
+		float rowGapExtra = 20.0f;
+		float rowGap = spacing + rowGapExtra;
+		groupHeight = btnSize.y * 2 + rowGap;
 
-		ImVec2 mousePos = ImGui::GetMousePos();
-		if (!ImGui::IsAnyItemHovered()) {
-			if (mousePos.x >= safePosAdd.x && mousePos.x <= safePosAddMax.x &&
-				mousePos.y >= safePosAdd.y && mousePos.y <= safePosAddMax.y) {
-				invertColor(btnNewCol);
-				invertColor(tintNew);
-				if (ImGui::IsMouseReleased(ImGuiMouseButton_Left)) {
-					if (m_SFXEnabled)
-						m_AssetLoader->PlaySound(s_ProjCreateSound);
-					m_Popups.Open("new");
-				}
-			}
+		float titleFontSize = 25.0f;
+		float descFontSize = 18.0f;
+		ImFont* titleFont = m_AssetLoader && m_AssetLoader->GetFontBold()
+			? m_AssetLoader->GetFontBold()
+			: ImGui::GetFont();
 
-			if (mousePos.x >= safePosOpen.x && mousePos.x <= safePosOpenMax.x &&
-				mousePos.y >= safePosOpen.y && mousePos.y <= safePosOpenMax.y) {
-				invertColor(btnOpenCol);
-				invertColor(tintOpen);
-				if (ImGui::IsMouseReleased(ImGuiMouseButton_Left)) {
-					OpenFileDialog([&]() { this->ReadProjectFile(); });
-				}
-			}
+		ImVec2 padding = ImGui::GetStyle().FramePadding;
+		float textGap = ImGui::GetStyle().ItemSpacing.x;
+
+		const char* newProjTitle = "New project";
+		const char* newProjDesc = "Create a new FuncDoodle project";
+		const char* openProjTitle = "Open project";
+		const char* openProjDesc = "Open an existing FuncDoodle project";
+
+		float maxWidth;
+		{
+			ImGui::PushFont(titleFont, titleFontSize);
+			float t1 = ImGui::CalcTextSize(newProjTitle).x;
+			float t2 = ImGui::CalcTextSize(openProjTitle).x;
+			ImGui::PopFont();
+
+			ImGui::PushFont(0, descFontSize);
+			float d1 = ImGui::CalcTextSize(newProjDesc).x;
+			float d2 = ImGui::CalcTextSize(openProjDesc).x;
+			ImGui::PopFont();
+
+			maxWidth = std::max({ t1, t2, d1, d2 });
 		}
 
-		drawList->AddRectFilled(safePosAdd, safePosAddMax,
-			ImGui::ColorConvertFloat4ToU32(btnNewCol), 10.0f);
-		drawList->AddImage((ImTextureID)(intptr_t)s_AddTexId, safePosAdd,
-			ImVec2(safePosAdd.x + btnWidth, safePosAdd.y + btnHeight),
-			ImVec2(0, 0), ImVec2(1, 1),
-			ImGui::ColorConvertFloat4ToU32(tintNew));
-		drawList->AddRectFilled(safePosOpen, safePosOpenMax,
-			ImGui::ColorConvertFloat4ToU32(btnOpenCol), 10.0f);
-		drawList->AddImage((ImTextureID)(intptr_t)s_OpenTexId, safePosOpen,
-			ImVec2(safePosOpen.x + btnWidth, safePosOpen.y + btnHeight),
-			ImVec2(0, 0), ImVec2(1, 1),
-			ImGui::ColorConvertFloat4ToU32(tintOpen));
+		ImGui::PushFont(titleFont, titleFontSize);
+		float titleLineHeight = ImGui::GetTextLineHeight();
+
+		float windowWidth = ImGui::GetWindowSize().x;
+		ImGui::SetCursorPosX((windowWidth - groupWidth) / 2 - maxWidth);
+
+		float textXPos = ImGui::GetCursorPosX();
+		ImVec2 windowPos = ImGui::GetWindowPos();
+
+		ImVec2 avail = ImGui::GetContentRegionAvail();
+		ImGui::SetCursorPosY((avail.y - groupHeight) * 0.5f);
+		float rowTopY = ImGui::GetCursorPosY();
+
+		if (ImGui::ImageButton(newProjTitle, (ImTextureID)(intptr_t)s_AddTexId, btnSize)) {
+			if (m_SFXEnabled)
+				m_AssetLoader->PlaySound(s_ProjCreateSound);
+			m_Popups.Open("new");
+		}
+		float newBtnTopY = ImGui::GetItemRectMin().y - windowPos.y;
+		float newBtnBottomY = ImGui::GetItemRectMax().y - windowPos.y;
+		float newBtnRightX = ImGui::GetItemRectMax().x - windowPos.x;
+		float newTextX = newBtnRightX + textGap;
+		float newTitleHeight = ImGui::CalcTextSize(newProjTitle).y;
+		float newTitleY = newBtnTopY + (btnSize.y - newTitleHeight) * 0.5f;
+
+		ImGui::SameLine();
+
+		ImGui::SetCursorPosX(newTextX);
+		ImGui::SetCursorPosY(newTitleY);
+
+		ImGui::Text("%s", newProjTitle);
+
+		ImGui::PopFont();
+
+		ImGui::PushFont(0, descFontSize);
+
+		float descLineHeight = ImGui::GetTextLineHeight();
+		float descYOffset = 12.0f;
+		ImGui::SetCursorPosX(newTextX);
+		ImGui::SetCursorPosY(newBtnBottomY - descLineHeight - descYOffset);
+		ImGui::Text("%s", newProjDesc);
+
+		ImGui::PopFont();
+
+		ImGui::SetCursorPosX(textXPos);
+		ImGui::SetCursorPosY(rowTopY + btnSize.y + rowGap - 6.0f);
+
+		if (ImGui::ImageButton(openProjTitle, (ImTextureID)(intptr_t)s_OpenTexId, btnSize)) {
+			OpenFileDialog([&]() { this->ReadProjectFile(); });
+		}
+		float openBtnTopY = ImGui::GetItemRectMin().y - windowPos.y;
+		float openBtnBottomY = ImGui::GetItemRectMax().y - windowPos.y;
+		float openBtnRightX = ImGui::GetItemRectMax().x - windowPos.x;
+		float openTextX = openBtnRightX + textGap;
+		float openTitleHeight = ImGui::CalcTextSize(openProjTitle).y;
+		float openTextYOffset = 4.0f;
+		float openTitleY = openBtnTopY + (btnSize.y - openTitleHeight) * 0.5f -
+			openTextYOffset;
+
+		ImGui::SameLine();
+
+		ImGui::SetCursorPosX(openTextX);
+		ImGui::SetCursorPosY(openTitleY);
+
+		ImGui::PushFont(titleFont, titleFontSize);
+
+		ImGui::Text("%s", openProjTitle);
+
+		ImGui::PopFont();
+
+		ImGui::PushFont(0, descFontSize);
+
+		ImGui::SetCursorPosX(openTextX);
+		ImGui::SetCursorPosY(openBtnBottomY - descLineHeight - descYOffset -
+			openTextYOffset);
+		ImGui::Text("%s", openProjDesc);
+
+		ImGui::PopFont();
+
+		ImGui::EndGroup();
+
+		ImGui::End();
+		ImGui::PopStyleVar(2);
 	}
+
+
 	void Application::SaveChangesDialog() {
 		if (m_Popups.IsOpen("save_changes")) {
 			ImGui::OpenPopup("Save Changes");
@@ -502,6 +575,7 @@ namespace FuncDoodle {
 
 		if (ImGui::BeginPopupModal("NewProj", m_Popups.Get("new"),
 				ImGuiWindowFlags_AlwaysAutoResize)) {
+			bool justOpened = ImGui::IsWindowAppearing();
 			char name[256] = "";
 			int width = 32;
 			int height = 32;
@@ -584,9 +658,10 @@ namespace FuncDoodle {
 				ImGui::CloseCurrentPopup();
 			}
 			ImGui::SameLine();
-			if (ImGui::Button("OK") ||
-				ImGui::IsKeyPressed(ImGuiKey_Enter, false) ||
-				ImGui::IsKeyPressed(ImGuiKey_KeypadEnter, false)) {
+			bool acceptByKey = !justOpened &&
+				(ImGui::IsKeyPressed(ImGuiKey_Enter, false) ||
+					ImGui::IsKeyPressed(ImGuiKey_KeypadEnter, false));
+			if (ImGui::Button("OK") || acceptByKey) {
 				m_CurrentProj = m_CacheProj;
 				m_Manager = std::make_unique<AnimationManager>(m_CurrentProj,
 					m_AssetLoader, m_EditorController, m_Keybinds, m_PrevEnabled);
