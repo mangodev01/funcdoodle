@@ -224,44 +224,24 @@ namespace FuncDoodle {
 		}
 	}
 	void Application::OpenFileDialog(std::function<void()> done) {
-		nfdchar_t* outPath = 0;
-		nfdresult_t result = NFD_OpenDialog("fdp", 0, &outPath);
-
-		if (result == NFD_OKAY) {
-			m_FilePath = outPath;
-			done();
-			free(outPath);
-		} else if (result == NFD_CANCEL) {
-			FUNC_DBG("Cancelled");
-		} else {
-			FUNC_WARN("Failed to open open file dialog -- " +
-					  (std::string)NFD_GetError());
-		}
-		// free(outPath);
+		FileDialog dialog("fdp");
+		m_FilePath = dialog.Open();
+		done();
 	}
 	void Application::SaveFileDialog(std::function<void()> done) {
 		if (m_CurrentProj == nullptr) {
 			FUNC_INF("No project to save");
 			return;
 		}
-		nfdchar_t* outPath = 0;
-		nfdresult_t result = NFD_SaveDialog("fdp", 0, &outPath);
 
-		if (result == NFD_OKAY) {
-			m_FilePath = outPath;
-			done();
-			free(outPath);
-		} else if (result == NFD_CANCEL) {
-			FUNC_DBG("Cancelled");
-		} else {
-			FUNC_WARN("Failed to open save file dialog -- " +
-					  (std::string)NFD_GetError());
-		}
+		FileDialog dialog("fdp");
+		m_FilePath = dialog.Save();
+		done();
 	}
 	void Application::ReadProjectFile() {
 		// m_FilePath is the actual file that we're going to read
 		if (m_FilePath.empty()) {
-			FUNC_DBG("@Application::ReadProjectFile -- m_FilePath is nullptr");
+			FUNC_DBG("tried reading but m_FilePath is nullptr, probably means that the file dialog was cancelled");
 			return;
 		}
 
@@ -276,7 +256,7 @@ namespace FuncDoodle {
 	}
 	void Application::SaveProjectFile() {
 		if (m_FilePath.empty()) {
-			FUNC_DBG("@Application::SaveProjectFile -- m_FilePath is nullptr");
+			FUNC_DBG("tried saving but m_FilePath is nullptr");
 			return;
 		}
 		m_CurrentProj->Write(m_FilePath.c_str());
@@ -805,30 +785,25 @@ namespace FuncDoodle {
 			}
 			ImGui::SameLine();
 			if (ImGui::Button("Add temporary from file")) {
+				FileDialog dialog = "toml";
 				static Themes::CustomTheme* style;
-				nfdpathset_t pathset;
-				nfdresult_t res = NFD_OpenDialogMultiple("toml", "", &pathset);
-				if (res == NFD_OKAY) {
-					for (size_t i = 0; i < NFD_PathSet_GetCount(&pathset);
-						i++) {
-						nfdchar_t* path = NFD_PathSet_GetPath(&pathset, i);
-						style = Themes::LoadThemeFromFile(path);
-						if (style) {
-							auto [it, inserted] =
-								Themes::g_Themes.emplace(style->Uuid, *style);
-							if (!inserted && style->OwnsMeta) {
-								std::free(const_cast<char*>(style->Name));
-								std::free(const_cast<char*>(style->Author));
-								style->Name = "";
-								style->Author = "";
-								style->OwnsMeta = false;
-							}
+				std::vector<std::filesystem::path> themes = dialog.OpenMultiple();
+
+				for (size_t i = 0; i < themes.size(); i++) {
+					std::filesystem::path path = themes[i];
+					style = Themes::LoadThemeFromFile(path.c_str());
+
+					if (style) {
+						auto [it, inserted] =
+							Themes::g_Themes.emplace(style->Uuid, *style);
+						if (!inserted && style->OwnsMeta) {
+							std::free(const_cast<char*>(style->Name));
+							std::free(const_cast<char*>(style->Author));
+							style->Name = "";
+							style->Author = "";
+							style->OwnsMeta = false;
 						}
 					}
-					NFD_PathSet_Free(&pathset);
-				} else if (res == NFD_ERROR) {
-					FUNC_ERR(
-						"Failed to open save theme dialog: " << NFD_GetError());
 				}
 			}
 			if (ImGui::Button("Open themes directory")) {
@@ -893,23 +868,14 @@ namespace FuncDoodle {
 			if (choice == ImUtil::ButtonRowResult::Primary ||
 				ImGui::IsKeyPressed(ImGuiKey_Enter, false) ||
 				ImGui::IsKeyPressed(ImGuiKey_KeypadEnter, false)) {
-				nfdchar_t* outPath = 0;
-				nfdresult_t result = NFD_PickFolder(0, &outPath);
+				FileDialog dialog;
+				std::filesystem::path path = dialog.Dir();
 
-				if (result == NFD_OKAY) {
-					if (m_SFXEnabled)
-						m_AssetLoader->PlaySound(s_ExportSound);
-					FUNC_INF("Exporting to " << outPath);
-					m_CurrentProj->Export(outPath, m_ExportFormat);
-					free(outPath);
-				} else if (result == NFD_CANCEL) {
-					FUNC_DBG("Cancelled");
-					free(outPath);
-				} else {
-					FUNC_DBG("Failed to open file dialog" +
-							 (std::string)NFD_GetError());
-					free(outPath);
-				}
+				if (m_SFXEnabled)
+					m_AssetLoader->PlaySound(s_ExportSound);
+				FUNC_INF("Exporting to " << path);
+				m_CurrentProj->Export(path.c_str(), m_ExportFormat);
+
 				ImGui::CloseCurrentPopup();
 			}
 			if (choice == ImUtil::ButtonRowResult::Secondary ||

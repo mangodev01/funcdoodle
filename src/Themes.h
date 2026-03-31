@@ -226,6 +226,7 @@ namespace FuncDoodle {
 			// NOTE: std::map is keyed/sorted by UUID, so name-based sorting is
 			// intentionally omitted here.
 		}
+
 		inline void SaveCurrentTheme() {
 			// Save macros for ImGuiStyle fields
 			#define SAVE_FLOAT(field) other.insert(#field, style.field)
@@ -239,10 +240,14 @@ namespace FuncDoodle {
 				ImGui::InputText("Name", themeName, 100);
 				static char themeAuthor[50] = "";
 				ImGui::InputText("Author", themeAuthor, 50);
+
+
 				if (ImGui::Button("Save")) {
-					nfdchar_t* savePath = 0;
-					nfdresult_t res = NFD_SaveDialog("toml", 0, &savePath);
-					if (res == NFD_OKAY) {
+					// should've made the constructor explicit cos assigning a string to a filedialog doesn't make any sense
+					FileDialog dialog = "toml";
+					std::filesystem::path res = dialog.Save();
+
+					{
 						using namespace std::string_view_literals;
 						toml::table theme = toml::table();
 						toml::table meta = toml::table();
@@ -333,24 +338,17 @@ namespace FuncDoodle {
 						SAVE_FLOAT(CurveTessellationTol);
 						SAVE_FLOAT(CircleTessellationMaxError);
 
-
-						std::ofstream f(savePath);
+						std::ofstream f(res);
 						if (!f) {
 							FUNC_ERR("Failed to open file...");
-							std::free(savePath);
 							g_SaveThemeOpen = false;
 							ImGui::End();
 							return;
 						}
-						FUNC_INF(
-							"saving current theme to " << savePath << "...");
+						FUNC_INF("Saving current theme to " << res << "!");
 						f << theme;
 						f.close();
-						std::free(savePath);
 						g_SaveThemeOpen = false;
-					} else if (res == NFD_ERROR) {
-						FUNC_ERR("Failed to open save theme dialog: "
-								 << NFD_GetError());
 					}
 				}
 				ImGui::End();

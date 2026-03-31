@@ -17,4 +17,8 @@ function(funcdoodle_apply_build_config target)
 		target_compile_definitions(${target} PRIVATE NDEBUG)
 		target_compile_options(${target} PRIVATE -O3)
 	endif()
+
+	if(APPLE)
+		target_compile_definitions(${target} PRIVATE MACOS)
+	endif()
 endfunction()
