@@ -348,19 +348,20 @@ namespace FuncDoodle {
 
 		std::vector<Col> plte;
 
-		int plteLen = 0;
+		std::size_t plteLen = 0;
 
 		if (file.fail()) {
 			FUNC_FATAL("Failed to read file");
 		}
 
 		file.read(reinterpret_cast<char*>(&plteLen), sizeof(plteLen));
+		FUNC_DBG("plteLen = " << plteLen);
 
 		if (file.fail()) {
 			FUNC_FATAL("Failed to read file");
 		}
 
-		for (int i = 0; i < plteLen; i++) {
+		for (std::size_t i = 0; i < plteLen; i++) {
 			// read the rgb
 			unsigned char r = 0;
 			unsigned char g = 0;
@@ -383,7 +384,7 @@ namespace FuncDoodle {
 						unsigned char bytes[sizeof(int)];
 						file.read(reinterpret_cast<char*>(bytes), sizeof(int));
 						int index = *reinterpret_cast<int*>(bytes);
-						if (index > plteLen) {
+						if (index >= (int)plteLen) {
 							FUNC_DBG("Index -- " << index);
 							FUNC_DBG("Index out of bounds -- maybe the project "
 									 "file is corrupted..?");
@@ -400,6 +401,8 @@ namespace FuncDoodle {
 
 				unsigned char null;
 				file.read(reinterpret_cast<char*>(&null), 1);
+
+				delete img;
 			}
 		} else {
 			FUNC_INF((long)frameCount);
@@ -411,6 +414,9 @@ namespace FuncDoodle {
 						file.read(reinterpret_cast<char*>(bytes), sizeof(int));
 
 						int index = *reinterpret_cast<int*>(bytes);
+
+						FUNC_DBG("Reading index, x=" << x << " y=" << y
+													 << " index=" << index);
 
 						if (index < 0 || index > plteLen) {
 							FUNC_WARN("Index out of bounds -- maybe the "

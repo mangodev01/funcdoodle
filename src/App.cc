@@ -16,6 +16,7 @@
 #include <stdint.h>
 #include <string.h>
 #include <string>
+#include <thread>
 
 #include "LoadedAssets.h"
 #include "TextUtil.h"
@@ -137,7 +138,13 @@ namespace FuncDoodle {
 			m_Popups.Open("new");
 		}
 		if (m_Keybinds.Get("open").IsPressed()) {
-			OpenFileDialog([&]() { this->ReadProjectFile(); });
+#ifndef MACOS
+			std::thread([&]() {
+#endif
+				OpenFileDialog([&]() { this->ReadProjectFile(); });
+#ifndef MACOS
+			}).detach();
+#endif
 		}
 		if (m_Keybinds.Get("quit").IsPressed()) {
 			glfwSetWindowShouldClose(m_Window, true);
@@ -171,9 +178,18 @@ namespace FuncDoodle {
 			if (m_CurrentProj && m_Keybinds.Get("save").IsPressed()) {
 				if (m_SFXEnabled)
 					m_AssetLoader->PlaySound(s_ProjSaveSound);
-				SaveFileDialog([&]() { this->SaveProjectFile(); });
-				if (m_SFXEnabled)
-					m_AssetLoader->PlaySound(s_ProjSaveEndSound);
+#ifndef MACOS
+						std::thread([&]() {
+#endif
+							SaveFileDialog([&]() {
+								SaveProjectFile();
+
+								if (m_SFXEnabled)
+									m_AssetLoader->PlaySound(s_ProjSaveEndSound);
+							});
+#ifndef MACOS
+						}).detach();
+#endif
 			}
 
 			if (m_Keybinds.Get("export").IsPressed()) {
@@ -375,7 +391,15 @@ namespace FuncDoodle {
 
 		renderOptionRow(openProjTitle, openProjDesc, s_OpenTexId,
 			openTextYOffsetFactor,
-			[&]() { OpenFileDialog([&]() { this->ReadProjectFile(); }); });
+			[&]() { 
+#ifndef MACOS
+				std::thread([&]() {
+#endif
+					OpenFileDialog([&]() { this->ReadProjectFile(); });
+#ifndef MACOS
+				}).detach();
+#endif
+			});
 
 		ImGui::EndGroup();
 		ImGui::End();
@@ -393,9 +417,17 @@ namespace FuncDoodle {
 			ImGui::Text("Save changes?");
 			ImUtil::ButtonRowResult choice = ImUtil::YesNoCancelButtons();
 			if (choice == ImUtil::ButtonRowResult::Primary) {
-				SaveFileDialog([&] { SaveProjectFile(); });
-				m_ShouldClose = true;
-				ImGui::CloseCurrentPopup();
+#ifndef MACOS
+				std::thread([&]() {
+#endif
+					SaveFileDialog([&]() {
+						SaveProjectFile();
+						m_ShouldClose = true;
+						ImGui::CloseCurrentPopup();
+					});
+#ifndef MACOS
+				}).detach();
+#endif
 			} else if (choice == ImUtil::ButtonRowResult::Secondary) {
 				m_ShouldClose = true;
 				ImGui::CloseCurrentPopup();
@@ -645,7 +677,13 @@ namespace FuncDoodle {
 
 				if (ImGui::MenuItem("Open",
 						m_WaitingForKey ? nullptr : m_Keybinds.Get("open"))) {
-					this->OpenFileDialog([&]() { this->ReadProjectFile(); });
+#ifndef MACOS
+					std::thread([&]() {
+#endif
+						OpenFileDialog([&]() { this->ReadProjectFile(); });
+#ifndef MACOS
+					}).detach();
+#endif
 				}
 				if (m_CurrentProj) {
 					if (ImGui::MenuItem("Save", m_WaitingForKey
@@ -653,8 +691,14 @@ namespace FuncDoodle {
 													: m_Keybinds.Get("save"))) {
 						if (m_SFXEnabled)
 							m_AssetLoader->PlaySound(s_ProjSaveSound);
-						this->SaveFileDialog(
-							[&]() { this->SaveProjectFile(); });
+
+#ifndef MACOS
+						std::thread([&]() {
+#endif
+							SaveFileDialog([&]() { SaveProjectFile(); });
+#ifndef MACOS
+						}).detach();
+#endif
 					}
 
 					if (ImGui::MenuItem("Close")) {
