@@ -309,16 +309,22 @@ namespace FuncDoodle {
 		const ImVec2 btnSize(50, 50);
 		const float titleFontSize = 25.0f;
 		const float descFontSize = 18.0f;
-		const float descYOffset = 12.0f;
-		const float openTextYOffset = 4.0f;
-		const float rowGapExtra = 14.0f;
+		const float descPadFactor = 0.65f;
+		const float rowGapFactor = 0.75f;
+		const float openTextYOffsetFactor = 0.16f;
 
 		ImFont* titleFont = m_AssetLoader && m_AssetLoader->GetFontBold()
 			? m_AssetLoader->GetFontBold()
 			: ImGui::GetFont();
 
+		const char* measureSample = "Ag";
+
 		const float spacingY = ImGui::GetStyle().ItemSpacing.y;
 		const float textGap = ImGui::GetStyle().ItemSpacing.x;
+		const float descLineHeight =
+			TextUtil::TextHeight(nullptr, descFontSize, measureSample);
+		const float descBottomPad = std::round(descLineHeight * descPadFactor);
+		const float rowGapExtra = std::round(descLineHeight * rowGapFactor);
 		const float rowGap = spacingY + rowGapExtra;
 
 		const char* newProjTitle = "New project";
@@ -345,7 +351,7 @@ namespace FuncDoodle {
 		ImGui::SetCursorPosY(rowTopY);
 
 		auto renderOptionRow = [&](const char* title, const char* desc,
-								   uint32_t texId, float textYOffset,
+								   uint32_t texId, float textYOffsetFactor,
 								   const std::function<void()>& onClick) {
 			if (ImGui::ImageButton(title, (ImTextureID)(intptr_t)texId, btnSize)) {
 				onClick();
@@ -362,6 +368,7 @@ namespace FuncDoodle {
 			ImGui::PushFont(titleFont, titleFontSize);
 			float titleHeight =
 				TextUtil::TextHeight(titleFont, titleFontSize, title);
+			float textYOffset = std::round(titleHeight * textYOffsetFactor);
 			ImGui::SetCursorPosX(textX);
 			ImGui::SetCursorPosY(btnTopY + (btnSize.y - titleHeight) * 0.5f -
 				textYOffset);
@@ -369,10 +376,10 @@ namespace FuncDoodle {
 			ImGui::PopFont();
 
 			ImGui::PushFont(nullptr, descFontSize);
-			float descLineHeight = ImGui::GetTextLineHeight();
+			float descLineHeightLocal = ImGui::GetTextLineHeight();
 			ImGui::SetCursorPosX(textX);
-			ImGui::SetCursorPosY(btnBottomY - descLineHeight - descYOffset -
-				textYOffset);
+			ImGui::SetCursorPosY(btnBottomY - descLineHeightLocal -
+				descBottomPad - textYOffset);
 			ImGui::Text("%s", desc);
 			ImGui::PopFont();
 		};
@@ -386,7 +393,8 @@ namespace FuncDoodle {
 		ImGui::SetCursorPosX(rowStartX);
 		ImGui::SetCursorPosY(rowTopY + btnSize.y + rowGap);
 
-		renderOptionRow(openProjTitle, openProjDesc, s_OpenTexId, openTextYOffset,
+		renderOptionRow(openProjTitle, openProjDesc, s_OpenTexId,
+			openTextYOffsetFactor,
 			[&]() { OpenFileDialog([&]() { this->ReadProjectFile(); }); });
 
 		ImGui::EndGroup();
