@@ -411,20 +411,15 @@ namespace FuncDoodle {
 		if (ImGui::BeginPopupModal(
 				"Save Changes", m_Popups.Get("save_changes"))) {
 			ImGui::Text("Save changes?");
-			if (ImGui::Button("Yes")) {
+			ImUtil::ButtonRowResult choice = ImUtil::YesNoCancelButtons();
+			if (choice == ImUtil::ButtonRowResult::Primary) {
 				SaveFileDialog([&] { SaveProjectFile(); });
-				// glfwSetWindowShouldClose(m_Window, true);
 				m_ShouldClose = true;
 				ImGui::CloseCurrentPopup();
-			}
-			ImGui::SameLine();
-			if (ImGui::Button("No")) {
-				// glfwSetWindowShouldClose(m_Window, true);
+			} else if (choice == ImUtil::ButtonRowResult::Secondary) {
 				m_ShouldClose = true;
 				ImGui::CloseCurrentPopup();
-			}
-			ImGui::SameLine();
-			if (ImGui::Button("Cancel")) {
+			} else if (choice == ImUtil::ButtonRowResult::Tertiary) {
 				m_ShouldClose = false;
 				ImGui::CloseCurrentPopup();
 			}
@@ -517,13 +512,13 @@ namespace FuncDoodle {
 				m_CacheProj->SetAnimDesc(desc);
 			}
 
-			if (ImGui::Button("Close") ||
+			ImUtil::ButtonRowResult choice = ImUtil::CloseOkButtons();
+			if (choice == ImUtil::ButtonRowResult::Secondary ||
 				ImGui::IsKeyPressed(ImGuiKey_Escape, false)) {
 				m_Popups.Close("edit_proj");
 				ImGui::CloseCurrentPopup();
 			}
-			ImGui::SameLine();
-			if (ImGui::Button("OK") ||
+			if (choice == ImUtil::ButtonRowResult::Primary ||
 				ImGui::IsKeyPressed(ImGuiKey_Enter, false) ||
 				ImGui::IsKeyPressed(ImGuiKey_KeypadEnter, false)) {
 				m_CurrentProj = m_CacheProj;
@@ -623,16 +618,16 @@ namespace FuncDoodle {
 					m_CacheProj->SetBgCol(m_CacheBGCol.data());
 			}
 
-			if (ImGui::Button("Close") ||
+			ImUtil::ButtonRowResult choice = ImUtil::CloseOkButtons();
+			if (choice == ImUtil::ButtonRowResult::Secondary ||
 				ImGui::IsKeyPressed(ImGuiKey_Escape, false)) {
 				m_Popups.Close("new");
 				ImGui::CloseCurrentPopup();
 			}
-			ImGui::SameLine();
 			bool acceptByKey = !justOpened &&
 				(ImGui::IsKeyPressed(ImGuiKey_Enter, false) ||
 					ImGui::IsKeyPressed(ImGuiKey_KeypadEnter, false));
-			if (ImGui::Button("OK") || acceptByKey) {
+			if (choice == ImUtil::ButtonRowResult::Primary || acceptByKey) {
 				m_CurrentProj = m_CacheProj;
 				m_Manager = std::make_unique<AnimationManager>(m_CurrentProj,
 					m_AssetLoader, m_EditorController, m_Keybinds, m_PrevEnabled);
@@ -856,7 +851,7 @@ namespace FuncDoodle {
 			if (ImGui::IsKeyPressed(ImGuiKey_Escape) ||
 				ImGui::IsKeyPressed(ImGuiKey_Enter) ||
 				ImGui::IsKeyPressed(ImGuiKey_KeypadEnter) ||
-				ImGui::Button("OK")) {
+				ImUtil::OkButton()) {
 				ImGui::CloseCurrentPopup();
 			}
 
@@ -872,12 +867,12 @@ namespace FuncDoodle {
 		if (ImGui::BeginPopup("Rotate")) {
 			ImGui::DragInt("##Deg", &m_Deg, 1.0f, -360, 360, "%d°");
 
-			if (ImGui::Button("OK")) {
+			ImUtil::ButtonRowResult choice = ImUtil::OkCancelButtons();
+			if (choice == ImUtil::ButtonRowResult::Primary) {
 				Rotate(m_Deg);
 				ImGui::CloseCurrentPopup();
 			}
-
-			if (ImGui::Button("Cancel")) {
+			if (choice == ImUtil::ButtonRowResult::Secondary) {
 				ImGui::CloseCurrentPopup();
 			}
 
@@ -894,7 +889,8 @@ namespace FuncDoodle {
 			const char* formats[] = {"PNGs", "MP4"};
 			ImGui::Combo("Export Format", &m_ExportFormat, formats,
 				IM_ARRAYSIZE(formats));
-			if (ImGui::Button("Export") ||
+			ImUtil::ButtonRowResult choice = ImUtil::ExportCloseButtons();
+			if (choice == ImUtil::ButtonRowResult::Primary ||
 				ImGui::IsKeyPressed(ImGuiKey_Enter, false) ||
 				ImGui::IsKeyPressed(ImGuiKey_KeypadEnter, false)) {
 				nfdchar_t* outPath = 0;
@@ -916,8 +912,7 @@ namespace FuncDoodle {
 				}
 				ImGui::CloseCurrentPopup();
 			}
-			ImGui::SameLine();
-			if (ImGui::Button("Close") ||
+			if (choice == ImUtil::ButtonRowResult::Secondary ||
 				ImGui::IsKeyPressed(ImGuiKey_Escape, false)) {
 				ImGui::CloseCurrentPopup();
 			}
@@ -993,6 +988,10 @@ namespace FuncDoodle {
 				ImGui::EndTable();
 			}
 
+			if (ImUtil::CloseButton() ||
+				ImGui::IsKeyPressed(ImGuiKey_Escape)) {
+				ImGui::CloseCurrentPopup();
+			}
 			ImGui::EndPopup();
 		} else {
 			if (m_WaitingForKey != nullptr) {
