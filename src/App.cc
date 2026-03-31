@@ -330,12 +330,14 @@ namespace FuncDoodle {
 			newProjTitle, openProjTitle, nullptr, descFontSize, newProjDesc,
 			openProjDesc);
 
-		float groupWidth = btnSize.x;
+		float groupWidth = btnSize.x + textGap + maxWidth;
 		float groupHeight = btnSize.y * 2 + rowGap;
 
-		float windowWidth = ImGui::GetWindowSize().x;
-		ImGui::SetCursorPosX((windowWidth - groupWidth) * 0.5f - maxWidth);
-		float rowStartX = ImGui::GetCursorPosX();
+		ImVec2 contentMin = ImGui::GetWindowContentRegionMin();
+		ImVec2 contentMax = ImGui::GetWindowContentRegionMax();
+		float contentWidth = contentMax.x - contentMin.x;
+		float rowStartX = contentMin.x + (contentWidth - groupWidth) * 0.5f;
+		ImGui::SetCursorPosX(rowStartX);
 
 		ImVec2 windowPos = ImGui::GetWindowPos();
 		ImVec2 avail = ImGui::GetContentRegionAvail();
