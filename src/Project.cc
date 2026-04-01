@@ -223,9 +223,9 @@ namespace FuncDoodle {
 		WRITEB(null);
 		outFile << m_Author;  // animation author
 		WRITEB(null);
-		outFile << m_BG.r;
-		outFile << m_BG.g;
-		outFile << m_BG.b;
+		WRITEB(m_BG.r);
+		WRITEB(m_BG.g);
+		WRITEB(m_BG.b);
 		WRITEB(null);
 
 		auto frameData = AnimFrames();
@@ -336,6 +336,8 @@ namespace FuncDoodle {
 			file.read(reinterpret_cast<char*>(&bgR), sizeof(bgR));
 			file.read(reinterpret_cast<char*>(&bgG), sizeof(bgG));
 			file.read(reinterpret_cast<char*>(&bgB), sizeof(bgB));
+			unsigned char null;
+			file.read(reinterpret_cast<char*>(&null), 1);
 		} else {
 			if (verMajor != FDPVERMAJOR && verMinor != FDPVERMINOR) {
 				verMinor++;
@@ -418,7 +420,7 @@ namespace FuncDoodle {
 						FUNC_DBG("Reading index, x=" << x << " y=" << y
 													 << " index=" << index);
 
-						if (index < 0 || index > plteLen) {
+						if (index < 0 || index >= (int)plteLen) {
 							FUNC_WARN("Index out of bounds -- maybe the "
 									  "project file is corrupted..?");
 							FUNC_INF("Index: " << index);

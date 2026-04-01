@@ -23,7 +23,7 @@
 | str  | Animation description, terminating with byte 0 |
 | str  | Animation author, terminating with byte 0 |
 | [col](#Color) | BG color |
-| int | Palette length |
+| std::size_t | Palette length |
   
 
 ## <span style="color: cyan;">Palette</span>
@@ -32,7 +32,6 @@ For each color in the palette, this is the structure:
 
 | Type | Description |
 | ---- | ----------- |
-| unsigned long | color index |
 | [col](#Color) | color |
   
 
@@ -50,7 +49,7 @@ The .fdp file format uses this structure per frame to describe frames:
 
 An array variant which is used to describe palette colors:
 
-It's just continuous unsigned longs which are palette color indices.
+It's just continuous `int`s which are palette color indices.
 
 Also the origin for colors in frames is the top-left corner.
 
