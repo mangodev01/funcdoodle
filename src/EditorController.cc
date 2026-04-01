@@ -72,9 +72,11 @@ namespace FuncDoodle {
 
 		int size = toolManager->Size();
 		bool actionPerformed = false;
+		int startOffset = -(size / 2);
+		int endOffset = startOffset + size - 1;
 
-		for (int offsetY = -size / 2; offsetY <= size / 2; offsetY++) {
-			for (int offsetX = -size / 2; offsetX <= size / 2; offsetX++) {
+		for (int offsetY = startOffset; offsetY <= endOffset; offsetY++) {
+			for (int offsetX = startOffset; offsetX <= endOffset; offsetX++) {
 				int newX = pixelX + offsetX;
 				int newY = pixelY + offsetY;
 
@@ -111,10 +113,12 @@ namespace FuncDoodle {
 		}
 		int size = toolManager->Size();
 		bool actionPerformed = false;
+		int startOffset = -(size / 2);
+		int endOffset = startOffset + size - 1;
 		Col bgColor = player->Proj()->BgCol();
 
-		for (int offsetY = -size / 2; offsetY <= size / 2; offsetY++) {
-			for (int offsetX = -size / 2; offsetX <= size / 2; offsetX++) {
+		for (int offsetY = startOffset; offsetY <= endOffset; offsetY++) {
+			for (int offsetX = startOffset; offsetX <= endOffset; offsetX++) {
 				int newX = pixelX + offsetX;
 				int newY = pixelY + offsetY;
 
@@ -284,7 +288,6 @@ namespace FuncDoodle {
 	}
 
 	void EditorController::RenderCanvas(CanvasContext& context) {
-		(void)context.PrevEnabled;
 		if (!context.Frame || !context.Player || !context.Player->Proj() ||
 			!context.ToolManager || !context.Grid || !context.PixelScale ||
 			!context.LastMousePos) {
@@ -304,7 +307,8 @@ namespace FuncDoodle {
 		const float startX =
 			windowPos.x + (contentRegion.x - frameWidth) * 0.5f + 9;
 		const float startY =
-			windowPos.y + ((contentRegion.y - c_StatusBarHeight) - frameHeight) * 0.5f + 41;
+			windowPos.y +
+			((contentRegion.y - c_StatusBarHeight) - frameHeight) * 0.5f + 41;
 		ImDrawList* drawList = ImGui::GetWindowDrawList();
 
 		ApplyToolAt(context, pixels, startX, startY, frameWidth, frameHeight);
@@ -381,6 +385,7 @@ namespace FuncDoodle {
 							const ImVec2 interpPixel(
 								context.LastMousePos->x + dx * t,
 								context.LastMousePos->y + dy * t);
+
 							Paint(context.Frame, context.Index,
 								context.ToolManager, context.Player,
 								static_cast<int>(interpPixel.x),
@@ -427,6 +432,65 @@ namespace FuncDoodle {
 										 << "," << m_SquareSel.Max.y);
 		}
 
+		if (ImGui::IsMouseHoveringRect(frameMin, frameMax) && !shouldDraw &&
+			!ImGui::IsPopupOpen(nullptr, ImGuiPopupFlags_AnyPopupId) &&
+			!context.Player->Playing()) {
+			if (context.PrevEnabled &&
+				context.ToolManager->SelectedTool() == ToolType::Pencil) {
+				ImVec2 pixel = *context.LastHoverMousePos;
+
+				if (pixel.x >= 0 && pixel.y >= 0) {
+					int px = (int)pixel.x;
+					int py = (int)pixel.y;
+
+					float brushSize = (float)context.ToolManager->Size();
+					float scaledSize = brushSize * context.PixelScale;
+
+					int startOffset = -(int)(brushSize / 2);
+
+					float brushOriginX =
+						startX + (px + startOffset) * context.PixelScale;
+					float brushOriginY =
+						startY + (py + startOffset) * context.PixelScale;
+
+					// calc brush bounds in pixel coordinates
+					int brushMinX = px + startOffset;
+					int brushMinY = py + startOffset;
+					int brushMaxX = brushMinX + (int)brushSize;
+					int brushMaxY = brushMinY + (int)brushSize;
+
+					// clip to frame bounds
+					int frameWidth = pixels->Width();
+					int frameHeight = pixels->Height();
+					int clipMinX = std::max(0, brushMinX);
+					int clipMinY = std::max(0, brushMinY);
+					int clipMaxX = std::min(frameWidth, brushMaxX);
+					int clipMaxY = std::min(frameHeight, brushMaxY);
+
+					// only render if there's any visible area
+					if (clipMaxX > clipMinX && clipMaxY > clipMinY) {
+						float clipOriginX =
+							startX + clipMinX * context.PixelScale;
+						float clipOriginY =
+							startY + clipMinY * context.PixelScale;
+						float clipWidth =
+							(clipMaxX - clipMinX) * context.PixelScale;
+						float clipHeight =
+							(clipMaxY - clipMinY) * context.PixelScale;
+
+						ImVec2 min(clipOriginX, clipOriginY);
+						ImVec2 max(
+							clipOriginX + clipWidth, clipOriginY + clipHeight);
+
+						Col col = Col::FromFloat3(context.ToolManager->Col());
+
+						ImGui::GetForegroundDrawList()->AddRectFilled(
+							min, max, IM_COL32(col.r, col.g, col.b, 255));
+					}
+				}
+			}
+		}
+
 		if (!ImGui::IsMouseDown(0)) {
 			EndStroke(context.Player);
 		}
@@ -440,8 +504,7 @@ namespace FuncDoodle {
 				const Col col = pixels->Get(x, y);
 				const ImVec2 topLeft(startX + x * context.PixelScale,
 					startY + y * context.PixelScale);
-				const ImVec2 bottomRight(
-					startX + (x + 1) * context.PixelScale,
+				const ImVec2 bottomRight(startX + (x + 1) * context.PixelScale,
 					startY + (y + 1) * context.PixelScale);
 				drawList->AddRectFilled(
 					topLeft, bottomRight, IM_COL32(col.r, col.g, col.b, 255));
@@ -482,8 +545,10 @@ namespace FuncDoodle {
 
 		float screenMinX = startX + m_SquareSel.Min.x * context.PixelScale;
 		float screenMinY = startY + m_SquareSel.Min.y * context.PixelScale;
-		float screenMaxX = startX + (m_SquareSel.Max.x + 1) * context.PixelScale;
-		float screenMaxY = startY + (m_SquareSel.Max.y + 1) * context.PixelScale;
+		float screenMaxX =
+			startX + (m_SquareSel.Max.x + 1) * context.PixelScale;
+		float screenMaxY =
+			startY + (m_SquareSel.Max.y + 1) * context.PixelScale;
 
 		for (float x = screenMinX - offset; x < screenMaxX; x += dash + gap)
 			drawList->AddLine({x, screenMinY},

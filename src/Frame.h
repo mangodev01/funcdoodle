@@ -16,24 +16,31 @@ namespace FuncDoodle {
 		public:
 			unsigned char r = 255, g = 255, b = 255;
 
+			static Col FromFloat3(const float* f) {
+				Col col;
+
+				col.r = (unsigned char)(f[0] * 255.0f + 0.5f);
+				col.g = (unsigned char)(f[1] * 255.0f + 0.5f);
+				col.b = (unsigned char)(f[2] * 255.0f + 0.5f);
+
+				return col;
+			}
+
 			bool operator==(const Col& other) const {
 				return r == other.r && g == other.g && b == other.b;
 			}
 			bool operator!=(const Col& other) const {
-				return !(r == other.r && g == other.g && b == other.b);
+				return !(*this == other);
 			}
 			bool operator<(const Col& other) const {
-				if (r != other.r)
-					return r < other.r;
-				if (g != other.g)
-					return g < other.g;
+				if (r != other.r) return r < other.r;
+				if (g != other.g) return g < other.g;
 				return b < other.b;
 			}
-			friend std::ostream& operator<<(
-				std::ostream& stream, const Col& col) {
+
+			friend std::ostream& operator<<(std::ostream& stream, const Col& col) {
 				stream << "Col{" << (unsigned int)col.r << ", "
-					   << (unsigned int)col.g << ", " << (unsigned int)col.b
-					   << "}";
+					<< (unsigned int)col.g << ", " << (unsigned int)col.b << "}";
 				return stream;
 			}
 	};

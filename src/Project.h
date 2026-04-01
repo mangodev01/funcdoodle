@@ -1,6 +1,7 @@
 #pragma once
 
 #include "DynArr.h"
+#include "Frame.h"
 #include "Ptr.h"
 
 #include <concepts>
