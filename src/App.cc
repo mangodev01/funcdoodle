@@ -199,12 +199,13 @@ namespace FuncDoodle {
 	}
 
 	void Application::RenderImGui() {
+		if (!m_CurrentProj)
+			RenderOptions();
+
 		#ifdef FUNCDOODLE_BUILD_IMTESTS
 			ImGuiTestEngine_ShowTestEngineWindows(s_TestEngine, &m_ShowTests);
 		#endif
 
-		if (!m_CurrentProj)
-			RenderOptions();
 
 		CheckKeybinds();
 		RenderMainMenuBar();
