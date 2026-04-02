@@ -1,6 +1,9 @@
 @echo off
 setlocal EnableExtensions
 
+set "root_dir=%~dp0.."
+set "root_dir=%root_dir:\=%"
+
 if "%~1"=="" (
     if not "%~2"=="" goto usage
     if not "%~3"=="" goto usage
@@ -47,44 +50,61 @@ if errorlevel 1 (
     exit /b -1
 )
 
+set "bin_dir=%root_dir%\bin\microslop"
+
 if "%arg3%"=="true" (
-    if exist bin rmdir /S /Q bin
+    if exist "%bin_dir%" rmdir /S /Q "%bin_dir%"
 )
 
-mkdir bin
+mkdir "%bin_dir%"
 if errorlevel 1 exit /b -1
 
-cd bin
+cd "%bin_dir%"
 if errorlevel 1 exit /b -1
 
 set "tiling_flag=OFF"
 if "%arg2%"=="true" set "tiling_flag=ON"
 
-cmake -DCMAKE_BUILD_TYPE=%arg1% -DISTILING=%tiling_flag% ..
+set "use_bundled=%FUNCDOODLE_USE_BUNDLED_PORTAUDIO%"
+if not defined use_bundled (
+    if exist "%root_dir%\lib\portaudio\CMakeLists.txt" (
+        set "use_bundled=ON"
+    )
+)
+
+set "cmake_args=-DCMAKE_BUILD_TYPE=%arg1% -DISTILING=%tiling_flag% -DBUILD_TESTS=OFF -DBUILD_IMTESTS=OFF"
+
+if "%use_bundled%"=="ON" (
+    set "cmake_args=%cmake_args% -DFUNCDOODLE_USE_BUNDLED_PORTAUDIO=ON"
+) else (
+    set "cmake_args=%cmake_args% -DFUNCDOODLE_USE_BUNDLED_PORTAUDIO=OFF -DPORTAUDIO_STATIC=ON"
+)
+
+cmake %cmake_args% "%root_dir%"
 if errorlevel 1 exit /b -1
 
-cmake --build . --config %arg1%
+cmake --build . --config %arg1% --parallel
 if errorlevel 1 exit /b -1
 
-xcopy /E /I /Y ..\assets .\assets >nul
+xcopy /E /I /Y "%root_dir%\assets" ".\assets" >nul
 if errorlevel 1 exit /b -1
 
-xcopy /E /I /Y ..\themes .\themes >nul
+xcopy /E /I /Y "%root_dir%\themes" ".\themes" >nul
 if errorlevel 1 exit /b -1
 
-if exist .\%arg1%\ (
-    xcopy /E /I /Y ..\assets .\%arg1%\assets >nul
+if exist ".\%arg1%\" (
+    xcopy /E /I /Y "%root_dir%\assets" ".\%arg1%\assets" >nul
     if errorlevel 1 exit /b -1
-    xcopy /E /I /Y ..\themes .\%arg1%\themes >nul
+    xcopy /E /I /Y "%root_dir%\themes" ".\%arg1%\themes" >nul
     if errorlevel 1 exit /b -1
 )
 
 if "%arg4%"=="true" (
-    if exist .\FuncDoodle.exe (
+    if exist ".\FuncDoodle.exe" (
         .\FuncDoodle.exe
         if errorlevel 1 exit /b -1
     ) else (
-        if exist .\%arg1%\FuncDoodle.exe (
+        if exist ".\%arg1%\FuncDoodle.exe" (
             .\%arg1%\FuncDoodle.exe
             if errorlevel 1 exit /b -1
         ) else (
