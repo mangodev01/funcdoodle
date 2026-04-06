@@ -220,7 +220,10 @@ int main(int argc, char** argv) {
 	glfwGetWindowContentScale(win, &xScale, &yScale);
 	float dpiScale = xScale;
 
+	// Don't scale down on macOS - ImGui backends handle DPI scaling properly
+#ifndef __APPLE__
 	ImGui::GetStyle().ScaleAllSizes(1.0f / dpiScale);
+#endif
 
 	// Setup Dear ImGui style
 	ImGui::StyleColorsDark();

@@ -285,7 +285,8 @@ namespace FuncDoodle {
 		ImVec2 safe = ImGui::GetStyle().DisplaySafeAreaPadding;
 
 		float menuBarHeight = ImGui::GetFrameHeight();
-		ImGui::SetNextWindowPos(ImVec2(safe.x - 2, menuBarHeight + safe.y - 3));
+		ImVec2 nextWindowPos = ImVec2(vp->Pos.x + safe.x - 2, vp->Pos.y + menuBarHeight + safe.y - 3);
+		ImGui::SetNextWindowPos(nextWindowPos, ImGuiCond_Always);
 		size.y -= menuBarHeight;
 		ImGui::SetNextWindowSize(size, ImGuiCond_Always);
 		ImGui::SetNextWindowViewport(vp->ID);
