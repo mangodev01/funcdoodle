@@ -1,0 +1,1 @@
+src/Action.cc:			auto pixels = m_Sel->All();

@@ -168,7 +168,7 @@ namespace FuncDoodle {
 					DeleteSelectionAction(m_Manager->SelectedFrameI(),
 						m_EditorController->Sel(), prevPixels, m_CurrentProj));
 				m_Manager->SelectedFrame()->DeleteSelection(
-					m_EditorController->Sel().get(), m_CurrentProj->BgCol());
+					m_EditorController->Sel(), m_CurrentProj->BgCol());
 			}
 		}
 		if (m_Keybinds.Get("keybinds").IsPressed()) {
@@ -663,7 +663,7 @@ namespace FuncDoodle {
 					m_EditorController->Sel(), deg, m_CurrentProj));
 
 			m_Manager->SelectedFrame()->RotateSelection(
-				m_EditorController->Sel().get(), deg);
+				m_EditorController->Sel(), deg);
 		}
 	}
 
@@ -758,7 +758,7 @@ namespace FuncDoodle {
 								m_EditorController->Sel(), prevPixels,
 								m_CurrentProj));
 							m_Manager->SelectedFrame()->DeleteSelection(
-								m_EditorController->Sel().get(),
+								m_EditorController->Sel(),
 								m_CurrentProj->BgCol());
 						}
 					}

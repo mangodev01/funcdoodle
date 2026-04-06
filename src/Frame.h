@@ -7,6 +7,7 @@
 
 #include "Gui.h"
 
+#include "Ptr.h"
 #include "Selection.h"
 
 #include "stb_image_write.h"
@@ -131,8 +132,8 @@ namespace FuncDoodle {
 				m_Pixels.SetData(result);
 			}
 
-			void RotateSelection(Selection* sel, int deg);
-			void DeleteSelection(Selection* sel, Col bg);
+			void RotateSelection(WeakPtr<Selection> sel, int deg);
+			void DeleteSelection(WeakPtr<Selection> sel, Col bg);
 
 			void CopyToClipboard();
 			static Frame* PastedFrame();

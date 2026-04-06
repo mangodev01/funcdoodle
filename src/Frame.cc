@@ -9,6 +9,7 @@
 
 #include "MacroUtils.h"
 
+#include "Ptr.h"
 #include "stb_image_write.h"
 
 namespace FuncDoodle {
@@ -243,12 +244,12 @@ namespace FuncDoodle {
 			   m_Pixels.BgCol() == other.m_Pixels.BgCol();
 	}
 
-	void Frame::RotateSelection(Selection* sel, int deg) {
-		if (!sel) {
+	void Frame::RotateSelection(WeakPtr<Selection> sel, int deg) {
+		if (sel.expired()) {
 			return;
 		}
 
-		std::vector<ImVec2i> pixels = sel->All();
+		std::vector<ImVec2i> pixels = sel.lock()->All();
 		if (pixels.empty()) {
 			return;
 		}
@@ -293,11 +294,12 @@ namespace FuncDoodle {
 		}
 	}
 
-	void Frame::DeleteSelection(Selection* sel, Col bg) {
-		if (!sel)
+	void Frame::DeleteSelection(WeakPtr<Selection> sel, Col bg) {
+		if (sel.expired())
 			return;
 
-		for (ImVec2i px : sel->All()) {
+		auto all = sel.lock()->All();
+		for (ImVec2i px : all) {
 			m_Pixels.Set(px.x, px.y, bg);
 		}
 	}

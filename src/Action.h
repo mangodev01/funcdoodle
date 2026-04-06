@@ -175,7 +175,7 @@ namespace FuncDoodle {
 	class RotateSelectionAction : public Action {
 		public:
 			RotateSelectionAction(unsigned long frameIndex,
-				SharedPtr<Selection> sel, int32_t deg,
+				WeakPtr<Selection> sel, int32_t deg,
 				const SharedPtr<ProjectFile>& proj)
 				: m_FrameIndex(frameIndex), m_Sel(std::move(sel)), m_Proj(proj),
 				  m_Deg(deg) {}
@@ -184,11 +184,11 @@ namespace FuncDoodle {
 			void Redo() override;
 
 			inline int32_t Deg() { return m_Deg; };
-			inline Selection* Sel() { return m_Sel.get(); };
+			inline WeakPtr<Selection> Sel() { return m_Sel; };
 
 		private:
 			unsigned long m_FrameIndex;
-			SharedPtr<Selection> m_Sel;
+			WeakPtr<Selection> m_Sel;
 			int32_t m_Deg;
 			WeakPtr<ProjectFile> m_Proj;
 	};
@@ -196,7 +196,7 @@ namespace FuncDoodle {
 	class DeleteSelectionAction : public Action {
 		public:
 			DeleteSelectionAction(unsigned long frameIndex,
-				SharedPtr<Selection> sel, std::vector<Col> prevPixels,
+				WeakPtr<Selection> sel, std::vector<Col> prevPixels,
 				const SharedPtr<ProjectFile>& proj)
 				: m_FrameIndex(frameIndex), m_Sel(std::move(sel)),
 				  m_PrevPixels(std::move(prevPixels)), m_Proj(proj) {}
@@ -204,11 +204,11 @@ namespace FuncDoodle {
 			void Undo() override;
 			void Redo() override;
 
-			inline Selection* Sel() { return m_Sel.get(); };
+			inline WeakPtr<Selection> Sel() { return m_Sel; };
 
 		private:
 			unsigned long m_FrameIndex;
-			SharedPtr<Selection> m_Sel;
+			WeakPtr<Selection> m_Sel;
 			std::vector<Col> m_PrevPixels;
 			WeakPtr<ProjectFile> m_Proj;
 	};
