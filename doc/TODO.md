@@ -8,7 +8,11 @@
 - [x] modifying keybinds
 - [x] make portaudio a submodule
 - [x] make a better startup screen
-- [ ] make it so you can do more stuff with selection, not just rotation and deletion
+- [ ] fix tool keybinds (p0)
+- [ ] moving selections
+- [ ] copy & pasting selections
+- [ ] qol stuff
+- [ ] improved keybinds system with the ability to assign multiple keys to 1 action
 - [ ] i18n
 - [ ] fix infinite tech debt (wip)
 - [ ] sounds for animations
