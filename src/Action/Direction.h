@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Ptr.h"
 #include "Selection.h"
 

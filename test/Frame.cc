@@ -1,4 +1,5 @@
 #include "Frame.h"
+#include "Action/Direction.h"
 #include "Test.h"
 
 int FuncDoodle_RunFrameTests() {
@@ -171,6 +172,62 @@ int FuncDoodle_RunFrameTests() {
 	sel_frame.RotateSelection(selPtr, -90);
 	CHECK((sel_frame == sel_original),
 		"RotateSelection(90) then RotateSelection(-90) should restore");
+
+	// Selection movement
+	FuncDoodle::Frame moveFrame(5, 5, FuncDoodle::Col{255, 255, 255});
+	auto moveSel = std::make_shared<FuncDoodle::SquareSelection>();
+	moveSel->Active = false;
+	moveSel->Min = ImVec2i(1, 1);
+	moveSel->Max = ImVec2i(2, 2);
+
+	FuncDoodle::Col pixelA{10, 20, 30};
+	FuncDoodle::Col pixelB{40, 50, 60};
+	FuncDoodle::Col pixelC{70, 80, 90};
+	FuncDoodle::Col pixelD{100, 110, 120};
+
+	moveFrame.SetPixel(1, 1, pixelA);
+	moveFrame.SetPixel(2, 1, pixelB);
+	moveFrame.SetPixel(1, 2, pixelC);
+	moveFrame.SetPixel(2, 2, pixelD);
+
+	WeakPtr<FuncDoodle::Selection> moveSelPtr = moveSel;
+
+	moveFrame.MoveSelection(moveSelPtr, FuncDoodle::Direction::Right,
+		FuncDoodle::Col{255, 255, 255});
+	CHECK(
+		(moveSel->Min.x == 2), "MoveSelection(Right) should move Min.x right");
+	CHECK(
+		(moveSel->Max.x == 3), "MoveSelection(Right) should move Max.x right");
+	CHECK((moveFrame.Pixels()->Get(1, 1) == FuncDoodle::Col{255, 255, 255}),
+		"Old position should be bgCol");
+	CHECK((moveFrame.Pixels()->Get(2, 1) == pixelA),
+		"New position should have moved pixel");
+	CHECK((moveFrame.Pixels()->Get(3, 1) == pixelB),
+		"New position should have moved pixel");
+	CHECK((moveFrame.Pixels()->Get(2, 2) == pixelC),
+		"New position should have moved pixel");
+	CHECK((moveFrame.Pixels()->Get(3, 2) == pixelD),
+		"New position should have moved pixel");
+
+	moveFrame.MoveSelection(moveSelPtr, FuncDoodle::Direction::Down,
+		FuncDoodle::Col{255, 255, 255});
+	CHECK((moveSel->Min.y == 2), "MoveSelection(Down) should move Min.y down");
+	CHECK((moveSel->Max.y == 3), "MoveSelection(Down) should move Max.y down");
+	CHECK((moveFrame.Pixels()->Get(2, 1) == FuncDoodle::Col{255, 255, 255}),
+		"Old y position (2,1) should be bgCol");
+	CHECK((moveFrame.Pixels()->Get(3, 1) == FuncDoodle::Col{255, 255, 255}),
+		"Old y position (3,1) should be bgCol");
+	CHECK((moveFrame.Pixels()->Get(3, 3) == pixelD),
+		"pixelD should have moved to (3,3)");
+
+	moveFrame.MoveSelection(moveSelPtr, FuncDoodle::Direction::Left,
+		FuncDoodle::Col{255, 255, 255});
+	CHECK((moveSel->Min.x == 1),
+		"MoveSelection(Left) should move selection left");
+
+	moveFrame.MoveSelection(
+		moveSelPtr, FuncDoodle::Direction::Up, FuncDoodle::Col{255, 255, 255});
+	CHECK((moveSel->Min.y == 1), "MoveSelection(Up) should move selection up");
 
 	return 0;
 }
