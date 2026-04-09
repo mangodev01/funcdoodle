@@ -90,6 +90,7 @@ namespace FuncDoodle {
 			bool m_UndoByStroke = false;
 			bool m_ShowTests = true;
 			double m_FrameLimit = 1000.0;
+			double m_FrameLimitCache = 1000.0;
 			double m_LastFrameTime = 0.0;
 			double m_FPS = 0.0;
 			std::array<float, 3> m_CacheBGCol;

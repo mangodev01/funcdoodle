@@ -43,6 +43,7 @@ namespace FuncDoodle {
 		  m_CacheBGCol({255, 255, 255}), m_ThemesPath(themesPath),
 		  m_Theme(UUID::FromString("d0c1a009-d09c-4fe6-84f8-eddcb2da38f9")),
 		  m_Keybinds(rootPath) {
+		m_FrameLimitCache = m_FrameLimit;
 		m_Manager = std::make_unique<AnimationManager>(nullptr, assetLoader,
 			m_EditorController, m_Keybinds, m_PrevEnabled),
 		m_Manager->SetUndoByStroke(m_UndoByStroke);
@@ -966,7 +967,12 @@ namespace FuncDoodle {
 			ImGui::SameLine();
 			ImGui::Checkbox("Undo by stroke", &m_UndoByStroke);
 
-			ImGui::InputDouble("FPS limit", &m_FrameLimit);
+			ImGui::InputDouble("FPS limit", &m_FrameLimitCache);
+
+			if (ImGui::IsKeyPressed(ImGuiKey_Enter) ||
+				ImGui::IsKeyPressed(ImGuiKey_KeypadEnter)) {
+				m_FrameLimit = m_FrameLimitCache;
+			}
 
 			if (ImGui::IsKeyPressed(ImGuiKey_Escape) ||
 				ImGui::IsKeyPressed(ImGuiKey_Enter) ||
