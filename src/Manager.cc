@@ -49,11 +49,6 @@ namespace FuncDoodle {
 		ImGui::GetStyle().ScrollbarSize =
 			20.0f;	// Increase the thickness of the scrollbars
 
-		// Lock window height but allow horizontal resizing
-		float fixedHeight = 160.0f;
-		ImGui::SetNextWindowSizeConstraints(
-			ImVec2(0, fixedHeight), ImVec2(FLT_MAX, fixedHeight));
-
 		// Begin the window with horizontal scrollbar enabled
 		ImGui::SetNextWindowPos(ImVec2(0, 920), ImGuiCond_FirstUseEver);
 		ImGui::SetNextWindowSize(ImVec2(1074, 160), ImGuiCond_FirstUseEver);
@@ -68,9 +63,14 @@ namespace FuncDoodle {
 		float totalWidth = m_Proj->AnimFrameCount() * (frameWidth + padding);
 
 		// Create a scrollable region
+		ImGuiStyle& style = ImGui::GetStyle();
+		float childHeight = ImGui::GetWindowHeight() - ImGui::GetCursorPosY() -
+			style.WindowPadding.y;
+		if (childHeight < 0.0f)
+			childHeight = 0.0f;
 		ImGui::BeginChild("FrameScrollRegion",
-			ImVec2(ImGui::GetContentRegionAvail().x, frameHeight + padding),
-			false, ImGuiWindowFlags_HorizontalScrollbar);
+			ImVec2(ImGui::GetContentRegionAvail().x, childHeight), false,
+			ImGuiWindowFlags_HorizontalScrollbar);
 
 		ImDrawList* drawList = ImGui::GetWindowDrawList();
 
@@ -134,7 +134,7 @@ namespace FuncDoodle {
 					IM_COL32(255, 0, 0, 255),  // Red color
 					0.0f,					   // rounding
 					0,						   // flags
-					8.0f  // thickness - increased to make it much thicker
+					3.0f  // thickness - increased to make it much thicker
 				);
 			}
 			ImVec2 mousePos = ImGui::GetMousePos();
