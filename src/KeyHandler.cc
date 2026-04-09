@@ -15,6 +15,16 @@ namespace FuncDoodle {
 		keybinds.Register("insert_before", {false, false, false, ImGuiKey_O});
 		keybinds.Register("move_forward", {false, false, false, ImGuiKey_I});
 		keybinds.Register("move_backward", {false, false, false, ImGuiKey_U});
+
+		keybinds.Register(
+			"move_selection_left", {false, false, false, ImGuiKey_LeftArrow});
+		keybinds.Register(
+			"move_selection_right", {false, false, false, ImGuiKey_RightArrow});
+		keybinds.Register(
+			"move_selection_up", {false, false, false, ImGuiKey_UpArrow});
+		keybinds.Register(
+			"move_selection_down", {false, false, false, ImGuiKey_DownArrow});
+
 		keybinds.Register(
 			"delete_frame", {false, false, false, ImGuiKey_Backslash});
 		keybinds.Register("copy_frame", {false, false, false, ImGuiKey_Comma});

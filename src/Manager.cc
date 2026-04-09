@@ -59,7 +59,7 @@ namespace FuncDoodle {
 		ImGui::SetNextWindowSize(ImVec2(1074, 160), ImGuiCond_FirstUseEver);
 		ImGui::Begin("Timeline", nullptr,
 			ImGuiWindowFlags_HorizontalScrollbar |
-			ImGuiWindowFlags_NoBackground);
+				ImGuiWindowFlags_NoBackground);
 		ImDrawList* drawList = ImGui::GetWindowDrawList();
 
 		float frameWidth = (float)m_Proj->AnimWidth();

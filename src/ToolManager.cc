@@ -40,9 +40,11 @@ namespace FuncDoodle {
 			ImGui::SliderInt("##Size", &m_Size, 1, 100, "%dpx");
 		}
 
-		if (m_SelectedTool != ToolType::Eraser && m_SelectedTool != ToolType::Select) {
+		if (m_SelectedTool != ToolType::Eraser &&
+			m_SelectedTool != ToolType::Select) {
 			ImGui::PushItemWidth(250);
-			ImGui::ColorPicker3("Color", m_Col, ImGuiColorEditFlags_NoSidePreview);
+			ImGui::ColorPicker3(
+				"Color", m_Col, ImGuiColorEditFlags_NoSidePreview);
 			ImGui::PopItemWidth();
 		}
 

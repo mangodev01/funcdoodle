@@ -1,6 +1,6 @@
 #include "Project.h"
 
-#include "Action.h"
+#include "Action/Action.h"
 #include "Frame.h"
 
 #include <cstdio>
@@ -377,7 +377,7 @@ namespace FuncDoodle {
 
 		m_Frames.reset(new LongIndexArray(m_Width, m_Height, m_BG));
 		if (verMajor >= 0 && verMinor >= 2) {
-			FUNC_DBG((unsigned long)frameCount);
+			FUNC_GRAY("Reading " << (unsigned long)frameCount << "frames...");
 			for (unsigned long i = 0; i < (unsigned long)frameCount; i++) {
 				ImageArray* img = new ImageArray(animWidth, animHeight, m_BG);
 				for (int y = 0; y < animHeight; y++) {
@@ -407,7 +407,7 @@ namespace FuncDoodle {
 				delete img;
 			}
 		} else {
-			FUNC_INF((long)frameCount);
+			FUNC_GRAY("Reading " << (long)frameCount << "frames...");
 			for (long i = 0; i < (long)frameCount; i++) {
 				ImageArray* img = new ImageArray(animWidth, animHeight, m_BG);
 				for (int y = 0; y < animHeight; y++) {

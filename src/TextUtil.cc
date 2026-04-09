@@ -8,7 +8,7 @@ namespace FuncDoodle {
 		ImGui::PushFont(font, size);
 		ImVec2 sizePx = ImGui::CalcTextSize(text);
 		ImGui::PopFont();
-		return { sizePx.x, sizePx.y };
+		return {sizePx.x, sizePx.y};
 	}
 
 	float TextUtil::TextWidth(ImFont* font, float size, const char* text) {
@@ -26,6 +26,6 @@ namespace FuncDoodle {
 		float t2 = TextWidth(titleFont, titleSize, titleB);
 		float d1 = TextWidth(descFont, descSize, descA);
 		float d2 = TextWidth(descFont, descSize, descB);
-		return std::max({ t1, t2, d1, d2 });
+		return std::max({t1, t2, d1, d2});
 	}
 }  // namespace FuncDoodle

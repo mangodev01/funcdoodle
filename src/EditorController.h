@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Action.h"
+#include "Action/Action.h"
 #include "Frame.h"
 #include "Ptr.h"
 #include "Selection.h"
@@ -17,16 +17,16 @@ namespace FuncDoodle {
 	class EditorController {
 		public:
 			struct CanvasContext {
-				class Frame* Frame = nullptr;
-				class Frame* PreviousFrame = nullptr;
-				unsigned long Index = 0;
-				ToolManager* ToolManager = nullptr;
-				AnimationPlayer* Player = nullptr;
-				UniquePtr<Grid> Grid = nullptr;
-				int PixelScale = 8;
-				ImVec2* LastMousePos = nullptr;
-				ImVec2* LastHoverMousePos = nullptr;
-				bool PrevEnabled = false;
+					class Frame* Frame = nullptr;
+					class Frame* PreviousFrame = nullptr;
+					unsigned long Index = 0;
+					ToolManager* ToolManager = nullptr;
+					AnimationPlayer* Player = nullptr;
+					UniquePtr<Grid> Grid = nullptr;
+					int PixelScale = 8;
+					ImVec2* LastMousePos = nullptr;
+					ImVec2* LastHoverMousePos = nullptr;
+					bool PrevEnabled = false;
 			};
 
 			EditorController();

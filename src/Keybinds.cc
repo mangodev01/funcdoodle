@@ -63,9 +63,6 @@ namespace FuncDoodle {
 						snprintf(buf + offset, sizeof(buf) - offset, " | ");
 				}
 
-				if (offset >= sizeof(buf))
-					break;
-
 				offset +=
 					snprintf(buf + offset, sizeof(buf) - offset, "%s", keyName);
 				first = false;
@@ -191,7 +188,7 @@ namespace FuncDoodle {
 
 	Shortcut KeybindsRegistry::Get(const char* id) {
 		auto it = std::find_if(m_Reg.begin(), m_Reg.end(),
-			[id](const auto& pair) { return pair.first == id; });
+			[id](const auto& pair) { return strcmp(pair.first, id) == 0; });
 		if (it != m_Reg.end()) {
 			return it->second.User.value_or(it->second.Default);
 		}

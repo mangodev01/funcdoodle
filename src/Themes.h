@@ -60,48 +60,48 @@ namespace FuncDoodle {
 			}
 			ImGui::ShowStyleEditor(&ImGui::GetStyle());
 			// if (g_ThemeEditorOpen) {
-				// ImGui::Begin("Theme editor", &g_ThemeEditorOpen,
-						// ImGuiWindowFlags_NoCollapse);
-//
-				// ImGuiStyle& style = ImGui::GetStyle();
-//
-				// ImVec2 windowSize = ImGui::GetWindowSize();
-				// float windowWidth = windowSize.x;
-//
-				// Calculate the number of col based on the window width
-				// int numCol = static_cast<int>(
-					// windowWidth /
-					// 200);  // Each column has a minimum width of 100px
-				// numCol = ImMax(1, numCol);
-//
-				// ImGui::Columns(numCol, nullptr, false);
-				// for (unsigned char col = 0; col < ImGuiCol_COUNT; ++col) {
-					// ImGui::PushID(col);
-					// ImVec4& color = style.Colors[col];
-//
-					// if (ImGui::ColorEdit4(ImGui::GetStyleColorName(col),
-							// (float*)&color)) {
-						// style.Colors[col] = color;
-					// }
-//
-					// if ((col + 1) % numCol == 0) {
-						// ImGui::NextColumn();
-					// }
-//
-					// ImGui::PopID();
-				// }
-//
-				// End the cols
-				// ImGui::Columns(1);
-//
-				// if (ImGui::Button("Close") ||
-					// ImGui::IsKeyPressed(ImGuiKey_Escape) ||
-					// ImGui::IsKeyPressed(ImGuiKey_Enter) ||
-					// ImGui::IsKeyPressed(ImGuiKey_KeypadEnter)) {
-					// g_ThemeEditorOpen = false;
-				// }
-//
-				// ImGui::End();
+			// ImGui::Begin("Theme editor", &g_ThemeEditorOpen,
+			// ImGuiWindowFlags_NoCollapse);
+			//
+			// ImGuiStyle& style = ImGui::GetStyle();
+			//
+			// ImVec2 windowSize = ImGui::GetWindowSize();
+			// float windowWidth = windowSize.x;
+			//
+			// Calculate the number of col based on the window width
+			// int numCol = static_cast<int>(
+			// windowWidth /
+			// 200);  // Each column has a minimum width of 100px
+			// numCol = ImMax(1, numCol);
+			//
+			// ImGui::Columns(numCol, nullptr, false);
+			// for (unsigned char col = 0; col < ImGuiCol_COUNT; ++col) {
+			// ImGui::PushID(col);
+			// ImVec4& color = style.Colors[col];
+			//
+			// if (ImGui::ColorEdit4(ImGui::GetStyleColorName(col),
+			// (float*)&color)) {
+			// style.Colors[col] = color;
+			// }
+			//
+			// if ((col + 1) % numCol == 0) {
+			// ImGui::NextColumn();
+			// }
+			//
+			// ImGui::PopID();
+			// }
+			//
+			// End the cols
+			// ImGui::Columns(1);
+			//
+			// if (ImGui::Button("Close") ||
+			// ImGui::IsKeyPressed(ImGuiKey_Escape) ||
+			// ImGui::IsKeyPressed(ImGuiKey_Enter) ||
+			// ImGui::IsKeyPressed(ImGuiKey_KeypadEnter)) {
+			// g_ThemeEditorOpen = false;
+			// }
+			//
+			// ImGui::End();
 			// }
 		}
 		inline CustomTheme g_LastLoadedTheme;
@@ -228,11 +228,12 @@ namespace FuncDoodle {
 		}
 
 		inline void SaveCurrentTheme() {
-			// Save macros for ImGuiStyle fields
-			#define SAVE_FLOAT(field) other.insert(#field, style.field)
-			#define SAVE_VEC2(field) other.insert(#field, toml::array{style.field.x, style.field.y})
-			#define SAVE_BOOL(field) other.insert(#field, style.field)
-			#define SAVE_ENUM(field) other.insert(#field, static_cast<int>(style.field))
+// Save macros for ImGuiStyle fields
+#define SAVE_FLOAT(field) other.insert(#field, style.field)
+#define SAVE_VEC2(field) \
+	other.insert(#field, toml::array{style.field.x, style.field.y})
+#define SAVE_BOOL(field) other.insert(#field, style.field)
+#define SAVE_ENUM(field) other.insert(#field, static_cast<int>(style.field))
 
 			if (g_SaveThemeOpen) {
 				ImGui::Begin("Save current theme", &g_SaveThemeOpen);
@@ -241,9 +242,9 @@ namespace FuncDoodle {
 				static char themeAuthor[50] = "";
 				ImGui::InputText("Author", themeAuthor, 50);
 
-
 				if (ImGui::Button("Save")) {
-					// should've made the constructor explicit cos assigning a string to a filedialog doesn't make any sense
+					// should've made the constructor explicit cos assigning a
+					// string to a filedialog doesn't make any sense
 					FileDialog dialog = "toml";
 					std::filesystem::path res = dialog.Save();
 
@@ -272,7 +273,7 @@ namespace FuncDoodle {
 						theme.insert("colors"sv, colors);
 
 						toml::table other = toml::table();
-						
+
 						SAVE_FLOAT(Alpha);
 						SAVE_FLOAT(DisabledAlpha);
 						SAVE_VEC2(WindowPadding);

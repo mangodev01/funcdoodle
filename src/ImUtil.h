@@ -27,7 +27,7 @@ namespace FuncDoodle {
 			float tertiaryWidth = tertiary ? ButtonWidth(tertiary) : 0.0f;
 			int count = tertiary ? 3 : 2;
 			float totalWidth = primaryWidth + secondaryWidth + tertiaryWidth +
-				spacing * (count - 1);
+							   spacing * (count - 1);
 			AlignButtonsRight(totalWidth);
 
 			ButtonRowResult result = ButtonRowResult::None;
@@ -69,9 +69,13 @@ namespace FuncDoodle {
 			return ImGui::Button(label);
 		}
 
-		inline bool OkButton() { return SingleButtonRow("OK"); }
+		inline bool OkButton() {
+			return SingleButtonRow("OK");
+		}
 
-		inline bool CloseButton() { return SingleButtonRow("Close"); }
+		inline bool CloseButton() {
+			return SingleButtonRow("Close");
+		}
 
 		ImGuiKey GetAnyReleasedKey() {
 			for (int i = ImGuiKey_NamedKey_BEGIN; i < ImGuiKey_NamedKey_END;

@@ -26,7 +26,7 @@ endfunction()
 
 function(funcdoodle_sources)
 	add_subdirectory(lib/glfw)
-	file(GLOB SRC "src/*.cc")
+	file(GLOB_RECURSE SRC "src/*.cc")
 
 	file(GLOB IMGUI_TEST_ENGINE_SOURCES
 		"lib/imgui_test_engine/imgui_test_engine/*.cpp"

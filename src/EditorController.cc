@@ -426,7 +426,7 @@ namespace FuncDoodle {
 			} else {
 				m_Sel = std::make_unique<SquareSelection>(m_SquareSel);
 			}
-			FUNC_INF("m_SquareSel min: " << m_SquareSel.Min.x << ","
+			FUNC_DBG("m_SquareSel min: " << m_SquareSel.Min.x << ","
 										 << m_SquareSel.Min.y
 										 << "; max: " << m_SquareSel.Max.x
 										 << "," << m_SquareSel.Max.y);

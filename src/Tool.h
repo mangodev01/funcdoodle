@@ -109,13 +109,10 @@ namespace FuncDoodle {
 	}
 
 	static void ToolKeybinds(ToolType* tool, KeybindsRegistry& keybinds) {
-		// if (!ImGui::IsAnyItemActive()) {
-		auto pencil = keybinds.Get("pencil");
-		auto eraser = keybinds.Get("eraser");
-		if (pencil.IsPressed()) {
+		if (keybinds.Get("pencil").IsPressed()) {
 			*tool = ToolType::Pencil;
 		}
-		if (eraser.IsPressed()) {
+		if (keybinds.Get("eraser").IsPressed()) {
 			*tool = ToolType::Eraser;
 		}
 		if (keybinds.Get("bucket").IsPressed()) {
@@ -127,6 +124,5 @@ namespace FuncDoodle {
 		if (keybinds.Get("select").IsPressed()) {
 			*tool = ToolType::Select;
 		}
-		// }
 	}
 }  // namespace FuncDoodle

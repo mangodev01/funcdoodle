@@ -2,7 +2,7 @@
 
 #include "Frame.h"
 
-#include "Action.h"
+#include "Action/Action.h"
 #include "Grid.h"
 #include "ToolManager.h"
 
@@ -18,7 +18,10 @@
 namespace FuncDoodle {
 	class FrameRenderer {
 		public:
-			FrameRenderer(Frame* frame, unsigned long index, ToolManager* manager, AnimationPlayer* player, const SharedPtr<EditorController>& editorController, bool prevEnabled) {
+			FrameRenderer(Frame* frame, unsigned long index,
+				ToolManager* manager, AnimationPlayer* player,
+				const SharedPtr<EditorController>& editorController,
+				bool prevEnabled) {
 				m_Ctx = EditorController::CanvasContext();
 				m_Ctx.Frame = frame;
 				m_Ctx.PreviousFrame = nullptr;
@@ -49,12 +52,11 @@ namespace FuncDoodle {
 			void RenderStatusBar();
 			void InitPixels();
 
-			inline EditorController::CanvasContext* Ctx() {
-				return &m_Ctx;
-			}
+			inline EditorController::CanvasContext* Ctx() { return &m_Ctx; }
 			void SetUndoByStroke(bool undoByStroke) {
 				if (m_EditorController) {
-					m_EditorController->SetUndoByStroke(undoByStroke, m_Ctx.Player);
+					m_EditorController->SetUndoByStroke(
+						undoByStroke, m_Ctx.Player);
 				}
 			}
 			void RenderFramePixels(int startX, int startY, ImDrawList* drawList,

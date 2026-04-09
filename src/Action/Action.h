@@ -165,7 +165,7 @@ namespace FuncDoodle {
 			void Undo() override;
 			void Redo() override;
 
-			inline int32_t Deg() { return m_Deg; };
+			inline int32_t Deg() const { return m_Deg; };
 
 		private:
 			unsigned long m_FrameIndex;
@@ -183,8 +183,8 @@ namespace FuncDoodle {
 			void Undo() override;
 			void Redo() override;
 
-			inline int32_t Deg() { return m_Deg; };
-			inline WeakPtr<Selection> Sel() { return m_Sel; };
+			inline int32_t Deg() const { return m_Deg; };
+			inline WeakPtr<Selection> Sel() const { return m_Sel; };
 
 		private:
 			unsigned long m_FrameIndex;
@@ -204,12 +204,33 @@ namespace FuncDoodle {
 			void Undo() override;
 			void Redo() override;
 
-			inline WeakPtr<Selection> Sel() { return m_Sel; };
+			inline WeakPtr<Selection> Sel() const { return m_Sel; };
 
 		private:
 			unsigned long m_FrameIndex;
 			WeakPtr<Selection> m_Sel;
 			std::vector<Col> m_PrevPixels;
 			WeakPtr<ProjectFile> m_Proj;
+	};
+
+	class MoveSelectionAction : public Action {
+		public:
+			MoveSelectionAction(Frame frame, MoveSelectionActionContext ctx)
+				: m_FrameBeforeMove(frame), m_Ctx(ctx) {}
+
+			void Undo() override;
+			void Redo() override;
+
+			inline WeakPtr<Selection> Sel() const { return m_Ctx.sel; };
+			inline Direction Dir() const { return m_Ctx.moveDir; };
+			inline SharedPtr<ProjectFile> Proj() const { return m_Ctx.proj; };
+			inline unsigned long FrameIndex() const {
+				return m_Ctx.frameIndex;
+			};
+			inline MoveSelectionActionContext Ctx() const { return m_Ctx; };
+
+		private:
+			MoveSelectionActionContext m_Ctx;
+			Frame m_FrameBeforeMove;
 	};
 }  // namespace FuncDoodle

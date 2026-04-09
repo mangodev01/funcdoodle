@@ -303,4 +303,80 @@ namespace FuncDoodle {
 			m_Pixels.Set(px.x, px.y, bg);
 		}
 	}
+
+	void Frame::MoveSelection(
+		WeakPtr<Selection> sel, Direction moveDir, Col bg) {
+		if (sel.expired())
+			return;
+
+		auto selPtr = sel.lock();
+		auto all = selPtr->All();
+		if (all.empty())
+			return;
+
+		std::vector<std::pair<ImVec2i, Col>> pixelData;
+		pixelData.reserve(all.size());
+		for (const auto& p : all) {
+			pixelData.push_back({p, m_Pixels.Get(p.x, p.y)});
+		}
+
+		for (const auto& [p, col] : pixelData) {
+			m_Pixels.Set(p.x, p.y, bg);
+		}
+
+		for (const auto& [p, col] : pixelData) {
+			ImVec2i newPos = p;
+			switch (moveDir) {
+				case Direction::Left:
+					newPos.x--;
+					break;
+				case Direction::Right:
+					newPos.x++;
+					break;
+				case Direction::Up:
+					newPos.y--;
+					break;
+				case Direction::Down:
+					newPos.y++;
+					break;
+				case Direction::None:
+					break;
+			}
+			if (newPos.x >= 0 && newPos.x < Width() && newPos.y >= 0 &&
+				newPos.y < Height()) {
+				m_Pixels.Set(newPos.x, newPos.y, col);
+			}
+		}
+
+		if (auto* sqSel = dynamic_cast<SquareSelection*>(selPtr.get())) {
+			switch (moveDir) {
+				case Direction::Left:
+					if (sqSel->Min.x > 0) {
+						sqSel->Min.x--;
+						sqSel->Max.x--;
+					}
+					break;
+				case Direction::Right:
+					if (sqSel->Max.x < Width() - 1) {
+						sqSel->Min.x++;
+						sqSel->Max.x++;
+					}
+					break;
+				case Direction::Up:
+					if (sqSel->Min.y > 0) {
+						sqSel->Min.y--;
+						sqSel->Max.y--;
+					}
+					break;
+				case Direction::Down:
+					if (sqSel->Max.y < Height() - 1) {
+						sqSel->Min.y++;
+						sqSel->Max.y++;
+					}
+					break;
+				case Direction::None:
+					break;
+			}
+		}
+	}
 }  // namespace FuncDoodle

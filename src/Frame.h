@@ -5,6 +5,7 @@
 #include <stdexcept>
 #include <vector>
 
+#include "Action/Direction.h"
 #include "Gui.h"
 
 #include "Ptr.h"
@@ -13,6 +14,8 @@
 #include "stb_image_write.h"
 
 namespace FuncDoodle {
+	class MoveSelectionAction;
+
 	struct Col {
 		public:
 			unsigned char r = 255, g = 255, b = 255;
@@ -34,14 +37,18 @@ namespace FuncDoodle {
 				return !(*this == other);
 			}
 			bool operator<(const Col& other) const {
-				if (r != other.r) return r < other.r;
-				if (g != other.g) return g < other.g;
+				if (r != other.r)
+					return r < other.r;
+				if (g != other.g)
+					return g < other.g;
 				return b < other.b;
 			}
 
-			friend std::ostream& operator<<(std::ostream& stream, const Col& col) {
+			friend std::ostream& operator<<(
+				std::ostream& stream, const Col& col) {
 				stream << "Col{" << (unsigned int)col.r << ", "
-					<< (unsigned int)col.g << ", " << (unsigned int)col.b << "}";
+					   << (unsigned int)col.g << ", " << (unsigned int)col.b
+					   << "}";
 				return stream;
 			}
 	};
@@ -134,6 +141,8 @@ namespace FuncDoodle {
 
 			void RotateSelection(WeakPtr<Selection> sel, int deg);
 			void DeleteSelection(WeakPtr<Selection> sel, Col bg);
+			void MoveSelection(
+				WeakPtr<Selection> sel, Direction moveDir, Col bg);
 
 			void CopyToClipboard();
 			static Frame* PastedFrame();

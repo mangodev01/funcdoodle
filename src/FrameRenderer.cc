@@ -24,10 +24,8 @@ namespace FuncDoodle {
 	void FrameRenderer::RenderFrame() {
 		ImGui::SetNextWindowPos(ImVec2(0, 32), ImGuiCond_FirstUseEver);
 		ImGui::SetNextWindowSize(ImVec2(1073, 862), ImGuiCond_FirstUseEver);
-		ImGui::Begin("Frame", 
-			0,
-			ImGuiWindowFlags_NoScrollbar |
-			ImGuiWindowFlags_NoScrollWithMouse);
+		ImGui::Begin("Frame", 0,
+			ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 
 		if (!m_Ctx.Frame || !m_Ctx.ToolManager) {
 			ImGui::End();
@@ -76,15 +74,15 @@ namespace FuncDoodle {
 
 	void FrameRenderer::RenderStatusBar() {
 		float availY = ImGui::GetContentRegionAvail().y;
-		ImGui::SetCursorPosY(ImGui::GetCursorPosY() + availY - c_StatusBarHeight);
+		ImGui::SetCursorPosY(
+			ImGui::GetCursorPosY() + availY - c_StatusBarHeight);
 
 		ImGui::Separator();
 
-		ImGui::Text("Frame %lu | %dx%d | Zoom: %dx | X: %.0f, Y: %.0f | Draw X: %.0f, Draw Y: %.0f",
-			m_Ctx.Index,
-			m_Ctx.Frame->Width(),
-			m_Ctx.Frame->Height(),
-			m_Ctx.PixelScale, 
+		ImGui::Text("Frame %lu | %dx%d | Zoom: %dx | X: %.0f, Y: %.0f | Draw "
+					"X: %.0f, Draw Y: %.0f",
+			m_Ctx.Index, m_Ctx.Frame->Width(), m_Ctx.Frame->Height(),
+			m_Ctx.PixelScale,
 			m_Ctx.LastHoverMousePos ? m_Ctx.LastHoverMousePos->x : 0,
 			m_Ctx.LastHoverMousePos ? m_Ctx.LastHoverMousePos->y : 0,
 			m_Ctx.LastMousePos ? m_Ctx.LastMousePos->x : 0,

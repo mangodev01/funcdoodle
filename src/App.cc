@@ -2,7 +2,7 @@
 #include "KeyHandler.h"
 #include "Manager.h"
 
-#include "Action.h"
+#include "Action/Action.h"
 
 #include "App.h"
 
@@ -43,8 +43,8 @@ namespace FuncDoodle {
 		  m_CacheBGCol({255, 255, 255}), m_ThemesPath(themesPath),
 		  m_Theme(UUID::FromString("d0c1a009-d09c-4fe6-84f8-eddcb2da38f9")),
 		  m_Keybinds(rootPath) {
-		m_Manager = std::make_unique<AnimationManager>(
-			nullptr, assetLoader, m_EditorController, m_Keybinds, m_PrevEnabled),
+		m_Manager = std::make_unique<AnimationManager>(nullptr, assetLoader,
+			m_EditorController, m_Keybinds, m_PrevEnabled),
 		m_Manager->SetUndoByStroke(m_UndoByStroke);
 
 		RegisterKeybinds();
@@ -157,6 +157,9 @@ namespace FuncDoodle {
 		}
 		if (m_Keybinds.Get("del").IsPressed()) {
 			if (m_EditorController->Sel() && m_CurrentProj) {
+				FUNC_DBG("Has selection, checking keybinds");
+				auto sel = m_EditorController->Sel();
+				FUNC_DBG("Sel().use_count() = " << sel.use_count());
 				auto selPixels = m_EditorController->Sel()->All();
 				std::vector<Col> prevPixels;
 				prevPixels.reserve(selPixels.size());
@@ -171,6 +174,26 @@ namespace FuncDoodle {
 					m_EditorController->Sel(), m_CurrentProj->BgCol());
 			}
 		}
+		if (m_EditorController->Sel() && m_CurrentProj) {
+			auto moveSel = [&](Direction dir) {
+				FUNC_INF("Moving selection: " << (int)dir);
+				MoveSelectionActionContext ctx{m_Manager->SelectedFrameI(),
+					m_EditorController->Sel(), dir, m_CurrentProj};
+				auto action = MoveSelectionAction(
+					Frame(*m_Manager->SelectedFrame()), ctx);
+				m_CurrentProj->PushUndoable(action);
+				m_Manager->SelectedFrame()->MoveSelection(
+					m_EditorController->Sel(), dir, m_CurrentProj->BgCol());
+			};
+			if (m_Keybinds.Get("move_selection_left").IsPressed())
+				moveSel(Direction::Left);
+			if (m_Keybinds.Get("move_selection_right").IsPressed())
+				moveSel(Direction::Right);
+			if (m_Keybinds.Get("move_selection_up").IsPressed())
+				moveSel(Direction::Up);
+			if (m_Keybinds.Get("move_selection_down").IsPressed())
+				moveSel(Direction::Down);
+		}
 		if (m_Keybinds.Get("keybinds").IsPressed()) {
 			m_Popups.Open("keybinds");
 		}
@@ -179,16 +202,16 @@ namespace FuncDoodle {
 				if (m_SFXEnabled)
 					m_AssetLoader->PlaySound(s_ProjSaveSound);
 #ifndef MACOS
-						std::thread([&]() {
+				std::thread([&]() {
 #endif
-							SaveFileDialog([&]() {
-								SaveProjectFile();
+					SaveFileDialog([&]() {
+						SaveProjectFile();
 
-								if (m_SFXEnabled)
-									m_AssetLoader->PlaySound(s_ProjSaveEndSound);
-							});
+						if (m_SFXEnabled)
+							m_AssetLoader->PlaySound(s_ProjSaveEndSound);
+					});
 #ifndef MACOS
-						}).detach();
+				}).detach();
 #endif
 			}
 
@@ -202,10 +225,9 @@ namespace FuncDoodle {
 		if (!m_CurrentProj)
 			RenderOptions();
 
-		#ifdef FUNCDOODLE_BUILD_IMTESTS
-			ImGuiTestEngine_ShowTestEngineWindows(s_TestEngine, &m_ShowTests);
-		#endif
-
+#ifdef FUNCDOODLE_BUILD_IMTESTS
+		ImGuiTestEngine_ShowTestEngineWindows(s_TestEngine, &m_ShowTests);
+#endif
 
 		CheckKeybinds();
 		RenderMainMenuBar();
@@ -258,7 +280,8 @@ namespace FuncDoodle {
 	void Application::ReadProjectFile() {
 		// m_FilePath is the actual file that we're going to read
 		if (m_FilePath.empty()) {
-			FUNC_DBG("tried reading but m_FilePath is nullptr, probably means that the file dialog was cancelled");
+			FUNC_DBG("tried reading but m_FilePath is nullptr, probably means "
+					 "that the file dialog was cancelled");
 			return;
 		}
 
@@ -285,7 +308,8 @@ namespace FuncDoodle {
 		ImVec2 safe = ImGui::GetStyle().DisplaySafeAreaPadding;
 
 		float menuBarHeight = ImGui::GetFrameHeight();
-		ImVec2 nextWindowPos = ImVec2(vp->Pos.x + safe.x - 2, vp->Pos.y + menuBarHeight + safe.y - 3);
+		ImVec2 nextWindowPos = ImVec2(
+			vp->Pos.x + safe.x - 2, vp->Pos.y + menuBarHeight + safe.y - 3);
 		ImGui::SetNextWindowPos(nextWindowPos, ImGuiCond_Always);
 		size.y -= menuBarHeight;
 		ImGui::SetNextWindowSize(size, ImGuiCond_Always);
@@ -294,13 +318,11 @@ namespace FuncDoodle {
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0);
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
 
-		ImGui::Begin("Options", 0, ImGuiWindowFlags_NoTitleBar |
-			ImGuiWindowFlags_NoResize |
-			ImGuiWindowFlags_NoScrollbar |
-			ImGuiWindowFlags_NoScrollWithMouse |
-			ImGuiWindowFlags_NoMove |
-			ImGuiWindowFlags_NoCollapse |
-			ImGuiWindowFlags_NoDecoration);
+		ImGui::Begin("Options", 0,
+			ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize |
+				ImGuiWindowFlags_NoScrollbar |
+				ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoMove |
+				ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoDecoration);
 
 		ImGui::BeginGroup();
 
@@ -312,8 +334,8 @@ namespace FuncDoodle {
 		const float openTextYOffsetFactor = 0.16f;
 
 		ImFont* titleFont = m_AssetLoader && m_AssetLoader->GetFontBold()
-			? m_AssetLoader->GetFontBold()
-			: ImGui::GetFont();
+								? m_AssetLoader->GetFontBold()
+								: ImGui::GetFont();
 
 		const char* measureSample = "Ag";
 
@@ -351,7 +373,8 @@ namespace FuncDoodle {
 		auto renderOptionRow = [&](const char* title, const char* desc,
 								   uint32_t texId, float textYOffsetFactor,
 								   const std::function<void()>& onClick) {
-			if (ImGui::ImageButton(title, (ImTextureID)(intptr_t)texId, btnSize)) {
+			if (ImGui::ImageButton(
+					title, (ImTextureID)(intptr_t)texId, btnSize)) {
 				onClick();
 			}
 
@@ -368,16 +391,16 @@ namespace FuncDoodle {
 				TextUtil::TextHeight(titleFont, titleFontSize, title);
 			float textYOffset = std::round(titleHeight * textYOffsetFactor);
 			ImGui::SetCursorPosX(textX);
-			ImGui::SetCursorPosY(btnTopY + (btnSize.y - titleHeight) * 0.5f -
-				textYOffset);
+			ImGui::SetCursorPosY(
+				btnTopY + (btnSize.y - titleHeight) * 0.5f - textYOffset);
 			ImGui::Text("%s", title);
 			ImGui::PopFont();
 
 			ImGui::PushFont(nullptr, descFontSize);
 			float descLineHeightLocal = ImGui::GetTextLineHeight();
 			ImGui::SetCursorPosX(textX);
-			ImGui::SetCursorPosY(btnBottomY - descLineHeightLocal -
-				descBottomPad - textYOffset);
+			ImGui::SetCursorPosY(
+				btnBottomY - descLineHeightLocal - descBottomPad - textYOffset);
 			ImGui::Text("%s", desc);
 			ImGui::PopFont();
 		};
@@ -392,8 +415,7 @@ namespace FuncDoodle {
 		ImGui::SetCursorPosY(rowTopY + btnSize.y + rowGap);
 
 		renderOptionRow(openProjTitle, openProjDesc, s_OpenTexId,
-			openTextYOffsetFactor,
-			[&]() { 
+			openTextYOffsetFactor, [&]() {
 #ifndef MACOS
 				std::thread([&]() {
 #endif
@@ -407,7 +429,6 @@ namespace FuncDoodle {
 		ImGui::End();
 		ImGui::PopStyleVar(2);
 	}
-
 
 	void Application::SaveChangesDialog() {
 		if (m_Popups.IsOpen("save_changes")) {
@@ -638,13 +659,15 @@ namespace FuncDoodle {
 				m_Popups.Close("new");
 				ImGui::CloseCurrentPopup();
 			}
-			bool acceptByKey = !justOpened &&
+			bool acceptByKey =
+				!justOpened &&
 				(ImGui::IsKeyPressed(ImGuiKey_Enter, false) ||
 					ImGui::IsKeyPressed(ImGuiKey_KeypadEnter, false));
 			if (choice == ImUtil::ButtonRowResult::Primary || acceptByKey) {
 				m_CurrentProj = m_CacheProj;
 				m_Manager = std::make_unique<AnimationManager>(m_CurrentProj,
-					m_AssetLoader, m_EditorController, m_Keybinds, m_PrevEnabled);
+					m_AssetLoader, m_EditorController, m_Keybinds,
+					m_PrevEnabled);
 				m_Manager->SetUndoByStroke(m_UndoByStroke);
 				m_Popups.Close("new");
 			}
@@ -762,6 +785,82 @@ namespace FuncDoodle {
 								m_CurrentProj->BgCol());
 						}
 					}
+
+					if (ImGui::MenuItem("Move left",
+							m_WaitingForKey
+								? nullptr
+								: m_Keybinds.Get("move_selection_left"))) {
+						if (m_EditorController->Sel()) {
+							MoveSelectionActionContext ctx{
+								m_Manager->SelectedFrameI(),
+								m_EditorController->Sel(), Direction::Left,
+								m_CurrentProj};
+							auto action = MoveSelectionAction(
+								Frame(*m_Manager->SelectedFrame()), ctx);
+
+							m_CurrentProj->PushUndoable(action);
+							m_Manager->SelectedFrame()->MoveSelection(
+								m_EditorController->Sel(), Direction::Left,
+								m_CurrentProj->BgCol());
+						}
+					}
+
+					if (ImGui::MenuItem("Move right",
+							m_WaitingForKey
+								? nullptr
+								: m_Keybinds.Get("move_selection_right"))) {
+						if (m_EditorController->Sel()) {
+							MoveSelectionActionContext ctx{
+								m_Manager->SelectedFrameI(),
+								m_EditorController->Sel(), Direction::Right,
+								m_CurrentProj};
+							auto action = MoveSelectionAction(
+								Frame(*m_Manager->SelectedFrame()), ctx);
+
+							m_CurrentProj->PushUndoable(action);
+							m_Manager->SelectedFrame()->MoveSelection(
+								m_EditorController->Sel(), Direction::Right,
+								m_CurrentProj->BgCol());
+						}
+					}
+
+					if (ImGui::MenuItem("Move up",
+							m_WaitingForKey
+								? nullptr
+								: m_Keybinds.Get("move_selection_up"))) {
+						if (m_EditorController->Sel()) {
+							MoveSelectionActionContext ctx{
+								m_Manager->SelectedFrameI(),
+								m_EditorController->Sel(), Direction::Up,
+								m_CurrentProj};
+							auto action = MoveSelectionAction(
+								Frame(*m_Manager->SelectedFrame()), ctx);
+
+							m_CurrentProj->PushUndoable(action);
+							m_Manager->SelectedFrame()->MoveSelection(
+								m_EditorController->Sel(), Direction::Up,
+								m_CurrentProj->BgCol());
+						}
+					}
+
+					if (ImGui::MenuItem("Move down",
+							m_WaitingForKey
+								? nullptr
+								: m_Keybinds.Get("move_selection_down"))) {
+						if (m_EditorController->Sel()) {
+							MoveSelectionActionContext ctx{
+								m_Manager->SelectedFrameI(),
+								m_EditorController->Sel(), Direction::Down,
+								m_CurrentProj};
+							auto action = MoveSelectionAction(
+								Frame(*m_Manager->SelectedFrame()), ctx);
+
+							m_CurrentProj->PushUndoable(action);
+							m_Manager->SelectedFrame()->MoveSelection(
+								m_EditorController->Sel(), Direction::Down,
+								m_CurrentProj->BgCol());
+						}
+					}
 				}
 
 				if (ImGui::MenuItem("Preferences",
@@ -833,7 +932,8 @@ namespace FuncDoodle {
 			if (ImGui::Button("Add temporary from file")) {
 				FileDialog dialog = "toml";
 				static Themes::CustomTheme* style;
-				std::vector<std::filesystem::path> themes = dialog.OpenMultiple();
+				std::vector<std::filesystem::path> themes =
+					dialog.OpenMultiple();
 
 				for (size_t i = 0; i < themes.size(); i++) {
 					std::filesystem::path path = themes[i];
@@ -1000,8 +1100,7 @@ namespace FuncDoodle {
 				ImGui::EndTable();
 			}
 
-			if (ImUtil::CloseButton() ||
-				ImGui::IsKeyPressed(ImGuiKey_Escape)) {
+			if (ImUtil::CloseButton() || ImGui::IsKeyPressed(ImGuiKey_Escape)) {
 				ImGui::CloseCurrentPopup();
 			}
 			ImGui::EndPopup();
