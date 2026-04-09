@@ -60,8 +60,6 @@ namespace FuncDoodle {
 		ImGui::Begin("Timeline", nullptr,
 			ImGuiWindowFlags_HorizontalScrollbar |
 				ImGuiWindowFlags_NoBackground);
-		ImDrawList* drawList = ImGui::GetWindowDrawList();
-
 		float frameWidth = (float)m_Proj->AnimWidth();
 		float frameHeight = (float)m_Proj->AnimHeight();
 		float padding = 25.0f;
@@ -73,6 +71,8 @@ namespace FuncDoodle {
 		ImGui::BeginChild("FrameScrollRegion",
 			ImVec2(ImGui::GetContentRegionAvail().x, frameHeight + padding),
 			false, ImGuiWindowFlags_HorizontalScrollbar);
+
+		ImDrawList* drawList = ImGui::GetWindowDrawList();
 
 		// Get the initial top-left position
 		ImVec2 topLeft = ImGui::GetCursorScreenPos();
