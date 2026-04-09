@@ -139,10 +139,10 @@ int FuncDoodle_RunFrameTests() {
 
 	// Selection rotation
 	FuncDoodle::Frame sel_frame(4, 4, FuncDoodle::Col{255, 255, 255});
-	FuncDoodle::SquareSelection sel;
-	sel.Active = false;
-	sel.Min = ImVec2i(1, 1);
-	sel.Max = ImVec2i(2, 2);
+	auto sel = std::make_shared<FuncDoodle::SquareSelection>();
+	sel->Active = false;
+	sel->Min = ImVec2i(1, 1);
+	sel->Max = ImVec2i(2, 2);
 
 	FuncDoodle::Col SA{10, 20, 30};
 	FuncDoodle::Col SB{40, 50, 60};
@@ -155,7 +155,9 @@ int FuncDoodle_RunFrameTests() {
 	sel_frame.SetPixel(2, 2, SD);
 
 	FuncDoodle::Frame sel_original = sel_frame;
-	sel_frame.RotateSelection(&sel, 90);
+	WeakPtr<FuncDoodle::Selection> selPtr = sel;
+
+	sel_frame.RotateSelection(selPtr, 90);
 
 	CHECK((sel_frame.Pixels()->Get(1, 1) == SC),
 		"RotateSelection(90) should rotate within selection");
@@ -166,7 +168,7 @@ int FuncDoodle_RunFrameTests() {
 	CHECK((sel_frame.Pixels()->Get(2, 2) == SB),
 		"RotateSelection(90) should rotate within selection");
 
-	sel_frame.RotateSelection(&sel, -90);
+	sel_frame.RotateSelection(selPtr, -90);
 	CHECK((sel_frame == sel_original),
 		"RotateSelection(90) then RotateSelection(-90) should restore");
 

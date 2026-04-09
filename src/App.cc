@@ -176,7 +176,6 @@ namespace FuncDoodle {
 		}
 		if (m_EditorController->Sel() && m_CurrentProj) {
 			auto moveSel = [&](Direction dir) {
-				FUNC_INF("Moving selection: " << (int)dir);
 				MoveSelectionActionContext ctx{m_Manager->SelectedFrameI(),
 					m_EditorController->Sel(), dir, m_CurrentProj};
 				auto action = MoveSelectionAction(
