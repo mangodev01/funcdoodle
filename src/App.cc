@@ -56,6 +56,7 @@ namespace FuncDoodle {
 		m_Keybinds.Register("new", {true, false, false, ImGuiKey_N});
 		m_Keybinds.Register("open", {true, false, false, ImGuiKey_O});
 		m_Keybinds.Register("save", {true, false, false, ImGuiKey_S});
+		m_Keybinds.Register("save_as", {true, true, false, ImGuiKey_S});
 		m_Keybinds.Register("export", {true, false, false, ImGuiKey_E});
 
 		m_Keybinds.Register("quit", {true, false, false, ImGuiKey_Q});
@@ -199,20 +200,17 @@ namespace FuncDoodle {
 		}
 		if (m_CurrentProj) {
 			if (m_CurrentProj && m_Keybinds.Get("save").IsPressed()) {
-				if (m_SFXEnabled)
-					m_AssetLoader->PlaySound(s_ProjSaveSound);
-#ifndef MACOS
-				std::thread([&]() {
-#endif
-					SaveFileDialog([&]() {
-						SaveProjectFile();
+				const char* path = m_CurrentProj->LastSavePath();
 
-						if (m_SFXEnabled)
-							m_AssetLoader->PlaySound(s_ProjSaveEndSound);
-					});
-#ifndef MACOS
-				}).detach();
-#endif
+				if (*path) {
+					SaveAt(path);
+				} else {
+					Save();
+				}
+			}
+
+			if (m_CurrentProj && m_Keybinds.Get("save_as").IsPressed()) {
+				Save();
 			}
 
 			if (m_Keybinds.Get("export").IsPressed()) {
@@ -440,17 +438,7 @@ namespace FuncDoodle {
 			ImGui::Text("Save changes?");
 			ImUtil::ButtonRowResult choice = ImUtil::YesNoCancelButtons();
 			if (choice == ImUtil::ButtonRowResult::Primary) {
-#ifndef MACOS
-				std::thread([&]() {
-#endif
-					SaveFileDialog([&]() {
-						SaveProjectFile();
-						m_ShouldClose = true;
-						ImGui::CloseCurrentPopup();
-					});
-#ifndef MACOS
-				}).detach();
-#endif
+				Save(true);
 			} else if (choice == ImUtil::ButtonRowResult::Secondary) {
 				m_ShouldClose = true;
 				ImGui::CloseCurrentPopup();
@@ -462,10 +450,7 @@ namespace FuncDoodle {
 		}
 	}
 	void Application::OpenSaveChangesDialog() {
-		FUNC_DBG("Saved?: " << m_CurrentProj->Saved());
-		FUNC_DBG("m_Popups.Open(save_changes) being called");
 		m_Popups.Open("save_changes");
-		FUNC_DBG("called m_Popups.Open(save_changes)");
 	}
 	void Application::DropCallback(
 		GLFWwindow* win, int count, const char** paths) {
@@ -690,6 +675,37 @@ namespace FuncDoodle {
 		}
 	}
 
+	void Application::Save(bool exit) {
+		if (m_SFXEnabled)
+			m_AssetLoader->PlaySound(s_ProjSaveSound);
+
+#ifndef MACOS
+		std::thread([this, exit]() {
+#endif
+			SaveFileDialog([this, exit]() { 
+				SaveProjectFile();
+
+				if (m_SFXEnabled)
+					m_AssetLoader->PlaySound(s_ProjSaveEndSound);
+
+				if (exit) {
+					m_ShouldClose = true;
+					ImGui::CloseCurrentPopup();
+				}
+			});
+#ifndef MACOS
+		}).detach();
+#endif
+	}
+
+	void Application::SaveAt(const char* path) {
+		if (m_SFXEnabled)
+			m_AssetLoader->PlaySound(s_ProjSaveSound);
+
+		m_FilePath = path;
+		SaveProjectFile();
+	}
+
 	void Application::RenderMainMenuBar() {
 		if (ImGui::BeginMainMenuBar()) {
 			if (ImGui::BeginMenu("File", true)) {
@@ -711,19 +727,25 @@ namespace FuncDoodle {
 #endif
 				}
 				if (m_CurrentProj) {
+					const char* path = m_CurrentProj->LastSavePath();
+
 					if (ImGui::MenuItem("Save", m_WaitingForKey
 													? nullptr
 													: m_Keybinds.Get("save"))) {
-						if (m_SFXEnabled)
-							m_AssetLoader->PlaySound(s_ProjSaveSound);
+						if (*path) {
+							SaveAt(path);
+						} else {
+							Save();
+						}
+					}
 
-#ifndef MACOS
-						std::thread([&]() {
-#endif
-							SaveFileDialog([&]() { SaveProjectFile(); });
-#ifndef MACOS
-						}).detach();
-#endif
+					if (*path) {
+						if (ImGui::MenuItem("Save as...", m_WaitingForKey
+									? nullptr
+									: m_Keybinds.Get("save_as"))) {
+							// force dialog if user presses save as
+							Save();
+						}
 					}
 
 					if (ImGui::MenuItem("Close")) {

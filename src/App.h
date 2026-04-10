@@ -63,6 +63,8 @@ namespace FuncDoodle {
 			void DropCallback(GLFWwindow* win, int count, const char** paths);
 			void RenderEditProj();
 			void RenderNewProj();
+			void Save(bool exit = false);
+			void SaveAt(const char* path);
 			void RenderMainMenuBar();
 			void RenderEditPrefs();
 			void RenderRotate();

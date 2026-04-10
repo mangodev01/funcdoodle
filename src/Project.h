@@ -5,6 +5,7 @@
 #include "Ptr.h"
 
 #include <concepts>
+#include <filesystem>
 #include <stack>
 
 #include "Action/Action.h"
@@ -52,7 +53,8 @@ namespace FuncDoodle {
 
 				m_Frames->PushBackEmpty();
 			}
-			inline const Col BgCol() { return m_BG; }
+			inline const Col BgCol() const { return m_BG; }
+			inline const char* LastSavePath() const { return m_LastSavePath; };
 			SharedPtr<LongIndexArray> AnimFrames();
 			void Write(const char* filePath);
 			void ReadAndPopulate(const char* filePath);
@@ -93,6 +95,7 @@ namespace FuncDoodle {
 			std::stack<UniquePtr<Action>> m_UndoStack;
 			std::stack<UniquePtr<Action>> m_RedoStack;
 			bool m_Saved = false;
+			const char* m_LastSavePath = "";
 			Col m_BG;
 	};
 }  // namespace FuncDoodle

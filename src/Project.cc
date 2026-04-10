@@ -280,6 +280,7 @@ namespace FuncDoodle {
 		outFile << "EOP";
 		outFile.close();
 		m_Saved = true;
+		m_LastSavePath = fileName;
 	}
 	void ProjectFile::ReadAndPopulate(const char* filePath) {
 		std::ifstream file(filePath, std::ios::in | std::ios::binary);
