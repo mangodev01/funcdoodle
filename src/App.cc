@@ -242,6 +242,7 @@ namespace FuncDoodle {
 
 		if (m_CurrentProj) {
 			m_Manager->SetUndoByStroke(m_UndoByStroke);
+			m_Manager->SetPrevEnabled(m_PrevEnabled);
 			m_Manager->RenderTimeline(m_PrevEnabled);
 			m_Manager->RenderControls();
 			m_Manager->RenderLogs();
@@ -682,7 +683,7 @@ namespace FuncDoodle {
 #ifndef MACOS
 		std::thread([this, exit]() {
 #endif
-			SaveFileDialog([this, exit]() { 
+			SaveFileDialog([this, exit]() {
 				SaveProjectFile();
 
 				if (m_SFXEnabled)
@@ -740,9 +741,9 @@ namespace FuncDoodle {
 					}
 
 					if (*path) {
-						if (ImGui::MenuItem("Save as...", m_WaitingForKey
-									? nullptr
-									: m_Keybinds.Get("save_as"))) {
+						if (ImGui::MenuItem("Save as...",
+								m_WaitingForKey ? nullptr
+												: m_Keybinds.Get("save_as"))) {
 							// force dialog if user presses save as
 							Save();
 						}

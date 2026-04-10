@@ -39,6 +39,14 @@ namespace FuncDoodle {
 					m_FrameRenderer->SetUndoByStroke(undoByStroke);
 				}
 			}
+			void SetPrevEnabled(bool enabled) {
+				if (m_FrameRenderer) {
+					m_FrameRenderer->SetPrevEnabled(enabled);
+				}
+				if (m_TimelineFrameRenderer) {
+					m_TimelineFrameRenderer->SetPrevEnabled(enabled);
+				}
+			}
 			AnimationPlayer* Player() const { return m_Player.get(); }
 			void SetPlayer(AnimationPlayer* player) { m_Player.reset(player); }
 

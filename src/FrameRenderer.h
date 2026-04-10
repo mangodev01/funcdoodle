@@ -53,6 +53,7 @@ namespace FuncDoodle {
 			void InitPixels();
 
 			inline EditorController::CanvasContext* Ctx() { return &m_Ctx; }
+			void SetPrevEnabled(bool enabled) { m_Ctx.PrevEnabled = enabled; }
 			void SetUndoByStroke(bool undoByStroke) {
 				if (m_EditorController) {
 					m_EditorController->SetUndoByStroke(

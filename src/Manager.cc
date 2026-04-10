@@ -65,7 +65,7 @@ namespace FuncDoodle {
 		// Create a scrollable region
 		ImGuiStyle& style = ImGui::GetStyle();
 		float childHeight = ImGui::GetWindowHeight() - ImGui::GetCursorPosY() -
-			style.WindowPadding.y;
+							style.WindowPadding.y;
 		if (childHeight < 0.0f)
 			childHeight = 0.0f;
 		ImGui::BeginChild("FrameScrollRegion",

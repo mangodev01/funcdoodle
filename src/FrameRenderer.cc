@@ -79,12 +79,12 @@ namespace FuncDoodle {
 
 		ImGui::Separator();
 
-		ImGui::Text("%s%s | Frame %lu | %dx%d | Zoom: %dx | X: %.0f, Y: %.0f | Draw "
-					"X: %.0f, Draw Y: %.0f",
+		ImGui::Text(
+			"%s%s | Frame %lu | %dx%d | Zoom: %dx | X: %.0f, Y: %.0f | Draw "
+			"X: %.0f, Draw Y: %.0f",
 			m_Ctx.Player->Proj()->AnimName(),
-			m_Ctx.Player->Proj()->Saved() ? "" : "*",
-			m_Ctx.Index, m_Ctx.Frame->Width(), m_Ctx.Frame->Height(),
-			m_Ctx.PixelScale,
+			m_Ctx.Player->Proj()->Saved() ? "" : "*", m_Ctx.Index,
+			m_Ctx.Frame->Width(), m_Ctx.Frame->Height(), m_Ctx.PixelScale,
 			m_Ctx.LastHoverMousePos ? m_Ctx.LastHoverMousePos->x : 0,
 			m_Ctx.LastHoverMousePos ? m_Ctx.LastHoverMousePos->y : 0,
 			m_Ctx.LastMousePos ? m_Ctx.LastMousePos->x : 0,
