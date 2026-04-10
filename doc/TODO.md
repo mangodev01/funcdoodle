@@ -8,8 +8,8 @@
 - [x] modifying keybinds
 - [x] make portaudio a submodule
 - [x] make a better startup screen
-- [ ] fix tool keybinds (p0)
-- [ ] moving selections
+- [x] fix tool keybinds (p0)
+- [x] moving selections
 - [ ] copy & pasting selections
 - [ ] qol stuff
 - [ ] improved keybinds system with the ability to assign multiple keys to 1 action
