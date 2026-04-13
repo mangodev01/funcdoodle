@@ -17,13 +17,13 @@
 namespace FuncDoodle {
 	AssetLoader::AssetLoader(const std::filesystem::path& assetsPath)
 		: m_AssetsPath(assetsPath), m_AudioManager(new AudioManager) {
-		LoadAssets();
+		InitAssets();
 	}
 	AssetLoader::~AssetLoader() {
 		UnloadAssets();
 	}
 
-	void AssetLoader::LoadAssets() {
+	void AssetLoader::InitAssets() {
 		FUNC_DBG("Finding assets path...");
 		if (std::filesystem::exists(m_AssetsPath)) {
 			FUNC_DBG("Found assets path @" << m_AssetsPath.string());

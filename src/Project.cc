@@ -14,8 +14,6 @@
 #include <type_traits>
 #include <vector>
 
-#include <GLFW/glfw3.h>
-
 #include "MacroUtils.h"
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
@@ -34,7 +32,7 @@
 
 namespace FuncDoodle {
 	ProjectFile::ProjectFile(char name[], int width, int height, char author[],
-		int fps, char desc[], GLFWwindow* win, Col bgCol)
+		int fps, char desc[], Platform::Window* win, Col bgCol)
 		: m_Window(win) {
 		strcpy(m_Name, name);
 		m_Width = width;
@@ -470,7 +468,7 @@ namespace FuncDoodle {
 		snprintf(title, 1024, "FuncDoodle %s: %s%s (%d FPS)", FUNCVER,
 			AnimName(), !m_Saved ? "*" : "",
 			(int)(fps > 0.0 ? fps : ImGui::GetIO().Framerate));
-		glfwSetWindowTitle(m_Window, title);
+		m_Window->SetTitle(title);
 		free(title);
 	}
 }  // namespace FuncDoodle

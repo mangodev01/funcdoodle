@@ -62,3 +62,18 @@
 author = '(built-in)'
 name = 'Light'
 uuid = '375cd4bb-c1ab-4604-8200-28e86b2d34d2'
+
+[other]
+Alpha = 1.0
+WindowRounding = 10.0
+FrameRounding = 5.0
+PopupRounding = 12.0
+ScrollbarRounding = 10.0
+GrabRounding = 6.0
+TabRounding = 12.0
+ChildRounding = 12.0
+WindowPadding = [ 10.0, 10.0 ]
+FramePadding = [ 8.0, 8.0 ]
+ItemSpacing = [ 10.0, 10.0 ]
+IndentSpacing = 20.0
+ScrollbarSize = 16.0

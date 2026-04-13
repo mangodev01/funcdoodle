@@ -1,12 +1,14 @@
+#include "AssetLoader.h"
 #include "Gui.h"
 #include "KeyHandler.h"
-#include "Manager.h"
+#include <glad/glad.h>
 
 #include "Action/Action.h"
 
 #include "App.h"
 
 #include <array>
+#include <chrono>
 #include <cmath>
 #include <cstdlib>
 #include <cstring>
@@ -19,6 +21,7 @@
 #include <thread>
 
 #include "LoadedAssets.h"
+#include "Platform/Window.h"
 #include "TextUtil.h"
 
 #include "MacroUtils.h"
@@ -27,6 +30,7 @@
 #include "Themes.h"
 #include "Tool.h"
 
+#include "exepath.h"
 #include "imgui_te_ui.h"
 #include "nfd.h"
 
@@ -35,20 +39,228 @@
 #include "Test.h"
 
 namespace FuncDoodle {
-	Application::Application(GLFWwindow* win, AssetLoader* assetLoader,
-		std::filesystem::path themesPath, std::filesystem::path rootPath)
+	namespace {
+		void ApplyThemeStyle(const ImGuiStyle& themeStyle) {
+			ImGuiStyle& style = ImGui::GetStyle();
+			style = themeStyle;
+			if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+				style.WindowRounding = 1.0f;
+			}
+		}
+
+		void ApplyThemeUuid(const FuncDoodle::UUID& uuid) {
+			auto it = FuncDoodle::Themes::g_Themes.find(uuid);
+			if (it != FuncDoodle::Themes::g_Themes.end()) {
+				ApplyThemeStyle(it->second.Style);
+				return;
+			}
+			auto defUuid = FuncDoodle::UUID::FromString(
+				FuncDoodle::Themes::s_DefaultTheme);
+			auto defIt = FuncDoodle::Themes::g_Themes.find(defUuid);
+			if (defIt != FuncDoodle::Themes::g_Themes.end()) {
+				ApplyThemeStyle(defIt->second.Style);
+			}
+		}
+	}  // namespace
+
+	Application* Application::s_Instance = nullptr;
+	Application::Application()
 		: m_FilePath(""), m_CurrentProj(nullptr), m_CacheProj(nullptr),
 		  m_EditorController(std::make_shared<EditorController>()),
-		  m_Window(win), m_AssetLoader(assetLoader),
-		  m_CacheBGCol({255, 255, 255}), m_ThemesPath(themesPath),
+		  m_CacheBGCol({255, 255, 255}),
 		  m_Theme(UUID::FromString("d0c1a009-d09c-4fe6-84f8-eddcb2da38f9")),
-		  m_Keybinds(rootPath) {
+		  m_FrameLimitCache(m_FrameLimit),
+		  m_Keybinds(std::filesystem::path("")),
+		  m_Window({.Width = 1920, .Height = 1080, .Title = "", .Monitor = 0}) {
+#ifdef FUNCDOODLE_BUILD_TESTS
+		FuncDoodle_RunTests();
+		FuncDoodle::TestRegistry::Instance().PrintSummary();
+
+		std::exit(0);
+#endif
+
+		std::filesystem::path path = exepath::get();
+
+		std::filesystem::path rootPath = path.parent_path();
+
+		m_AssetLoader = new AssetLoader(rootPath / "assets");
+
+		m_ThemesPath = rootPath / "themes";
+
+		m_Keybinds = KeybindsRegistry(path);
 		m_FrameLimitCache = m_FrameLimit;
-		m_Manager = std::make_unique<AnimationManager>(nullptr, assetLoader,
+		m_Manager = std::make_unique<AnimationManager>(nullptr, m_AssetLoader,
 			m_EditorController, m_Keybinds, m_PrevEnabled),
 		m_Manager->SetUndoByStroke(m_UndoByStroke);
 
 		RegisterKeybinds();
+
+		auto title = std::format("FuncDoodle {}", FUNCVER);
+		m_Window.SetTitle(title.c_str());
+
+		m_AssetLoader->LoadAssets();
+
+		m_Window.SetDropCallback(
+			[](Platform::Window*, int count, const char** paths) {
+				Get()->DropCallback(count, paths);
+			});
+
+#ifdef DEBUG
+		m_Window.SetErrorCallback([](int err, const char* desc) {
+			FUNC_ERR("GLFW ERROR (" << err << "): " << desc);
+		});
+#endif
+
+		s_Instance = this;
+
+		InitImGui();
+	}
+
+	void Application::InitImGui() {
+		ImGui::GetIO().UserData = this;
+		Themes::LoadThemes(m_ThemesPath);
+
+		ImGuiSettingsHandler handler;
+		handler.TypeName = "UserData";
+		handler.TypeHash = ImHashStr(handler.TypeName);
+		handler.ReadOpenFn = [](ImGuiContext*, ImGuiSettingsHandler* handler,
+								 const char* val) -> void* {
+			if (std::strcmp(val, "Preferences") == 0) {
+				(void)handler;
+				return Application::Get();
+			}
+			return nullptr;
+		};
+		handler.ReadLineFn = [](ImGuiContext*, ImGuiSettingsHandler*,
+								 void* entry, const char* line) {
+			(void)entry;
+			char sel[37] = {0};
+			if (std::sscanf(line, "Theme=\"%36s\"", sel) == 1) {
+				FUNC_DBG("ReadLineFn read Theme: " << sel);
+				Get()->SetTheme(UUID::FromString(sel));
+			}
+			int sfxEnabled;
+			if (std::sscanf(line, "Sfx=%d", &sfxEnabled) == 1) {
+				bool sfxEnabledBool = false;
+				if (sfxEnabled >= 1) {
+					sfxEnabledBool = true;
+				}
+				Get()->SetSFXEnabled(sfxEnabledBool);
+			}
+			int prevEnabled;
+			if (std::sscanf(line, "Prev=%d", &prevEnabled) == 1) {
+				bool prevEnabledBool = false;
+				if (prevEnabled >= 1)
+					prevEnabledBool = true;
+
+				Get()->SetPrevEnabled(prevEnabledBool);
+			}
+			int undoByStroke;
+			if (std::sscanf(line, "UndoByStroke=%d", &undoByStroke) == 1) {
+				bool undoByStrokeBool = false;
+				if (undoByStroke >= 1) {
+					undoByStrokeBool = true;
+				}
+
+				Get()->SetUndoByStroke(undoByStrokeBool);
+			}
+
+			double frameLimit;
+			if (std::sscanf(line, "FrameLimit=%lf", &frameLimit) == 1) {
+				Get()->SetFrameLimit(frameLimit);
+			}
+
+			ApplyThemeUuid(Get()->Theme());
+		};
+		handler.WriteAllFn = [](ImGuiContext*, ImGuiSettingsHandler* handler,
+								 ImGuiTextBuffer* buf) {
+			if (!Get()) {
+				FUNC_INF("???");
+				return;
+			}
+			FuncDoodle::UUID theme = Get()->Theme();
+			buf->reserve(buf->size() + strlen(theme.ToString()));
+			buf->append("[UserData][Preferences]\n");
+			buf->appendf("Theme=\"%s\"", theme.ToString());
+			buf->append("\n");
+			buf->appendf("Sfx=%d", Get()->SFXEnabled() ? 1 : 0);
+			buf->append("\n");
+			buf->appendf("Prev=%d", Get()->PrevEnabled() ? 1 : 0);
+			buf->append("\n");
+			buf->appendf("UndoByStroke=%d", Get()->UndoByStroke() ? 1 : 0);
+			buf->append("\n");
+			buf->appendf("FrameLimit=%lf", Get()->FrameLimit());
+			buf->append("\n");
+		};
+		ImGui::AddSettingsHandler(&handler);
+
+		ImGui::LoadIniSettingsFromDisk(ImGui::GetIO().IniFilename);
+	}
+
+	void Application::Run() {
+		ApplyThemeUuid(m_Theme);
+
+		while (!m_Window.ShouldClose()) {
+			Update();
+
+			if (ShouldClose()) {
+				break;
+			}
+
+			if (false) {  // SaveChangesDialog already handled via m_Popups
+			}
+		}
+	}
+
+	void Application::Update() {
+		using namespace std::chrono;
+
+		ImGuiIO& io = ImGui::GetIO();
+
+		auto currentFrameTime = high_resolution_clock::now();
+		auto deltaTime =
+			duration<double>(currentFrameTime - m_LastFrame).count();
+
+		if (deltaTime >= FrameTime()) {
+			m_LastFrame = currentFrameTime;
+			m_Window.PollEvents();
+
+			// Start the ImGui frame
+			ImGui_ImplOpenGL3_NewFrame();
+			ImGui_ImplGlfw_NewFrame();
+			ImGui::NewFrame();
+
+			ImGui::DockSpaceOverViewport(0U, ImGui::GetMainViewport(),
+				ImGuiDockNodeFlags_PassthruCentralNode);
+
+			RenderImGui();
+
+			// Rendering
+			int display_w, display_h;
+			m_Window.GetFramebufferSize(&display_w, &display_h);
+			glViewport(0, 0, display_w, display_h);
+			glClearColor(0.0f, 0.0f, 0.0f, 1.00f);
+			glClear(GL_COLOR_BUFFER_BIT);
+			ImGui::Render();
+			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+			if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+				GLFWwindow* backup = glfwGetCurrentContext();
+				ImGui::UpdatePlatformWindows();
+				ImGui::RenderPlatformWindowsDefault();
+				glfwMakeContextCurrent(backup);
+			}
+
+			UpdateFPS(deltaTime);
+
+			m_Window.SwapBuffers();
+
+#ifdef FUNCDOODLE_BUILD_IMTESTS
+		if (s_TestEngine) {
+			ImGuiTestEngine_PostSwap(s_TestEngine);
+		}
+#endif
+		}
 	}
 
 	void Application::RegisterKeybinds() {
@@ -143,13 +355,13 @@ namespace FuncDoodle {
 #ifndef MACOS
 			std::thread([&]() {
 #endif
-				OpenFileDialog([&]() { this->ReadProjectFile(); });
+				OpenFileDialog([&]() { ReadProjectFile(); });
 #ifndef MACOS
 			}).detach();
 #endif
 		}
 		if (m_Keybinds.Get("quit").IsPressed()) {
-			glfwSetWindowShouldClose(m_Window, true);
+			m_Window.SetShouldClose(true);
 		}
 		if (m_Keybinds.Get("pref").IsPressed()) {
 			m_Popups.Open("pref");
@@ -224,7 +436,9 @@ namespace FuncDoodle {
 			RenderOptions();
 
 #ifdef FUNCDOODLE_BUILD_IMTESTS
-		ImGuiTestEngine_ShowTestEngineWindows(s_TestEngine, &m_ShowTests);
+		if (s_TestEngine) {
+			ImGuiTestEngine_ShowTestEngineWindows(s_TestEngine, &m_ShowTests);
+		}
 #endif
 
 		CheckKeybinds();
@@ -248,17 +462,6 @@ namespace FuncDoodle {
 			m_Manager->RenderLogs();
 			m_Manager->Player()->Play();
 			m_CurrentProj->DisplayFPS(m_FPS);
-		} else {
-			char* title = (char*)malloc(35);
-			if (title != 0) {
-				snprintf(
-					title, 35, "FuncDoodle %s, %d FPS", FUNCVER, (int)m_FPS);
-				glfwSetWindowTitle(m_Window, title);
-				free(title);
-			} else {
-				FUNC_WARN(
-					"Failed to allocate title -- perhaps you ran out of RAM?");
-			}
 		}
 	}
 	void Application::OpenFileDialog(std::function<void()> done) {
@@ -286,7 +489,7 @@ namespace FuncDoodle {
 
 		if (m_CurrentProj == nullptr) {
 			m_CurrentProj.reset(new ProjectFile((char*)"", 1, 1, (char*)"", 0,
-				(char*)"", m_Window, Col{.r = 0, .g = 0, .b = 0}));
+				(char*)"", &m_Window, Col{.r = 0, .g = 0, .b = 0}));
 		}
 
 		m_CurrentProj->ReadAndPopulate(m_FilePath.c_str());
@@ -418,7 +621,7 @@ namespace FuncDoodle {
 #ifndef MACOS
 				std::thread([&]() {
 #endif
-					OpenFileDialog([&]() { this->ReadProjectFile(); });
+					OpenFileDialog([&]() { ReadProjectFile(); });
 #ifndef MACOS
 				}).detach();
 #endif
@@ -453,16 +656,17 @@ namespace FuncDoodle {
 	void Application::OpenSaveChangesDialog() {
 		m_Popups.Open("save_changes");
 	}
-	void Application::DropCallback(
-		GLFWwindow* win, int count, const char** paths) {
+	void Application::DropCallback(int count, const char** paths) {
 		if (count == 0)
 			return;
+
 		if (count > 1) {
 			FUNC_WARN("Attempted to drag and drop multiple items when 1 is "
 					  "expected: Attempting to use first item");
 		}
 		m_FilePath = paths[0] ? paths[0] : "";
-		this->ReadProjectFile();
+
+		ReadProjectFile();
 	}
 	void Application::RenderEditProj() {
 		if (m_Popups.IsOpen("edit_proj")) {
@@ -589,7 +793,7 @@ namespace FuncDoodle {
 				fps = 10;
 				strcpy(desc, "Simple test project");
 				m_CacheProj.reset(new ProjectFile(
-					name, width, height, author, fps, desc, m_Window, Col()));
+					name, width, height, author, fps, desc, &m_Window, Col()));
 			} else {
 				strcpy(name, m_CacheProj->AnimName());
 				width = m_CacheProj->AnimWidth();
@@ -722,7 +926,7 @@ namespace FuncDoodle {
 #ifndef MACOS
 					std::thread([&]() {
 #endif
-						OpenFileDialog([&]() { this->ReadProjectFile(); });
+						OpenFileDialog([&]() { ReadProjectFile(); });
 #ifndef MACOS
 					}).detach();
 #endif
@@ -765,7 +969,7 @@ namespace FuncDoodle {
 				if (ImGui::MenuItem("Exit",
 						m_WaitingForKey ? nullptr : m_Keybinds.Get("quit"))) {
 					m_Popups.CloseAllExcept("save_changes");
-					glfwSetWindowShouldClose(m_Window, true);
+					m_Window.SetShouldClose(true);
 				}
 				ImGui::EndMenu();
 			}
@@ -918,24 +1122,7 @@ namespace FuncDoodle {
 					bool is_selected = (m_Theme == uuid);
 					if (ImGui::Selectable(theme.Name, is_selected)) {
 						m_Theme = uuid;
-						ImGui::GetStyle() = theme.Style;
-						ImGui::GetStyle().Alpha = 1.0f;	 // Fully opaque
-						ImGui::GetStyle().WindowRounding = 10.0f;
-						ImGui::GetStyle().FrameRounding = 5.0f;
-						ImGui::GetStyle().PopupRounding = 12.0f;
-						ImGui::GetStyle().ScrollbarRounding = 10.0f;
-						ImGui::GetStyle().GrabRounding = 6.0f;
-						ImGui::GetStyle().TabRounding = 12.0f;
-						ImGui::GetStyle().ChildRounding = 12.0f;
-						ImGui::GetStyle().WindowPadding = ImVec2(10, 10);
-						ImGui::GetStyle().FramePadding = ImVec2(8, 8);
-						ImGui::GetStyle().ItemSpacing = ImVec2(10, 10);
-						ImGui::GetStyle().IndentSpacing = 20.0f;
-						ImGui::GetStyle().ScrollbarSize = 16.0f;
-						if (ImGui::GetIO().ConfigFlags &
-							ImGuiConfigFlags_ViewportsEnable) {
-							ImGui::GetStyle().WindowRounding = 1.0f;
-						}
+						ApplyThemeStyle(theme.Style);
 					}
 					if (ImGui::IsItemHovered()) {
 						ImGui::BeginTooltip();

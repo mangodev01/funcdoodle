@@ -10,6 +10,7 @@
 - [x] make a better startup screen
 - [x] fix tool keybinds (p0)
 - [x] moving selections
+- [ ] FIGURE OUT WHATS CURRENTLY WRONG WITH THEME - it applies incorrectly on startup for some reason
 - [ ] copy & pasting selections
 - [ ] qol stuff
 - [ ] improve keybinds system with the ability to assign multiple keys to 1 action

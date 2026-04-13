@@ -18,8 +18,9 @@ namespace FuncDoodle {
 			inline void SetPath(const std::filesystem::path& assetsPath) {
 				m_AssetsPath = assetsPath;
 			};
-			void LoadAssets();
+			void InitAssets();
 			void UnloadAssets();
+			void LoadAssets();
 			void RenderImage(const char* name, ImDrawList* drawList,
 				const ImVec2& pos, const ImVec2& size,
 				const ImVec4& tint = ImVec4(1, 1, 1, 1));

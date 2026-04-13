@@ -4,11 +4,13 @@
 #include "EditorController.h"
 #include "Keybinds.h"
 #include "Manager.h"
+#include "Platform/Window.h"
 #include "PopupRegistry.h"
 #include "Project.h"
 #include "Ptr.h"
 #include "UUID.h"
 
+#include <chrono>
 #include <functional>
 #include <string>
 
@@ -17,10 +19,11 @@
 namespace FuncDoodle {
 	class Application {
 		public:
-			Application(GLFWwindow* win, AssetLoader* assetLoader,
-				std::filesystem::path themesPath,
-				std::filesystem::path rootPath);
+			Application();
 			~Application();
+			inline static Application* Get() { return s_Instance; };
+			void Run();
+			void InitImGui();
 			void RenderImGui();
 			void OpenFileDialog(std::function<void()> done);
 			void SaveFileDialog(std::function<void()> done);
@@ -60,9 +63,10 @@ namespace FuncDoodle {
 			inline double FrameLimit() { return m_FrameLimit; }
 			inline PopupRegistry* Popups() { return &m_Popups; }
 			void UpdateFPS(double deltaTime);
-			void DropCallback(GLFWwindow* win, int count, const char** paths);
+			void DropCallback(int count, const char** paths);
 			void RenderEditProj();
 			void RenderNewProj();
+			void Update();
 			void Save(bool exit = false);
 			void SaveAt(const char* path);
 			void RenderMainMenuBar();
@@ -80,7 +84,7 @@ namespace FuncDoodle {
 			SharedPtr<ProjectFile> m_CurrentProj;
 			SharedPtr<ProjectFile> m_CacheProj;
 			UniquePtr<AnimationManager> m_Manager;
-			GLFWwindow* m_Window;
+			Platform::Window m_Window;
 			AssetLoader* m_AssetLoader;
 			SharedPtr<EditorController> m_EditorController;
 			int m_ExportFormat = 0;
@@ -94,8 +98,11 @@ namespace FuncDoodle {
 			double m_FrameLimit = 1000.0;
 			double m_FrameLimitCache = 1000.0;
 			double m_LastFrameTime = 0.0;
+			std::chrono::time_point<std::chrono::high_resolution_clock>
+				m_LastFrame;
 			double m_FPS = 0.0;
 			std::array<float, 3> m_CacheBGCol;
 			std::filesystem::path m_ThemesPath;
+			static Application* s_Instance;
 	};
 }  // namespace FuncDoodle

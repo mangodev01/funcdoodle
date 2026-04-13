@@ -62,4 +62,3 @@ popd >/dev/null
 ASAN_OPTIONS="${ASAN_OPTIONS:-detect_leaks=0}" \
 LSAN_OPTIONS="suppressions=leaks.supp:print_suppressions=false" \
 "$bin_dir/FuncDoodle"
-

@@ -119,7 +119,7 @@ extern std::vector<char*> s_Logs;
 #include <windows.h>
 #define OPEN_FILE_EXPLORER(path) \
 	ShellExecuteA(               \
-		nullptr, "explore", path.string().c_str(), nullptr, nullptr, SW_SHOW)
+		nullptr, "open", path.string().c_str(), nullptr, nullptr, SW_SHOW)
 #undef LoadImage
 #undef PlaySound
 #define strncasecmp _strnicmp

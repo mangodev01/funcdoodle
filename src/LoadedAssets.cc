@@ -15,29 +15,31 @@ namespace FuncDoodle {
 	uint32_t s_TextTexId = 0;
 	uint32_t s_AddTexId = 0;
 	uint32_t s_OpenTexId = 0;
+
 	AudioData s_ProjCreateSound;
 	AudioData s_ProjSaveSound;
 	AudioData s_ExportSound;
 	AudioData s_ProjSaveEndSound;
-	void GlobalLoadAssets(AssetLoader* assetLoader) {
+
+	void AssetLoader::LoadAssets() {
 		// images
-		s_PlayTexId = assetLoader->LoadImage("play.png");
-		s_PauseTexId = assetLoader->LoadImage("pause.png");
-		s_RewindTexId = assetLoader->LoadImage("rewind.png");
-		s_EndTexId = assetLoader->LoadImage("end.png");
-		s_PencilTexId = assetLoader->LoadImage("pencil.png");
-		s_PickerTexId = assetLoader->LoadImage("picker.png");
-		s_EraserTexId = assetLoader->LoadImage("eraser.png");
-		s_BucketTexId = assetLoader->LoadImage("bucket.png");
-		s_TextTexId = assetLoader->LoadImage("text.png");
-		s_AddTexId = assetLoader->LoadImage("add.png");
-		s_OpenTexId = assetLoader->LoadImage("folder.png");
-		s_SelectTexId = assetLoader->LoadImage("select.png");
+		s_PlayTexId = LoadImage("play.png");
+		s_PauseTexId = LoadImage("pause.png");
+		s_RewindTexId = LoadImage("rewind.png");
+		s_EndTexId = LoadImage("end.png");
+		s_PencilTexId = LoadImage("pencil.png");
+		s_PickerTexId = LoadImage("picker.png");
+		s_EraserTexId = LoadImage("eraser.png");
+		s_BucketTexId = LoadImage("bucket.png");
+		s_TextTexId = LoadImage("text.png");
+		s_AddTexId = LoadImage("add.png");
+		s_OpenTexId = LoadImage("folder.png");
+		s_SelectTexId = LoadImage("select.png");
 
 		// audio
-		s_ProjCreateSound = assetLoader->LoadSound("create.wav");
-		s_ProjSaveSound = assetLoader->LoadSound("save.wav");
-		s_ExportSound = assetLoader->LoadSound("export.wav");
-		s_ProjSaveEndSound = assetLoader->LoadSound("saveend.wav");
+		s_ProjCreateSound = LoadSound("create.wav");
+		s_ProjSaveSound = LoadSound("save.wav");
+		s_ExportSound = LoadSound("export.wav");
+		s_ProjSaveEndSound = LoadSound("saveend.wav");
 	}
 }  // namespace FuncDoodle

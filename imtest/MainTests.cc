@@ -7,7 +7,12 @@
 #include "imgui_te_utils.h"
 
 static FuncDoodle::Application* GetApp() {
-	return static_cast<FuncDoodle::Application*>(ImGui::GetIO().UserData);
+	FuncDoodle::Application* app =
+		static_cast<FuncDoodle::Application*>(ImGui::GetIO().UserData);
+	if (!app) {
+		app = FuncDoodle::Application::Get();
+	}
+	return app;
 }
 
 static void RegisterTests_FuncDoodle(ImGuiTestEngine* e) {

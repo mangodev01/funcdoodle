@@ -62,3 +62,18 @@
 author = '(built-in)'
 name = 'Classic'
 uuid = 'baf1acaf-333a-4dfa-a3ab-1e27cd7157dc'
+
+[other]
+Alpha = 1.0
+WindowRounding = 10.0
+FrameRounding = 5.0
+PopupRounding = 12.0
+ScrollbarRounding = 10.0
+GrabRounding = 6.0
+TabRounding = 12.0
+ChildRounding = 12.0
+WindowPadding = [ 10.0, 10.0 ]
+FramePadding = [ 8.0, 8.0 ]
+ItemSpacing = [ 10.0, 10.0 ]
+IndentSpacing = 20.0
+ScrollbarSize = 16.0

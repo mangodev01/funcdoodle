@@ -10,6 +10,7 @@
 #include <string.h>
 #include <string>
 #include <string_view>
+#include <type_traits>
 #include <unordered_map>
 #include <vector>
 
@@ -23,6 +24,9 @@
 
 namespace FuncDoodle {
 	namespace Themes {
+		constexpr const char* s_DefaultTheme =
+			"d0c1a009-d09c-4fe6-84f8-eddcb2da38f9";
+
 		struct CustomTheme {
 				const char* Name;
 				const char* Author;
@@ -181,6 +185,154 @@ namespace FuncDoodle {
 						arr.get(1)->as_floating_point()->get(),
 						arr.get(2)->as_floating_point()->get(),
 						arr.get(3)->as_floating_point()->get());
+			}
+
+			if (table.contains("other"sv) && table.get("other"sv)->is_table()) {
+				toml::table* other = table.get("other"sv)->as_table();
+
+				auto read_number = [](const toml::node* node, double& out) {
+					if (!node) {
+						return false;
+					}
+					if (auto fp = node->as_floating_point()) {
+						out = fp->get();
+						return true;
+					}
+					if (auto i = node->as_integer()) {
+						out = static_cast<double>(i->get());
+						return true;
+					}
+					return false;
+				};
+
+				auto read_float = [&](std::string_view key, float& out) {
+					double tmp = 0.0;
+					if (read_number(other->get(key), tmp)) {
+						out = static_cast<float>(tmp);
+					}
+				};
+
+				auto read_vec2 = [&](std::string_view key, ImVec2& out) {
+					const toml::node* node = other->get(key);
+					if (!node || !node->is_array()) {
+						return;
+					}
+					const toml::array& arr = *node->as_array();
+					if (arr.size() != 2) {
+						return;
+					}
+					double x = 0.0;
+					double y = 0.0;
+					if (!read_number(arr.get(0), x) ||
+						!read_number(arr.get(1), y)) {
+						return;
+					}
+					out = ImVec2(static_cast<float>(x), static_cast<float>(y));
+				};
+
+				auto read_bool = [&](std::string_view key, bool& out) {
+					const toml::node* node = other->get(key);
+					if (!node) {
+						return;
+					}
+					if (auto b = node->as_boolean()) {
+						out = b->get();
+						return;
+					}
+					double tmp = 0.0;
+					if (read_number(node, tmp)) {
+						out = (tmp != 0.0);
+					}
+				};
+
+				auto read_enum = [&](std::string_view key, auto& out) {
+					double tmp = 0.0;
+					if (read_number(other->get(key), tmp)) {
+						using T = std::remove_reference_t<decltype(out)>;
+						out = static_cast<T>(static_cast<int>(tmp));
+					}
+				};
+
+				read_float("Alpha"sv, style.Alpha);
+				read_float("DisabledAlpha"sv, style.DisabledAlpha);
+				read_vec2("WindowPadding"sv, style.WindowPadding);
+				read_float("WindowRounding"sv, style.WindowRounding);
+				read_float("WindowBorderSize"sv, style.WindowBorderSize);
+				read_float("WindowBorderHoverPadding"sv,
+					style.WindowBorderHoverPadding);
+				read_vec2("WindowMinSize"sv, style.WindowMinSize);
+				read_vec2("WindowTitleAlign"sv, style.WindowTitleAlign);
+				read_enum("WindowMenuButtonPosition"sv,
+					style.WindowMenuButtonPosition);
+				read_float("ChildRounding"sv, style.ChildRounding);
+				read_float("ChildBorderSize"sv, style.ChildBorderSize);
+				read_float("PopupRounding"sv, style.PopupRounding);
+				read_float("PopupBorderSize"sv, style.PopupBorderSize);
+				read_vec2("FramePadding"sv, style.FramePadding);
+				read_float("FrameRounding"sv, style.FrameRounding);
+				read_float("FrameBorderSize"sv, style.FrameBorderSize);
+				read_vec2("ItemSpacing"sv, style.ItemSpacing);
+				read_vec2("ItemInnerSpacing"sv, style.ItemInnerSpacing);
+				read_vec2("CellPadding"sv, style.CellPadding);
+				read_vec2("TouchExtraPadding"sv, style.TouchExtraPadding);
+				read_float("IndentSpacing"sv, style.IndentSpacing);
+				read_float("ColumnsMinSpacing"sv, style.ColumnsMinSpacing);
+				read_float("ScrollbarSize"sv, style.ScrollbarSize);
+				read_float("ScrollbarRounding"sv, style.ScrollbarRounding);
+				read_float("ScrollbarPadding"sv, style.ScrollbarPadding);
+				read_float("GrabMinSize"sv, style.GrabMinSize);
+				read_float("GrabRounding"sv, style.GrabRounding);
+				read_float("LogSliderDeadzone"sv, style.LogSliderDeadzone);
+				read_float("ImageRounding"sv, style.ImageRounding);
+				read_float("ImageBorderSize"sv, style.ImageBorderSize);
+				read_float("TabRounding"sv, style.TabRounding);
+				read_float("TabBorderSize"sv, style.TabBorderSize);
+				read_float("TabMinWidthBase"sv, style.TabMinWidthBase);
+				read_float("TabMinWidthShrink"sv, style.TabMinWidthShrink);
+				read_float("TabCloseButtonMinWidthSelected"sv,
+					style.TabCloseButtonMinWidthSelected);
+				read_float("TabCloseButtonMinWidthUnselected"sv,
+					style.TabCloseButtonMinWidthUnselected);
+				read_float("TabBarBorderSize"sv, style.TabBarBorderSize);
+				read_float("TabBarOverlineSize"sv, style.TabBarOverlineSize);
+				read_float(
+					"TableAngledHeadersAngle"sv, style.TableAngledHeadersAngle);
+				read_vec2("TableAngledHeadersTextAlign"sv,
+					style.TableAngledHeadersTextAlign);
+				read_enum("TreeLinesFlags"sv, style.TreeLinesFlags);
+				read_float("TreeLinesSize"sv, style.TreeLinesSize);
+				read_float("TreeLinesRounding"sv, style.TreeLinesRounding);
+				read_float(
+					"DragDropTargetRounding"sv, style.DragDropTargetRounding);
+				read_float("DragDropTargetBorderSize"sv,
+					style.DragDropTargetBorderSize);
+				read_float(
+					"DragDropTargetPadding"sv, style.DragDropTargetPadding);
+				read_float("ColorMarkerSize"sv, style.ColorMarkerSize);
+				read_enum("ColorButtonPosition"sv, style.ColorButtonPosition);
+				read_vec2("ButtonTextAlign"sv, style.ButtonTextAlign);
+				read_vec2("SelectableTextAlign"sv, style.SelectableTextAlign);
+				read_float("SeparatorSize"sv, style.SeparatorSize);
+				read_float(
+					"SeparatorTextBorderSize"sv, style.SeparatorTextBorderSize);
+				read_vec2("SeparatorTextAlign"sv, style.SeparatorTextAlign);
+				read_vec2("SeparatorTextPadding"sv, style.SeparatorTextPadding);
+				read_vec2("DisplayWindowPadding"sv, style.DisplayWindowPadding);
+				read_vec2(
+					"DisplaySafeAreaPadding"sv, style.DisplaySafeAreaPadding);
+				read_bool("DockingNodeHasCloseButton"sv,
+					style.DockingNodeHasCloseButton);
+				read_float(
+					"DockingSeparatorSize"sv, style.DockingSeparatorSize);
+				read_float("MouseCursorScale"sv, style.MouseCursorScale);
+				read_bool("AntiAliasedLines"sv, style.AntiAliasedLines);
+				read_bool(
+					"AntiAliasedLinesUseTex"sv, style.AntiAliasedLinesUseTex);
+				read_bool("AntiAliasedFill"sv, style.AntiAliasedFill);
+				read_float(
+					"CurveTessellationTol"sv, style.CurveTessellationTol);
+				read_float("CircleTessellationMaxError"sv,
+					style.CircleTessellationMaxError);
 			}
 
 			g_LastLoadedTheme = CustomTheme{name_copy, author_copy, style,

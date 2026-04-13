@@ -15,13 +15,13 @@
 #include <algorithm>
 #include <memory>
 
-#include <GLFW/glfw3.h>
+#include "Platform/Window.h"
 
 namespace FuncDoodle {
 	class ProjectFile {
 		public:
 			ProjectFile(char name[256], int width, int height, char author[100],
-				int fps, char desc[512], GLFWwindow* win, Col bgCol);
+				int fps, char desc[512], Platform::Window* win, Col bgCol);
 			~ProjectFile();
 			const char* AnimName() const;
 			void SetAnimName(char name[256]);
@@ -59,7 +59,9 @@ namespace FuncDoodle {
 			void Write(const char* filePath);
 			void ReadAndPopulate(const char* filePath);
 			void Export(const char* filePath, int format);
-			constexpr inline GLFWwindow* Window() const { return m_Window; }
+			constexpr inline Platform::Window* Window() const {
+				return m_Window;
+			}
 			inline bool Saved() { return m_Saved; }
 			void DisplayFPS(double fps);
 
@@ -91,7 +93,7 @@ namespace FuncDoodle {
 			int m_FPS = 0;
 			char m_Desc[512];  // 512
 			SharedPtr<LongIndexArray> m_Frames;
-			GLFWwindow* m_Window;
+			Platform::Window* m_Window;
 			std::stack<UniquePtr<Action>> m_UndoStack;
 			std::stack<UniquePtr<Action>> m_RedoStack;
 			bool m_Saved = false;

@@ -11,6 +11,10 @@
 #include <string>
 #include <vector>
 
+#ifdef FUNCDOODLE_BUILD_TESTS
+int FuncDoodle_RunTests();
+#endif
+
 #if defined(_MSC_VER)
 #define CURRENT_FUNC __FUNCTION__
 #else
@@ -18,6 +22,7 @@
 #endif
 
 #ifdef FUNCDOODLE_BUILD_IMTESTS
+int FuncDoodle_RegisterImTests();
 extern ImGuiTestEngine* s_TestEngine;
 #endif
 

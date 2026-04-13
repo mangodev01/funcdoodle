@@ -66,3 +66,18 @@
 author = '(built-in)'
 name = 'Catppuccin Mocha'
 uuid = '581758bc-91f3-40e1-9d9f-5f2640f52f7a'
+
+[other]
+Alpha = 1.0
+WindowRounding = 10.0
+FrameRounding = 5.0
+PopupRounding = 12.0
+ScrollbarRounding = 10.0
+GrabRounding = 6.0
+TabRounding = 12.0
+ChildRounding = 12.0
+WindowPadding = [ 10.0, 10.0 ]
+FramePadding = [ 8.0, 8.0 ]
+ItemSpacing = [ 10.0, 10.0 ]
+IndentSpacing = 20.0
+ScrollbarSize = 16.0
