@@ -92,5 +92,20 @@ namespace FuncDoodle {
 			}
 			return ImGuiKey_None;
 		}
+
+		inline const char* GetUsername() {
+			const char* username = std::getenv("USER");  // Common on Linux and macOS
+			if (!username) {
+				username = std::getenv("LOGNAME");	 // Fallback for Linux and macOS
+			}
+			if (!username) {
+				username = std::getenv("USERNAME");	 // Common on Windows
+			}
+			if (!username) {
+				username = "unknown";
+			}
+
+			return username;
+		}
 	}  // namespace ImUtil
 }  // namespace FuncDoodle

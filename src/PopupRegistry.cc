@@ -2,7 +2,7 @@
 
 namespace FuncDoodle {
 	void PopupRegistry::Register(std::string_view id) {
-		m_Popups.try_emplace(id, false);
+		m_Popups.emplace(id, false);
 	}
 
 	void PopupRegistry::Open(std::string_view id) {

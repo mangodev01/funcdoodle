@@ -105,6 +105,15 @@ namespace FuncDoodle {
 				Get()->DropCallback(count, paths);
 			});
 
+		m_Window.SetCloseCallback([](Platform::Window* win){
+			win->SetShouldClose(false);
+			if (Get()->CurProj()) {
+				Get()->OpenSaveChangesDialog();
+			} else {
+				win->SetShouldClose(true);
+			}
+		});
+
 #ifdef DEBUG
 		m_Window.SetErrorCallback([](int err, const char* desc) {
 			FUNC_ERR("GLFW ERROR (" << err << "): " << desc);
@@ -206,9 +215,6 @@ namespace FuncDoodle {
 			if (ShouldClose()) {
 				break;
 			}
-
-			if (false) {  // SaveChangesDialog already handled via m_Popups
-			}
 		}
 	}
 
@@ -256,9 +262,9 @@ namespace FuncDoodle {
 			m_Window.SwapBuffers();
 
 #ifdef FUNCDOODLE_BUILD_IMTESTS
-		if (s_TestEngine) {
-			ImGuiTestEngine_PostSwap(s_TestEngine);
-		}
+			if (s_TestEngine) {
+				ImGuiTestEngine_PostSwap(s_TestEngine);
+			}
 #endif
 		}
 	}
@@ -301,6 +307,8 @@ namespace FuncDoodle {
 			delete[] log;
 		}
 		s_Logs.clear();
+
+		delete m_AssetLoader;
 	}
 
 	void Application::UpdateFPS(double deltaTime) {
@@ -339,6 +347,24 @@ namespace FuncDoodle {
 		return shortcut;
 	}
 
+	void Application::DeleteCurrentSelection() {
+		auto sel = m_EditorController->Sel();
+		auto selPixels = m_EditorController->Sel()->All();
+		std::vector<Col> prevPixels;
+
+		prevPixels.reserve(selPixels.size());
+		for (auto& p : selPixels) {
+			prevPixels.push_back(
+				m_Manager->SelectedFrame()->Pixels()->Get(p.x, p.y));
+		}
+
+		m_CurrentProj->PushUndoable(
+			DeleteSelectionAction(m_Manager->SelectedFrameI(),
+				m_EditorController->Sel(), prevPixels, m_CurrentProj));
+		m_Manager->SelectedFrame()->DeleteSelection(
+			m_EditorController->Sel(), m_CurrentProj->BgCol());
+	}
+
 	void Application::CheckKeybinds() {
 		if (m_WaitingForKey != nullptr)
 			return;
@@ -371,41 +397,18 @@ namespace FuncDoodle {
 		}
 		if (m_Keybinds.Get("del").IsPressed()) {
 			if (m_EditorController->Sel() && m_CurrentProj) {
-				FUNC_DBG("Has selection, checking keybinds");
-				auto sel = m_EditorController->Sel();
-				FUNC_DBG("Sel().use_count() = " << sel.use_count());
-				auto selPixels = m_EditorController->Sel()->All();
-				std::vector<Col> prevPixels;
-				prevPixels.reserve(selPixels.size());
-				for (auto& p : selPixels) {
-					prevPixels.push_back(
-						m_Manager->SelectedFrame()->Pixels()->Get(p.x, p.y));
-				}
-				m_CurrentProj->PushUndoable(
-					DeleteSelectionAction(m_Manager->SelectedFrameI(),
-						m_EditorController->Sel(), prevPixels, m_CurrentProj));
-				m_Manager->SelectedFrame()->DeleteSelection(
-					m_EditorController->Sel(), m_CurrentProj->BgCol());
+				DeleteCurrentSelection();
 			}
 		}
 		if (m_EditorController->Sel() && m_CurrentProj) {
-			auto moveSel = [&](Direction dir) {
-				MoveSelectionActionContext ctx{m_Manager->SelectedFrameI(),
-					m_EditorController->Sel(), dir, m_CurrentProj};
-				auto action = MoveSelectionAction(
-					Frame(*m_Manager->SelectedFrame()), ctx);
-				m_CurrentProj->PushUndoable(action);
-				m_Manager->SelectedFrame()->MoveSelection(
-					m_EditorController->Sel(), dir, m_CurrentProj->BgCol());
-			};
 			if (m_Keybinds.Get("move_selection_left").IsPressed())
-				moveSel(Direction::Left);
+				MoveCurrentSelection(Direction::Left);
 			if (m_Keybinds.Get("move_selection_right").IsPressed())
-				moveSel(Direction::Right);
+				MoveCurrentSelection(Direction::Right);
 			if (m_Keybinds.Get("move_selection_up").IsPressed())
-				moveSel(Direction::Up);
+				MoveCurrentSelection(Direction::Up);
 			if (m_Keybinds.Get("move_selection_down").IsPressed())
-				moveSel(Direction::Down);
+				MoveCurrentSelection(Direction::Down);
 		}
 		if (m_Keybinds.Get("keybinds").IsPressed()) {
 			m_Popups.Open("keybinds");
@@ -701,18 +704,7 @@ namespace FuncDoodle {
 				strcpy(name, (char*)"Untitled Animation");
 				width = 32;
 				height = 32;
-				const char* username =
-					std::getenv("USER");  // Common on Linux and macOS
-				if (!username) {
-					username =
-						std::getenv("LOGNAME");	 // Fallback for Linux and macOS
-				}
-				if (!username) {
-					username = std::getenv("USERNAME");	 // Common on Windows
-				}
-				if (!username) {
-					username = "unknown";
-				}
+				const char* username = ImUtil::GetUsername();
 				strncpy(author, username, sizeof(author) - 1);
 				author[sizeof(author) - 1] = '\0';
 				fps = 10;
@@ -778,16 +770,7 @@ namespace FuncDoodle {
 				strcpy(name, (char*)"testproj");
 				width = 32;
 				height = 32;
-				const char* username = std::getenv("USER");
-				if (!username) {
-					username = std::getenv("LOGNAME");
-				}
-				if (!username) {
-					username = std::getenv("USERNAME");
-				}
-				if (!username) {
-					username = "unknown";
-				}
+				const char* username = ImUtil::GetUsername();
 				strncpy(author, username, sizeof(author) - 1);
 				author[sizeof(author) - 1] = '\0';
 				fps = 10;
@@ -911,10 +894,24 @@ namespace FuncDoodle {
 		SaveProjectFile();
 	}
 
+	void Application::MoveCurrentSelection(Direction direction) {
+		MoveSelectionActionContext ctx{
+			m_Manager->SelectedFrameI(),
+				m_EditorController->Sel(), direction,
+				m_CurrentProj};
+		auto action = MoveSelectionAction(
+				Frame(*m_Manager->SelectedFrame()), ctx);
+
+		m_CurrentProj->PushUndoable(action);
+		m_Manager->SelectedFrame()->MoveSelection(
+				m_EditorController->Sel(), direction,
+				m_CurrentProj->BgCol());
+	}
+
 	void Application::RenderMainMenuBar() {
 		if (ImGui::BeginMainMenuBar()) {
 			if (ImGui::BeginMenu("File", true)) {
-				if (ImGui::MenuItem("New project",
+				if (ImGui::MenuItem("New",
 						m_WaitingForKey ? nullptr : m_Keybinds.Get("new"))) {
 					if (m_SFXEnabled)
 						m_AssetLoader->PlaySound(s_ProjCreateSound);
@@ -995,21 +992,7 @@ namespace FuncDoodle {
 							m_WaitingForKey ? nullptr
 											: m_Keybinds.Get("del"))) {
 						if (m_EditorController->Sel()) {
-							auto selPixels = m_EditorController->Sel()->All();
-							std::vector<Col> prevPixels;
-							prevPixels.reserve(selPixels.size());
-							for (auto& p : selPixels) {
-								prevPixels.push_back(
-									m_Manager->SelectedFrame()->Pixels()->Get(
-										p.x, p.y));
-							}
-							m_CurrentProj->PushUndoable(DeleteSelectionAction(
-								m_Manager->SelectedFrameI(),
-								m_EditorController->Sel(), prevPixels,
-								m_CurrentProj));
-							m_Manager->SelectedFrame()->DeleteSelection(
-								m_EditorController->Sel(),
-								m_CurrentProj->BgCol());
+							DeleteCurrentSelection();
 						}
 					}
 
@@ -1018,17 +1001,7 @@ namespace FuncDoodle {
 								? nullptr
 								: m_Keybinds.Get("move_selection_left"))) {
 						if (m_EditorController->Sel()) {
-							MoveSelectionActionContext ctx{
-								m_Manager->SelectedFrameI(),
-								m_EditorController->Sel(), Direction::Left,
-								m_CurrentProj};
-							auto action = MoveSelectionAction(
-								Frame(*m_Manager->SelectedFrame()), ctx);
-
-							m_CurrentProj->PushUndoable(action);
-							m_Manager->SelectedFrame()->MoveSelection(
-								m_EditorController->Sel(), Direction::Left,
-								m_CurrentProj->BgCol());
+							MoveCurrentSelection(Direction::Left);
 						}
 					}
 
@@ -1037,17 +1010,7 @@ namespace FuncDoodle {
 								? nullptr
 								: m_Keybinds.Get("move_selection_right"))) {
 						if (m_EditorController->Sel()) {
-							MoveSelectionActionContext ctx{
-								m_Manager->SelectedFrameI(),
-								m_EditorController->Sel(), Direction::Right,
-								m_CurrentProj};
-							auto action = MoveSelectionAction(
-								Frame(*m_Manager->SelectedFrame()), ctx);
-
-							m_CurrentProj->PushUndoable(action);
-							m_Manager->SelectedFrame()->MoveSelection(
-								m_EditorController->Sel(), Direction::Right,
-								m_CurrentProj->BgCol());
+							MoveCurrentSelection(Direction::Right);
 						}
 					}
 
@@ -1056,17 +1019,7 @@ namespace FuncDoodle {
 								? nullptr
 								: m_Keybinds.Get("move_selection_up"))) {
 						if (m_EditorController->Sel()) {
-							MoveSelectionActionContext ctx{
-								m_Manager->SelectedFrameI(),
-								m_EditorController->Sel(), Direction::Up,
-								m_CurrentProj};
-							auto action = MoveSelectionAction(
-								Frame(*m_Manager->SelectedFrame()), ctx);
-
-							m_CurrentProj->PushUndoable(action);
-							m_Manager->SelectedFrame()->MoveSelection(
-								m_EditorController->Sel(), Direction::Up,
-								m_CurrentProj->BgCol());
+							MoveCurrentSelection(Direction::Up);
 						}
 					}
 
@@ -1075,17 +1028,7 @@ namespace FuncDoodle {
 								? nullptr
 								: m_Keybinds.Get("move_selection_down"))) {
 						if (m_EditorController->Sel()) {
-							MoveSelectionActionContext ctx{
-								m_Manager->SelectedFrameI(),
-								m_EditorController->Sel(), Direction::Down,
-								m_CurrentProj};
-							auto action = MoveSelectionAction(
-								Frame(*m_Manager->SelectedFrame()), ctx);
-
-							m_CurrentProj->PushUndoable(action);
-							m_Manager->SelectedFrame()->MoveSelection(
-								m_EditorController->Sel(), Direction::Down,
-								m_CurrentProj->BgCol());
+							MoveCurrentSelection(Direction::Down);
 						}
 					}
 				}

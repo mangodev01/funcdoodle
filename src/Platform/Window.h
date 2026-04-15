@@ -38,6 +38,9 @@ namespace FuncDoodle::Platform {
 			using ErrorCallback = void (*)(int err, const char* desc);
 			void SetErrorCallback(ErrorCallback cb);
 
+			using CloseCallback = std::function<void(Window*)>;
+			void SetCloseCallback(CloseCallback cb);
+
 			void SetShouldClose(bool shouldClose);
 			bool ShouldClose();
 
@@ -49,11 +52,12 @@ namespace FuncDoodle::Platform {
 			void InitImGui();
 
 		private:
-			static void GlfwDropTrampoline(
-				GLFWwindow* glfwWin, int count, const char** paths);
+			static void GlfwDropTrampoline(GLFWwindow* glfwWin, int count, const char** paths);
+			static void GlfwCloseTrampoline(GLFWwindow* glfwWin);
 
 		protected:
 			DropCallback mp_DropCallback;
+			CloseCallback mp_CloseCallback;
 
 		private:
 			GLFWwindow* m_Handle;

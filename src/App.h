@@ -76,6 +76,9 @@ namespace FuncDoodle {
 			void RenderKeybinds();
 			void Rotate(int32_t deg);
 
+			void DeleteCurrentSelection();
+			void MoveCurrentSelection(Direction direction);
+
 		private:
 			std::string m_FilePath;
 			int m_Deg = 90;

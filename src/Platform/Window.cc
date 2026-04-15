@@ -66,6 +66,7 @@ namespace FuncDoodle::Platform {
 		glfwSetWindowUserPointer(m_Handle, this);
 
 		glfwSetDropCallback(m_Handle, GlfwDropTrampoline);
+		glfwSetWindowCloseCallback(m_Handle, GlfwCloseTrampoline);
 
 		PaError err = Pa_Initialize();
 		if (err != paNoError) {
@@ -87,12 +88,26 @@ namespace FuncDoodle::Platform {
 			self->mp_DropCallback(self, count, paths);
 	}
 
+	void Window::GlfwCloseTrampoline(GLFWwindow* glfwWin) {
+		Window* self = static_cast<Window*>(glfwGetWindowUserPointer(glfwWin));
+
+		if (!self)
+			return;
+
+		if (self->mp_CloseCallback)
+			self->mp_CloseCallback(self);
+	}
+
 	void Window::SetDropCallback(DropCallback cb) {
 		mp_DropCallback = cb;
 	}
 
 	void Window::SetErrorCallback(ErrorCallback cb) {
 		glfwSetErrorCallback(cb);
+	}
+
+	void Window::SetCloseCallback(CloseCallback cb) {
+		mp_CloseCallback = cb;
 	}
 
 	void Window::SetTitle(const char* title) {

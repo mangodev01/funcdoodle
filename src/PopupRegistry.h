@@ -1,8 +1,7 @@
 #pragma once
 
-#include <filesystem>
 #include <map>
-#include <string_view>
+#include <string>
 
 namespace FuncDoodle {
 	class PopupRegistry {
