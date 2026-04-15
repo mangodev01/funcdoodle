@@ -1,6 +1,7 @@
 #include "Project.h"
 
 #include "Action/Action.h"
+#include "Constants.h"
 #include "Frame.h"
 
 #include <cstdio>
@@ -63,7 +64,7 @@ namespace FuncDoodle {
 
 		auto frames = AnimFrames();
 
-		char curFilePath[512];
+		char curFilePath[FILE_PATH_BUFFER_SIZE];
 
 		for (unsigned long i = 0; i < AnimFrameCount(); i++) {
 #ifndef _WIN32
@@ -93,7 +94,7 @@ namespace FuncDoodle {
 			// so yea sorry for that
 			// idk if/when i'll fix this
 			// see you until then
-			char cmd[1024];
+			char cmd[LARGE_BUFFER_SIZE];
 #ifndef _WIN32
 			snprintf(cmd, sizeof(cmd),
 				"ffmpeg -framerate %d -pattern_type glob -i \"%s/frame_*.png\" "
@@ -328,9 +329,9 @@ namespace FuncDoodle {
 
 		file.getline(m_Author, sizeof(m_Author), '\0');
 
-		unsigned char bgR = 255;
-		unsigned char bgG = 255;
-		unsigned char bgB = 255;
+		unsigned char bgR = MAX_COLOR_VALUE;
+		unsigned char bgG = MAX_COLOR_VALUE;
+		unsigned char bgB = MAX_COLOR_VALUE;
 
 		if (verMajor >= 0 && verMinor >= 1) {
 			file.read(reinterpret_cast<char*>(&bgR), sizeof(bgR));
@@ -463,9 +464,9 @@ namespace FuncDoodle {
 	}
 
 	void ProjectFile::DisplayFPS(double fps) {
-		char* title = (char*)malloc(1024);
-		snprintf(title, 1024, "FuncDoodle %s: %s%s (%d FPS)", FUNCVER,
-			AnimName(), !m_Saved ? "*" : "",
+		char* title = (char*)malloc(LARGE_BUFFER_SIZE);
+		snprintf(title, LARGE_BUFFER_SIZE, "FuncDoodle %s: %s%s (%d FPS)",
+			FUNCVER, AnimName(), !m_Saved ? "*" : "",
 			(int)(fps > 0.0 ? fps : ImGui::GetIO().Framerate));
 		m_Window->SetTitle(title);
 		free(title);

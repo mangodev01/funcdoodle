@@ -20,7 +20,8 @@ namespace FuncDoodle {
 		}
 
 		inline bool EnterPressed() {
-			return ImGui::IsKeyPressed(ImGuiKey_Enter, false) || ImGui::IsKeyPressed(ImGuiKey_KeypadEnter, false);
+			return ImGui::IsKeyPressed(ImGuiKey_Enter, false) ||
+				   ImGui::IsKeyPressed(ImGuiKey_KeypadEnter, false);
 		}
 
 		inline bool EscPressed() {

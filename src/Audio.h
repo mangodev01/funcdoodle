@@ -7,11 +7,11 @@
 
 namespace FuncDoodle {
 	struct AudioData {
-			std::vector<float> samples;
-			int sampleRate;
-			int numChannels;
-			size_t cur = 0;
-			size_t total = 0;
+		std::vector<float> samples;
+		int sampleRate;
+		int numChannels;
+		size_t cur = 0;
+		size_t total = 0;
 	};
 };	// namespace FuncDoodle
 

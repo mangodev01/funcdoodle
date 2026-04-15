@@ -9,9 +9,9 @@ namespace FuncDoodle {
 	enum class Direction { None = 0, Left, Right, Up, Down };
 
 	struct MoveSelectionActionContext {
-			unsigned long frameIndex;
-			WeakPtr<Selection> sel;
-			Direction moveDir;
-			const SharedPtr<ProjectFile>& proj;
+		unsigned long frameIndex;
+		WeakPtr<Selection> sel;
+		Direction moveDir;
+		const SharedPtr<ProjectFile>& proj;
 	};
 }  // namespace FuncDoodle

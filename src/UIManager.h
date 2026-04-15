@@ -14,18 +14,18 @@
 namespace FuncDoodle {
 	class UIManager {
 		public:
-			UIManager();
+		UIManager();
 
-			void SaveChanges();
-			void MainMenuBar();
-			void Keybinds();
-			void CheckKeybinds();
-			void NewProj();
-			void EditProj();
-			void ExportProj();
+		void SaveChanges();
+		void MainMenuBar();
+		void Keybinds();
+		void CheckKeybinds();
+		void NewProj();
+		void EditProj();
+		void ExportProj();
 
 		private:
-			const char* m_WaitingForKey = nullptr;
-			std::array<float, 3> m_CacheBGCol = {1.0f, 1.0f, 1.0f};
+		const char* m_WaitingForKey = nullptr;
+		std::array<float, 3> m_CacheBGCol = {1.0f, 1.0f, 1.0f};
 	};
 }  // namespace FuncDoodle

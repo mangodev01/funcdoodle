@@ -7,4 +7,4 @@ namespace FuncDoodle {
 		bool UndoByStroke = true;
 		float FrameLimit = 1000.0;
 	};
-}
+}  // namespace FuncDoodle

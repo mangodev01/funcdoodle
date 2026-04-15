@@ -10,57 +10,57 @@ namespace FuncDoodle::Platform {
 	extern bool g_GlfwInitted;
 
 	struct WindowSpec {
-			/// window width at startup
-			int Width;
+		/// window width at startup
+		int Width;
 
-			/// window height at startup
-			int Height;
+		/// window height at startup
+		int Height;
 
-			/// window title at startup
-			const char* Title;
+		/// window title at startup
+		const char* Title;
 
-			/// monitor - 0 for primary, 1 for secondary, etc.
-			int Monitor;
+		/// monitor - 0 for primary, 1 for secondary, etc.
+		int Monitor;
 	};
 
 	class Window {
 		public:
-			Window(WindowSpec spec);
-			~Window();
+		Window(WindowSpec spec);
+		~Window();
 
-			void SetTitle(const char* title);
-			void SetIcon(std::filesystem::path icon);
+		void SetTitle(const char* title);
+		void SetIcon(std::filesystem::path icon);
 
-			using DropCallback =
-				std::function<void(Window*, int, const char**)>;
-			void SetDropCallback(DropCallback cb);
+		using DropCallback = std::function<void(Window*, int, const char**)>;
+		void SetDropCallback(DropCallback cb);
 
-			using ErrorCallback = void (*)(int err, const char* desc);
-			void SetErrorCallback(ErrorCallback cb);
+		using ErrorCallback = void (*)(int err, const char* desc);
+		void SetErrorCallback(ErrorCallback cb);
 
-			using CloseCallback = std::function<void(Window*)>;
-			void SetCloseCallback(CloseCallback cb);
+		using CloseCallback = std::function<void(Window*)>;
+		void SetCloseCallback(CloseCallback cb);
 
-			void SetShouldClose(bool shouldClose);
-			bool ShouldClose();
+		void SetShouldClose(bool shouldClose);
+		bool ShouldClose();
 
-			void PollEvents();
-			void GetFramebufferSize(int* width, int* height);
-			void SwapBuffers();
+		void PollEvents();
+		void GetFramebufferSize(int* width, int* height);
+		void SwapBuffers();
 
-			static void InitGlfw();
-			void InitImGui();
+		static void InitGlfw();
+		void InitImGui();
 
 		private:
-			static void GlfwDropTrampoline(GLFWwindow* glfwWin, int count, const char** paths);
-			static void GlfwCloseTrampoline(GLFWwindow* glfwWin);
+		static void GlfwDropTrampoline(
+			GLFWwindow* glfwWin, int count, const char** paths);
+		static void GlfwCloseTrampoline(GLFWwindow* glfwWin);
 
 		protected:
-			DropCallback mp_DropCallback;
-			CloseCallback mp_CloseCallback;
+		DropCallback mp_DropCallback;
+		CloseCallback mp_CloseCallback;
 
 		private:
-			GLFWwindow* m_Handle;
-			WindowSpec m_Spec;
+		GLFWwindow* m_Handle;
+		WindowSpec m_Spec;
 	};
 }  // namespace FuncDoodle::Platform

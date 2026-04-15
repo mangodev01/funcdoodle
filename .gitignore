@@ -8,6 +8,7 @@ FuncDoodle
 FuncDoodle.app
 # imgui.ini
 pkg_app.sh
+build/
 bin/
 dmg/*.dmg
 .git

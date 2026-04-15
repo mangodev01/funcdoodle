@@ -1,10 +1,13 @@
 #include "Frame.h"
 
 #include <cmath>
+#include <cstdio>
+#include <cstdlib>
 #include <iostream>
 #include <stdexcept>
 #include <vector>
 
+#include "Constants.h"
 #include "Gui.h"
 
 #include "MacroUtils.h"
@@ -111,10 +114,12 @@ namespace FuncDoodle {
 	}
 
 	void Frame::CopyToClipboard() {
-		size_t bufferSize = 32;	 // Start with space for dimensions
+		size_t bufferSize =
+			BUFFER_CHUNK_SIZE;	// Start with space for dimensions
 		for (int y = 0; y < Height(); y++) {
 			for (int x = 0; x < Width(); x++) {
-				bufferSize += 32;  // Space for r g b values and spaces/newline
+				bufferSize += BUFFER_CHUNK_SIZE;  // Space for r g b values and
+												  // spaces/newline
 			}
 		}
 
@@ -148,7 +153,7 @@ namespace FuncDoodle {
 			return nullptr;
 
 		// Buffer for dimensions line (e.g. "1920x1080\0")
-		char first[32];
+		char first[BUFFER_CHUNK_SIZE];
 		int i = 0;
 
 		// Copy first line into buffer
@@ -173,8 +178,10 @@ namespace FuncDoodle {
 		if (width <= 0 || height <= 0)
 			return nullptr;
 
-		Frame* frame =
-			new Frame(width, height, Col{.r = 255, .g = 255, .b = 255});
+		Frame* frame = new Frame(width, height,
+			Col{.r = MAX_COLOR_VALUE,
+				.g = MAX_COLOR_VALUE,
+				.b = MAX_COLOR_VALUE});
 
 		ptr = pasted;
 		// Skip first line
@@ -209,7 +216,8 @@ namespace FuncDoodle {
 			}
 		}
 
-		Col bgCol = Col{.r = 255, .g = 255, .b = 255};
+		Col bgCol = Col{
+			.r = MAX_COLOR_VALUE, .g = MAX_COLOR_VALUE, .b = MAX_COLOR_VALUE};
 
 		bgCol.r = atoi(ptr);
 		while (*ptr && *ptr != ' ')

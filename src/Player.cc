@@ -2,8 +2,6 @@
 
 #include "Project.h"
 
-#include <GLFW/glfw3.h>
-
 #include "Gui.h"
 
 namespace FuncDoodle {

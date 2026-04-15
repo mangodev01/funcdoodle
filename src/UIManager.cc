@@ -1,5 +1,6 @@
 #include "UIManager.h"
 #include "App.h"
+#include "Constants.h"
 #include "ImUtil.h"
 #include "LoadedAssets.h"
 #include "Themes.h"
@@ -390,9 +391,12 @@ namespace FuncDoodle {
 				fps = app->GetCacheProj()->AnimFPS();
 				strcpy(desc, app->GetCacheProj()->AnimDesc());
 
-				float r = (float)(app->GetCacheProj()->BgCol().r) / 255;
-				float g = (float)(app->GetCacheProj()->BgCol().g) / 255;
-				float b = (float)(app->GetCacheProj()->BgCol().b) / 255;
+				float r =
+					(float)(app->GetCacheProj()->BgCol().r) / MAX_COLOR_VALUE;
+				float g =
+					(float)(app->GetCacheProj()->BgCol().g) / MAX_COLOR_VALUE;
+				float b =
+					(float)(app->GetCacheProj()->BgCol().b) / MAX_COLOR_VALUE;
 				m_CacheBGCol[0] = r;
 				m_CacheBGCol[1] = g;
 				m_CacheBGCol[2] = b;
@@ -466,7 +470,8 @@ namespace FuncDoodle {
 			ImGui::Combo("Export Format", app->GetExportFormatPtr(), formats,
 				IM_ARRAYSIZE(formats));
 			ImUtil::ButtonRowResult choice = ImUtil::ExportCloseButtons();
-			if (choice == ImUtil::ButtonRowResult::Primary || ImUtil::EnterPressed()) {
+			if (choice == ImUtil::ButtonRowResult::Primary ||
+				ImUtil::EnterPressed()) {
 				FileDialog dialog;
 				std::filesystem::path path = dialog.Dir();
 
@@ -477,7 +482,8 @@ namespace FuncDoodle {
 
 				ImGui::CloseCurrentPopup();
 			}
-			if (choice == ImUtil::ButtonRowResult::Secondary || ImUtil::EscPressed()) {
+			if (choice == ImUtil::ButtonRowResult::Secondary ||
+				ImUtil::EscPressed()) {
 				ImGui::CloseCurrentPopup();
 			}
 			ImGui::EndPopup();

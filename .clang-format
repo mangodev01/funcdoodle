@@ -24,6 +24,6 @@ BraceWrapping:
   AfterUnion: false
   AfterExternBlock: false
 AccessModifierOffset: 0
-IndentAccessModifiers: true
+IndentAccessModifiers: false
 NamespaceIndentation: All
 IndentCaseLabels: true

@@ -28,18 +28,18 @@ namespace FuncDoodle {
 			"d0c1a009-d09c-4fe6-84f8-eddcb2da38f9";
 
 		struct CustomTheme {
-				const char* Name;
-				const char* Author;
-				ImGuiStyle Style;
-				UUID Uuid;
-				bool OwnsMeta = false;
-				CustomTheme()
-					: Uuid(UUID()), Name(""), Author(""), Style(ImGuiStyle()),
-					  OwnsMeta(false) {}
-				CustomTheme(const char* name, const char* author,
-					ImGuiStyle style, UUID uuid, bool ownsMeta = false)
-					: Uuid(uuid), Name(name), Author(author), Style(style),
-					  OwnsMeta(ownsMeta) {};
+			const char* Name;
+			const char* Author;
+			ImGuiStyle Style;
+			UUID Uuid;
+			bool OwnsMeta = false;
+			CustomTheme()
+				: Uuid(UUID()), Name(""), Author(""), Style(ImGuiStyle()),
+				  OwnsMeta(false) {}
+			CustomTheme(const char* name, const char* author, ImGuiStyle style,
+				UUID uuid, bool ownsMeta = false)
+				: Uuid(uuid), Name(name), Author(author), Style(style),
+				  OwnsMeta(ownsMeta) {};
 		};
 
 		inline std::map<UUID, CustomTheme> g_Themes;

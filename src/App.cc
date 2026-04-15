@@ -1,4 +1,5 @@
 #include "AssetLoader.h"
+#include "Constants.h"
 #include "Gui.h"
 #include "KeyHandler.h"
 #include <glad/glad.h>
@@ -67,12 +68,14 @@ namespace FuncDoodle {
 	Application::Application()
 		: m_FilePath(""), m_CurrentProj(nullptr), m_CacheProj(nullptr),
 		  m_EditorController(std::make_shared<EditorController>()),
-		  m_CacheBGCol({255, 255, 255}),
+		  m_CacheBGCol({MAX_COLOR_VALUE, MAX_COLOR_VALUE, MAX_COLOR_VALUE}),
 		  m_Theme(UUID::FromString("d0c1a009-d09c-4fe6-84f8-eddcb2da38f9")),
 		  m_FrameLimitCache(m_Settings.FrameLimit),
 		  m_Keybinds(std::filesystem::path("")),
-		  m_Window(
-			  {.Width = 1920, .Height = 1080, .Title = "", .Monitor = -1}) {
+		  m_Window({.Width = DEFAULT_WINDOW_WIDTH,
+			  .Height = DEFAULT_WINDOW_HEIGHT,
+			  .Title = "",
+			  .Monitor = -1}) {
 #ifdef FUNCDOODLE_BUILD_TESTS
 		FuncDoodle_RunTests();
 		FuncDoodle::TestRegistry::Instance().PrintSummary();
@@ -739,7 +742,8 @@ namespace FuncDoodle {
 		}
 
 		if (ImGui::BeginPopup("Rotate")) {
-			ImGui::DragInt("##Deg", &m_Deg, 1.0f, -360, 360, "%d°");
+			ImGui::DragInt("##Deg", &m_Deg, 1.0f, -MAX_ROTATION_DEG,
+				MAX_ROTATION_DEG, "%d°");
 
 			ImUtil::ButtonRowResult choice = ImUtil::OkCancelButtons();
 			if (choice == ImUtil::ButtonRowResult::Primary) {
