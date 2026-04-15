@@ -46,7 +46,7 @@ namespace FuncDoodle {
 			inline void SetCacheProj(SharedPtr<ProjectFile> proj) {
 				m_CacheProj = proj;
 			}
-			inline AssetLoader* GetAssetLoader() { return m_AssetLoader; }
+			inline AssetLoader* GetAssetLoader() { return m_AssetLoader.get(); }
 			inline bool GetShouldClose() { return m_ShouldClose; }
 			inline UUID GetTheme() { return m_Theme; }
 			inline void SetTheme(UUID theme) { m_Theme = theme; }
@@ -95,7 +95,7 @@ namespace FuncDoodle {
 			SharedPtr<ProjectFile> m_CacheProj;
 			UniquePtr<AnimationManager> m_Manager;
 			Platform::Window m_Window;
-			AssetLoader* m_AssetLoader;
+			UniquePtr<AssetLoader> m_AssetLoader;
 			SharedPtr<EditorController> m_EditorController;
 			int m_ExportFormat = 0;
 			UUID m_Theme;

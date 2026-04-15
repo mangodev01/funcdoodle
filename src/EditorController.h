@@ -25,8 +25,8 @@ namespace FuncDoodle {
 					AnimationPlayer* Player = nullptr;
 					UniquePtr<Grid> Grid = nullptr;
 					int PixelScale = 8;
-					ImVec2* LastMousePos = nullptr;
-					ImVec2* LastHoverMousePos = nullptr;
+					ImVec2 LastMousePos = {-1, -1};
+					ImVec2 LastHoverMousePos = {-1, -1};
 					AppSettings& Settings;
 
 					CanvasContext(AppSettings& settings) : Settings(settings) {}

@@ -379,7 +379,7 @@ namespace FuncDoodle {
 		if (verMajor >= 0 && verMinor >= 2) {
 			FUNC_GRAY("Reading " << (unsigned long)frameCount << "frames...");
 			for (unsigned long i = 0; i < (unsigned long)frameCount; i++) {
-				ImageArray* img = new ImageArray(animWidth, animHeight, m_BG);
+				ImageArray img(animWidth, animHeight, m_BG);
 				for (int y = 0; y < animHeight; y++) {
 					for (int x = 0; x < animWidth; x++) {
 						std::streampos start = file.tellg();
@@ -395,21 +395,19 @@ namespace FuncDoodle {
 							break;
 						}
 
-						img->Set(x, y, plte[index]);
+						img.Set(x, y, plte[index]);
 					}
 				}
-				Frame newFrame = Frame(img);
+				Frame newFrame = Frame(&img);
 				m_Frames->PushBack(&newFrame);
 
 				unsigned char null;
 				file.read(reinterpret_cast<char*>(&null), 1);
-
-				delete img;
 			}
 		} else {
 			FUNC_GRAY("Reading " << (long)frameCount << "frames...");
 			for (long i = 0; i < (long)frameCount; i++) {
-				ImageArray* img = new ImageArray(animWidth, animHeight, m_BG);
+				ImageArray img(animWidth, animHeight, m_BG);
 				for (int y = 0; y < animHeight; y++) {
 					for (int x = 0; x < animWidth; x++) {
 						unsigned char bytes[sizeof(int)];
@@ -427,10 +425,10 @@ namespace FuncDoodle {
 							std::exit(-1);
 						}
 
-						img->Set(x, y, plte[index]);
+						img.Set(x, y, plte[index]);
 					}
 				}
-				Frame newFrame = Frame(img);
+				Frame newFrame = Frame(&img);
 				m_Frames->PushBack(&newFrame);
 				unsigned char null;
 				file.read(reinterpret_cast<char*>(&null), 1);

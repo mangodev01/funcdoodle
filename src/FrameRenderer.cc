@@ -85,10 +85,8 @@ namespace FuncDoodle {
 			m_Ctx.Player->Proj()->AnimName(),
 			m_Ctx.Player->Proj()->Saved() ? "" : "*", m_Ctx.Index,
 			m_Ctx.Frame->Width(), m_Ctx.Frame->Height(), m_Ctx.PixelScale,
-			m_Ctx.LastHoverMousePos ? m_Ctx.LastHoverMousePos->x : 0,
-			m_Ctx.LastHoverMousePos ? m_Ctx.LastHoverMousePos->y : 0,
-			m_Ctx.LastMousePos ? m_Ctx.LastMousePos->x : 0,
-			m_Ctx.LastMousePos ? m_Ctx.LastMousePos->y : 0);
+			m_Ctx.LastHoverMousePos.x, m_Ctx.LastHoverMousePos.y,
+			m_Ctx.LastMousePos.x, m_Ctx.LastMousePos.y);
 	}
 
 	void FrameRenderer::InitPixels() {

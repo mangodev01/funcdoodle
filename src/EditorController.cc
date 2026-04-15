@@ -289,8 +289,7 @@ namespace FuncDoodle {
 
 	void EditorController::RenderCanvas(CanvasContext& context) {
 		if (!context.Frame || !context.Player || !context.Player->Proj() ||
-			!context.ToolManager || !context.Grid || !context.PixelScale ||
-			!context.LastMousePos) {
+			!context.ToolManager || !context.Grid || !context.PixelScale) {
 			return;
 		}
 		const ImageArray* pixels = context.Frame->Pixels();
@@ -369,22 +368,22 @@ namespace FuncDoodle {
 					std::strcmp(focusedWindow->Name, "Frame") == 0;
 
 				if (isFrameWindowFocused) {
-					if (context.LastMousePos->x >= 0 &&
-						context.LastMousePos->y >= 0 &&
+					if (context.LastMousePos.x >= 0 &&
+						context.LastMousePos.y >= 0 &&
 						(selectedTool == ToolType::Pencil ||
 							selectedTool == ToolType::Eraser)) {
 						const float dx =
-							currentPixel.x - context.LastMousePos->x;
+							currentPixel.x - context.LastMousePos.x;
 						const float dy =
-							currentPixel.y - context.LastMousePos->y;
+							currentPixel.y - context.LastMousePos.y;
 						const int steps =
 							std::max(1, std::max(static_cast<int>(std::abs(dx)),
 											static_cast<int>(std::abs(dy))));
 						for (int i = 0; i <= steps; i++) {
 							const float t = static_cast<float>(i) / steps;
 							const ImVec2 interpPixel(
-								context.LastMousePos->x + dx * t,
-								context.LastMousePos->y + dy * t);
+								context.LastMousePos.x + dx * t,
+								context.LastMousePos.y + dy * t);
 
 							Paint(context.Frame, context.Index,
 								context.ToolManager, context.Player,
@@ -403,8 +402,8 @@ namespace FuncDoodle {
 							ImGui::IsMouseClicked(0));
 					}
 				}
-				*context.LastMousePos = currentPixel;
-				*context.LastHoverMousePos = currentPixel;
+				context.LastMousePos = currentPixel;
+				context.LastHoverMousePos = currentPixel;
 			}
 		} else if (!ImGui::IsMouseDown(0) ||
 				   !ImGui::IsMouseHoveringRect(frameMin, frameMax)) {
@@ -412,8 +411,8 @@ namespace FuncDoodle {
 				(mousePos.x - startX) / context.PixelScale,
 				(mousePos.y - startY) / context.PixelScale);
 
-			*context.LastMousePos = ImVec2(-1, -1);
-			*context.LastHoverMousePos = currentPixel;
+			context.LastMousePos = ImVec2(-1, -1);
+			context.LastHoverMousePos = currentPixel;
 		}
 
 		if (context.ToolManager->GetSelectedTool() == ToolType::Select &&
@@ -437,7 +436,7 @@ namespace FuncDoodle {
 			!context.Player->Playing()) {
 			if (context.Settings.Preview &&
 				context.ToolManager->GetSelectedTool() == ToolType::Pencil) {
-				ImVec2 pixel = *context.LastHoverMousePos;
+				ImVec2 pixel = context.LastHoverMousePos;
 
 				if (pixel.x >= 0 && pixel.y >= 0) {
 					int px = (int)pixel.x;

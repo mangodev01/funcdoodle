@@ -30,20 +30,10 @@ namespace FuncDoodle {
 				m_Ctx.ToolManager = manager;
 				m_Ctx.Player = player;
 				m_Ctx.Grid = nullptr;
-
-				m_Ctx.LastMousePos = new ImVec2();
-				m_Ctx.LastMousePos->x = -1;
-				m_Ctx.LastMousePos->y = -1;
-
-				m_Ctx.LastHoverMousePos = new ImVec2();
-				m_Ctx.LastHoverMousePos->x = -1;
-				m_Ctx.LastHoverMousePos->y = -1;
+				m_Ctx.LastMousePos = ImVec2{-1, -1};
+				m_Ctx.LastHoverMousePos = ImVec2{-1, -1};
 
 				m_EditorController = editorController;
-			}
-			~FrameRenderer() {
-				delete m_Ctx.LastMousePos;
-				delete m_Ctx.LastHoverMousePos;
 			}
 			void RenderFrame();
 			void RenderStatusBar();

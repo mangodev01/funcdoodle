@@ -84,14 +84,14 @@ namespace FuncDoodle {
 
 		std::filesystem::path rootPath = path.parent_path();
 
-		m_AssetLoader = new AssetLoader(rootPath / "assets");
+		m_AssetLoader = std::make_unique<AssetLoader>(rootPath / "assets");
 
 		m_ThemesPath = rootPath / "themes";
 
 		m_Keybinds = KeybindsRegistry(path);
 		m_FrameLimitCache = m_Settings.FrameLimit;
-		m_Manager = std::make_unique<AnimationManager>(
-			nullptr, m_AssetLoader, m_EditorController, m_Keybinds, m_Settings),
+		m_Manager = std::make_unique<AnimationManager>(nullptr,
+			m_AssetLoader.get(), m_EditorController, m_Keybinds, m_Settings),
 
 		RegisterKeybinds();
 
@@ -303,8 +303,6 @@ namespace FuncDoodle {
 			delete[] log;
 		}
 		s_Logs.clear();
-
-		delete m_AssetLoader;
 	}
 
 	void Application::UpdateFPS(double deltaTime) {
@@ -726,8 +724,7 @@ namespace FuncDoodle {
 				m_Settings.FrameLimit = m_FrameLimitCache;
 			}
 
-			if (ImUtil::EscPressed() ||
-				ImUtil::EnterPressed() ||
+			if (ImUtil::EscPressed() || ImUtil::EnterPressed() ||
 				ImUtil::OkButton()) {
 				ImGui::CloseCurrentPopup();
 			}
