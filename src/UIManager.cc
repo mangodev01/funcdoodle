@@ -79,7 +79,7 @@ namespace FuncDoodle {
 					}
 
 					if (ImGui::MenuItem("Close")) {
-						app->GetCurProj().reset();
+						app->SetCurProj(nullptr);
 						app->GetManager()->SetProj(nullptr);
 					}
 					if (ImGui::MenuItem("Edit project")) {
@@ -259,7 +259,7 @@ namespace FuncDoodle {
 				ImGui::EndTable();
 			}
 
-			if (ImUtil::CloseButton() || ImGui::IsKeyPressed(ImGuiKey_Escape)) {
+			if (ImUtil::CloseButton() || ImUtil::EscPressed()) {
 				ImGui::CloseCurrentPopup();
 			}
 			ImGui::EndPopup();
@@ -463,25 +463,21 @@ namespace FuncDoodle {
 
 		if (ImGui::BeginPopup("Export##export")) {
 			const char* formats[] = {"PNGs", "MP4"};
-			ImGui::Combo("Export Format", &m_ExportFormat, formats,
+			ImGui::Combo("Export Format", app->GetExportFormatPtr(), formats,
 				IM_ARRAYSIZE(formats));
 			ImUtil::ButtonRowResult choice = ImUtil::ExportCloseButtons();
-			if (choice == ImUtil::ButtonRowResult::Primary ||
-				ImGui::IsKeyPressed(ImGuiKey_Enter, false) ||
-				ImGui::IsKeyPressed(ImGuiKey_KeypadEnter, false)) {
-				Application* app = Application::Get();
+			if (choice == ImUtil::ButtonRowResult::Primary || ImUtil::EnterPressed()) {
 				FileDialog dialog;
 				std::filesystem::path path = dialog.Dir();
 
-				if (m_SFXEnabled)
+				if (app->GetSettings().Sfx)
 					app->GetAssetLoader()->PlaySound(s_ExportSound);
 				FUNC_INF("Exporting to " << path);
-				app->GetCurProj()->Export(path.c_str(), m_ExportFormat);
+				app->GetCurProj()->Export(path.c_str(), app->GetExportFormat());
 
 				ImGui::CloseCurrentPopup();
 			}
-			if (choice == ImUtil::ButtonRowResult::Secondary ||
-				ImGui::IsKeyPressed(ImGuiKey_Escape, false)) {
+			if (choice == ImUtil::ButtonRowResult::Secondary || ImUtil::EscPressed()) {
 				ImGui::CloseCurrentPopup();
 			}
 			ImGui::EndPopup();
@@ -497,7 +493,7 @@ namespace FuncDoodle {
 
 		// Check if each shortcut is pressed and perform the appropriate action
 		if (app->GetKeybinds().Get("new").IsPressed()) {
-			if (m_SFXEnabled)
+			if (app->GetSettings().Sfx)
 				app->GetAssetLoader()->PlaySound(s_ProjCreateSound);
 			app->GetPopups()->Open("new");
 		}
@@ -538,8 +534,7 @@ namespace FuncDoodle {
 			app->GetPopups()->Open("keybinds");
 		}
 		if (app->GetCurProj()) {
-			if (app->GetCurProj() &&
-				app->GetKeybinds().Get("save").IsPressed()) {
+			if (app->GetKeybinds().Get("save").IsPressed()) {
 				const char* path = app->GetCurProj()->LastSavePath();
 
 				if (*path) {
@@ -549,8 +544,7 @@ namespace FuncDoodle {
 				}
 			}
 
-			if (app->GetCurProj() &&
-				app->GetKeybinds().Get("save_as").IsPressed()) {
+			if (app->GetKeybinds().Get("save_as").IsPressed()) {
 				app->Save();
 			}
 

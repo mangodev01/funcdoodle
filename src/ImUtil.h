@@ -19,6 +19,14 @@ namespace FuncDoodle {
 			ImGui::SetCursorPosX(startX);
 		}
 
+		inline bool EnterPressed() {
+			return ImGui::IsKeyPressed(ImGuiKey_Enter, false) || ImGui::IsKeyPressed(ImGuiKey_KeypadEnter, false);
+		}
+
+		inline bool EscPressed() {
+			return ImGui::IsKeyPressed(ImGuiKey_Escape, false);
+		}
+
 		inline ButtonRowResult ConfirmButtons(const char* primary,
 			const char* secondary, const char* tertiary = nullptr) {
 			float spacing = ImGui::GetStyle().ItemSpacing.x;

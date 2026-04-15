@@ -27,7 +27,5 @@ namespace FuncDoodle {
 		private:
 			const char* m_WaitingForKey = nullptr;
 			std::array<float, 3> m_CacheBGCol = {1.0f, 1.0f, 1.0f};
-			int m_ExportFormat = 0;
-			bool m_SFXEnabled = true;
 	};
 }  // namespace FuncDoodle

@@ -64,6 +64,9 @@ namespace FuncDoodle {
 			inline double GetFrameTime() { return 1.0 / m_Settings.FrameLimit; }
 			inline PopupRegistry* GetPopups() { return &m_Popups; }
 			inline KeybindsRegistry& GetKeybinds() { return m_Keybinds; }
+			inline int GetExportFormat() { return m_ExportFormat; }
+			inline int* GetExportFormatPtr() { return &m_ExportFormat; }
+			inline void SetExportFormat(int format) { m_ExportFormat = format; }
 
 			inline AnimationManager* GetManager() { return m_Manager.get(); }
 

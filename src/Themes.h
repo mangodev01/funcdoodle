@@ -63,50 +63,6 @@ namespace FuncDoodle {
 				return;
 			}
 			ImGui::ShowStyleEditor(&ImGui::GetStyle());
-			// if (g_ThemeEditorOpen) {
-			// ImGui::Begin("Theme editor", &g_ThemeEditorOpen,
-			// ImGuiWindowFlags_NoCollapse);
-			//
-			// ImGuiStyle& style = ImGui::GetStyle();
-			//
-			// ImVec2 windowSize = ImGui::GetWindowSize();
-			// float windowWidth = windowSize.x;
-			//
-			// Calculate the number of col based on the window width
-			// int numCol = static_cast<int>(
-			// windowWidth /
-			// 200);  // Each column has a minimum width of 100px
-			// numCol = ImMax(1, numCol);
-			//
-			// ImGui::Columns(numCol, nullptr, false);
-			// for (unsigned char col = 0; col < ImGuiCol_COUNT; ++col) {
-			// ImGui::PushID(col);
-			// ImVec4& color = style.Colors[col];
-			//
-			// if (ImGui::ColorEdit4(ImGui::GetStyleColorName(col),
-			// (float*)&color)) {
-			// style.Colors[col] = color;
-			// }
-			//
-			// if ((col + 1) % numCol == 0) {
-			// ImGui::NextColumn();
-			// }
-			//
-			// ImGui::PopID();
-			// }
-			//
-			// End the cols
-			// ImGui::Columns(1);
-			//
-			// if (ImGui::Button("Close") ||
-			// ImGui::IsKeyPressed(ImGuiKey_Escape) ||
-			// ImGui::IsKeyPressed(ImGuiKey_Enter) ||
-			// ImGui::IsKeyPressed(ImGuiKey_KeypadEnter)) {
-			// g_ThemeEditorOpen = false;
-			// }
-			//
-			// ImGui::End();
-			// }
 		}
 		inline CustomTheme g_LastLoadedTheme;
 		inline CustomTheme* LoadThemeFromFile(const char* path) {

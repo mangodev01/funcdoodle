@@ -722,14 +722,12 @@ namespace FuncDoodle {
 
 			ImGui::InputDouble("FPS limit", &m_FrameLimitCache);
 
-			if (ImGui::IsKeyPressed(ImGuiKey_Enter) ||
-				ImGui::IsKeyPressed(ImGuiKey_KeypadEnter)) {
+			if (ImUtil::EnterPressed()) {
 				m_Settings.FrameLimit = m_FrameLimitCache;
 			}
 
-			if (ImGui::IsKeyPressed(ImGuiKey_Escape) ||
-				ImGui::IsKeyPressed(ImGuiKey_Enter) ||
-				ImGui::IsKeyPressed(ImGuiKey_KeypadEnter) ||
+			if (ImUtil::EscPressed() ||
+				ImUtil::EnterPressed() ||
 				ImUtil::OkButton()) {
 				ImGui::CloseCurrentPopup();
 			}
