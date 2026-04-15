@@ -23,7 +23,7 @@ namespace FuncDoodle {
 			void SetCol(struct Col col) {
 				unsigned char colArr[3] = {col.r, col.g, col.b};
 				for (int j = 0; j < 3; j++) {
-					m_Col[j] = static_cast<float>(colArr[j] / 255.0f);
+					m_Col[j] = static_cast<float>(colArr[j]) / 255.0f;
 				}
 			}
 			const int GetSize() const { return m_Size; }

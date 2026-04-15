@@ -285,6 +285,7 @@ namespace FuncDoodle {
 
 		if (!file.is_open()) {
 			FUNC_FATAL("Failed to open file");
+			return;
 		}
 
 		const int numBytes = 6;

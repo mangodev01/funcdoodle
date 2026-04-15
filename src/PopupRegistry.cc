@@ -33,7 +33,7 @@ namespace FuncDoodle {
 
 	void PopupRegistry::CloseAllExcept(std::string_view exception) {
 		for (auto& [id, open] : m_Popups) {
-			if (id.compare(exception))
+			if (id == exception)
 				continue;
 
 			open = false;

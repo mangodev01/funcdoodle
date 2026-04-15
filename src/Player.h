@@ -30,5 +30,6 @@ namespace FuncDoodle {
 			bool m_Playing;
 			SharedPtr<ProjectFile> m_Proj;
 			unsigned long m_CurFrame = 0L;
+			float m_TimeElapsed = 0.0f;
 	};
 }  // namespace FuncDoodle

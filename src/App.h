@@ -16,8 +16,6 @@
 #include <functional>
 #include <string>
 
-#include "Ptr.h"
-
 namespace FuncDoodle {
 	class Application {
 		public:

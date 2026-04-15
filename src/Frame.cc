@@ -238,10 +238,18 @@ namespace FuncDoodle {
 		return *this;
 	}
 	bool Frame::operator==(const Frame& other) const {
-		return m_Pixels.Data() == other.m_Pixels.Data() &&
-			   m_Pixels.Width() == other.m_Pixels.Width() &&
-			   m_Pixels.Height() == other.m_Pixels.Height() &&
-			   m_Pixels.BgCol() == other.m_Pixels.BgCol();
+		if (m_Pixels.Width() != other.m_Pixels.Width() ||
+			m_Pixels.Height() != other.m_Pixels.Height() ||
+			m_Pixels.BgCol() != other.m_Pixels.BgCol()) {
+			return false;
+		}
+		for (unsigned long i = 0; i < m_Pixels.Width() * m_Pixels.Height();
+			i++) {
+			if (m_Pixels.Data()[i] != other.m_Pixels.Data()[i]) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	void Frame::RotateSelection(WeakPtr<Selection> sel, int deg) {

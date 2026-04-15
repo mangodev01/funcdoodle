@@ -1,0 +1,26 @@
+var searchData=
+[
+  ['parameters_0',['Window handle parameters',['../moving_guide.html#moving_window_handles',1,'']]],
+  ['path_20drop_20input_1',['Path drop input',['../input_guide.html#path_drop',1,'']]],
+  ['persistent_20window_20hints_2',['Persistent window hints',['../moving_guide.html#moving_hints',1,'']]],
+  ['physical_20key_20input_3',['Physical key input',['../moving_guide.html#moving_keys',1,'']]],
+  ['physical_20size_4',['Physical size',['../monitor_guide.html#monitor_size',1,'']]],
+  ['pkg_20config_20and_20glfw_20binaries_20on_20unix_5',['With pkg-config and GLFW binaries on Unix',['../build_guide.html#build_link_pkgconfig',1,'']]],
+  ['platform_20interface_6',['Platform interface',['../internals_guide.html#internals_platform',1,'']]],
+  ['platform_20selection_7',['Runtime platform selection',['../intro_guide.html#platform',1,'']]],
+  ['pointer_8',['pointer',['../input_guide.html#joystick_userptr',1,'Joystick user pointer'],['../monitor_guide.html#monitor_userptr',1,'User pointer'],['../window_guide.html#window_userptr',1,'User pointer']]],
+  ['pointer_20lifetimes_9',['Pointer lifetimes',['../intro_guide.html#lifetime',1,'']]],
+  ['pointers_10',['pointers',['../context_guide.html#context_glext_proc',1,'Fetching function pointers'],['../vulkan_guide.html#vulkan_proc',1,'Querying Vulkan function pointers']]],
+  ['polling_11',['Removal of automatic event polling',['../moving_guide.html#moving_autopoll',1,'']]],
+  ['position_12',['position',['../input_guide.html#cursor_pos',1,'Cursor position'],['../monitor_guide.html#monitor_pos',1,'Virtual position'],['../window_guide.html#window_pos',1,'Window position']]],
+  ['position_20changes_13',['Cursor position changes',['../moving_guide.html#moving_cursorpos',1,'']]],
+  ['position_20replaced_20by_20scroll_20offsets_14',['Wheel position replaced by scroll offsets',['../moving_guide.html#moving_wheel',1,'']]],
+  ['presentation_20support_15',['Querying for Vulkan presentation support',['../vulkan_guide.html#vulkan_present',1,'']]],
+  ['processing_16',['processing',['../input_guide.html#events',1,'Event processing'],['../window_guide.html#window_events',1,'Window event processing']]],
+  ['processing_20events_17',['Processing events',['../quick_guide.html#quick_process_events',1,'']]],
+  ['properties_18',['Monitor properties',['../monitor_guide.html#monitor_properties',1,'']]],
+  ['properties_20and_20events_19',['Window properties and events',['../window_guide.html#window_properties',1,'']]],
+  ['protocols_20and_20ipc_20standards_20',['protocols and IPC standards',['../compat_guide.html#compat_wayland',1,'Wayland protocols and IPC standards'],['../compat_guide.html#compat_x11',1,'X11 extensions, protocols and IPC standards']]],
+  ['public_20interface_21',['Public interface',['../internals_guide.html#internals_public',1,'']]],
+  ['putting_20it_20together_22',['Putting it together',['../quick_guide.html#quick_example',1,'']]]
+];
