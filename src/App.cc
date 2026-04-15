@@ -2,6 +2,7 @@
 #include "Constants.h"
 #include "Gui.h"
 #include "KeyHandler.h"
+#include "MacroUtils.h"
 #include <glad/glad.h>
 
 #include "Action/Action.h"
@@ -98,7 +99,7 @@ namespace FuncDoodle {
 
 		RegisterKeybinds();
 
-		auto title = std::format("FuncDoodle {}", FUNCVER);
+		auto title = FUNC_FMT("FuncDoodle {}", FUNCVER);
 		m_Window.SetTitle(title.c_str());
 
 		m_AssetLoader->LoadAssets();
@@ -396,7 +397,7 @@ namespace FuncDoodle {
 	}
 	void Application::OpenFileDialog(std::function<void()> done) {
 		FileDialog dialog("fdp");
-		m_FilePath = dialog.Open();
+		m_FilePath = dialog.Open().string();
 		done();
 	}
 	void Application::SaveFileDialog(std::function<void()> done) {
@@ -406,7 +407,7 @@ namespace FuncDoodle {
 		}
 
 		FileDialog dialog("fdp");
-		m_FilePath = dialog.Save();
+		m_FilePath = dialog.Save().string();
 		done();
 	}
 	void Application::ReadProjectFile() {
@@ -691,7 +692,7 @@ namespace FuncDoodle {
 
 				for (size_t i = 0; i < themes.size(); i++) {
 					std::filesystem::path path = themes[i];
-					style = Themes::LoadThemeFromFile(path.c_str());
+					style = Themes::LoadThemeFromFile(path.string().c_str());
 
 					if (style) {
 						auto [it, inserted] =

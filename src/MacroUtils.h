@@ -8,6 +8,31 @@
 
 extern std::vector<char*> s_Logs;
 
+#if __cplusplus >= 202002L && defined(__cpp_lib_format)
+#include <format>
+#define FUNC_FORMAT_AVAILABLE 1
+#else
+#define FUNC_FORMAT_AVAILABLE 0
+#endif
+
+#if FUNC_FORMAT_AVAILABLE
+#define FUNC_FMT(...) std::format(__VA_ARGS__)
+#else
+#include <cstdio>
+#define FUNC_FMT(...) func_format_fallback(__VA_ARGS__)
+namespace FuncDoodle {
+	inline std::string func_format_fallback(const char* fmt) {
+		return std::string(fmt);
+	}
+	template <typename... Args>
+	inline std::string func_format_fallback(const char* fmt, Args... args) {
+		char buf[256];
+		snprintf(buf, sizeof(buf), fmt, args...);
+		return std::string(buf);
+	}
+}  // namespace FuncDoodle
+#endif
+
 #ifdef DEBUG
 #define FUNC_AOV(x)                                                    \
 	do {                                                               \

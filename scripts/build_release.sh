@@ -1,20 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-usage() {
-	echo "Usage: $0 <win portaudio.h path> <win portaudio lib path> <mac portaudio.h path> <mac x86_64 portaudio lib/dylib path> <mac arm64 portaudio lib/dylib path>"
-	exit 1
-}
-
-if [[ $# -ne 5 ]]; then
-	usage
-fi
-
 root_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 release_dir="$root_dir/release"
 mkdir -p "$release_dir"
 
-"$root_dir/scripts/build_cross.sh" Release true false "$1" "$2" "$3" "$4" "$5"
+export FUNCDOODLE_USE_BUNDLED_PORTAUDIO=ON
+
+"$root_dir/scripts/build_cross.sh" Release true false "" "" "" "" ""
 
 package_dir() {
 	local name="$1"
@@ -51,7 +44,7 @@ if [[ -d "$root_dir/bin/macos" ]]; then
 		"$root_dir/bin/macos" \
 		"$release_dir" \
 		"FuncDoodle" \
-		"$4" \
+		"" \
 		"x86_64"
 fi
 if [[ -d "$root_dir/bin/macos-arm64" ]]; then
@@ -59,7 +52,7 @@ if [[ -d "$root_dir/bin/macos-arm64" ]]; then
 		"$root_dir/bin/macos-arm64" \
 		"$release_dir" \
 		"FuncDoodle-arm64" \
-		"$5" \
+		"" \
 		"arm64"
 fi
 

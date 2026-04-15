@@ -478,7 +478,8 @@ namespace FuncDoodle {
 				if (app->GetSettings().Sfx)
 					app->GetAssetLoader()->PlaySound(s_ExportSound);
 				FUNC_INF("Exporting to " << path);
-				app->GetCurProj()->Export(path.c_str(), app->GetExportFormat());
+				app->GetCurProj()->Export(
+					path.string().c_str(), app->GetExportFormat());
 
 				ImGui::CloseCurrentPopup();
 			}

@@ -45,7 +45,7 @@ fi
 mkdir -p "$root_dir/bin/microslop" || exit -1
 pushd "$root_dir/bin/microslop" >/dev/null || exit -1
 mkdir -p incl
-if [[ "$use_bundled" != "ON" ]]; then
+if [[ "$use_bundled" != "ON" && -n "$arg4" ]]; then
 	cp "$arg4" incl/ || exit -1
 fi
 
@@ -53,8 +53,9 @@ cmake_args=(
 	-DCMAKE_TOOLCHAIN_FILE="$root_dir/mingw.cmake"
 	-DCMAKE_BUILD_TYPE="$arg1"
 	-DFUNCDOODLE_USE_BUNDLED_PORTAUDIO="$use_bundled"
+	-DPA_USE_JACK=OFF
 )
-if [[ "$use_bundled" != "ON" ]]; then
+if [[ "$use_bundled" != "ON" && -n "$win_pa_path" ]]; then
 	win_pa_base="$(basename "$win_pa_path")"
 	win_pa_name="${win_pa_base%.*}"
 	win_pa_name="${win_pa_name#lib}"
@@ -156,6 +157,7 @@ if [[ "$use_bundled" == "ON" || ( -n "$mac_pa_incl" && -n "$mac_pa_lib_x86" && -
 			-DCMAKE_BUILD_TYPE="$arg1"
 			-DCMAKE_OSX_ARCHITECTURES="$arch"
 			-DFUNCDOODLE_USE_BUNDLED_PORTAUDIO="$use_bundled"
+			-DPA_USE_JACK=OFF
 		)
 		if [[ "$use_bundled" != "ON" ]]; then
 			cmake_args+=(

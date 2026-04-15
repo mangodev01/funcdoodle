@@ -62,3 +62,18 @@
 author = '(built-in)'
 name = 'Catppuccin Macchiato'
 uuid = 'df170c68-3946-4a44-9dbb-35fa8b3e2475'
+
+[other]
+Alpha = 1.0
+WindowRounding = 10.0
+FrameRounding = 5.0
+PopupRounding = 12.0
+ScrollbarRounding = 10.0
+GrabRounding = 6.0
+TabRounding = 12.0
+ChildRounding = 12.0
+WindowPadding = [ 10.0, 10.0 ]
+FramePadding = [ 8.0, 8.0 ]
+ItemSpacing = [ 10.0, 10.0 ]
+IndentSpacing = 20.0
+ScrollbarSize = 16.0
