@@ -22,12 +22,12 @@ static void RegisterTests_FuncDoodle(ImGuiTestEngine* e) {
 	t->GuiFunc = [](ImGuiTestContext*) {};
 	t->TestFunc = [](ImGuiTestContext* ctx) {
 		FuncDoodle::Application* app = GetApp();
-		app->Popups()->Open("new");
+		app->GetPopups()->Open("new");
 		ImGui::OpenPopup("NewProj");
 		ctx->Yield();
 
 		IM_CHECK(ImGui::IsPopupOpen("NewProj"));
-		app->Popups()->Close("new");
+		app->GetPopups()->Close("new");
 		ctx->Yield();
 
 		IM_CHECK(!ImGui::IsPopupOpen("NewProj"));
@@ -37,12 +37,12 @@ static void RegisterTests_FuncDoodle(ImGuiTestEngine* e) {
 	t->GuiFunc = [](ImGuiTestContext*) {};
 	t->TestFunc = [](ImGuiTestContext* ctx) {
 		FuncDoodle::Application* app = GetApp();
-		app->Popups()->Open("keybinds");
+		app->GetPopups()->Open("keybinds");
 		ImGui::OpenPopup("Keybinds");
 		ctx->Yield();
 
 		IM_CHECK(ImGui::IsPopupOpen("Keybinds"));
-		app->Popups()->Close("keybinds");
+		app->GetPopups()->Close("keybinds");
 		ctx->Yield();
 	};
 
@@ -50,12 +50,12 @@ static void RegisterTests_FuncDoodle(ImGuiTestEngine* e) {
 	t->GuiFunc = [](ImGuiTestContext*) {};
 	t->TestFunc = [](ImGuiTestContext* ctx) {
 		FuncDoodle::Application* app = GetApp();
-		app->Popups()->Open("pref");
+		app->GetPopups()->Open("pref");
 		ImGui::OpenPopup("EditPrefs");
 		ctx->Yield();
 
 		IM_CHECK(ImGui::IsPopupOpen("EditPrefs"));
-		app->Popups()->Close("pref");
+		app->GetPopups()->Close("pref");
 		ctx->Yield();
 	};
 
@@ -63,13 +63,13 @@ static void RegisterTests_FuncDoodle(ImGuiTestEngine* e) {
 	t->GuiFunc = [](ImGuiTestContext*) {};
 	t->TestFunc = [](ImGuiTestContext* ctx) {
 		FuncDoodle::Application* app = GetApp();
-		app->Popups()->Open("keybinds");
+		app->GetPopups()->Open("keybinds");
 		ImGui::OpenPopup("Keybinds");
 		ctx->Yield();
 
 		IM_CHECK(ImGui::IsPopupOpen("Keybinds"));
 
-		app->Popups()->Close("keybinds");
+		app->GetPopups()->Close("keybinds");
 		ctx->Yield();
 	};
 
@@ -77,13 +77,13 @@ static void RegisterTests_FuncDoodle(ImGuiTestEngine* e) {
 	t->GuiFunc = [](ImGuiTestContext*) {};
 	t->TestFunc = [](ImGuiTestContext* ctx) {
 		FuncDoodle::Application* app = GetApp();
-		app->Popups()->Open("new");
+		app->GetPopups()->Open("new");
 		ImGui::OpenPopup("NewProj");
 		ctx->Yield();
 
 		IM_CHECK(ImGui::IsPopupOpen("NewProj"));
 
-		app->Popups()->Close("new");
+		app->GetPopups()->Close("new");
 		ctx->Yield();
 	};
 
@@ -91,13 +91,13 @@ static void RegisterTests_FuncDoodle(ImGuiTestEngine* e) {
 	t->GuiFunc = [](ImGuiTestContext*) {};
 	t->TestFunc = [](ImGuiTestContext* ctx) {
 		FuncDoodle::Application* app = GetApp();
-		app->Popups()->Open("rotate");
+		app->GetPopups()->Open("rotate");
 		ImGui::OpenPopup("Rotate");
 		ctx->Yield();
 
 		IM_CHECK(ImGui::IsPopupOpen("Rotate"));
 
-		app->Popups()->Close("rotate");
+		app->GetPopups()->Close("rotate");
 		ctx->Yield();
 	};
 
@@ -105,14 +105,14 @@ static void RegisterTests_FuncDoodle(ImGuiTestEngine* e) {
 	t->GuiFunc = [](ImGuiTestContext*) {};
 	t->TestFunc = [](ImGuiTestContext* ctx) {
 		FuncDoodle::Application* app = GetApp();
-		app->Popups()->Open("export");
+		app->GetPopups()->Open("export");
 		ImGui::OpenPopup("Export##export");
 		ctx->Yield();
 
 		ctx->SetRef("Export##export");
 		IM_CHECK(ImGui::IsPopupOpen("Export##export"));
 
-		app->Popups()->Close("export");
+		app->GetPopups()->Close("export");
 		ctx->Yield();
 	};
 

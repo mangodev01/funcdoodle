@@ -1,5 +1,6 @@
 #pragma once
 
+#include "AppSettings.h"
 #include "Frame.h"
 
 #include "Action/Action.h"
@@ -21,8 +22,8 @@ namespace FuncDoodle {
 			FrameRenderer(Frame* frame, unsigned long index,
 				ToolManager* manager, AnimationPlayer* player,
 				const SharedPtr<EditorController>& editorController,
-				bool prevEnabled) {
-				m_Ctx = EditorController::CanvasContext();
+				AppSettings& settings)
+				: m_Ctx(settings) {
 				m_Ctx.Frame = frame;
 				m_Ctx.PreviousFrame = nullptr;
 				m_Ctx.Index = index;
@@ -30,17 +31,13 @@ namespace FuncDoodle {
 				m_Ctx.Player = player;
 				m_Ctx.Grid = nullptr;
 
-				// disgusting
 				m_Ctx.LastMousePos = new ImVec2();
 				m_Ctx.LastMousePos->x = -1;
 				m_Ctx.LastMousePos->y = -1;
 
-				// disgusting
 				m_Ctx.LastHoverMousePos = new ImVec2();
 				m_Ctx.LastHoverMousePos->x = -1;
 				m_Ctx.LastHoverMousePos->y = -1;
-
-				m_Ctx.PrevEnabled = prevEnabled;
 
 				m_EditorController = editorController;
 			}
@@ -52,8 +49,7 @@ namespace FuncDoodle {
 			void RenderStatusBar();
 			void InitPixels();
 
-			inline EditorController::CanvasContext* Ctx() { return &m_Ctx; }
-			void SetPrevEnabled(bool enabled) { m_Ctx.PrevEnabled = enabled; }
+			inline EditorController::CanvasContext* GetCtx() { return &m_Ctx; }
 			void SetUndoByStroke(bool undoByStroke) {
 				if (m_EditorController) {
 					m_EditorController->SetUndoByStroke(

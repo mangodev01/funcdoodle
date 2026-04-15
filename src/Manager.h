@@ -1,5 +1,6 @@
 #pragma once
 
+#include "AppSettings.h"
 #include "Keybinds.h"
 #include "Project.h"
 #include "Ptr.h"
@@ -21,8 +22,9 @@ namespace FuncDoodle {
 			AnimationManager(SharedPtr<ProjectFile> proj,
 				AssetLoader* assetLoader,
 				SharedPtr<EditorController> editorController,
-				KeybindsRegistry& keybinds, bool prevEnabled);
+				KeybindsRegistry& keybinds, AppSettings& settings);
 			~AnimationManager();
+
 			void RegisterKeybinds();
 			void RenderTimeline(bool prevEnabled);
 			void RenderControls();
@@ -33,19 +35,8 @@ namespace FuncDoodle {
 				m_Proj = proj;
 				m_Player->SetProj(proj);
 			}
-			void SetUndoByStroke(bool undoByStroke) {
-				m_UndoByStroke = undoByStroke;
-				if (m_FrameRenderer) {
-					m_FrameRenderer->SetUndoByStroke(undoByStroke);
-				}
-			}
-			void SetPrevEnabled(bool enabled) {
-				if (m_FrameRenderer) {
-					m_FrameRenderer->SetPrevEnabled(enabled);
-				}
-				if (m_TimelineFrameRenderer) {
-					m_TimelineFrameRenderer->SetPrevEnabled(enabled);
-				}
+			void SetSettings(AppSettings& settings) {
+				m_Settings = settings;
 			}
 			AnimationPlayer* Player() const { return m_Player.get(); }
 			void SetPlayer(AnimationPlayer* player) { m_Player.reset(player); }
@@ -65,6 +56,6 @@ namespace FuncDoodle {
 			SharedPtr<EditorController> m_EditorController;
 			KeybindsRegistry& m_Keybinds;
 			AssetLoader* m_AssetLoader;
-			bool m_UndoByStroke = false;
+			AppSettings& m_Settings;
 	};
 }  // namespace FuncDoodle

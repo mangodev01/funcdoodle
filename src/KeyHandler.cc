@@ -57,8 +57,8 @@ namespace FuncDoodle {
 
 				Frame* frame = context.Proj->AnimFrames()->Get(selectedFrame);
 				if (context.FrameRenderer) {
-					context.FrameRenderer->Ctx()->PreviousFrame = prevFrame;
-					context.FrameRenderer->Ctx()->Frame = frame;
+					context.FrameRenderer->GetCtx()->PreviousFrame = prevFrame;
+					context.FrameRenderer->GetCtx()->Frame = frame;
 				}
 			}
 		}
@@ -70,8 +70,8 @@ namespace FuncDoodle {
 
 				Frame* frame = context.Proj->AnimFrames()->Get(selectedFrame);
 				if (context.FrameRenderer) {
-					context.FrameRenderer->Ctx()->PreviousFrame = prevFrame;
-					context.FrameRenderer->Ctx()->Frame = frame;
+					context.FrameRenderer->GetCtx()->PreviousFrame = prevFrame;
+					context.FrameRenderer->GetCtx()->Frame = frame;
 				}
 			}
 		}

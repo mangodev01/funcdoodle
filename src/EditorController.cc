@@ -25,7 +25,7 @@ namespace FuncDoodle {
 			return false;
 		}
 
-		switch (toolManager->SelectedTool()) {
+		switch (toolManager->GetSelectedTool()) {
 			case ToolType::Pencil:
 				return PaintPencil(frame, frameI, toolManager, player, pixelX,
 					pixelY, mouseDown);
@@ -65,12 +65,12 @@ namespace FuncDoodle {
 		if (!mouseDown) {
 			return false;
 		}
-		const float* colOld = toolManager->Col();
+		const float* colOld = toolManager->GetCol();
 		Col newColor = {static_cast<unsigned char>(colOld[0] * 255.0f + 0.5f),
 			static_cast<unsigned char>(colOld[1] * 255.0f + 0.5f),
 			static_cast<unsigned char>(colOld[2] * 255.0f + 0.5f)};
 
-		int size = toolManager->Size();
+		int size = toolManager->GetSize();
 		bool actionPerformed = false;
 		int startOffset = -(size / 2);
 		int endOffset = startOffset + size - 1;
@@ -111,7 +111,7 @@ namespace FuncDoodle {
 		if (!mouseDown) {
 			return false;
 		}
-		int size = toolManager->Size();
+		int size = toolManager->GetSize();
 		bool actionPerformed = false;
 		int startOffset = -(size / 2);
 		int endOffset = startOffset + size - 1;
@@ -156,7 +156,7 @@ namespace FuncDoodle {
 			return false;
 		}
 
-		const float* colOld = toolManager->Col();
+		const float* colOld = toolManager->GetCol();
 		Col fillColor = {static_cast<unsigned char>(colOld[0] * 255.0f + 0.5f),
 			static_cast<unsigned char>(colOld[1] * 255.0f + 0.5f),
 			static_cast<unsigned char>(colOld[2] * 255.0f + 0.5f)};
@@ -361,7 +361,7 @@ namespace FuncDoodle {
 			if (currentPixel.x >= 0 && currentPixel.x < pixels->Width() &&
 				currentPixel.y >= 0 && currentPixel.y < pixels->Height()) {
 				const ToolType selectedTool =
-					context.ToolManager->SelectedTool();
+					context.ToolManager->GetSelectedTool();
 				ImGuiContext* ctx = ImGui::GetCurrentContext();
 				ImGuiWindow* focusedWindow = ctx->NavWindow;
 				const bool isFrameWindowFocused =
@@ -416,7 +416,7 @@ namespace FuncDoodle {
 			*context.LastHoverMousePos = currentPixel;
 		}
 
-		if (context.ToolManager->SelectedTool() == ToolType::Select &&
+		if (context.ToolManager->GetSelectedTool() == ToolType::Select &&
 			m_SquareSel.Active &&
 			ImGui::IsMouseReleased(ImGuiMouseButton_Left)) {
 			m_SquareSel.Active = false;
@@ -435,15 +435,15 @@ namespace FuncDoodle {
 		if (ImGui::IsMouseHoveringRect(frameMin, frameMax) && !shouldDraw &&
 			!ImGui::IsPopupOpen(nullptr, ImGuiPopupFlags_AnyPopupId) &&
 			!context.Player->Playing()) {
-			if (context.PrevEnabled &&
-				context.ToolManager->SelectedTool() == ToolType::Pencil) {
+			if (context.Settings.Preview &&
+				context.ToolManager->GetSelectedTool() == ToolType::Pencil) {
 				ImVec2 pixel = *context.LastHoverMousePos;
 
 				if (pixel.x >= 0 && pixel.y >= 0) {
 					int px = (int)pixel.x;
 					int py = (int)pixel.y;
 
-					float brushSize = (float)context.ToolManager->Size();
+					float brushSize = (float)context.ToolManager->GetSize();
 					float scaledSize = brushSize * context.PixelScale;
 
 					int startOffset = -(int)(brushSize / 2);
@@ -482,7 +482,8 @@ namespace FuncDoodle {
 						ImVec2 max(
 							clipOriginX + clipWidth, clipOriginY + clipHeight);
 
-						Col col = Col::FromFloat3(context.ToolManager->Col());
+						Col col =
+							Col::FromFloat3(context.ToolManager->GetCol());
 
 						ImGui::GetForegroundDrawList()->AddRectFilled(
 							min, max, IM_COL32(col.r, col.g, col.b, 255));

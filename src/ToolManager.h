@@ -18,15 +18,15 @@ namespace FuncDoodle {
 			void RenderTools();
 			void Buttons();
 			void Widgets();
-			const ToolType SelectedTool() { return m_SelectedTool; }
-			const float* Col() { return m_Col; }
+			const ToolType GetSelectedTool() { return m_SelectedTool; }
+			const float* GetCol() { return m_Col; }
 			void SetCol(struct Col col) {
 				unsigned char colArr[3] = {col.r, col.g, col.b};
 				for (int j = 0; j < 3; j++) {
 					m_Col[j] = static_cast<float>(colArr[j] / 255.0f);
 				}
 			}
-			const int Size() const { return m_Size; }
+			const int GetSize() const { return m_Size; }
 			void SetSize(int size) { m_Size = size; }
 
 		private:

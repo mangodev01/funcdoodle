@@ -77,7 +77,7 @@ namespace FuncDoodle {
 			return SingleButtonRow("Close");
 		}
 
-		ImGuiKey GetAnyReleasedKey() {
+		inline ImGuiKey GetAnyReleasedKey() {
 			for (int i = ImGuiKey_NamedKey_BEGIN; i < ImGuiKey_NamedKey_END;
 				i++) {
 				ImGuiKey key = (ImGuiKey)i;
@@ -94,9 +94,11 @@ namespace FuncDoodle {
 		}
 
 		inline const char* GetUsername() {
-			const char* username = std::getenv("USER");  // Common on Linux and macOS
+			const char* username =
+				std::getenv("USER");  // Common on Linux and macOS
 			if (!username) {
-				username = std::getenv("LOGNAME");	 // Fallback for Linux and macOS
+				username =
+					std::getenv("LOGNAME");	 // Fallback for Linux and macOS
 			}
 			if (!username) {
 				username = std::getenv("USERNAME");	 // Common on Windows

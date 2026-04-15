@@ -69,9 +69,10 @@ namespace FuncDoodle {
 		  m_EditorController(std::make_shared<EditorController>()),
 		  m_CacheBGCol({255, 255, 255}),
 		  m_Theme(UUID::FromString("d0c1a009-d09c-4fe6-84f8-eddcb2da38f9")),
-		  m_FrameLimitCache(m_FrameLimit),
+		  m_FrameLimitCache(m_Settings.FrameLimit),
 		  m_Keybinds(std::filesystem::path("")),
-		  m_Window({.Width = 1920, .Height = 1080, .Title = "", .Monitor = 0}) {
+		  m_Window(
+			  {.Width = 1920, .Height = 1080, .Title = "", .Monitor = -1}) {
 #ifdef FUNCDOODLE_BUILD_TESTS
 		FuncDoodle_RunTests();
 		FuncDoodle::TestRegistry::Instance().PrintSummary();
@@ -88,10 +89,9 @@ namespace FuncDoodle {
 		m_ThemesPath = rootPath / "themes";
 
 		m_Keybinds = KeybindsRegistry(path);
-		m_FrameLimitCache = m_FrameLimit;
-		m_Manager = std::make_unique<AnimationManager>(nullptr, m_AssetLoader,
-			m_EditorController, m_Keybinds, m_PrevEnabled),
-		m_Manager->SetUndoByStroke(m_UndoByStroke);
+		m_FrameLimitCache = m_Settings.FrameLimit;
+		m_Manager = std::make_unique<AnimationManager>(
+			nullptr, m_AssetLoader, m_EditorController, m_Keybinds, m_Settings),
 
 		RegisterKeybinds();
 
@@ -105,9 +105,9 @@ namespace FuncDoodle {
 				Get()->DropCallback(count, paths);
 			});
 
-		m_Window.SetCloseCallback([](Platform::Window* win){
+		m_Window.SetCloseCallback([](Platform::Window* win) {
 			win->SetShouldClose(false);
-			if (Get()->CurProj()) {
+			if (Get()->GetCurProj()) {
 				Get()->OpenSaveChangesDialog();
 			} else {
 				win->SetShouldClose(true);
@@ -154,7 +154,7 @@ namespace FuncDoodle {
 				if (sfxEnabled >= 1) {
 					sfxEnabledBool = true;
 				}
-				Get()->SetSFXEnabled(sfxEnabledBool);
+				Get()->GetSettings().Sfx = sfxEnabledBool;
 			}
 			int prevEnabled;
 			if (std::sscanf(line, "Prev=%d", &prevEnabled) == 1) {
@@ -162,24 +162,19 @@ namespace FuncDoodle {
 				if (prevEnabled >= 1)
 					prevEnabledBool = true;
 
-				Get()->SetPrevEnabled(prevEnabledBool);
+				Get()->GetSettings().Preview = prevEnabledBool;
 			}
 			int undoByStroke;
 			if (std::sscanf(line, "UndoByStroke=%d", &undoByStroke) == 1) {
-				bool undoByStrokeBool = false;
-				if (undoByStroke >= 1) {
-					undoByStrokeBool = true;
-				}
-
-				Get()->SetUndoByStroke(undoByStrokeBool);
+				Get()->GetSettings().UndoByStroke = undoByStroke >= 1;
 			}
 
 			double frameLimit;
 			if (std::sscanf(line, "FrameLimit=%lf", &frameLimit) == 1) {
-				Get()->SetFrameLimit(frameLimit);
+				Get()->GetSettings().FrameLimit = frameLimit;
 			}
 
-			ApplyThemeUuid(Get()->Theme());
+			ApplyThemeUuid(Get()->GetTheme());
 		};
 		handler.WriteAllFn = [](ImGuiContext*, ImGuiSettingsHandler* handler,
 								 ImGuiTextBuffer* buf) {
@@ -187,18 +182,19 @@ namespace FuncDoodle {
 				FUNC_INF("???");
 				return;
 			}
-			FuncDoodle::UUID theme = Get()->Theme();
+			FuncDoodle::UUID theme = Get()->GetTheme();
 			buf->reserve(buf->size() + strlen(theme.ToString()));
 			buf->append("[UserData][Preferences]\n");
 			buf->appendf("Theme=\"%s\"", theme.ToString());
 			buf->append("\n");
-			buf->appendf("Sfx=%d", Get()->SFXEnabled() ? 1 : 0);
+			buf->appendf("Sfx=%d", Get()->GetSettings().Sfx ? 1 : 0);
 			buf->append("\n");
-			buf->appendf("Prev=%d", Get()->PrevEnabled() ? 1 : 0);
+			buf->appendf("Prev=%d", Get()->GetSettings().Preview ? 1 : 0);
 			buf->append("\n");
-			buf->appendf("UndoByStroke=%d", Get()->UndoByStroke() ? 1 : 0);
+			buf->appendf(
+				"UndoByStroke=%d", Get()->GetSettings().UndoByStroke ? 1 : 0);
 			buf->append("\n");
-			buf->appendf("FrameLimit=%lf", Get()->FrameLimit());
+			buf->appendf("FrameLimit=%lf", Get()->GetSettings().FrameLimit);
 			buf->append("\n");
 		};
 		ImGui::AddSettingsHandler(&handler);
@@ -212,7 +208,7 @@ namespace FuncDoodle {
 		while (!m_Window.ShouldClose()) {
 			Update();
 
-			if (ShouldClose()) {
+			if (GetShouldClose()) {
 				break;
 			}
 		}
@@ -227,7 +223,7 @@ namespace FuncDoodle {
 		auto deltaTime =
 			duration<double>(currentFrameTime - m_LastFrame).count();
 
-		if (deltaTime >= FrameTime()) {
+		if (deltaTime >= GetFrameTime()) {
 			m_LastFrame = currentFrameTime;
 			m_Window.PollEvents();
 
@@ -365,75 +361,6 @@ namespace FuncDoodle {
 			m_EditorController->Sel(), m_CurrentProj->BgCol());
 	}
 
-	void Application::CheckKeybinds() {
-		if (m_WaitingForKey != nullptr)
-			return;
-
-		ImGuiIO& io = ImGui::GetIO();
-
-		// Check if each shortcut is pressed and perform the appropriate action
-		if (m_Keybinds.Get("new").IsPressed()) {
-			if (m_SFXEnabled)
-				m_AssetLoader->PlaySound(s_ProjCreateSound);
-			m_Popups.Open("new");
-		}
-		if (m_Keybinds.Get("open").IsPressed()) {
-#ifndef MACOS
-			std::thread([&]() {
-#endif
-				OpenFileDialog([&]() { ReadProjectFile(); });
-#ifndef MACOS
-			}).detach();
-#endif
-		}
-		if (m_Keybinds.Get("quit").IsPressed()) {
-			m_Window.SetShouldClose(true);
-		}
-		if (m_Keybinds.Get("pref").IsPressed()) {
-			m_Popups.Open("pref");
-		}
-		if (m_Keybinds.Get("theme").IsPressed()) {
-			Themes::g_ThemeEditorOpen = true;
-		}
-		if (m_Keybinds.Get("del").IsPressed()) {
-			if (m_EditorController->Sel() && m_CurrentProj) {
-				DeleteCurrentSelection();
-			}
-		}
-		if (m_EditorController->Sel() && m_CurrentProj) {
-			if (m_Keybinds.Get("move_selection_left").IsPressed())
-				MoveCurrentSelection(Direction::Left);
-			if (m_Keybinds.Get("move_selection_right").IsPressed())
-				MoveCurrentSelection(Direction::Right);
-			if (m_Keybinds.Get("move_selection_up").IsPressed())
-				MoveCurrentSelection(Direction::Up);
-			if (m_Keybinds.Get("move_selection_down").IsPressed())
-				MoveCurrentSelection(Direction::Down);
-		}
-		if (m_Keybinds.Get("keybinds").IsPressed()) {
-			m_Popups.Open("keybinds");
-		}
-		if (m_CurrentProj) {
-			if (m_CurrentProj && m_Keybinds.Get("save").IsPressed()) {
-				const char* path = m_CurrentProj->LastSavePath();
-
-				if (*path) {
-					SaveAt(path);
-				} else {
-					Save();
-				}
-			}
-
-			if (m_CurrentProj && m_Keybinds.Get("save_as").IsPressed()) {
-				Save();
-			}
-
-			if (m_Keybinds.Get("export").IsPressed()) {
-				m_Popups.Open("export");
-			}
-		}
-	}
-
 	void Application::RenderImGui() {
 		if (!m_CurrentProj)
 			RenderOptions();
@@ -444,23 +371,22 @@ namespace FuncDoodle {
 		}
 #endif
 
-		CheckKeybinds();
-		RenderMainMenuBar();
+		m_UiManager.CheckKeybinds();
+		m_UiManager.MainMenuBar();
 		RenderEditPrefs();
 		RenderRotate();
 		SaveChangesDialog();
-		RenderExport();
-		RenderEditProj();
-		RenderKeybinds();
-		RenderNewProj();
+		m_UiManager.ExportProj();
+		m_UiManager.EditProj();
+		m_UiManager.Keybinds();
+		m_UiManager.NewProj();
 
 		Themes::ThemeEditor();
 		Themes::SaveCurrentTheme();
 
 		if (m_CurrentProj) {
-			m_Manager->SetUndoByStroke(m_UndoByStroke);
-			m_Manager->SetPrevEnabled(m_PrevEnabled);
-			m_Manager->RenderTimeline(m_PrevEnabled);
+			m_Manager->SetSettings(m_Settings);
+			m_Manager->RenderTimeline(m_Settings.Preview);
 			m_Manager->RenderControls();
 			m_Manager->RenderLogs();
 			m_Manager->Player()->Play();
@@ -611,7 +537,7 @@ namespace FuncDoodle {
 		};
 
 		renderOptionRow(newProjTitle, newProjDesc, s_AddTexId, 0.0f, [&]() {
-			if (m_SFXEnabled)
+			if (m_Settings.Sfx)
 				m_AssetLoader->PlaySound(s_ProjCreateSound);
 			m_Popups.Open("new");
 		});
@@ -671,183 +597,6 @@ namespace FuncDoodle {
 
 		ReadProjectFile();
 	}
-	void Application::RenderEditProj() {
-		if (m_Popups.IsOpen("edit_proj")) {
-			ImGui::OpenPopup("EditProj");
-		}
-
-		if (ImGui::IsPopupOpen("EditProj")) {
-			ImGui::SetNextWindowFocus();
-			ImGui::SetNextWindowPos(ImVec2(485, 384), ImGuiCond_FirstUseEver);
-			ImGui::SetNextWindowSize(ImVec2(309, 312), ImGuiCond_FirstUseEver);
-		}
-		if (ImGui::BeginPopupModal("EditProj", m_Popups.Get("edit_proj"),
-				ImGuiWindowFlags_AlwaysAutoResize) &&
-			m_CurrentProj) {
-			char name[256];
-			strcpy(name, m_CurrentProj->AnimName());
-			int width = m_CurrentProj->AnimWidth();
-			int height = m_CurrentProj->AnimHeight();
-			char author[100];
-			strcpy(author, m_CurrentProj->AnimAuthor());
-			int fps = m_CurrentProj->AnimFPS();
-			char desc[512];
-			strcpy(desc, m_CurrentProj->AnimDesc());
-			if (m_CacheProj) {
-				strcpy(name, m_CacheProj->AnimName());
-				width = m_CacheProj->AnimWidth();
-				height = m_CacheProj->AnimHeight();
-				strcpy(author, m_CacheProj->AnimAuthor());
-				fps = m_CacheProj->AnimFPS();
-				strcpy(desc, m_CacheProj->AnimDesc());
-			} else {
-				strcpy(name, (char*)"Untitled Animation");
-				width = 32;
-				height = 32;
-				const char* username = ImUtil::GetUsername();
-				strncpy(author, username, sizeof(author) - 1);
-				author[sizeof(author) - 1] = '\0';
-				fps = 10;
-				strcpy(desc, "Simple test project");
-			}
-			if (ImGui::InputText("Name", name, sizeof(name))) {
-				m_CacheProj->SetAnimName(name);
-			}
-			if (ImGui::InputInt("Width", &width)) {
-				m_CacheProj->SetAnimWidth(width);
-			}
-			if (ImGui::InputInt("Height", &height)) {
-				m_CacheProj->SetAnimHeight(height);
-			}
-			if (ImGui::InputText("Author", author, sizeof(author))) {
-				m_CacheProj->SetAnimAuthor(author);
-			}
-			if (ImGui::InputInt("FPS", &fps)) {
-				m_CacheProj->SetAnimFPS(fps);
-			}
-			if (ImGui::InputText("Description", desc, sizeof(desc))) {
-				m_CacheProj->SetAnimDesc(desc);
-			}
-
-			ImUtil::ButtonRowResult choice = ImUtil::CloseOkButtons();
-			if (choice == ImUtil::ButtonRowResult::Secondary ||
-				ImGui::IsKeyPressed(ImGuiKey_Escape, false)) {
-				m_Popups.Close("edit_proj");
-				ImGui::CloseCurrentPopup();
-			}
-			if (choice == ImUtil::ButtonRowResult::Primary ||
-				ImGui::IsKeyPressed(ImGuiKey_Enter, false) ||
-				ImGui::IsKeyPressed(ImGuiKey_KeypadEnter, false)) {
-				m_CurrentProj = m_CacheProj;
-				m_Popups.Close("edit_proj");
-				ImGui::CloseCurrentPopup();
-			}
-			ImGui::EndPopup();
-		}
-	}
-	void Application::RenderNewProj() {
-		if (m_Popups.IsOpen("new")) {
-			ImGui::OpenPopup("NewProj");
-		}
-
-		if (ImGui::IsPopupOpen("NewProj")) {
-			ImGui::SetNextWindowFocus();
-			ImGui::SetNextWindowPos(ImVec2(376, 436), ImGuiCond_FirstUseEver);
-			ImGui::SetNextWindowSize(ImVec2(350, 336), ImGuiCond_FirstUseEver);
-		}
-
-		if (ImGui::BeginPopupModal("NewProj", m_Popups.Get("new"),
-				ImGuiWindowFlags_AlwaysAutoResize)) {
-			bool justOpened = ImGui::IsWindowAppearing();
-			char name[256] = "";
-			int width = 32;
-			int height = 32;
-			char author[100] = "";
-			int fps = 0;
-			char desc[512] = "";
-
-			if (!m_CacheProj) {
-				strcpy(name, (char*)"testproj");
-				width = 32;
-				height = 32;
-				const char* username = ImUtil::GetUsername();
-				strncpy(author, username, sizeof(author) - 1);
-				author[sizeof(author) - 1] = '\0';
-				fps = 10;
-				strcpy(desc, "Simple test project");
-				m_CacheProj.reset(new ProjectFile(
-					name, width, height, author, fps, desc, &m_Window, Col()));
-			} else {
-				strcpy(name, m_CacheProj->AnimName());
-				width = m_CacheProj->AnimWidth();
-				height = m_CacheProj->AnimHeight();
-				strcpy(author, m_CacheProj->AnimAuthor());
-				fps = m_CacheProj->AnimFPS();
-				strcpy(desc, m_CacheProj->AnimDesc());
-
-				float r = (float)(m_CacheProj->BgCol().r) / 255;
-				float g = (float)(m_CacheProj->BgCol().g) / 255;
-				float b = (float)(m_CacheProj->BgCol().b) / 255;
-				m_CacheBGCol[0] = r;
-				m_CacheBGCol[1] = g;
-				m_CacheBGCol[2] = b;
-			}
-
-			// GUI inputs for project properties
-			if (ImGui::InputText("Name", name, sizeof(name))) {
-				m_CacheProj->SetAnimName(name);
-			}
-			if (ImGui::InputInt("Width", &width)) {
-				if (m_CurrentProj)
-					m_CacheProj->SetAnimWidth(width, false);
-				else {
-					if (m_CacheProj) {
-						m_CacheProj->SetAnimWidth(width, true);
-					}
-				}
-			}
-			if (ImGui::InputInt("Height", &height)) {
-				if (m_CurrentProj)
-					m_CacheProj->SetAnimHeight(height, false);
-				else
-					m_CacheProj->SetAnimHeight(height, true);
-			}
-			if (ImGui::InputText("Author", author, sizeof(author))) {
-				m_CacheProj->SetAnimAuthor(author);
-			}
-			if (ImGui::InputInt("FPS", &fps)) {
-				m_CacheProj->SetAnimFPS(fps);
-			}
-			if (ImGui::InputText("Description", desc, sizeof(desc))) {
-				m_CacheProj->SetAnimDesc(desc);
-			}
-			if (ImGui::ColorPicker3("BG", m_CacheBGCol.data())) {
-				if (m_CacheProj)
-					m_CacheProj->SetBgCol(m_CacheBGCol.data());
-			}
-
-			ImUtil::ButtonRowResult choice = ImUtil::CloseOkButtons();
-			if (choice == ImUtil::ButtonRowResult::Secondary ||
-				ImGui::IsKeyPressed(ImGuiKey_Escape, false)) {
-				m_Popups.Close("new");
-				ImGui::CloseCurrentPopup();
-			}
-			bool acceptByKey =
-				!justOpened &&
-				(ImGui::IsKeyPressed(ImGuiKey_Enter, false) ||
-					ImGui::IsKeyPressed(ImGuiKey_KeypadEnter, false));
-			if (choice == ImUtil::ButtonRowResult::Primary || acceptByKey) {
-				m_CurrentProj = m_CacheProj;
-				m_Manager = std::make_unique<AnimationManager>(m_CurrentProj,
-					m_AssetLoader, m_EditorController, m_Keybinds,
-					m_PrevEnabled);
-				m_Manager->SetUndoByStroke(m_UndoByStroke);
-				m_Popups.Close("new");
-			}
-
-			ImGui::EndPopup();
-		}
-	}
 	void Application::Rotate(int32_t deg) {
 		if (!m_EditorController->Sel()) {
 			m_CurrentProj->PushUndoable(RotateFrameAction(
@@ -864,7 +613,7 @@ namespace FuncDoodle {
 	}
 
 	void Application::Save(bool exit) {
-		if (m_SFXEnabled)
+		if (m_Settings.Sfx)
 			m_AssetLoader->PlaySound(s_ProjSaveSound);
 
 #ifndef MACOS
@@ -873,7 +622,7 @@ namespace FuncDoodle {
 			SaveFileDialog([this, exit]() {
 				SaveProjectFile();
 
-				if (m_SFXEnabled)
+				if (m_Settings.Sfx)
 					m_AssetLoader->PlaySound(s_ProjSaveEndSound);
 
 				if (exit) {
@@ -887,7 +636,7 @@ namespace FuncDoodle {
 	}
 
 	void Application::SaveAt(const char* path) {
-		if (m_SFXEnabled)
+		if (m_Settings.Sfx)
 			m_AssetLoader->PlaySound(s_ProjSaveSound);
 
 		m_FilePath = path;
@@ -895,165 +644,16 @@ namespace FuncDoodle {
 	}
 
 	void Application::MoveCurrentSelection(Direction direction) {
-		MoveSelectionActionContext ctx{
-			m_Manager->SelectedFrameI(),
-				m_EditorController->Sel(), direction,
-				m_CurrentProj};
-		auto action = MoveSelectionAction(
-				Frame(*m_Manager->SelectedFrame()), ctx);
+		MoveSelectionActionContext ctx{m_Manager->SelectedFrameI(),
+			m_EditorController->Sel(), direction, m_CurrentProj};
+		auto action =
+			MoveSelectionAction(Frame(*m_Manager->SelectedFrame()), ctx);
 
 		m_CurrentProj->PushUndoable(action);
 		m_Manager->SelectedFrame()->MoveSelection(
-				m_EditorController->Sel(), direction,
-				m_CurrentProj->BgCol());
+			m_EditorController->Sel(), direction, m_CurrentProj->BgCol());
 	}
 
-	void Application::RenderMainMenuBar() {
-		if (ImGui::BeginMainMenuBar()) {
-			if (ImGui::BeginMenu("File", true)) {
-				if (ImGui::MenuItem("New",
-						m_WaitingForKey ? nullptr : m_Keybinds.Get("new"))) {
-					if (m_SFXEnabled)
-						m_AssetLoader->PlaySound(s_ProjCreateSound);
-					m_Popups.Open("new");
-				}
-
-				if (ImGui::MenuItem("Open",
-						m_WaitingForKey ? nullptr : m_Keybinds.Get("open"))) {
-#ifndef MACOS
-					std::thread([&]() {
-#endif
-						OpenFileDialog([&]() { ReadProjectFile(); });
-#ifndef MACOS
-					}).detach();
-#endif
-				}
-				if (m_CurrentProj) {
-					const char* path = m_CurrentProj->LastSavePath();
-
-					if (ImGui::MenuItem("Save", m_WaitingForKey
-													? nullptr
-													: m_Keybinds.Get("save"))) {
-						if (*path) {
-							SaveAt(path);
-						} else {
-							Save();
-						}
-					}
-
-					if (*path) {
-						if (ImGui::MenuItem("Save as...",
-								m_WaitingForKey ? nullptr
-												: m_Keybinds.Get("save_as"))) {
-							// force dialog if user presses save as
-							Save();
-						}
-					}
-
-					if (ImGui::MenuItem("Close")) {
-						m_CurrentProj = nullptr;
-						m_Manager->SetProj(nullptr);
-					}
-					if (ImGui::MenuItem("Edit project")) {
-						m_Popups.Open("edit_proj");
-					}
-					if (ImGui::MenuItem("Export",
-							m_WaitingForKey ? nullptr
-											: m_Keybinds.Get("export"))) {
-						m_Popups.Open("export");
-					}
-				}
-				if (ImGui::MenuItem("Exit",
-						m_WaitingForKey ? nullptr : m_Keybinds.Get("quit"))) {
-					m_Popups.CloseAllExcept("save_changes");
-					m_Window.SetShouldClose(true);
-				}
-				ImGui::EndMenu();
-			}
-			if (ImGui::BeginMenu("Edit", true)) {
-				if (m_CurrentProj) {
-					if (ImGui::BeginMenu("Transform")) {
-						if (ImGui::MenuItem("Rotate 90°")) {
-							Rotate(90);
-						}
-
-						if (ImGui::MenuItem("Rotate -90°")) {
-							Rotate(-90);
-						}
-
-						if (ImGui::MenuItem("Rotate...")) {
-							m_Popups.Open("rotate");
-						}
-
-						ImGui::EndMenu();
-					}
-
-					if (ImGui::MenuItem("Delete",
-							m_WaitingForKey ? nullptr
-											: m_Keybinds.Get("del"))) {
-						if (m_EditorController->Sel()) {
-							DeleteCurrentSelection();
-						}
-					}
-
-					if (ImGui::MenuItem("Move left",
-							m_WaitingForKey
-								? nullptr
-								: m_Keybinds.Get("move_selection_left"))) {
-						if (m_EditorController->Sel()) {
-							MoveCurrentSelection(Direction::Left);
-						}
-					}
-
-					if (ImGui::MenuItem("Move right",
-							m_WaitingForKey
-								? nullptr
-								: m_Keybinds.Get("move_selection_right"))) {
-						if (m_EditorController->Sel()) {
-							MoveCurrentSelection(Direction::Right);
-						}
-					}
-
-					if (ImGui::MenuItem("Move up",
-							m_WaitingForKey
-								? nullptr
-								: m_Keybinds.Get("move_selection_up"))) {
-						if (m_EditorController->Sel()) {
-							MoveCurrentSelection(Direction::Up);
-						}
-					}
-
-					if (ImGui::MenuItem("Move down",
-							m_WaitingForKey
-								? nullptr
-								: m_Keybinds.Get("move_selection_down"))) {
-						if (m_EditorController->Sel()) {
-							MoveCurrentSelection(Direction::Down);
-						}
-					}
-				}
-
-				if (ImGui::MenuItem("Preferences",
-						m_WaitingForKey ? nullptr : m_Keybinds.Get("pref"))) {
-					m_Popups.Open("pref");
-				}
-				if (ImGui::MenuItem("Theme editor",
-						m_WaitingForKey ? nullptr : m_Keybinds.Get("theme"))) {
-					Themes::g_ThemeEditorOpen = true;
-				}
-				ImGui::EndMenu();
-			}
-			if (ImGui::BeginMenu("Help", true)) {
-				if (ImGui::MenuItem("Show keybinds",
-						m_WaitingForKey ? nullptr
-										: m_Keybinds.Get("keybinds"))) {
-					m_Popups.Open("keybinds");
-				}
-				ImGui::EndMenu();
-			}
-			ImGui::EndMainMenuBar();
-		}
-	}
 	void Application::RenderEditPrefs() {
 		if (m_Popups.IsOpen("pref")) {
 			ImGui::OpenPopup("EditPrefs");
@@ -1114,17 +714,17 @@ namespace FuncDoodle {
 				Themes::LoadThemes(m_ThemesPath);
 			}
 
-			ImGui::Checkbox("SFX", &m_SFXEnabled);
+			ImGui::Checkbox("SFX", &m_Settings.Sfx);
 			ImGui::SameLine();
-			ImGui::Checkbox("Preview", &m_PrevEnabled);
+			ImGui::Checkbox("Preview", &m_Settings.Preview);
 			ImGui::SameLine();
-			ImGui::Checkbox("Undo by stroke", &m_UndoByStroke);
+			ImGui::Checkbox("Undo by stroke", &m_Settings.UndoByStroke);
 
 			ImGui::InputDouble("FPS limit", &m_FrameLimitCache);
 
 			if (ImGui::IsKeyPressed(ImGuiKey_Enter) ||
 				ImGui::IsKeyPressed(ImGuiKey_KeypadEnter)) {
-				m_FrameLimit = m_FrameLimitCache;
+				m_Settings.FrameLimit = m_FrameLimitCache;
 			}
 
 			if (ImGui::IsKeyPressed(ImGuiKey_Escape) ||
@@ -1156,116 +756,6 @@ namespace FuncDoodle {
 			}
 
 			ImGui::EndPopup();
-		}
-	}
-	void Application::RenderExport() {
-		if (m_Popups.IsOpen("export")) {
-			ImGui::OpenPopup("Export##export");
-			m_Popups.Close("export");
-		}
-
-		if (ImGui::BeginPopup("Export##export")) {
-			const char* formats[] = {"PNGs", "MP4"};
-			ImGui::Combo("Export Format", &m_ExportFormat, formats,
-				IM_ARRAYSIZE(formats));
-			ImUtil::ButtonRowResult choice = ImUtil::ExportCloseButtons();
-			if (choice == ImUtil::ButtonRowResult::Primary ||
-				ImGui::IsKeyPressed(ImGuiKey_Enter, false) ||
-				ImGui::IsKeyPressed(ImGuiKey_KeypadEnter, false)) {
-				FileDialog dialog;
-				std::filesystem::path path = dialog.Dir();
-
-				if (m_SFXEnabled)
-					m_AssetLoader->PlaySound(s_ExportSound);
-				FUNC_INF("Exporting to " << path);
-				m_CurrentProj->Export(path.c_str(), m_ExportFormat);
-
-				ImGui::CloseCurrentPopup();
-			}
-			if (choice == ImUtil::ButtonRowResult::Secondary ||
-				ImGui::IsKeyPressed(ImGuiKey_Escape, false)) {
-				ImGui::CloseCurrentPopup();
-			}
-			ImGui::EndPopup();
-		}
-	}
-	void Application::RenderKeybinds() {
-		if (m_Popups.IsOpen("keybinds")) {
-			ImGui::OpenPopup("Keybinds");
-		}
-
-		if (ImGui::BeginPopupModal("Keybinds", m_Popups.Get("keybinds"),
-				ImGuiWindowFlags_AlwaysAutoResize)) {
-			if (ImGui::BeginTable(
-					"keybinds", 3, ImGuiTableFlags_BordersInnerH)) {
-				ImGui::TableSetupColumn("Action");
-				ImGui::TableSetupColumn("Keybind");
-				ImGui::TableSetupColumn("Reset");
-				ImGui::TableHeadersRow();
-
-				for (auto& [k, v] : m_Keybinds.GetAll()) {
-					ImGui::TableNextRow();
-					ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg,
-						ImGui::GetColorU32(ImGuiCol_FrameBg));
-
-					ImGui::TableSetColumnIndex(0);
-					ImGui::TextUnformatted(k);
-
-					ImGui::TableSetColumnIndex(1);
-
-					ImGui::PushID(k);
-					const char* label = "...";
-					if (!m_WaitingForKey || strcmp(m_WaitingForKey, k) != 0) {
-						label = v.User.value_or(v.Default);
-					}
-					if (ImGui::Button(label)) {
-						m_WaitingForKey = k;
-					}
-
-					ImGuiKey key = ImUtil::GetAnyReleasedKey();
-
-					if (m_WaitingForKey != nullptr &&
-						strcmp(m_WaitingForKey, k) == 0 &&
-						key != ImGuiKey_None) {
-						ImGuiIO& io = ImGui::GetIO();
-						v.User =
-							Shortcut(io.KeyCtrl, io.KeyShift, io.KeySuper, key);
-						m_WaitingForKey = nullptr;
-						io.KeysData[key].Down = false;
-						io.KeyCtrl = false;
-						io.KeyShift = false;
-						io.KeySuper = false;
-						m_Keybinds.Write();
-					}
-
-					ImGui::PopID();
-
-					ImGui::TableSetColumnIndex(2);
-					if (!v.User.has_value() || v.User.value() == v.Default) {
-						ImGui::BeginDisabled(true);
-					} else {
-						ImGui::BeginDisabled(false);
-					}
-
-					ImGui::PushID(k);
-					if (ImGui::Button("Reset")) {
-						v.User = std::nullopt;
-					}
-					ImGui::PopID();
-
-					ImGui::EndDisabled();
-				}
-				ImGui::EndTable();
-			}
-
-			if (ImUtil::CloseButton() || ImGui::IsKeyPressed(ImGuiKey_Escape)) {
-				ImGui::CloseCurrentPopup();
-			}
-			ImGui::EndPopup();
-		} else {
-			if (m_WaitingForKey != nullptr) {
-				m_WaitingForKey = nullptr;
-			}
 		}
 	}
 }  // namespace FuncDoodle

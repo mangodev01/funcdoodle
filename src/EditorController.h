@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Action/Action.h"
+#include "AppSettings.h"
 #include "Frame.h"
 #include "Ptr.h"
 #include "Selection.h"
@@ -26,7 +27,9 @@ namespace FuncDoodle {
 					int PixelScale = 8;
 					ImVec2* LastMousePos = nullptr;
 					ImVec2* LastHoverMousePos = nullptr;
-					bool PrevEnabled = false;
+					AppSettings& Settings;
+
+					CanvasContext(AppSettings& settings) : Settings(settings) {}
 			};
 
 			EditorController();

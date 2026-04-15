@@ -1,5 +1,6 @@
 #include "Manager.h"
 
+#include "AppSettings.h"
 #include "Keybinds.h"
 #include "Project.h"
 
@@ -21,18 +22,19 @@
 namespace FuncDoodle {
 	AnimationManager::AnimationManager(SharedPtr<ProjectFile> proj,
 		AssetLoader* assetLoader, SharedPtr<EditorController> editorController,
-		KeybindsRegistry& keybinds, bool prevEnabled)
+		KeybindsRegistry& keybinds, AppSettings& appSettings)
 		: m_Proj(proj), m_SelectedFrame(0), m_Player(new AnimationPlayer(proj)),
 		  m_EditorController(editorController), m_AssetLoader(assetLoader),
 		  m_Keybinds(keybinds),
-		  m_ToolManager(std::make_unique<ToolManager>(keybinds)) {
+		  m_ToolManager(std::make_unique<ToolManager>(keybinds)),
+		  m_Settings(appSettings) {
 		m_FrameRenderer =
 			std::make_unique<FrameRenderer>(nullptr, -1, m_ToolManager.get(),
-				m_Player.get(), m_EditorController, prevEnabled);
+				m_Player.get(), m_EditorController, m_Settings);
 		m_TimelineFrameRenderer =
 			std::make_unique<FrameRenderer>(nullptr, -1, m_ToolManager.get(),
-				m_Player.get(), m_EditorController, prevEnabled);
-		m_FrameRenderer->SetUndoByStroke(m_UndoByStroke);
+				m_Player.get(), m_EditorController, m_Settings);
+		m_FrameRenderer->SetUndoByStroke(m_Settings.UndoByStroke);
 	}
 
 	AnimationManager::~AnimationManager() {}
@@ -100,9 +102,9 @@ namespace FuncDoodle {
 					: ImVec2(topLeft.x + frameWidth / 2, bottomRight.y),
 				IM_COL32(255, 255, 255, 255), std::to_string(i).c_str());
 
-			if (m_TimelineFrameRenderer->Ctx()->Frame !=
+			if (m_TimelineFrameRenderer->GetCtx()->Frame !=
 				m_Proj->AnimFrames()->Get(i)) {
-				m_TimelineFrameRenderer->Ctx()->Frame =
+				m_TimelineFrameRenderer->GetCtx()->Frame =
 					m_Proj->AnimFrames()->Get(i);
 			}
 
@@ -111,7 +113,7 @@ namespace FuncDoodle {
 			float scaleX = width / frameWidth;
 			float scaleY = width / frameHeight;
 
-			m_TimelineFrameRenderer->Ctx()->PixelScale =
+			m_TimelineFrameRenderer->GetCtx()->PixelScale =
 				std::min<float>(scaleX, scaleY);
 
 			m_TimelineFrameRenderer->RenderFramePixels(
@@ -121,13 +123,14 @@ namespace FuncDoodle {
 				(!m_Player->Playing() && m_SelectedFrame == i)) {
 
 				const auto frames = m_Proj->AnimFrames();
-				if (m_FrameRenderer->Ctx()->Frame != frames->Get(i))
-					m_FrameRenderer->Ctx()->Frame = frames->Get(i);
+				if (m_FrameRenderer->GetCtx()->Frame != frames->Get(i))
+					m_FrameRenderer->GetCtx()->Frame = frames->Get(i);
 
-				m_FrameRenderer->Ctx()->Index = i;
+				m_FrameRenderer->GetCtx()->Index = i;
 
 				if (i > 0) {
-					m_FrameRenderer->Ctx()->PreviousFrame = frames->Get(i - 1);
+					m_FrameRenderer->GetCtx()->PreviousFrame =
+						frames->Get(i - 1);
 				}
 				m_FrameRenderer->RenderFrame();
 				drawList->AddRect(topLeft, ImVec2(bottomRight.x, bottomRight.y),
