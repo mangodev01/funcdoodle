@@ -9,6 +9,7 @@
 #include "PopupRegistry.h"
 #include "Project.h"
 #include "Ptr.h"
+#include "Themes.h"
 #include "UIManager.h"
 #include "UUID.h"
 
@@ -30,11 +31,30 @@ namespace FuncDoodle {
 		void ReadProjectFile();
 		void SaveProjectFile();
 		void RegisterKeybinds();
-		void RegisterPopups();
-		void RenderOptions();
-		void SaveChangesDialog();
 		void OpenSaveChangesDialog();
-		bool SaveChangesDialogOpen() { return m_Popups.IsOpen("save_changes"); }
+		bool SaveChangesDialogOpen() { return m_UiManager.GetPopups().IsOpen("save_changes"); }
+
+		static void ApplyThemeStyle(const ImGuiStyle& themeStyle) {
+			ImGuiStyle& style = ImGui::GetStyle();
+			style = themeStyle;
+			if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+				style.WindowRounding = 1.0f;
+			}
+		}
+
+		static void ApplyThemeUuid(const FuncDoodle::UUID& uuid) {
+			auto it = FuncDoodle::Themes::g_Themes.find(uuid);
+			if (it != FuncDoodle::Themes::g_Themes.end()) {
+				ApplyThemeStyle(it->second.Style);
+				return;
+			}
+			auto defUuid = FuncDoodle::UUID::FromString(
+					FuncDoodle::Themes::s_DefaultTheme);
+			auto defIt = FuncDoodle::Themes::g_Themes.find(defUuid);
+			if (defIt != FuncDoodle::Themes::g_Themes.end()) {
+				ApplyThemeStyle(defIt->second.Style);
+			}
+		}
 
 		inline SharedPtr<ProjectFile> GetCurProj() { return m_CurrentProj; }
 		inline void SetCurProj(SharedPtr<ProjectFile> proj) {
@@ -58,10 +78,11 @@ namespace FuncDoodle {
 		inline Platform::Window* GetWindow() { return &m_Window; }
 		inline AppSettings& GetSettings() { return m_Settings; }
 		inline double GetFrameTime() { return 1.0 / m_Settings.FrameLimit; }
-		inline PopupRegistry* GetPopups() { return &m_Popups; }
 		inline KeybindsRegistry& GetKeybinds() { return m_Keybinds; }
 		inline int GetExportFormat() { return m_ExportFormat; }
-		inline int* GetExportFormatPtr() { return &m_ExportFormat; }
+		inline int& GetExportFormatPtr() { return m_ExportFormat; }
+		inline std::filesystem::path GetThemesPath() { return m_ThemesPath; }
+		inline double& GetFrameLimitCache() { return m_FrameLimitCache; }
 		inline void SetExportFormat(int format) { m_ExportFormat = format; }
 
 		inline AnimationManager* GetManager() { return m_Manager.get(); }
@@ -75,7 +96,6 @@ namespace FuncDoodle {
 		void Update();
 		void Save(bool exit = false);
 		void SaveAt(const char* path);
-		void RenderEditPrefs();
 		void RenderRotate();
 		void Rotate(int32_t deg);
 
@@ -84,10 +104,8 @@ namespace FuncDoodle {
 
 		private:
 		std::string m_FilePath;
-		int m_Deg = 90;
 		UIManager m_UiManager;
 		AppSettings m_Settings;
-		PopupRegistry m_Popups;
 		KeybindsRegistry m_Keybinds;
 		SharedPtr<ProjectFile> m_CurrentProj;
 		SharedPtr<ProjectFile> m_CacheProj;

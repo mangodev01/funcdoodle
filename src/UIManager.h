@@ -1,14 +1,6 @@
 #pragma once
 
-#include "AppSettings.h"
-#include "AssetLoader.h"
-#include "EditorController.h"
-#include "Keybinds.h"
-#include "Manager.h"
-#include "Platform/Window.h"
 #include "PopupRegistry.h"
-#include "Project.h"
-
 #include <array>
 
 namespace FuncDoodle {
@@ -16,6 +8,12 @@ namespace FuncDoodle {
 		public:
 		UIManager();
 
+		void Render();
+		void Options();
+
+		inline PopupRegistry& GetPopups() { return m_Popups; }
+
+		private:
 		void SaveChanges();
 		void MainMenuBar();
 		void Keybinds();
@@ -23,9 +21,13 @@ namespace FuncDoodle {
 		void NewProj();
 		void EditProj();
 		void ExportProj();
+		void EditPrefs();
+		void Rotate();
 
 		private:
 		const char* m_WaitingForKey = nullptr;
 		std::array<float, 3> m_CacheBGCol = {1.0f, 1.0f, 1.0f};
+		PopupRegistry m_Popups;
+		int m_Deg = 90;
 	};
 }  // namespace FuncDoodle

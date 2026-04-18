@@ -41,30 +41,6 @@
 #include "Test.h"
 
 namespace FuncDoodle {
-	namespace {
-		void ApplyThemeStyle(const ImGuiStyle& themeStyle) {
-			ImGuiStyle& style = ImGui::GetStyle();
-			style = themeStyle;
-			if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-				style.WindowRounding = 1.0f;
-			}
-		}
-
-		void ApplyThemeUuid(const FuncDoodle::UUID& uuid) {
-			auto it = FuncDoodle::Themes::g_Themes.find(uuid);
-			if (it != FuncDoodle::Themes::g_Themes.end()) {
-				ApplyThemeStyle(it->second.Style);
-				return;
-			}
-			auto defUuid = FuncDoodle::UUID::FromString(
-				FuncDoodle::Themes::s_DefaultTheme);
-			auto defIt = FuncDoodle::Themes::g_Themes.find(defUuid);
-			if (defIt != FuncDoodle::Themes::g_Themes.end()) {
-				ApplyThemeStyle(defIt->second.Style);
-			}
-		}
-	}  // namespace
-
 	Application* Application::s_Instance = nullptr;
 	Application::Application()
 		: m_FilePath(""), m_CurrentProj(nullptr), m_CacheProj(nullptr),
@@ -292,16 +268,6 @@ namespace FuncDoodle {
 		m_Keybinds.End();
 	}
 
-	void Application::RegisterPopups() {
-		m_Popups.Register("edit_proj");
-		m_Popups.Register("export");
-		m_Popups.Register("keybinds");
-		m_Popups.Register("new");
-		m_Popups.Register("pref");
-		m_Popups.Register("rotate");
-		m_Popups.Register("save_changes");
-	}
-
 	Application::~Application() {
 		for (char* log : s_Logs) {
 			delete[] log;
@@ -365,7 +331,7 @@ namespace FuncDoodle {
 
 	void Application::RenderImGui() {
 		if (!m_CurrentProj)
-			RenderOptions();
+			m_UiManager.Options();
 
 #ifdef FUNCDOODLE_BUILD_IMTESTS
 		if (s_TestEngine) {
@@ -373,15 +339,7 @@ namespace FuncDoodle {
 		}
 #endif
 
-		m_UiManager.CheckKeybinds();
-		m_UiManager.MainMenuBar();
-		RenderEditPrefs();
-		RenderRotate();
-		SaveChangesDialog();
-		m_UiManager.ExportProj();
-		m_UiManager.EditProj();
-		m_UiManager.Keybinds();
-		m_UiManager.NewProj();
+		m_UiManager.Render();
 
 		Themes::ThemeEditor();
 		Themes::SaveCurrentTheme();
@@ -435,158 +393,10 @@ namespace FuncDoodle {
 		m_CurrentProj->Write(m_FilePath.c_str());
 	}
 
-	void Application::RenderOptions() {
-		ImGuiViewport* vp = ImGui::GetMainViewport();
-		ImVec2 size = vp->Size;
-		ImVec2 safe = ImGui::GetStyle().DisplaySafeAreaPadding;
-
-		float menuBarHeight = ImGui::GetFrameHeight();
-		ImVec2 nextWindowPos = ImVec2(
-			vp->Pos.x + safe.x - 2, vp->Pos.y + menuBarHeight + safe.y - 3);
-		ImGui::SetNextWindowPos(nextWindowPos, ImGuiCond_Always);
-		size.y -= menuBarHeight;
-		ImGui::SetNextWindowSize(size, ImGuiCond_Always);
-		ImGui::SetNextWindowViewport(vp->ID);
-
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0);
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
-
-		ImGui::Begin("Options", 0,
-			ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize |
-				ImGuiWindowFlags_NoScrollbar |
-				ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoMove |
-				ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoDecoration);
-
-		ImGui::BeginGroup();
-
-		const ImVec2 btnSize(50, 50);
-		const float titleFontSize = 25.0f;
-		const float descFontSize = 18.0f;
-		const float descPadFactor = 0.65f;
-		const float rowGapFactor = 0.75f;
-		const float openTextYOffsetFactor = 0.16f;
-
-		ImFont* titleFont = m_AssetLoader && m_AssetLoader->GetFontBold()
-								? m_AssetLoader->GetFontBold()
-								: ImGui::GetFont();
-
-		const char* measureSample = "Ag";
-
-		const float spacingY = ImGui::GetStyle().ItemSpacing.y;
-		const float textGap = ImGui::GetStyle().ItemSpacing.x;
-		const float descLineHeight =
-			TextUtil::TextHeight(nullptr, descFontSize, measureSample);
-		const float descBottomPad = std::round(descLineHeight * descPadFactor);
-		const float rowGapExtra = std::round(descLineHeight * rowGapFactor);
-		const float rowGap = spacingY + rowGapExtra;
-
-		const char* newProjTitle = "New project";
-		const char* newProjDesc = "Create a new FuncDoodle project";
-		const char* openProjTitle = "Open project";
-		const char* openProjDesc = "Open an existing FuncDoodle project";
-
-		float maxWidth = TextUtil::MaxWidth(titleFont, titleFontSize,
-			newProjTitle, openProjTitle, nullptr, descFontSize, newProjDesc,
-			openProjDesc);
-
-		float groupWidth = btnSize.x + textGap + maxWidth;
-		float groupHeight = btnSize.y * 2 + rowGap;
-
-		ImVec2 contentMin = ImGui::GetWindowContentRegionMin();
-		ImVec2 contentMax = ImGui::GetWindowContentRegionMax();
-		float contentWidth = contentMax.x - contentMin.x;
-		float rowStartX = contentMin.x + (contentWidth - groupWidth) * 0.5f;
-		ImGui::SetCursorPosX(rowStartX);
-
-		ImVec2 windowPos = ImGui::GetWindowPos();
-		ImVec2 avail = ImGui::GetContentRegionAvail();
-		float rowTopY = (avail.y - groupHeight) * 0.5f;
-		ImGui::SetCursorPosY(rowTopY);
-
-		auto renderOptionRow = [&](const char* title, const char* desc,
-								   uint32_t texId, float textYOffsetFactor,
-								   const std::function<void()>& onClick) {
-			if (ImGui::ImageButton(
-					title, (ImTextureID)(intptr_t)texId, btnSize)) {
-				onClick();
-			}
-
-			ImVec2 btnMin = ImGui::GetItemRectMin();
-			ImVec2 btnMax = ImGui::GetItemRectMax();
-			float btnTopY = btnMin.y - windowPos.y;
-			float btnBottomY = btnMax.y - windowPos.y;
-			float textX = btnMax.x - windowPos.x + textGap;
-
-			ImGui::SameLine();
-
-			ImGui::PushFont(titleFont, titleFontSize);
-			float titleHeight =
-				TextUtil::TextHeight(titleFont, titleFontSize, title);
-			float textYOffset = std::round(titleHeight * textYOffsetFactor);
-			ImGui::SetCursorPosX(textX);
-			ImGui::SetCursorPosY(
-				btnTopY + (btnSize.y - titleHeight) * 0.5f - textYOffset);
-			ImGui::Text("%s", title);
-			ImGui::PopFont();
-
-			ImGui::PushFont(nullptr, descFontSize);
-			float descLineHeightLocal = ImGui::GetTextLineHeight();
-			ImGui::SetCursorPosX(textX);
-			ImGui::SetCursorPosY(
-				btnBottomY - descLineHeightLocal - descBottomPad - textYOffset);
-			ImGui::Text("%s", desc);
-			ImGui::PopFont();
-		};
-
-		renderOptionRow(newProjTitle, newProjDesc, s_AddTexId, 0.0f, [&]() {
-			if (m_Settings.Sfx)
-				m_AssetLoader->PlaySound(s_ProjCreateSound);
-			m_Popups.Open("new");
-		});
-
-		ImGui::SetCursorPosX(rowStartX);
-		ImGui::SetCursorPosY(rowTopY + btnSize.y + rowGap);
-
-		renderOptionRow(openProjTitle, openProjDesc, s_OpenTexId,
-			openTextYOffsetFactor, [&]() {
-#ifndef MACOS
-				std::thread([&]() {
-#endif
-					OpenFileDialog([&]() { ReadProjectFile(); });
-#ifndef MACOS
-				}).detach();
-#endif
-			});
-
-		ImGui::EndGroup();
-		ImGui::End();
-		ImGui::PopStyleVar(2);
-	}
-
-	void Application::SaveChangesDialog() {
-		if (m_Popups.IsOpen("save_changes")) {
-			ImGui::OpenPopup("Save Changes");
-		}
-
-		if (ImGui::BeginPopupModal(
-				"Save Changes", m_Popups.Get("save_changes"))) {
-			ImGui::Text("Save changes?");
-			ImUtil::ButtonRowResult choice = ImUtil::YesNoCancelButtons();
-			if (choice == ImUtil::ButtonRowResult::Primary) {
-				Save(true);
-			} else if (choice == ImUtil::ButtonRowResult::Secondary) {
-				m_ShouldClose = true;
-				ImGui::CloseCurrentPopup();
-			} else if (choice == ImUtil::ButtonRowResult::Tertiary) {
-				m_ShouldClose = false;
-				ImGui::CloseCurrentPopup();
-			}
-			ImGui::EndPopup();
-		}
-	}
 	void Application::OpenSaveChangesDialog() {
-		m_Popups.Open("save_changes");
+		m_UiManager.GetPopups().Open("save_changes");
 	}
+
 	void Application::DropCallback(int count, const char** paths) {
 		if (count == 0)
 			return;
@@ -656,106 +466,4 @@ namespace FuncDoodle {
 			m_EditorController->Sel(), direction, m_CurrentProj->BgCol());
 	}
 
-	void Application::RenderEditPrefs() {
-		if (m_Popups.IsOpen("pref")) {
-			ImGui::OpenPopup("EditPrefs");
-			m_Popups.Close("pref");
-		}
-		if (ImGui::BeginPopup("EditPrefs")) {
-			if (ImGui::BeginCombo("Theme", Themes::g_Themes[m_Theme].Name)) {
-				for (auto& [uuid, theme] : Themes::g_Themes) {
-					bool is_selected = (m_Theme == uuid);
-					if (ImGui::Selectable(theme.Name, is_selected)) {
-						m_Theme = uuid;
-						ApplyThemeStyle(theme.Style);
-					}
-					if (ImGui::IsItemHovered()) {
-						ImGui::BeginTooltip();
-						ImGui::Text("by %s", theme.Author);
-						ImGui::EndTooltip();
-					}
-					if (is_selected) {
-						ImGui::SetItemDefaultFocus();
-					}
-				}
-				ImGui::EndCombo();
-			}
-			if (ImGui::Button("Save current")) {
-				Themes::g_SaveThemeOpen = true;
-			}
-			ImGui::SameLine();
-			if (ImGui::Button("Add temporary from file")) {
-				FileDialog dialog = "toml";
-				static Themes::CustomTheme* style;
-				std::vector<std::filesystem::path> themes =
-					dialog.OpenMultiple();
-
-				for (size_t i = 0; i < themes.size(); i++) {
-					std::filesystem::path path = themes[i];
-					style = Themes::LoadThemeFromFile(path.string().c_str());
-
-					if (style) {
-						auto [it, inserted] =
-							Themes::g_Themes.emplace(style->Uuid, *style);
-						if (!inserted && style->OwnsMeta) {
-							std::free(const_cast<char*>(style->Name));
-							std::free(const_cast<char*>(style->Author));
-							style->Name = "";
-							style->Author = "";
-							style->OwnsMeta = false;
-						}
-					}
-				}
-			}
-			if (ImGui::Button("Open themes directory")) {
-				OPEN_FILE_EXPLORER(m_ThemesPath);
-			}
-			ImGui::SameLine();
-			if (ImGui::Button("Refresh")) {
-				Themes::ClearThemes();
-				Themes::LoadThemes(m_ThemesPath);
-			}
-
-			ImGui::Checkbox("SFX", &m_Settings.Sfx);
-			ImGui::SameLine();
-			ImGui::Checkbox("Preview", &m_Settings.Preview);
-			ImGui::SameLine();
-			ImGui::Checkbox("Undo by stroke", &m_Settings.UndoByStroke);
-
-			ImGui::InputDouble("FPS limit", &m_FrameLimitCache);
-
-			if (ImUtil::EnterPressed()) {
-				m_Settings.FrameLimit = m_FrameLimitCache;
-			}
-
-			if (ImUtil::EscPressed() || ImUtil::EnterPressed() ||
-				ImUtil::OkButton()) {
-				ImGui::CloseCurrentPopup();
-			}
-
-			ImGui::EndPopup();
-		}
-	}
-	void Application::RenderRotate() {
-		if (m_Popups.IsOpen("rotate")) {
-			ImGui::OpenPopup("Rotate");
-			m_Popups.Close("rotate");
-		}
-
-		if (ImGui::BeginPopup("Rotate")) {
-			ImGui::DragInt("##Deg", &m_Deg, 1.0f, -MAX_ROTATION_DEG,
-				MAX_ROTATION_DEG, "%d°");
-
-			ImUtil::ButtonRowResult choice = ImUtil::OkCancelButtons();
-			if (choice == ImUtil::ButtonRowResult::Primary) {
-				Rotate(m_Deg);
-				ImGui::CloseCurrentPopup();
-			}
-			if (choice == ImUtil::ButtonRowResult::Secondary) {
-				ImGui::CloseCurrentPopup();
-			}
-
-			ImGui::EndPopup();
-		}
-	}
 }  // namespace FuncDoodle
