@@ -18,6 +18,8 @@ namespace FuncDoodle {
 		void RenderTools();
 		void Buttons();
 		void Widgets();
+		void UpdateCursor();
+		void Cursor();
 		const ToolType GetSelectedTool() { return m_SelectedTool; }
 		const float* GetCol() { return m_Col; }
 		void SetCol(struct Col col) {

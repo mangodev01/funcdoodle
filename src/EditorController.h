@@ -33,6 +33,7 @@ namespace FuncDoodle {
 		};
 
 		EditorController();
+
 		bool Paint(Frame* frame, unsigned long frameI, ToolManager* toolManager,
 			AnimationPlayer* player, int pixelX, int pixelY, bool mouseDown,
 			bool mouseClicked);

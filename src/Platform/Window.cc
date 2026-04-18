@@ -17,6 +17,8 @@ namespace FuncDoodle::Platform {
 	bool g_GlfwInitted = false;
 
 	Window::Window(WindowSpec spec) {
+		m_CursorHidden = false;
+
 		int monitorCount = 0;
 
 		if (!g_GlfwInitted)
@@ -238,5 +240,26 @@ namespace FuncDoodle::Platform {
 
 		glfwDestroyWindow(m_Handle);
 		glfwTerminate();
+	}
+
+	void Window::SetCursorHidden(bool hidden) {
+		// HACK: glfw on wayland doesn't seem to hide the os cursor properly,
+		// so instead, set the cursor to a blank image which does work for some reason...
+		// thanks wayland! very cool
+		if (m_CursorHidden == hidden) return;
+		m_CursorHidden = hidden;
+		if (hidden) {
+			unsigned char pixels[4] = { 0, 0, 0, 0 };
+			GLFWimage img = { 1, 1, pixels };
+			GLFWcursor* blank = glfwCreateCursor(&img, 0, 0);
+			glfwSetCursor(m_Handle, blank);
+			m_BlankCursor = blank;
+		} else {
+			glfwSetCursor(m_Handle, nullptr);
+			if (m_BlankCursor) {
+				glfwDestroyCursor(m_BlankCursor);
+				m_BlankCursor = nullptr;
+			}
+		}
 	}
 }  // namespace FuncDoodle::Platform

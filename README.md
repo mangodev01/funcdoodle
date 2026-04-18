@@ -1,6 +1,10 @@
 # FuncDoodle
 
-Simple 2D pixel-art animation program written in C++.
+Simple 2D frame-by-frame pixel-art animation program written in C++.
+
+## Screenshots
+![Welcome screen](screenshots/welcome.png)
+![Main animation screen](screenshots/main.png)
 
 ## Build
 To build, run `scripts/build.sh` (unix) or `scripts/build.bat` (windows). `scripts/build.sh` now works with no arguments (defaults: `debug true false true`) and still accepts optional overrides in this order: `[debug|release] [tiling] [clean] [run]`.

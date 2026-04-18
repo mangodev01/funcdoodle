@@ -47,6 +47,9 @@ namespace FuncDoodle::Platform {
 		void GetFramebufferSize(int* width, int* height);
 		void SwapBuffers();
 
+		void SetCursorHidden(bool hidden);
+		inline bool GetCursorHidden() const { return m_CursorHidden; };
+
 		static void InitGlfw();
 		void InitImGui();
 
@@ -61,6 +64,8 @@ namespace FuncDoodle::Platform {
 
 		private:
 		GLFWwindow* m_Handle;
+		bool m_CursorHidden;
 		WindowSpec m_Spec;
+		GLFWcursor* m_BlankCursor = nullptr;
 	};
 }  // namespace FuncDoodle::Platform

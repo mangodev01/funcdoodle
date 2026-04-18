@@ -43,6 +43,8 @@ namespace FuncDoodle {
 			return m_Proj->AnimFrames()->Get(m_SelectedFrame);
 		}
 
+		inline const UniquePtr<FrameRenderer>& GetFrameRenderer() const { return m_FrameRenderer; }
+
 		private:
 		SharedPtr<ProjectFile> m_Proj;
 		unsigned long m_SelectedFrame;

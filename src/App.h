@@ -34,6 +34,9 @@ namespace FuncDoodle {
 		void OpenSaveChangesDialog();
 		bool SaveChangesDialogOpen() { return m_UiManager.GetPopups().IsOpen("save_changes"); }
 
+		void HideCursor();
+		void ShowCursor();
+
 		static void ApplyThemeStyle(const ImGuiStyle& themeStyle) {
 			ImGuiStyle& style = ImGui::GetStyle();
 			style = themeStyle;
@@ -91,6 +94,8 @@ namespace FuncDoodle {
 			return m_EditorController;
 		}
 
+		inline Platform::Window GetWindow() const { return m_Window; }
+
 		void UpdateFPS(double deltaTime);
 		void DropCallback(int count, const char** paths);
 		void Update();
@@ -101,6 +106,7 @@ namespace FuncDoodle {
 
 		void DeleteCurrentSelection();
 		void MoveCurrentSelection(Direction direction);
+		bool IsPosInFrame(ImVec2 pos);
 
 		private:
 		std::string m_FilePath;

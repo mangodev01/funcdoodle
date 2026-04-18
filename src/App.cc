@@ -223,7 +223,11 @@ namespace FuncDoodle {
 			glViewport(0, 0, display_w, display_h);
 			glClearColor(0.0f, 0.0f, 0.0f, 1.00f);
 			glClear(GL_COLOR_BUFFER_BIT);
+
 			ImGui::Render();
+
+			m_Manager->GetFrameRenderer()->GetCtx()->ToolManager->UpdateCursor();
+
 			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 			if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
@@ -466,4 +470,42 @@ namespace FuncDoodle {
 			m_EditorController->Sel(), direction, m_CurrentProj->BgCol());
 	}
 
+	bool Application::IsPosInFrame(ImVec2 pos) {
+		ImGuiWindow* frameWindow = ImGui::FindWindowByName("Frame");
+		if (!frameWindow) {
+			return false;
+		}
+
+		EditorController::CanvasContext* ctx = Application::Get()->GetManager()->GetFrameRenderer()->GetCtx();
+		if (!ctx || !ctx->Frame) {
+			return false;
+		}
+
+		const float frameWidth = ctx->Frame->Width() * ctx->PixelScale;
+		const float frameHeight = ctx->Frame->Height() * ctx->PixelScale;
+
+		const float statusBarHeight = 24.0f;
+
+		ImVec2 contentRegion = frameWindow->ContentRegionRect.GetSize();
+		ImVec2 windowPos = frameWindow->Pos;
+
+		float startX = windowPos.x + (contentRegion.x - frameWidth) * 0.5f + 9;
+		float startY =
+			windowPos.y +
+			((contentRegion.y - statusBarHeight) - frameHeight) * 0.5f + 41;
+
+		ImVec2 frameMin(startX, startY);
+		ImVec2 frameMax(startX + frameWidth, startY + frameHeight);
+
+		return pos.x >= frameMin.x && pos.x <= frameMax.x &&
+			pos.y >= frameMin.y && pos.y <= frameMax.y;
+	}
+
+	void Application::HideCursor() {
+		m_Window.SetCursorHidden(true);
+	}
+
+	void Application::ShowCursor() {
+		m_Window.SetCursorHidden(false);
+	}
 }  // namespace FuncDoodle
