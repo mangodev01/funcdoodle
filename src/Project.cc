@@ -464,10 +464,20 @@ namespace FuncDoodle {
 	}
 
 	void ProjectFile::DisplayFPS(double fps) {
-		char* title = (char*)malloc(LARGE_BUFFER_SIZE);
-		snprintf(title, LARGE_BUFFER_SIZE, "FuncDoodle %s: %s%s",
-			FUNCVER, AnimName(), !m_Saved ? "*" : "");
-		m_Window->SetTitle(title);
-		free(title);
+		if (ImGui::GetIO().KeyAlt) {
+			char* title = (char*)malloc(LARGE_BUFFER_SIZE);
+			snprintf(title, LARGE_BUFFER_SIZE, "FuncDoodle %s: %s%s (%d FPS)",
+				FUNCVER, AnimName(), !m_Saved ? "*" : "",
+				(int)(fps > 0.0 ? fps : ImGui::GetIO().Framerate));
+
+			m_Window->SetTitle(title);
+			free(title);
+		} else {
+			char* title = (char*)malloc(LARGE_BUFFER_SIZE);
+			snprintf(title, LARGE_BUFFER_SIZE, "FuncDoodle %s: %s%s (alt for details)",
+				FUNCVER, AnimName(), !m_Saved ? "*" : "");
+			m_Window->SetTitle(title);
+			free(title);
+		}
 	}
 }  // namespace FuncDoodle
