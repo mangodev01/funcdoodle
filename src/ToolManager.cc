@@ -130,13 +130,12 @@ namespace FuncDoodle {
 			(float)app->GetManager()->GetFrameRenderer()->GetCtx()->PixelScale;
 		float offsetFactor = scale / 2.0f;
 
-		ImVec2 cursorOff(-offsetFactor, -offsetFactor);
+		// ImVec2 cursorOff(0, offsetFactor);
 		ImVec2 posWithoutOff(ImGui::GetMousePos());
-		ImVec2 pos = ImVec2(
-			posWithoutOff.x + cursorOff.x, posWithoutOff.y + cursorOff.y);
+		ImVec2 pos = ImVec2(posWithoutOff.x, posWithoutOff.y - 32 + (scale / 2.0f));
 
 		ImGui::SetMouseCursor(ImGuiMouseCursor_None);
-		float off = 1.0f;
+		float off = 1.5f;
 		// same as (ImTextureID)(intptr_t)ToolTexID(m_SelectedTool);
 		ImTextureID texID = (intptr_t)ToolTexID(m_SelectedTool);
 
