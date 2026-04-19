@@ -36,6 +36,7 @@ namespace FuncDoodle {
 			"duplicate_frame_after", {false, false, false, ImGuiKey_M});
 		keybinds.Register(
 			"duplicate_frame_before", {false, false, false, ImGuiKey_N});
+		keybinds.Register("toggle_grid", {false, false, false, ImGuiKey_G});
 	}
 
 	void KeyHandler::HandleTimelineShortcuts(

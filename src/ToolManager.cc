@@ -19,7 +19,8 @@ namespace FuncDoodle {
 		float spacing = ImGui::GetStyle().ItemSpacing.x;
 
 		int columns = (int)(avail / (btnSize + spacing));
-		if (columns < 1) columns = 1;
+		if (columns < 1)
+			columns = 1;
 
 		int i = 0;
 		for (ToolType t : ToolTypes) {
@@ -53,10 +54,10 @@ namespace FuncDoodle {
 
 	void ToolManager::Widgets() {
 		bool showColorPredicate = m_SelectedTool != ToolType::Eraser &&
-			m_SelectedTool != ToolType::Select;
+								  m_SelectedTool != ToolType::Select;
 
 		bool showSizePredicate = m_SelectedTool == ToolType::Pencil ||
-			m_SelectedTool == ToolType::Eraser;
+								 m_SelectedTool == ToolType::Eraser;
 
 		if (showSizePredicate) {
 			ImGui::SliderInt("##Size", &m_Size, 1, 100, "%dpx");
@@ -75,7 +76,8 @@ namespace FuncDoodle {
 			m_Size = 1;
 
 		if (showColorPredicate) {
-			if (ImGui::ColorButton("Color", ImVec4(m_Col[0], m_Col[1], m_Col[2], 1.0f))) {
+			if (ImGui::ColorButton(
+					"Color", ImVec4(m_Col[0], m_Col[1], m_Col[2], 1.0f))) {
 				ImGui::OpenPopup("ColorPicker");
 			}
 		}
@@ -118,17 +120,20 @@ namespace FuncDoodle {
 	void ToolManager::Cursor() {
 		Application* app = Application::Get();
 
-		if (!app->GetWindow()->GetCursorHidden()) return;
+		if (!app->GetWindow()->GetCursorHidden())
+			return;
 
 		ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
 
 		ImDrawList* dl = ImGui::GetForegroundDrawList();
-		int scale = app->GetManager()->GetFrameRenderer()->GetCtx()->PixelScale;
-		int offsetFactor = scale / 2;
+		float scale =
+			(float)app->GetManager()->GetFrameRenderer()->GetCtx()->PixelScale;
+		float offsetFactor = scale / 2.0f;
 
 		ImVec2 cursorOff(-offsetFactor, -offsetFactor);
 		ImVec2 posWithoutOff(ImGui::GetMousePos());
-		ImVec2 pos = ImVec2(posWithoutOff.x + cursorOff.x, posWithoutOff.y + cursorOff.y);
+		ImVec2 pos = ImVec2(
+			posWithoutOff.x + cursorOff.x, posWithoutOff.y + cursorOff.y);
 
 		ImGui::SetMouseCursor(ImGuiMouseCursor_None);
 		float off = 1.0f;
@@ -138,11 +143,11 @@ namespace FuncDoodle {
 		// outline
 		for (int dx = -1; dx <= 1; dx++) {
 			for (int dy = -1; dy <= 1; dy++) {
-				if (dx == 0 && dy == 0) continue;
-				dl->AddImage(texID, 
-						ImVec2(pos.x + dx*off, pos.y + dy*off),
-						ImVec2(pos.x + 32 + dx*off, pos.y + 32 + dy*off),
-						ImVec2(0,0), ImVec2(1,1), IM_COL32_BLACK);
+				if (dx == 0 && dy == 0)
+					continue;
+				dl->AddImage(texID, ImVec2(pos.x + dx * off, pos.y + dy * off),
+					ImVec2(pos.x + 32 + dx * off, pos.y + 32 + dy * off),
+					ImVec2(0, 0), ImVec2(1, 1), IM_COL32_BLACK);
 			}
 		}
 

@@ -292,12 +292,17 @@ namespace FuncDoodle {
 
 	void EditorController::RenderCanvas(CanvasContext& context) {
 		if (!context.Frame || !context.Player || !context.Player->Proj() ||
-			!context.ToolManager || !context.Grid || !context.PixelScale) {
+			!context.ToolManager || !context.PixelScale) {
 			return;
 		}
 		const ImageArray* pixels = context.Frame->Pixels();
 		if (!pixels) {
 			return;
+		}
+
+		if (!context.Grid) {
+			context.Grid = std::make_unique<Grid>(pixels->Width(),
+				pixels->Height(), context.Player->Proj()->BgCol());
 		}
 
 		HandleCanvasInput(context);
@@ -536,12 +541,12 @@ namespace FuncDoodle {
 			}
 		}
 
+		context.Grid->RenderWithDrawList(drawList, ImVec2(startX, startY),
+			ImVec2(startX + frameWidth, startY + frameHeight));
+
 		if (!m_Sel && !m_SquareSel.Active) {
 			return;
 		}
-
-		context.Grid->RenderWithDrawList(drawList, ImVec2(startX, startY),
-			ImVec2(startX + frameWidth, startY + frameHeight));
 
 		float t = ImGui::GetTime();
 		float dash = 6.0f;
