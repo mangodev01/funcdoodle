@@ -11,6 +11,7 @@
 - [x] fix tool keybinds (p0)
 - [x] moving selections
 - [x] FIGURE OUT WHATS CURRENTLY WRONG WITH THEME - it applies incorrectly on startup for some reason
+- [ ] non-destructive moving of selections
 - [ ] copy & pasting selections
 - [ ] qol stuff
 - [ ] improve keybinds system with the ability to assign multiple keys to 1 action

@@ -14,7 +14,17 @@ namespace FuncDoodle {
 	ToolManager::~ToolManager() {}
 
 	void ToolManager::Buttons() {
+		float avail = ImGui::GetContentRegionAvail().x;
+		float btnSize = 36.0f;
+		float spacing = ImGui::GetStyle().ItemSpacing.x;
+
+		int columns = (int)(avail / (btnSize + spacing));
+		if (columns < 1) columns = 1;
+
+		int i = 0;
 		for (ToolType t : ToolTypes) {
+			// ImGui::PushID(i);
+
 			uint32_t btnTexId = ToolTexID(t);
 			if (ImGui::ImageButton(ToolTypeName(t),
 					(ImTextureID)(intptr_t)btnTexId, ImVec2(32, 32),
@@ -24,7 +34,13 @@ namespace FuncDoodle {
 				m_SelectedTool = t;
 			}
 
+			if ((i + 1) % columns != 0 && i != (int)ToolTypes.size() - 1)
+				ImGui::SameLine();
+
 			Tooltips(t);
+
+			// ImGui::PopID();
+			i++;
 		}
 	}
 
@@ -36,26 +52,41 @@ namespace FuncDoodle {
 	}
 
 	void ToolManager::Widgets() {
-		if (m_SelectedTool == ToolType::Pencil ||
-			m_SelectedTool == ToolType::Eraser) {
+		bool showColorPredicate = m_SelectedTool != ToolType::Eraser &&
+			m_SelectedTool != ToolType::Select;
+
+		bool showSizePredicate = m_SelectedTool == ToolType::Pencil ||
+			m_SelectedTool == ToolType::Eraser;
+
+		if (showSizePredicate) {
 			ImGui::SliderInt("##Size", &m_Size, 1, 100, "%dpx");
-		}
 
-		if (m_SelectedTool != ToolType::Eraser &&
-			m_SelectedTool != ToolType::Select) {
-			ImGui::PushItemWidth(250);
-			ImGui::ColorPicker3(
-				"Color", m_Col, ImGuiColorEditFlags_NoSidePreview);
-			ImGui::PopItemWidth();
+			if (showColorPredicate)
+				ImGui::SameLine();
 		}
-
-		if (m_Size < 1)
-			m_Size = 1;
 
 		if (m_Keybinds.Get("decrease_tool_size").IsPressed()) {
 			m_Size--;
 		} else if (m_Keybinds.Get("increase_tool_size").IsPressed()) {
 			m_Size++;
+		}
+
+		if (m_Size < 1)
+			m_Size = 1;
+
+		if (showColorPredicate) {
+			if (ImGui::ColorButton("Color", ImVec4(m_Col[0], m_Col[1], m_Col[2], 1.0f))) {
+				ImGui::OpenPopup("ColorPicker");
+			}
+		}
+
+		if (ImGui::BeginPopup("ColorPicker")) {
+			ImGui::PushItemWidth(250);
+			ImGui::ColorPicker3(
+				"##color", m_Col, ImGuiColorEditFlags_NoSidePreview);
+			ImGui::PopItemWidth();
+
+			ImGui::EndPopup();
 		}
 	}
 
@@ -64,6 +95,8 @@ namespace FuncDoodle {
 
 		ToolKeybinds(&m_SelectedTool, m_Keybinds);
 		Buttons();
+
+		ImGui::Separator();
 		Widgets();
 
 		Cursor();
