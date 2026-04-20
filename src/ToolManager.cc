@@ -110,7 +110,7 @@ namespace FuncDoodle {
 		Application* app = Application::Get();
 		ImVec2 pos = ImGui::GetMousePos();
 		// sorry, selection tool, you just look pretty weird as a cursor  :(
-		if (!app->IsPosInFrame(pos)/* || m_SelectedTool == ToolType::Select*/) {
+		if (!app->IsPosInFrame(pos) || m_SelectedTool == ToolType::Select) {
 			app->ShowCursor();
 		} else {
 			app->HideCursor();
