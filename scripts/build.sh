@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 usage() {
 	echo "Usage: $0 <Debug/Release> <tiling?> <clean?> <run?>"
 	exit -1

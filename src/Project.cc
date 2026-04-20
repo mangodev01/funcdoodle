@@ -98,13 +98,12 @@ namespace FuncDoodle {
 #ifndef _WIN32
 			snprintf(cmd, sizeof(cmd),
 				"ffmpeg -framerate %d -pattern_type glob -i \"%s/frame_*.png\" "
-				"-c:v libx264 -pix_fmt yuv420p %s/result.mp4 -y",
+				"-c:v libx264 -preset veryslow -crf 0 %s/result.mp4 -y",
 				m_FPS, filePath, filePath);
 #else
 			snprintf(cmd, sizeof(cmd),
-				"ffmpeg.exe -framerate %d -pattern-type glob -i "
-				"\"%s/frame_*.png\" "
-				"-c:v libx264 -pix_fmt yuv420p %s\\result.mp4 -y",
+				"ffmpeg.exe -framerate %d -pattern_type glob -i \"%s/frame_*.png\" "
+				"-c:v libx264 -preset veryslow -crf 0 %s\\result.mp4 -y",
 				m_FPS, filePath, filePath, filePath);
 #endif
 

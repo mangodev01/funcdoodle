@@ -149,9 +149,9 @@ namespace FuncDoodle {
 		renderOptionRow(openProjTitle, openProjDesc, s_OpenTexId,
 			openTextYOffsetFactor, [&]() {
 #ifndef MACOS
-				std::thread([&]() {
+				std::thread([app]() {
 #endif
-					app->OpenFileDialog([&]() { app->ReadProjectFile(); });
+					app->OpenFileDialog([app]() { app->ReadProjectFile(); });
 #ifndef MACOS
 				}).detach();
 #endif
@@ -313,9 +313,9 @@ namespace FuncDoodle {
 						m_WaitingForKey ? nullptr
 										: app->GetKeybinds().Get("open"))) {
 #ifndef MACOS
-					std::thread([&]() {
+					std::thread([app]() {
 #endif
-						app->OpenFileDialog([&]() { app->ReadProjectFile(); });
+						app->OpenFileDialog([app]() { app->ReadProjectFile(); });
 #ifndef MACOS
 					}).detach();
 #endif
@@ -768,9 +768,9 @@ namespace FuncDoodle {
 		}
 		if (app->GetKeybinds().Get("open").IsPressed()) {
 #ifndef MACOS
-			std::thread([&]() {
+			std::thread([app]() {
 #endif
-				app->OpenFileDialog([&]() { app->ReadProjectFile(); });
+				app->OpenFileDialog([app]() { app->ReadProjectFile(); });
 #ifndef MACOS
 			}).detach();
 #endif

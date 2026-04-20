@@ -36,7 +36,8 @@ namespace FuncDoodle::Platform {
 		GLFWmonitor* monitor = invalid ? nullptr : monitors[spec.Monitor];
 
 		glfwWindowHint(GLFW_SCALE_TO_MONITOR, 1);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+		// for compatibility with older hardware
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 #ifdef __APPLE__
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, 1);
@@ -51,8 +52,8 @@ namespace FuncDoodle::Platform {
 			int error = glfwGetError(&desc);
 
 			// weird BUT i think its fine..? cos we std::exiting
-			this->~Window();
-			delete this;
+			// this->~Window();
+			// delete this;
 
 			FUNC_FATAL("Failed to initialize GLFW window -- " << desc);
 		}
