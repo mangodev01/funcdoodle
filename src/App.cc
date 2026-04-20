@@ -226,7 +226,9 @@ namespace FuncDoodle {
 
 			ImGui::Render();
 
-			m_Manager->GetFrameRenderer()->GetCtx()->ToolManager->UpdateCursor();
+			m_Manager->GetFrameRenderer()
+				->GetCtx()
+				->ToolManager->UpdateCursor();
 
 			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
@@ -354,12 +356,13 @@ namespace FuncDoodle {
 			m_Manager->RenderControls();
 			m_Manager->RenderLogs();
 			m_Manager->Player()->Play();
-			m_CurrentProj->DisplayFPS(m_FPS);
+			m_CurrentProj->DisplayAltFPS(m_FPS);
 		}
 	}
 	void Application::OpenFileDialog(std::function<void()> done) {
 		FileDialog dialog("fdp");
 		m_FilePath = dialog.Open().string();
+
 		done();
 	}
 	void Application::SaveFileDialog(std::function<void()> done) {
@@ -381,13 +384,16 @@ namespace FuncDoodle {
 		}
 
 		if (m_CurrentProj == nullptr) {
-			m_CurrentProj.reset(new ProjectFile((char*)"", 1, 1, (char*)"", 0,
-				(char*)"", &m_Window, Col{.r = 0, .g = 0, .b = 0}));
+			m_CurrentProj =
+				std::make_shared<ProjectFile>((char*)"", 1, 1, (char*)"", 0,
+					(char*)"", &m_Window, Col{.r = 0, .g = 0, .b = 0});
 		}
 
 		m_CurrentProj->ReadAndPopulate(m_FilePath.c_str());
 
 		m_Manager->SetProj(m_CurrentProj);
+
+		m_CurrentProj->UpdateTitle();
 	}
 	void Application::SaveProjectFile() {
 		if (m_FilePath.empty()) {
@@ -395,6 +401,8 @@ namespace FuncDoodle {
 			return;
 		}
 		m_CurrentProj->Write(m_FilePath.c_str());
+
+		m_CurrentProj->UpdateTitle();
 	}
 
 	void Application::OpenSaveChangesDialog() {
@@ -476,7 +484,8 @@ namespace FuncDoodle {
 			return false;
 		}
 
-		EditorController::CanvasContext* ctx = Application::Get()->GetManager()->GetFrameRenderer()->GetCtx();
+		EditorController::CanvasContext* ctx =
+			Application::Get()->GetManager()->GetFrameRenderer()->GetCtx();
 		if (!ctx || !ctx->Frame) {
 			return false;
 		}
@@ -498,7 +507,7 @@ namespace FuncDoodle {
 		ImVec2 frameMax(startX + frameWidth, startY + frameHeight);
 
 		return pos.x >= frameMin.x && pos.x <= frameMax.x &&
-			pos.y >= frameMin.y && pos.y <= frameMax.y;
+			   pos.y >= frameMin.y && pos.y <= frameMax.y;
 	}
 
 	void Application::HideCursor() {

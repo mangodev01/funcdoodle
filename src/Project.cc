@@ -198,6 +198,8 @@ namespace FuncDoodle {
 	}
 
 	void ProjectFile::Write(const char* fileName) {
+		unsigned char null = 0;
+
 		std::ofstream outFile(fileName, std::ios::binary);
 		if (!outFile.is_open()) {
 			FUNC_ERR("Failed to open file for writing");
@@ -205,17 +207,18 @@ namespace FuncDoodle {
 		}
 
 		outFile << "FDProj";
+
 		// 0.3
 		unsigned long frames = m_Frames->Size();
+
 		int major = FDPVERMAJOR;
 		int minor = FDPVERMINOR;
 		WRITEB(major);
 		WRITEB(minor);
-		WRITEB(frames);	   // frame count (default)
-		WRITEB(m_Width);   // animation width
-		WRITEB(m_Height);  // animation height
-		WRITEB(m_FPS);	   // animation fps
-		unsigned char null = 0;
+		WRITEB(frames);		// frame count (default)
+		WRITEB(m_Width);	// animation width
+		WRITEB(m_Height);	// animation height
+		WRITEB(m_FPS);		// animation fps
 		outFile << m_Name;	// animation name
 		WRITEB(null);
 		outFile << m_Desc;	// animation description
@@ -268,7 +271,7 @@ namespace FuncDoodle {
 			for (int y = 0; y < pixels->Height(); y++) {
 				for (int x = 0; x < pixels->Width(); x++) {
 					Col px = pixels->Get(x, y);
-					int index = colorToIndex[px];  // Get stable index
+					int index = colorToIndex[px];
 					WRITEB(index);
 				}
 			}
@@ -463,7 +466,7 @@ namespace FuncDoodle {
 		file.close();
 	}
 
-	void ProjectFile::DisplayFPS(double fps) {
+	void ProjectFile::DisplayAltFPS(double fps) {
 		if (ImGui::GetIO().KeyAlt) {
 			char* title = (char*)malloc(LARGE_BUFFER_SIZE);
 			snprintf(title, LARGE_BUFFER_SIZE, "FuncDoodle %s: %s%s (%d FPS)",
@@ -472,12 +475,17 @@ namespace FuncDoodle {
 
 			m_Window->SetTitle(title);
 			free(title);
-		} else {
-			char* title = (char*)malloc(LARGE_BUFFER_SIZE);
-			snprintf(title, LARGE_BUFFER_SIZE, "FuncDoodle %s: %s%s (alt for details)",
-				FUNCVER, AnimName(), !m_Saved ? "*" : "");
-			m_Window->SetTitle(title);
-			free(title);
 		}
+	}
+
+	void ProjectFile::UpdateTitle() {
+		char* title = (char*)malloc(LARGE_BUFFER_SIZE);
+
+		snprintf(title, LARGE_BUFFER_SIZE,
+			"FuncDoodle %s: %s%s (alt for details)", FUNCVER, AnimName(),
+			!m_Saved ? "*" : "");
+
+		m_Window->SetTitle(title);
+		free(title);
 	}
 }  // namespace FuncDoodle

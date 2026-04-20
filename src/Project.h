@@ -61,7 +61,8 @@ namespace FuncDoodle {
 		void Export(const char* filePath, int format);
 		constexpr inline Platform::Window* Window() const { return m_Window; }
 		inline bool Saved() { return m_Saved; }
-		void DisplayFPS(double fps);
+		void DisplayAltFPS(double fps);
+		void UpdateTitle();
 
 		// Undo management
 		template <typename T>

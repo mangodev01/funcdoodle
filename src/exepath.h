@@ -3,6 +3,7 @@
 #include <vector>
 
 // ChatGPT wrote this code :)
+// :(
 
 #if defined(_WIN32)
 #include <windows.h>

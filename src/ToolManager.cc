@@ -132,7 +132,8 @@ namespace FuncDoodle {
 
 		// ImVec2 cursorOff(0, offsetFactor);
 		ImVec2 posWithoutOff(ImGui::GetMousePos());
-		ImVec2 pos = ImVec2(posWithoutOff.x, posWithoutOff.y - 32 + (scale / 2.0f));
+		ImVec2 pos =
+			ImVec2(posWithoutOff.x, posWithoutOff.y - 32 + (scale / 2.0f));
 
 		ImGui::SetMouseCursor(ImGuiMouseCursor_None);
 		float off = 1.5f;

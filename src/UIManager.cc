@@ -64,9 +64,10 @@ namespace FuncDoodle {
 		const float rowGapFactor = 0.75f;
 		const float openTextYOffsetFactor = 0.16f;
 
-		ImFont* titleFont = app->GetAssetLoader() && app->GetAssetLoader()->GetFontBold()
-								? app->GetAssetLoader()->GetFontBold()
-								: ImGui::GetFont();
+		ImFont* titleFont =
+			app->GetAssetLoader() && app->GetAssetLoader()->GetFontBold()
+				? app->GetAssetLoader()->GetFontBold()
+				: ImGui::GetFont();
 
 		const char* measureSample = "Ag";
 
@@ -194,7 +195,8 @@ namespace FuncDoodle {
 			m_Popups.Close("pref");
 		}
 		if (ImGui::BeginPopup("EditPrefs")) {
-			if (ImGui::BeginCombo("Theme", Themes::g_Themes[app->GetTheme()].Name)) {
+			if (ImGui::BeginCombo(
+					"Theme", Themes::g_Themes[app->GetTheme()].Name)) {
 				for (auto& [uuid, theme] : Themes::g_Themes) {
 					bool is_selected = (app->GetTheme() == uuid);
 					if (ImGui::Selectable(theme.Name, is_selected)) {
@@ -457,8 +459,7 @@ namespace FuncDoodle {
 			ImGui::OpenPopup("Keybinds");
 		}
 
-		if (ImGui::BeginPopupModal("Keybinds",
-				m_Popups.Get("keybinds"),
+		if (ImGui::BeginPopupModal("Keybinds", m_Popups.Get("keybinds"),
 				ImGuiWindowFlags_AlwaysAutoResize)) {
 			if (ImGui::BeginTable(
 					"keybinds", 3, ImGuiTableFlags_BordersInnerH)) {
@@ -545,8 +546,7 @@ namespace FuncDoodle {
 			ImGui::SetNextWindowPos(ImVec2(485, 384), ImGuiCond_FirstUseEver);
 			ImGui::SetNextWindowSize(ImVec2(309, 312), ImGuiCond_FirstUseEver);
 		}
-		if (ImGui::BeginPopupModal("EditProj",
-				m_Popups.Get("edit_proj"),
+		if (ImGui::BeginPopupModal("EditProj", m_Popups.Get("edit_proj"),
 				ImGuiWindowFlags_AlwaysAutoResize) &&
 			app->GetCurProj()) {
 			char name[256];
@@ -729,7 +729,8 @@ namespace FuncDoodle {
 
 		if (ImGui::BeginPopup("Export##export")) {
 			const char* formats[] = {"PNGs", "MP4"};
-			ImGui::Combo("Export Format", &app->GetExportFormatPtr(), formats, IM_ARRAYSIZE(formats));
+			ImGui::Combo("Export Format", &app->GetExportFormatPtr(), formats,
+				IM_ARRAYSIZE(formats));
 			ImUtil::ButtonRowResult choice = ImUtil::ExportCloseButtons();
 			if (choice == ImUtil::ButtonRowResult::Primary ||
 				ImUtil::EnterPressed()) {

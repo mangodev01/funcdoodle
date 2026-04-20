@@ -32,7 +32,9 @@ namespace FuncDoodle {
 		void SaveProjectFile();
 		void RegisterKeybinds();
 		void OpenSaveChangesDialog();
-		bool SaveChangesDialogOpen() { return m_UiManager.GetPopups().IsOpen("save_changes"); }
+		bool SaveChangesDialogOpen() {
+			return m_UiManager.GetPopups().IsOpen("save_changes");
+		}
 
 		void HideCursor();
 		void ShowCursor();
@@ -52,7 +54,7 @@ namespace FuncDoodle {
 				return;
 			}
 			auto defUuid = FuncDoodle::UUID::FromString(
-					FuncDoodle::Themes::s_DefaultTheme);
+				FuncDoodle::Themes::s_DefaultTheme);
 			auto defIt = FuncDoodle::Themes::g_Themes.find(defUuid);
 			if (defIt != FuncDoodle::Themes::g_Themes.end()) {
 				ApplyThemeStyle(defIt->second.Style);

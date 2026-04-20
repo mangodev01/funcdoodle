@@ -244,13 +244,14 @@ namespace FuncDoodle::Platform {
 
 	void Window::SetCursorHidden(bool hidden) {
 		// HACK: glfw on wayland doesn't seem to hide the os cursor properly,
-		// so instead, set the cursor to a blank image which does work for some reason...
-		// thanks wayland! very cool
-		if (m_CursorHidden == hidden) return;
+		// so instead, set the cursor to a blank image which does work for some
+		// reason... thanks wayland! very cool
+		if (m_CursorHidden == hidden)
+			return;
 		m_CursorHidden = hidden;
 		if (hidden) {
-			unsigned char pixels[4] = { 0, 0, 0, 0 };
-			GLFWimage img = { 1, 1, pixels };
+			unsigned char pixels[4] = {0, 0, 0, 0};
+			GLFWimage img = {1, 1, pixels};
 			GLFWcursor* blank = glfwCreateCursor(&img, 0, 0);
 			glfwSetCursor(m_Handle, blank);
 			m_BlankCursor = blank;
