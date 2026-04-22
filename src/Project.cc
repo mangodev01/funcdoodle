@@ -102,7 +102,8 @@ namespace FuncDoodle {
 				m_FPS, filePath, filePath);
 #else
 			snprintf(cmd, sizeof(cmd),
-				"ffmpeg.exe -framerate %d -pattern_type glob -i \"%s/frame_*.png\" "
+				"ffmpeg.exe -framerate %d -pattern_type glob -i "
+				"\"%s/frame_*.png\" "
 				"-c:v libx264 -preset veryslow -crf 0 %s\\result.mp4 -y",
 				m_FPS, filePath, filePath, filePath);
 #endif

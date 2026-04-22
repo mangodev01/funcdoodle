@@ -106,6 +106,10 @@ namespace FuncDoodle {
 		void RenderRotate();
 		void Rotate(int32_t deg);
 
+		// lol idk what to call this
+		enum class Where { Before = 0, After = 1 };
+		void Import(Where where);
+
 		void DeleteCurrentSelection();
 		void MoveCurrentSelection(Direction direction);
 		bool IsPosInFrame(ImVec2 pos);

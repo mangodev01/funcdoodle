@@ -442,8 +442,12 @@ namespace FuncDoodle {
 		if (ImGui::IsMouseHoveringRect(frameMin, frameMax) && !shouldDraw &&
 			!ImGui::IsPopupOpen(nullptr, ImGuiPopupFlags_AnyPopupId) &&
 			!context.Player->Playing()) {
-			if (context.Settings.Preview &&
-				context.ToolManager->GetSelectedTool() == ToolType::Pencil) {
+
+			bool preview = context.Settings.Preview;
+			ToolType tool = context.ToolManager->GetSelectedTool();
+
+			if (preview &&
+				(tool == ToolType::Pencil || tool == ToolType::Eraser)) {
 				ImVec2 pixel = context.LastHoverMousePos;
 
 				if (pixel.x >= 0 && pixel.y >= 0) {
@@ -489,8 +493,9 @@ namespace FuncDoodle {
 						ImVec2 max(
 							clipOriginX + clipWidth, clipOriginY + clipHeight);
 
-						Col col =
-							Col::FromFloat3(context.ToolManager->GetCol());
+						Col col = tool == ToolType::Pencil
+									? Col::FromFloat3(context.ToolManager->GetCol())
+									: context.Player->Proj()->BgCol();
 
 						ImGui::GetForegroundDrawList()->AddRectFilled(min, max,
 							IM_COL32(col.r, col.g, col.b, ALPHA_OPAQUE));

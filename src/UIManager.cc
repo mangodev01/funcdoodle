@@ -315,7 +315,8 @@ namespace FuncDoodle {
 #ifndef MACOS
 					std::thread([app]() {
 #endif
-						app->OpenFileDialog([app]() { app->ReadProjectFile(); });
+						app->OpenFileDialog(
+							[app]() { app->ReadProjectFile(); });
 #ifndef MACOS
 					}).detach();
 #endif
@@ -378,6 +379,23 @@ namespace FuncDoodle {
 
 						if (ImGui::MenuItem("Rotate...")) {
 							m_Popups.Open("rotate");
+						}
+
+						ImGui::EndMenu();
+					}
+
+					if (ImGui::BeginMenu("Frame")) {
+						if (ImGui::MenuItem("Import to frame before",
+								m_WaitingForKey ? nullptr
+												: app->GetKeybinds().Get(
+													  "import_before"))) {
+							app->Import(Application::Where::Before);
+						}
+						if (ImGui::MenuItem("Import to frame after",
+								m_WaitingForKey
+									? nullptr
+									: app->GetKeybinds().Get("import_after"))) {
+							app->Import(Application::Where::After);
 						}
 
 						ImGui::EndMenu();

@@ -1,5 +1,6 @@
 #include "AssetLoader.h"
 #include "Constants.h"
+#include "Frame.h"
 #include "Gui.h"
 #include "KeyHandler.h"
 #include "MacroUtils.h"
@@ -22,6 +23,8 @@
 #include <string>
 #include <thread>
 
+#include <stb_image.h>
+
 #include "LoadedAssets.h"
 #include "Platform/Window.h"
 #include "TextUtil.h"
@@ -41,6 +44,9 @@
 #include "Test.h"
 
 namespace FuncDoodle {
+	static constexpr const char* g_SupportedExtensionsForImporting =
+		"png,jpg,jpeg,bmp,tga,psd,gif,hdr,pic,ppm,pgm,pnm";
+
 	Application* Application::s_Instance = nullptr;
 	Application::Application()
 		: m_FilePath(""), m_CurrentProj(nullptr), m_CacheProj(nullptr),
@@ -508,6 +514,66 @@ namespace FuncDoodle {
 
 		return pos.x >= frameMin.x && pos.x <= frameMax.x &&
 			   pos.y >= frameMin.y && pos.y <= frameMax.y;
+	}
+
+	void Application::Import(Where where) {
+#ifndef MACOS
+		std::thread([this, where]() {
+			FileDialog dialog(g_SupportedExtensionsForImporting);
+			std::filesystem::path path = dialog.Open();
+
+			if (path.empty()) {
+				return;
+			}
+
+			int width, height, channels;
+
+			// data is R G B R G B R G B etc. because we're doing 3 channels
+			unsigned char* data =
+				stbi_load(path.c_str(), &width, &height, &channels, 3);
+
+			Frame frame = Frame(width, height, m_CurrentProj->BgCol());
+
+			if (width != m_CurrentProj->AnimWidth() ||
+				height != m_CurrentProj->AnimHeight()) {
+				FUNC_WARN("imported image size doesn't match animation size");
+			}
+
+			for (int y = 0; y < height; y++) {
+				for (int x = 0; x < width; x++) {
+					if (x > m_CurrentProj->AnimWidth() ||
+						y > m_CurrentProj->AnimHeight()) {
+						// im sure i will regret this after like 5 seconds...
+						goto done;
+					}
+
+					int i = (y * width + x) * 3;
+
+					unsigned char r = data[i + 0];
+					unsigned char g = data[i + 1];
+					unsigned char b = data[i + 2];
+
+					Col col = Col{.r = r, .g = g, .b = b};
+
+					frame.SetPixel(x, y, col);
+				}
+			}
+
+		done:
+
+			switch (where) {
+				case Where::Before:
+					m_CurrentProj->AnimFrames()->InsertBefore(
+						m_Manager->SelectedFrameI(), frame);
+					break;
+
+				case Where::After:
+					m_CurrentProj->AnimFrames()->InsertAfter(
+						m_Manager->SelectedFrameI(), frame);
+					break;
+			}
+		}).detach();
+#endif
 	}
 
 	void Application::HideCursor() {
