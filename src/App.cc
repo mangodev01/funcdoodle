@@ -74,7 +74,7 @@ namespace FuncDoodle {
 
 		m_ThemesPath = rootPath / "themes";
 
-		m_Keybinds = KeybindsRegistry(path);
+		m_Keybinds = KeybindsRegistry(rootPath);
 		m_FrameLimitCache = m_Settings.FrameLimit;
 		m_Manager = std::make_unique<AnimationManager>(nullptr,
 			m_AssetLoader.get(), m_EditorController, m_Keybinds, m_Settings),
