@@ -45,8 +45,8 @@ namespace FuncDoodle {
 		m_Keybinds.Register("play", {false, false, false, ImGuiKey_K});
 		m_Keybinds.Register("end", {false, false, false, ImGuiKey_L});
 
-		m_Keybinds.Register("import_before", {true, false, false, ImGuiKey_I});
-		m_Keybinds.Register("import_after", {true, true, false, ImGuiKey_I});
+		m_Keybinds.Register("import_before", {true, true, false, ImGuiKey_I});
+		m_Keybinds.Register("import_after", {true, false, false, ImGuiKey_I});
 		// false, ImGuiKey_H});
 		m_ToolManager->RegisterKeybinds();
 	}

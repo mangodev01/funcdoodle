@@ -446,9 +446,7 @@ namespace FuncDoodle {
 		if (m_Settings.Sfx)
 			m_AssetLoader->PlaySound(s_ProjSaveSound);
 
-#ifndef MACOS
-		std::thread([this, exit]() {
-#endif
+		if (exit) {
 			SaveFileDialog([this, exit]() {
 				SaveProjectFile();
 
@@ -460,9 +458,25 @@ namespace FuncDoodle {
 					ImGui::CloseCurrentPopup();
 				}
 			});
+		} else {
 #ifndef MACOS
-		}).detach();
+			std::thread([this, exit]() {
 #endif
+				SaveFileDialog([this, exit]() {
+					SaveProjectFile();
+
+					if (m_Settings.Sfx)
+						m_AssetLoader->PlaySound(s_ProjSaveEndSound);
+
+					if (exit) {
+						m_ShouldClose = true;
+						ImGui::CloseCurrentPopup();
+					}
+				});
+#ifndef MACOS
+			}).detach();
+#endif
+		}
 	}
 
 	void Application::SaveAt(const char* path) {
@@ -517,63 +531,57 @@ namespace FuncDoodle {
 	}
 
 	void Application::Import(Where where) {
-#ifndef MACOS
-		std::thread([this, where]() {
-			FileDialog dialog(g_SupportedExtensionsForImporting);
-			std::filesystem::path path = dialog.Open();
+		FileDialog dialog(g_SupportedExtensionsForImporting);
+		std::filesystem::path path = dialog.Open();
 
-			if (path.empty()) {
-				return;
+		if (path.empty()) {
+			return;
+		}
+
+		int width, height, channels;
+
+		// data is R G B R G B R G B etc. because we're doing 3 channels
+		unsigned char* data =
+			stbi_load(path.c_str(), &width, &height, &channels, 3);
+
+		if (width != m_CurrentProj->AnimWidth() ||
+			height != m_CurrentProj->AnimHeight()) {
+			FUNC_WARN("imported image size doesn't match animation size");
+		}
+
+		Frame frame = Frame(m_CurrentProj->AnimWidth(),
+			m_CurrentProj->AnimHeight(), m_CurrentProj->BgCol());
+
+		for (int y = 0; y < std::min(height, m_CurrentProj->AnimHeight());
+			y++) {
+			for (int x = 0; x < std::min(width, m_CurrentProj->AnimWidth());
+				x++) {
+
+				int i = (y * width + x) * 3;
+
+				unsigned char r = data[i + 0];
+				unsigned char g = data[i + 1];
+				unsigned char b = data[i + 2];
+
+				Col col = Col{.r = r, .g = g, .b = b};
+
+				frame.SetPixel(x, y, col);
 			}
+		}
 
-			int width, height, channels;
+		stbi_image_free(data);
 
-			// data is R G B R G B R G B etc. because we're doing 3 channels
-			unsigned char* data =
-				stbi_load(path.c_str(), &width, &height, &channels, 3);
+		switch (where) {
+			case Where::Before:
+				m_CurrentProj->AnimFrames()->InsertBefore(
+					m_Manager->SelectedFrameI(), frame);
+				break;
 
-			Frame frame = Frame(width, height, m_CurrentProj->BgCol());
-
-			if (width != m_CurrentProj->AnimWidth() ||
-				height != m_CurrentProj->AnimHeight()) {
-				FUNC_WARN("imported image size doesn't match animation size");
-			}
-
-			for (int y = 0; y < height; y++) {
-				for (int x = 0; x < width; x++) {
-					if (x > m_CurrentProj->AnimWidth() ||
-						y > m_CurrentProj->AnimHeight()) {
-						// im sure i will regret this after like 5 seconds...
-						goto done;
-					}
-
-					int i = (y * width + x) * 3;
-
-					unsigned char r = data[i + 0];
-					unsigned char g = data[i + 1];
-					unsigned char b = data[i + 2];
-
-					Col col = Col{.r = r, .g = g, .b = b};
-
-					frame.SetPixel(x, y, col);
-				}
-			}
-
-		done:
-
-			switch (where) {
-				case Where::Before:
-					m_CurrentProj->AnimFrames()->InsertBefore(
-						m_Manager->SelectedFrameI(), frame);
-					break;
-
-				case Where::After:
-					m_CurrentProj->AnimFrames()->InsertAfter(
-						m_Manager->SelectedFrameI(), frame);
-					break;
-			}
-		}).detach();
-#endif
+			case Where::After:
+				m_CurrentProj->AnimFrames()->InsertAfter(
+					m_Manager->SelectedFrameI(), frame);
+				break;
+		}
 	}
 
 	void Application::HideCursor() {

@@ -1,5 +1,6 @@
 #include "KeyHandler.h"
 
+#include "App.h"
 #include "Keybinds.h"
 #include "imgui.h"
 
@@ -160,6 +161,12 @@ namespace FuncDoodle {
 			InsertFrameAction action =
 				InsertFrameAction(selectedFrame - 1, context.Proj);
 			context.Proj->PushUndoable(action);
+		}
+		if (keybinds.Get("import_before").IsPressed()) {
+			Application::Get()->Import(Application::Where::Before);
+		}
+		if (keybinds.Get("import_after").IsPressed()) {
+			Application::Get()->Import(Application::Where::After);
 		}
 	}
 }  // namespace FuncDoodle

@@ -493,9 +493,10 @@ namespace FuncDoodle {
 						ImVec2 max(
 							clipOriginX + clipWidth, clipOriginY + clipHeight);
 
-						Col col = tool == ToolType::Pencil
-									? Col::FromFloat3(context.ToolManager->GetCol())
-									: context.Player->Proj()->BgCol();
+						Col col =
+							tool == ToolType::Pencil
+								? Col::FromFloat3(context.ToolManager->GetCol())
+								: context.Player->Proj()->BgCol();
 
 						ImGui::GetForegroundDrawList()->AddRectFilled(min, max,
 							IM_COL32(col.r, col.g, col.b, ALPHA_OPAQUE));
