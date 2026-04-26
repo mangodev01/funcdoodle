@@ -51,12 +51,12 @@ namespace FuncDoodle {
 	Application::Application()
 		: m_FilePath(""), m_CurrentProj(nullptr), m_CacheProj(nullptr),
 		  m_EditorController(std::make_shared<EditorController>()),
-		  m_CacheBGCol({MAX_COLOR_VALUE, MAX_COLOR_VALUE, MAX_COLOR_VALUE}),
+		  m_CacheBGCol({g_MaxColorValue, g_MaxColorValue, g_MaxColorValue}),
 		  m_Theme(UUID::FromString("d0c1a009-d09c-4fe6-84f8-eddcb2da38f9")),
 		  m_FrameLimitCache(m_Settings.FrameLimit),
 		  m_Keybinds(std::filesystem::path("")),
-		  m_Window({.Width = DEFAULT_WINDOW_WIDTH,
-			  .Height = DEFAULT_WINDOW_HEIGHT,
+		  m_Window({.Width = g_DefaultWindowWidth,
+			  .Height = g_DefaultWindowHeight,
 			  .Title = "",
 			  .Monitor = -1}) {
 #ifdef FUNCDOODLE_BUILD_TESTS
