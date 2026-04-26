@@ -64,7 +64,7 @@ namespace FuncDoodle {
 
 		auto frames = AnimFrames();
 
-		char curFilePath[FILE_PATH_BUFFER_SIZE];
+		char curFilePath[g_FilePathBufferSize];
 
 		for (unsigned long i = 0; i < AnimFrameCount(); i++) {
 #ifndef _WIN32
@@ -94,7 +94,7 @@ namespace FuncDoodle {
 			// so yea sorry for that
 			// idk if/when i'll fix this
 			// see you until then
-			char cmd[LARGE_BUFFER_SIZE];
+			char cmd[g_LargeBufferSize];
 #ifndef _WIN32
 			snprintf(cmd, sizeof(cmd),
 				"ffmpeg -framerate %d -pattern_type glob -i \"%s/frame_*.png\" "
@@ -332,9 +332,9 @@ namespace FuncDoodle {
 
 		file.getline(m_Author, sizeof(m_Author), '\0');
 
-		unsigned char bgR = MAX_COLOR_VALUE;
-		unsigned char bgG = MAX_COLOR_VALUE;
-		unsigned char bgB = MAX_COLOR_VALUE;
+		unsigned char bgR = g_MaxColorValue;
+		unsigned char bgG = g_MaxColorValue;
+		unsigned char bgB = g_MaxColorValue;
 
 		if (verMajor >= 0 && verMinor >= 1) {
 			file.read(reinterpret_cast<char*>(&bgR), sizeof(bgR));
@@ -468,8 +468,8 @@ namespace FuncDoodle {
 
 	void ProjectFile::DisplayAltFPS(double fps) {
 		if (ImGui::GetIO().KeyAlt) {
-			char* title = (char*)malloc(LARGE_BUFFER_SIZE);
-			snprintf(title, LARGE_BUFFER_SIZE, "FuncDoodle %s: %s%s (%d FPS)",
+			char* title = (char*)malloc(g_LargeBufferSize);
+			snprintf(title, g_LargeBufferSize, "FuncDoodle %s: %s%s (%d FPS)",
 				FUNCVER, AnimName(), !m_Saved ? "*" : "",
 				(int)(fps > 0.0 ? fps : ImGui::GetIO().Framerate));
 
@@ -479,9 +479,9 @@ namespace FuncDoodle {
 	}
 
 	void ProjectFile::UpdateTitle() {
-		char* title = (char*)malloc(LARGE_BUFFER_SIZE);
+		char* title = (char*)malloc(g_LargeBufferSize);
 
-		snprintf(title, LARGE_BUFFER_SIZE,
+		snprintf(title, g_LargeBufferSize,
 			"FuncDoodle %s: %s%s (alt for details)", FUNCVER, AnimName(),
 			!m_Saved ? "*" : "");
 

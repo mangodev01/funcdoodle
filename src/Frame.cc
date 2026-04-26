@@ -115,10 +115,10 @@ namespace FuncDoodle {
 
 	void Frame::CopyToClipboard() {
 		size_t bufferSize =
-			BUFFER_CHUNK_SIZE;	// Start with space for dimensions
+			g_BufferChunkSize;	// Start with space for dimensions
 		for (int y = 0; y < Height(); y++) {
 			for (int x = 0; x < Width(); x++) {
-				bufferSize += BUFFER_CHUNK_SIZE;  // Space for r g b values and
+				bufferSize += g_BufferChunkSize;  // Space for r g b values and
 												  // spaces/newline
 			}
 		}
@@ -153,7 +153,7 @@ namespace FuncDoodle {
 			return nullptr;
 
 		// Buffer for dimensions line (e.g. "1920x1080\0")
-		char first[BUFFER_CHUNK_SIZE];
+		char first[g_BufferChunkSize];
 		int i = 0;
 
 		// Copy first line into buffer
@@ -179,9 +179,9 @@ namespace FuncDoodle {
 			return nullptr;
 
 		Frame* frame = new Frame(width, height,
-			Col{.r = MAX_COLOR_VALUE,
-				.g = MAX_COLOR_VALUE,
-				.b = MAX_COLOR_VALUE});
+			Col{.r = g_MaxColorValue,
+				.g = g_MaxColorValue,
+				.b = g_MaxColorValue});
 
 		ptr = pasted;
 		// Skip first line
@@ -217,7 +217,7 @@ namespace FuncDoodle {
 		}
 
 		Col bgCol = Col{
-			.r = MAX_COLOR_VALUE, .g = MAX_COLOR_VALUE, .b = MAX_COLOR_VALUE};
+			.r = g_MaxColorValue, .g = g_MaxColorValue, .b = g_MaxColorValue};
 
 		bgCol.r = atoi(ptr);
 		while (*ptr && *ptr != ' ')

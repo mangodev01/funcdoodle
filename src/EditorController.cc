@@ -68,9 +68,9 @@ namespace FuncDoodle {
 		}
 		const float* colOld = toolManager->GetCol();
 		Col newColor = {
-			static_cast<unsigned char>(colOld[0] * MAX_COLOR_VALUE + 0.5f),
-			static_cast<unsigned char>(colOld[1] * MAX_COLOR_VALUE + 0.5f),
-			static_cast<unsigned char>(colOld[2] * MAX_COLOR_VALUE + 0.5f)};
+			static_cast<unsigned char>(colOld[0] * g_MaxColorValue + 0.5f),
+			static_cast<unsigned char>(colOld[1] * g_MaxColorValue + 0.5f),
+			static_cast<unsigned char>(colOld[2] * g_MaxColorValue + 0.5f)};
 
 		int size = toolManager->GetSize();
 		bool actionPerformed = false;
@@ -160,9 +160,9 @@ namespace FuncDoodle {
 
 		const float* colOld = toolManager->GetCol();
 		Col fillColor = {
-			static_cast<unsigned char>(colOld[0] * MAX_COLOR_VALUE + 0.5f),
-			static_cast<unsigned char>(colOld[1] * MAX_COLOR_VALUE + 0.5f),
-			static_cast<unsigned char>(colOld[2] * MAX_COLOR_VALUE + 0.5f)};
+			static_cast<unsigned char>(colOld[0] * g_MaxColorValue + 0.5f),
+			static_cast<unsigned char>(colOld[1] * g_MaxColorValue + 0.5f),
+			static_cast<unsigned char>(colOld[2] * g_MaxColorValue + 0.5f)};
 		Col curPixelCol = frame->Pixels()->Get(pixelX, pixelY);
 
 		if (curPixelCol == fillColor) {
@@ -499,7 +499,7 @@ namespace FuncDoodle {
 								: context.Player->Proj()->BgCol();
 
 						ImGui::GetForegroundDrawList()->AddRectFilled(min, max,
-							IM_COL32(col.r, col.g, col.b, ALPHA_OPAQUE));
+							IM_COL32(col.r, col.g, col.b, g_AlphaOpaque));
 					}
 				}
 			}
@@ -532,16 +532,16 @@ namespace FuncDoodle {
 				for (int x = 0; x < prevPixels->Width(); x++) {
 					const Col col = prevPixels->Get(x, y);
 					const Col curCol = pixels->Get(x, y);
-					if (curCol.r == MAX_COLOR_VALUE &&
-						curCol.g == MAX_COLOR_VALUE &&
-						curCol.b == MAX_COLOR_VALUE) {
+					if (curCol.r == g_MaxColorValue &&
+						curCol.g == g_MaxColorValue &&
+						curCol.b == g_MaxColorValue) {
 						const ImVec2 topLeft(startX + x * context.PixelScale,
 							startY + y * context.PixelScale);
 						const ImVec2 bottomRight(
 							startX + (x + 1) * context.PixelScale,
 							startY + (y + 1) * context.PixelScale);
 						drawList->AddRectFilled(topLeft, bottomRight,
-							IM_COL32(col.r, col.g, col.b, HALF_ALPHA));
+							IM_COL32(col.r, col.g, col.b, g_HalfAlpha));
 					}
 				}
 			}
@@ -569,26 +569,26 @@ namespace FuncDoodle {
 		for (float x = screenMinX - offset; x < screenMaxX; x += dash + gap)
 			drawList->AddLine({x, screenMinY},
 				{ImMin(x + dash, screenMaxX), screenMinY},
-				IM_COL32(DASH_COLOR_PRIMARY, DASH_COLOR_PRIMARY,
-					DASH_COLOR_PRIMARY, ALPHA_OPAQUE));
+				IM_COL32(g_DashColorPrimary, g_DashColorPrimary,
+					g_DashColorPrimary, g_AlphaOpaque));
 
 		for (float x = screenMinX - offset; x < screenMaxX; x += dash + gap)
 			drawList->AddLine({x, screenMaxY},
 				{ImMin(x + dash, screenMaxX), screenMaxY},
-				IM_COL32(DASH_COLOR_PRIMARY, DASH_COLOR_PRIMARY,
-					DASH_COLOR_PRIMARY, ALPHA_OPAQUE));
+				IM_COL32(g_DashColorPrimary, g_DashColorPrimary,
+					g_DashColorPrimary, g_AlphaOpaque));
 
 		for (float y = screenMinY - offset; y < screenMaxY; y += dash + gap)
 			drawList->AddLine({screenMinX, y},
 				{screenMinX, ImMin(y + dash, screenMaxY)},
-				IM_COL32(DASH_COLOR_PRIMARY, DASH_COLOR_PRIMARY,
-					DASH_COLOR_PRIMARY, ALPHA_OPAQUE));
+				IM_COL32(g_DashColorPrimary, g_DashColorPrimary,
+					g_DashColorPrimary, g_AlphaOpaque));
 
 		for (float y = screenMinY - offset; y < screenMaxY; y += dash + gap)
 			drawList->AddLine({screenMaxX, y},
 				{screenMaxX, ImMin(y + dash, screenMaxY)},
-				IM_COL32(DASH_COLOR_PRIMARY, DASH_COLOR_PRIMARY,
-					DASH_COLOR_PRIMARY, ALPHA_OPAQUE));
+				IM_COL32(g_DashColorPrimary, g_DashColorPrimary,
+					g_DashColorPrimary, g_AlphaOpaque));
 	}
 
 }  // namespace FuncDoodle

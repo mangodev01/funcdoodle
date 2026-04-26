@@ -59,7 +59,7 @@ namespace FuncDoodle {
 		// Begin the window with horizontal scrollbar enabled
 		ImGui::SetNextWindowPos(ImVec2(0, 920), ImGuiCond_FirstUseEver);
 		ImGui::SetNextWindowSize(
-			ImVec2(TIMELINE_WIDTH, TIMELINE_HEIGHT), ImGuiCond_FirstUseEver);
+			ImVec2(g_TimelineWidth, g_TimelineHeight), ImGuiCond_FirstUseEver);
 		ImGui::Begin("Timeline", nullptr,
 			ImGuiWindowFlags_HorizontalScrollbar |
 				ImGuiWindowFlags_NoBackground);
@@ -106,8 +106,8 @@ namespace FuncDoodle {
 				m_SelectedFrame == i
 					? ImVec2(topLeft.x + frameWidth / 2, bottomRight.y + 10)
 					: ImVec2(topLeft.x + frameWidth / 2, bottomRight.y),
-				IM_COL32(MAX_COLOR_VALUE, MAX_COLOR_VALUE, MAX_COLOR_VALUE,
-					ALPHA_OPAQUE),
+				IM_COL32(g_MaxColorValue, g_MaxColorValue, g_MaxColorValue,
+					g_AlphaOpaque),
 				std::to_string(i).c_str());
 
 			if (m_TimelineFrameRenderer->GetCtx()->Frame !=

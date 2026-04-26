@@ -171,8 +171,8 @@ namespace FuncDoodle {
 		}
 
 		if (ImGui::BeginPopup("Rotate")) {
-			ImGui::DragInt("##Deg", &m_Deg, 1.0f, -MAX_ROTATION_DEG,
-				MAX_ROTATION_DEG, "%d°");
+			ImGui::DragInt("##Deg", &m_Deg, 1.0f, -g_MaxRotationDeg,
+				g_MaxRotationDeg, "%d°");
 
 			ImUtil::ButtonRowResult choice = ImUtil::OkCancelButtons();
 			if (choice == ImUtil::ButtonRowResult::Primary) {
@@ -672,11 +672,11 @@ namespace FuncDoodle {
 				strcpy(desc, app->GetCacheProj()->AnimDesc());
 
 				float r =
-					(float)(app->GetCacheProj()->BgCol().r) / MAX_COLOR_VALUE;
+					(float)(app->GetCacheProj()->BgCol().r) / g_MaxColorValue;
 				float g =
-					(float)(app->GetCacheProj()->BgCol().g) / MAX_COLOR_VALUE;
+					(float)(app->GetCacheProj()->BgCol().g) / g_MaxColorValue;
 				float b =
-					(float)(app->GetCacheProj()->BgCol().b) / MAX_COLOR_VALUE;
+					(float)(app->GetCacheProj()->BgCol().b) / g_MaxColorValue;
 				m_CacheBGCol[0] = r;
 				m_CacheBGCol[1] = g;
 				m_CacheBGCol[2] = b;
