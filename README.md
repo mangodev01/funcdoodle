@@ -6,24 +6,110 @@ Simple 2D frame-by-frame pixel-art animation program written in C++.
 ![Welcome screen](screenshots/welcome.png)
 ![Main animation screen](screenshots/main.png)
 
-## Build
-To build, run `scripts/build.sh` (unix) or `scripts/build.bat` (windows). `scripts/build.sh` now works with no arguments (defaults: `debug true false true`) and still accepts optional overrides in this order: `[debug|release] [tiling] [clean] [run]`.
-BTW for unix a zsh completion script is available: 
+## Features
+
+This program supports:
+
+- 🎞️ basic frame-by-frame animation
+- 👀 onion-skin preview (see previous frames faintly)
+- 🖼️ image import as animation frames (PNG/JPG/etc. support)
+- ✏️ per-frame editing and timeline navigation
+- 🖱️ basic selection tools (rectangular selection, move)
+- 📄 frame duplication and deletion
+- 📦 export to image sequence
+- 🎬 export to .mp4 file
+- 💾 project save/load system (custom project format)
+- ↩️ undo/redo stack for editing actions
+- 🔍 zoom and pan in canvas view
+- 📏 grid overlay for pixel alignment
+- 🌐 cross-platform support (Linux, macOS, Windows via CMake)
+- ⌨️ keyboard shortcuts for faster workflow
+
+---
+
+## 🛠️ Build
+
+### Unix (Linux / macOS)
+
+```sh
+./scripts/build.sh
+```
+
+Default flags:
+- debug = true
+- tiling = false
+- clean = true
+
+Override options (in order):
+
+```sh
+./scripts/build.sh [debug|release] [tiling] [clean] [run]
+```
+
+Example:
+
+```sh
+./scripts/build.sh release true false true
+```
+
+---
+
+### Windows (CMake-based build, generator dependent)
+
+```bat
+scripts\build.bat
+```
+
+⚠️ Windows support is not heavily tested, but should work under MinGW-w64 or MSVC depending on your CMake generator.
+
+---
+
+## ⚡ Shell completions (Unix)
+
+Zsh:
+
 ```sh
 source scripts/completion/completion.zsh
 ```
 
-## NOTE:
-I haven't tested this on windows, i mean I have, but don't have the chance to very often.
-So if you're trying to build on windows, just know that it MAY or MAY NOT actually work. 
+Cross-compile completion:
 
-## Cross-compile
-You can cross compile using mingw32-w64 on macos/linux to windows... 
-use 
 ```sh
 source scripts/completion/completion_cross.zsh
 ```
-for completion, and run scripts/build_cross.sh. (usage is shown if ran with no arguments)
 
-### macOS
-For macOS users, there's a scripts/pkg_app.sh script and a scripts/create_dmg.sh script. First, run scripts/build.sh to build the project. Then, ./scripts/pkg_app.sh, and scripts/create_dmg.sh to create a DMG out of the newly created app
+---
+
+## 🌍 Cross-compile (Linux/macOS → Windows)
+
+```sh
+./scripts/build_cross.sh
+```
+
+Run with no arguments to see usage.
+
+---
+
+## 🍎 macOS
+
+macOS users can package FuncDoodle using the provided scripts.
+
+First, build the project:
+
+```sh
+./scripts/build.sh
+```
+
+Then create the `.app` bundle:
+
+```sh
+./scripts/pkg_app.sh
+```
+
+Finally, generate a DMG:
+
+```sh
+./scripts/create_dmg.sh
+```
+
+This produces a distributable `.dmg` containing the application.
