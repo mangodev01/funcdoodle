@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Ptr.h"
-#include "Selection.h"
+#include "../Selection.h"
 
 namespace FuncDoodle {
 	class ProjectFile;

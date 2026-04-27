@@ -85,6 +85,7 @@ namespace FuncDoodle {
 		inline double GetFrameTime() { return 1.0 / m_Settings.FrameLimit; }
 		inline KeybindsRegistry& GetKeybinds() { return m_Keybinds; }
 		inline int GetExportFormat() { return m_ExportFormat; }
+		inline UIManager& GetUiManager() { return m_UiManager; }
 		inline int& GetExportFormatPtr() { return m_ExportFormat; }
 		inline std::filesystem::path GetThemesPath() { return m_ThemesPath; }
 		inline double& GetFrameLimitCache() { return m_FrameLimitCache; }
