@@ -1,19 +1,34 @@
-Checks: >
-  -*,
-  clang-analyzer-*,
-  bugprone-*,
-  performance-*,
-  portability-*,
-  misc-*,
-  cppcoreguidelines-*,
-  modernize-*,
-  readability-*,
-  hicpp-*,
-  concurrency-*,
-  -llvm-header-guard,
-  -modernize-use-trailing-return-type
+Checks:
+  - '-*'
+  - 'clang-analyzer-*'
+  - 'bugprone-*'
+  - 'performance-*'
+  - 'portability-*'
+  - 'misc-*'
+  - 'cppcoreguidelines-*'
+  - 'modernize-*'
+  - 'readability-*'
+  - 'hicpp-*'
+  - 'concurrency-*'
 
-WarningsAsErrors: ''
+  - '-hicpp-braces-around-statements'
+  - '-llvm-header-guard'
+  - '-modernize-use-trailing-return-type'
+  - '-modernize-use-default-member-init'
+  - '-misc-header-include-cycle'
+  - '-readability-redundant-preprocessor'
+  - '-modernize-macro-to-enum'
+  - '-readability-avoid-pragma-once'
+  - '-portability-avoid-pragma-once'
+  - '-cppcoreguidelines-macro-to-enum'
+  - '-misc-non-private-member-variables-in-classes'
+# temporary, will revert in the future
+  - '-misc-unused-parameters'
+  - '-hicpp-uppercase-literal-suffix'
+  - '-readability-uppercase-literal-suffix'
+
+# i will probably regrert this in the future
+WarningsAsErrors: '*'
 
 HeaderFilterRegex: '.*'
 FormatStyle: none
@@ -59,7 +74,3 @@ CheckOptions:
 
   - key: cppcoreguidelines-init-variables
     value: '1'
-
-  # --- misc strictness ---
-  - key: misc-unused-parameters.IgnoreUnusedParameters
-    value: 'false'
