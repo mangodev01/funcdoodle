@@ -1,5 +1,6 @@
 PROJECT_NAME         = "FuncDoodle"
 OUTPUT_DIRECTORY     = doxy
+HTML_OUTPUT          = .
 INPUT                = src
 RECURSIVE            = YES
 FILE_PATTERNS        = *.h *.cc

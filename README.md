@@ -6,6 +6,13 @@ Simple 2D frame-by-frame pixel-art animation program written in C++.
 ![Welcome screen](screenshots/welcome.png)
 ![Main animation screen](screenshots/main.png)
 
+## Doxygen documentation
+Doxygen documentation can be generated manually by invoking
+`./scripts/docs.sh`,
+and is automatically generated to the
+https://mangodev01.github.io/funcdoodle/doxy
+github page.
+
 ## Features
 
 This program supports:
