@@ -184,10 +184,10 @@ namespace FuncDoodle {
 				m_Name.c_str(), m_Passed, m_Total, m_Failed);
 
 			std::cout << "\n";
-			std::cout << "╔" << repeat("═", 62) << "╗\n";
+			std::cout << "╔" << Repeat("═", 62) << "╗\n";
 			std::cout << "║  \033[1m" << m_Name << "\033[0m"
 					  << std::string(60 - m_Name.length(), ' ') << "║\n";
-			std::cout << "╠" << repeat("═", 62) << "╣\n";
+			std::cout << "╠" << Repeat("═", 62) << "╣\n";
 
 			if (m_Failed == 0) {
 				std::cout << "║  \033[32m[PASS]\033[0m " << m_Passed << "/"
@@ -210,7 +210,7 @@ namespace FuncDoodle {
 						  << "║\n";
 			}
 
-			std::cout << "╚" << repeat("═", 62) << "╝\n";
+			std::cout << "╚" << Repeat("═", 62) << "╝\n";
 		}
 
 		/**

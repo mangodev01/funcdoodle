@@ -1,0 +1,20 @@
+Checks: >
+  clang-diagnostic-*,
+  clang-analyzer-core.*,
+  clang-analyzer-cplusplus.NewDelete,
+  clang-analyzer-cplusplus.NewDeleteLeaks,
+
+  -readability-uppercase-literal-suffix,
+
+  readability-*,
+  modernize-*,
+  performance-*,
+  bugprone-*,
+
+  -clang-diagnostic-unused-command-line-argument,
+  -readability-identifier-length,
+  -readability-magic-numbers
+
+HeaderFilterRegex: ".*\\/src\\/.*"
+
+FormatStyle: none
