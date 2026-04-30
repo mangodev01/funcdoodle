@@ -1,47 +1,37 @@
 name: Deploy Doxygen Docs
-
 on:
   push:
     branches: ["master"]
   workflow_dispatch:
-
 permissions:
   contents: read
   pages: write
   id-token: write
-
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-
+    environment:
+      name: github-pages
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-
-	  - name: Install dependencies
-  run: |
-	  sudo apt update
-	  sudo apt install -y graphviz
-	  wget https://github.com/doxygen/doxygen/releases/download/Release_1_16_1/doxygen-1.16.1.linux.bin.tar.gz
-	  tar -xzf doxygen-1.16.1.linux.bin.tar.gz
-	  sudo mv doxygen-1.16.1/bin/doxygen /usr/local/bin/doxygen
-
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y graphviz
+          wget https://github.com/doxygen/doxygen/releases/download/Release_1_16_1/doxygen-1.16.1.linux.bin.tar.gz
+          tar -xzf doxygen-1.16.1.linux.bin.tar.gz
+          sudo mv doxygen-1.16.1/bin/doxygen /usr/local/bin/doxygen
       - name: Generate docs
         run: |
           chmod +x ./scripts/docs.sh
           ./scripts/docs.sh
-
       - name: Setup Pages
         uses: actions/configure-pages@v5
-
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./doxy
-
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
         id: deployment
-
-    environment:
-      name: github-pages
