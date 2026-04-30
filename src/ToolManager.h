@@ -1,4 +1,30 @@
+/**
+ * @file ToolManager.h
+ * @brief Manages tools, tool state, and tool-related UI in FuncDoodle.
+ *
+ * This file defines ToolManager, responsible for:
+ * - Tracking the currently selected drawing tool
+ * - Managing tool parameters (color, brush size, etc.)
+ * - Rendering tool UI elements
+ * - Handling tool-related keybinds and input updates
+ * - Updating cursor behavior based on active tool
+ *
+ * ToolManager acts as the central bridge between user input,
+ * UI rendering, and editing tools such as pencil, fill, erase, etc.
+ */
+
 #pragma once
+
+/**
+ * @file ToolManager.h
+ * @brief Manages tools, tool state, and tool-related UI in FuncDoodle.
+ *
+ * This file defines ToolManager, responsible for:
+ * - Tool selection and registration
+ * - Tool rendering in the UI
+ * - Cursor updates based on selected tool
+ * - Tool keybind registration
+ */
 
 #include "Frame.h"
 
@@ -10,6 +36,12 @@
 #include "Tool.h"
 
 namespace FuncDoodle {
+	/**
+	 * @class ToolManager
+	 * @brief Manages tools in FuncDoodle.
+	 *
+	 * Does various stuff like rendering tool buttons, handling tool keybinds
+	 */
 	class ToolManager {
 		public:
 		ToolManager(KeybindsRegistry& keybinds);

@@ -1,9 +1,16 @@
+/**
+ * @file LoadedAssets.h
+ * @brief Global handles for textures and audio used across FuncDoodle.
+ *
+ * Contains externally defined asset IDs and audio data loaded at startup.
+ * Initialized via GlobalLoadAssets().
+ */
+
 #pragma once
 
 #include <iostream>
 
 #include "AssetLoader.h"
-
 #include "Audio.h"
 #include "AudioManager.h"
 

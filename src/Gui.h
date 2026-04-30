@@ -1,3 +1,18 @@
+/**
+ * @file Gui.h
+ * @brief ImGui/OpenGL/GLFW integration utilities and file dialog wrapper.
+ *
+ * This header provides:
+ * - Stream operator overload for ImGuiStyle debugging/printing
+ * - FileDialog wrapper around Native File Dialog (NFD) for open/save/folder selection
+ *
+ * The FileDialog class simplifies cross-platform file operations and integrates
+ * with std::filesystem for type-safe path handling.
+ *
+ * @note Relies on ImGui, GLFW, OpenGL, and Native File Dialog (NFD).
+ * @warning NFD allocations must be freed properly (handled internally here).
+ */
+
 #pragma once
 
 #include <cstdlib>
@@ -29,7 +44,6 @@ inline std::ostream& operator<<(std::ostream& os, const ImGuiStyle& style) {
 	   << "GrabRounding: " << style.GrabRounding << ", "
 	   << "TabRounding: " << style.TabRounding << " }\n";
 
-	// Print colors
 	os << "Colors:\n";
 	for (int i = 0; i < ImGuiCol_COUNT; ++i) {
 		const ImVec4& col = style.Colors[i];

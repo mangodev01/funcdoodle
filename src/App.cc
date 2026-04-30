@@ -35,7 +35,7 @@
 #include "Themes.h"
 #include "Tool.h"
 
-#include "exepath.h"
+#include "ExePath.h"
 #include "imgui_te_ui.h"
 #include "nfd.h"
 
@@ -66,7 +66,7 @@ namespace FuncDoodle {
 		std::exit(0);
 #endif
 
-		std::filesystem::path path = exepath::get();
+		std::filesystem::path path = ExePath::Get();
 
 		std::filesystem::path rootPath = path.parent_path();
 
@@ -75,7 +75,9 @@ namespace FuncDoodle {
 		m_ThemesPath = rootPath / "themes";
 
 		m_Keybinds = KeybindsRegistry(rootPath);
+
 		m_FrameLimitCache = m_Settings.FrameLimit;
+
 		m_Manager = std::make_unique<AnimationManager>(nullptr,
 			m_AssetLoader.get(), m_EditorController, m_Keybinds, m_Settings),
 

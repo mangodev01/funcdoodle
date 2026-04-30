@@ -585,8 +585,8 @@ namespace FuncDoodle {
 				strcpy(desc, app->GetCacheProj()->AnimDesc());
 			} else {
 				strcpy(name, (char*)"Untitled Animation");
-				width = 32;
-				height = 32;
+				width = g_DefaultCanvasWidth;
+				height = g_DefaultCanvasHeight;
 				const char* username = ImUtil::GetUsername();
 				strncpy(author, username, sizeof(author) - 1);
 				author[sizeof(author) - 1] = '\0';
@@ -646,16 +646,16 @@ namespace FuncDoodle {
 				ImGuiWindowFlags_AlwaysAutoResize)) {
 			bool justOpened = ImGui::IsWindowAppearing();
 			char name[256] = "";
-			int width = 32;
-			int height = 32;
+			int width = g_DefaultCanvasWidth;
+			int height = g_DefaultCanvasHeight;
 			char author[100] = "";
 			int fps = 0;
 			char desc[512] = "";
 
 			if (!app->GetCacheProj()) {
 				strcpy(name, (char*)"testproj");
-				width = 32;
-				height = 32;
+				width = g_DefaultCanvasWidth;
+				height = g_DefaultCanvasHeight;
 				const char* username = ImUtil::GetUsername();
 				strncpy(author, username, sizeof(author) - 1);
 				author[sizeof(author) - 1] = '\0';

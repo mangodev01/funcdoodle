@@ -85,3 +85,16 @@ funcdoodle_apply_platform_links(FuncDoodle)
 add_compile_definitions(__WINE__)
 message(STATUS "CMAKE BUILD TYPE ${CMAKE_BUILD_TYPE}")
 funcdoodle_apply_build_config(FuncDoodle)
+
+option(BUILD_DOCS "Build Doxygen docs" OFF)
+if(BUILD_DOCS)
+    find_package(Doxygen REQUIRED)
+    
+    configure_file(Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
+    
+    add_custom_target(docs
+        COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+        COMMENT "Generating Doxygen docs..."
+        VERBATIM)
+endif()

@@ -1,4 +1,27 @@
+/**
+ * @file Project.h
+ * @brief Defines the ProjectFile class, which manages animation project data.
+ *
+ * This file contains the core representation of a FuncDoodle project,
+ * including animation frames, metadata (name, author, description),
+ * rendering configuration (width, height, FPS, background color),
+ * and full serialization/deserialization logic for the `.fdp` project format.
+ *
+ * It also implements undo/redo functionality through Action-based stacks,
+ * allowing reversible editing operations such as drawing, filling, and frame
+ * edits.
+ */
+
 #pragma once
+
+/**
+ * @file Project.h
+ * @brief Defines the ProjectFile class, which manages animation project data.
+ *
+ * This file contains the core representation of a FuncDoodle project,
+ * including frame storage (LongIndexArray), metadata, and undo/redo stacks.
+ * Handles serialization to/from .fdp binary format.
+ */
 
 #include "DynArr.h"
 #include "Frame.h"
@@ -18,6 +41,20 @@
 #include "Platform/Window.h"
 
 namespace FuncDoodle {
+	/**
+	 * @class ProjectFile
+	 * @brief Class that is responsible for storing, reading & saving users'
+	 * project files
+	 *
+	 * Represents a user's project, handling all aspects of its lifecycle -
+	 * including in-memory storage of project data, deserializing from disk, and
+	 * serializing back to the .fdp binary format that is documented in
+	 * ../doc/FDP.md
+	 *
+	 * @invariant m_Window != nullptr
+	 * @invariant m_Width  > 0
+	 * @invariant m_Height > 0
+	 */
 	class ProjectFile {
 		public:
 		ProjectFile(char name[256], int width, int height, char author[100],

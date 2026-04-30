@@ -12,11 +12,11 @@ namespace FuncDoodle {
 	}
 
 	float TextUtil::TextWidth(ImFont* font, float size, const char* text) {
-		return Measure(font, size, text).width;
+		return Measure(font, size, text).Width;
 	}
 
 	float TextUtil::TextHeight(ImFont* font, float size, const char* text) {
-		return Measure(font, size, text).height;
+		return Measure(font, size, text).Height;
 	}
 
 	float TextUtil::MaxWidth(ImFont* titleFont, float titleSize,

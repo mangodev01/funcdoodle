@@ -1,3 +1,20 @@
+/**
+ * @file ExePath.h
+ * @brief Cross-platform utility for retrieving the current executable path.
+ *
+ * This header defines a small utility namespace that provides a function
+ * for obtaining the full filesystem path of the running executable.
+ *
+ * Platform support:
+ * - Windows: GetModuleFileNameA
+ * - macOS: _NSGetExecutablePath
+ * - Linux: readlink("/proc/self/exe")
+ *
+ * @note Internally uses a static buffer resized as needed on macOS.
+ * @warning The returned pointer is to a static buffer and may be overwritten on subsequent calls.
+ * @warning Not thread-safe due to shared static storage.
+ */
+
 #pragma once
 
 #include <vector>
@@ -13,8 +30,8 @@
 #include <unistd.h>
 #endif
 
-namespace exepath {
-	inline const char* get() {
+namespace ExePath {
+	inline const char* Get() {
 		static std::vector<char> buffer(1024);
 
 #if defined(_WIN32)
@@ -33,4 +50,4 @@ namespace exepath {
 
 		return buffer.data();
 	}
-}  // namespace exepath
+}  // namespace ExePath

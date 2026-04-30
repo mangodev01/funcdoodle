@@ -43,22 +43,22 @@ namespace FuncDoodle {
 	}
 
 	void MoveSelectionAction::Undo() {
-		auto proj = m_Ctx.proj;
+		auto proj = m_Ctx.Proj;
 		if (!proj)
 			return;
-		Frame* frame = proj->AnimFrames()->Get(m_Ctx.frameIndex);
+		Frame* frame = proj->AnimFrames()->Get(m_Ctx.FrameIndex);
 		if (!frame)
 			return;
 		*frame = m_FrameBeforeMove;
 	}
 
 	void MoveSelectionAction::Redo() {
-		auto proj = m_Ctx.proj;
+		auto proj = m_Ctx.Proj;
 		if (!proj)
 			return;
-		Frame* frame = proj->AnimFrames()->Get(m_Ctx.frameIndex);
+		Frame* frame = proj->AnimFrames()->Get(m_Ctx.FrameIndex);
 		if (!frame)
 			return;
-		frame->MoveSelection(m_Ctx.sel, m_Ctx.moveDir, proj->BgCol());
+		frame->MoveSelection(m_Ctx.Sel, m_Ctx.MoveDir, proj->BgCol());
 	}
 }  // namespace FuncDoodle

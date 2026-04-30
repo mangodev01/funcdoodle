@@ -1,3 +1,20 @@
+/**
+ * @file UUID.h
+ * @brief Defines a custom 16-byte UUID (universally unique identifier).
+ *
+ * This file contains the UUID class used in FuncDoodle themes.
+ *
+ * The implementation uses a fixed 16-byte array and provides:
+ * - String serialization/deserialization
+ * - Equality and ordering operators
+ * - Simple FNV-based hashing support
+ * - Basic arithmetic operators (XOR and -)
+ *
+ * @note This UUID implementation is custom and does NOT follow RFC 4122.
+ * @warning Operator+ and operator- are not mathematically meaningful UUID operations;
+ *          they are used purely for internal utility behavior.
+ */
+
 #pragma once
 #include <array>
 #include <iostream>
@@ -5,6 +22,12 @@
 #include <ostream>
 
 namespace FuncDoodle {
+	/**
+	 * @class UUID
+	 * @brief Represents a single 16-byte opaque uuid-like unique identifier.
+	 *
+	 * @note This does not conform to RFC 4122 and uses a custom format.
+	 */
 	class UUID {
 		public:
 		UUID(std::array<unsigned char, 16> bytes) { m_Bytes = bytes; }

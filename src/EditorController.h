@@ -1,20 +1,50 @@
+/**
+ * @file EditorController.h
+ * @brief Core editor logic handling canvas interaction, painting tools, and
+ * stroke management.
+ *
+ * This file defines EditorController, which is responsible for:
+ * - Processing user input on the canvas (mouse/keyboard interaction)
+ * - Dispatching tool behavior (pencil, eraser, bucket, picker, selection)
+ * - Rendering the canvas using ImGui draw lists
+ * - Managing stroke-based undo/redo recording
+ * - Coordinating with AnimationPlayer, ToolManager, and Selection systems
+ *
+ * It also contains CanvasContext, a per-frame runtime structure used to
+ * pass rendering and input state into canvas operations.
+ *
+ * The controller acts as the central bridge between UI input and frame editing
+ * logic.
+ */
+
 #pragma once
+
+/**
+ * @file EditorController.h
+ * @brief Core editor logic handling canvas interaction, painting tools, and
+ * stroke management.
+ *
+ * This file defines EditorController, which is responsible for:
+ * - Processing mouse input on the canvas
+ * - Managing active painting strokes
+ * - Handling tool behavior (pencil, eraser, etc.)
+ * - Selection manipulation and rendering
+ */
 
 #include "Action/Action.h"
 #include "AppSettings.h"
 #include "Frame.h"
+#include "Grid.h"
+#include "Player.h"
 #include "Ptr.h"
 #include "Selection.h"
+#include "ToolManager.h"
 #include "imgui.h"
 
 #include <unordered_map>
 #include <vector>
 
 namespace FuncDoodle {
-	class ToolManager;
-	class AnimationPlayer;
-	class Grid;
-
 	class EditorController {
 		public:
 		struct CanvasContext {

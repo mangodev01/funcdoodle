@@ -1,3 +1,11 @@
+/**
+ * @file Themes.h
+ * @brief Theme system for FuncDoodle UI styling.
+ *
+ * Provides utilities for loading, saving, editing, and managing ImGui themes.
+ * Themes are stored as TOML files and support full ImGuiStyle serialization.
+ */
+
 #pragma once
 
 #include "Gui.h"
@@ -23,10 +31,18 @@
 #include "UUID.h"
 
 namespace FuncDoodle {
+	/**
+	 * @namespace Themes
+	 * @brief Helper utilities for applying, creating and saving FuncDoodle themes.
+	 */
 	namespace Themes {
 		constexpr const char* s_DefaultTheme =
 			"d0c1a009-d09c-4fe6-84f8-eddcb2da38f9";
 
+		/**
+		 * @struct CustomTheme
+		 * @brief Represents a users' custom theme for FuncDoodle.
+		 */
 		struct CustomTheme {
 			const char* Name;
 			const char* Author;
@@ -42,6 +58,7 @@ namespace FuncDoodle {
 				  OwnsMeta(ownsMeta) {};
 		};
 
+		// this is bad
 		inline std::map<UUID, CustomTheme> g_Themes;
 		inline bool g_ThemeEditorOpen = false;
 		inline bool g_SaveThemeOpen = false;
@@ -463,5 +480,9 @@ namespace FuncDoodle {
 				ImGui::End();
 			}
 		}
+#undef SAVE_FLOAT
+#undef SAVE_VEC2
+#undef SAVE_BOOL
+#undef SAVE_ENUM
 	}  // namespace Themes
 }  // namespace FuncDoodle

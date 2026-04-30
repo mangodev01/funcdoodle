@@ -1,11 +1,11 @@
-#include "exepath.h"
+#include "ExePath.h"
 #include "Test.h"
 #include <cstring>
 
-int FuncDoodle_RunExepathTests() {
-	TEST_SCOPE("Exepath Tests");
+int FuncDoodle_RunExePathTests() {
+	TEST_SCOPE("ExePath Tests");
 
-	const char* path = exepath::get();
+	const char* path = ExePath::Get();
 	CHECK((path != nullptr), "get() should return non-null");
 	CHECK((strlen(path) > 0), "get() should return non-empty string");
 	CHECK((strstr(path, "/") != nullptr || strstr(path, "\\") != nullptr),

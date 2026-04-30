@@ -1,10 +1,32 @@
+/**
+ * @file ImUtil.h
+ * @brief Small helper utilities for ImGui UI construction in FuncDoodle.
+ *
+ * Provides convenience functions for:
+ * - button row layouts (OK/Cancel, Yes/No, etc.)
+ * - keyboard input helpers
+ * - alignment utilities
+ * - small platform-independent utilities
+ *
+ * These functions are lightweight wrappers around ImGui to reduce UI boilerplate.
+ */
+
 #pragma once
 
 #include <algorithm>
 
 #include "imgui.h"
+
 namespace FuncDoodle {
+	/**
+	 * @namespace ImUtil
+	 * @brief Helper utilities for building ImGui-based UI components.
+	 */
 	namespace ImUtil {
+		/**
+		 * @enum ButtonRowResult
+		 * @brief Identifies which button was pressed in a button row.
+		 */
 		enum class ButtonRowResult { None, Primary, Secondary, Tertiary };
 
 		inline float ButtonWidth(const char* label) {
@@ -28,6 +50,12 @@ namespace FuncDoodle {
 			return ImGui::IsKeyPressed(ImGuiKey_Escape, false);
 		}
 
+		/**
+		 * @fn ConfirmButtons
+		 * @brief Renders CONFIRM buttons for popups.
+		 *
+		 * @return ButtonRowResult corresponding to the button clicked by the user
+		 */
 		inline ButtonRowResult ConfirmButtons(const char* primary,
 			const char* secondary, const char* tertiary = nullptr) {
 			float spacing = ImGui::GetStyle().ItemSpacing.x;
@@ -102,6 +130,14 @@ namespace FuncDoodle {
 			return ImGuiKey_None;
 		}
 
+		/**
+		 * @fn GetUsername
+		 * @brief Small util function for fetching the current users' username. Used for filling out the animation author field by default.
+		 *
+		 * @return Returns the current users' username.
+		 *
+		 * @note Returns "unknown" if it couldn't fetch the username from known ENV vars.
+		 */
 		inline const char* GetUsername() {
 			const char* username =
 				std::getenv("USER");  // Common on Linux and macOS
@@ -120,3 +156,4 @@ namespace FuncDoodle {
 		}
 	}  // namespace ImUtil
 }  // namespace FuncDoodle
+

@@ -1,3 +1,22 @@
+/**
+ * @file Grid.h
+ * @brief Renders and manages the editor grid overlay.
+ *
+ * This file defines the Grid class, which is responsible for drawing
+ * a visual grid over the canvas to assist with pixel alignment and editing.
+ *
+ * Features:
+ * - Configurable grid width and height
+ * - Toggleable visibility state
+ * - Rendering via ImGui draw lists
+ * - Color inversion support for contrast (m_OppositeCol)
+ *
+ * The grid is intended to be a single shared instance to avoid visual desync
+ * across different editor views.
+ *
+ * @note Only one Grid instance should typically exist during runtime.
+ */
+
 #pragma once
 
 #include "Gui.h"
@@ -5,6 +24,12 @@
 #include "Frame.h"
 
 namespace FuncDoodle {
+	/**
+	 * @class Grid
+	 * @brief Represents a singular grid.
+	 *
+	 * @note Should only be instantiated once so no grid desync happens.
+	 */
 	class Grid {
 		public:
 		Grid(int gridWidth, int gridHeight, Col opposite);

@@ -1,3 +1,25 @@
+/**
+ * @file Manager.h
+ * @brief Defines AnimationManager, the central coordinator for animation playback, timeline UI, and editor integration.
+ *
+ * This file contains the AnimationManager class, which is responsible for:
+ * - Managing animation playback state via AnimationPlayer
+ * - Rendering and updating the timeline UI
+ * - Handling control panels and logs UI
+ * - Coordinating editor interaction through EditorController
+ * - Managing frame selection and rendering via FrameRenderer
+ * - Integrating tool input through ToolManager
+ *
+ * The manager acts as a high-level orchestrator between the project data,
+ * rendering system, input system, and editor tools.
+ *
+ * It ensures synchronization between playback state and editing state,
+ * and provides the main UI entry points for animation-related controls.
+ *
+ * @note AnimationManager does not own AssetLoader.
+ * @warning SetPlayer() must be called before replacing or assigning project data.
+ */
+
 #pragma once
 
 #include "AppSettings.h"
@@ -17,6 +39,29 @@
 #include "Ptr.h"
 
 namespace FuncDoodle {
+	/**
+	 * @class AnimationManager
+	 * @brief Responsible for registering keybinds for animations, rendering timeline, logs window, controls window, etc.
+	 *
+	 * Manages animation playback and user interaction, including handling input bindings
+	 * and coordinating UI elements such as the timeline, logs, and control panels.
+	 * Keeps animation state in sync with the editor and ensures consistent behavior
+	 * during playback and editing.
+	 *
+	 * @invariant m_Proj is always non-null after construction.
+	 * @invariant m_Player is always non-null and references the same ProjectFile as m_Proj.
+	 * @invariant m_SelectedFrame is always a valid index into m_Proj->AnimFrames().
+	 * @invariant m_FrameRenderer and m_TimelineFrameRenderer are initialized before any render call.
+	 * @invariant m_EditorController is always non-null.
+	 * @invariant m_AssetLoader is non-null and owned externally.
+	 * @invariant m_Settings and m_Keybinds remain valid for the lifetime of this instance.k
+	 *
+	 * @note This class does not own the AssetLoader.
+	 * @warning SetPlayer() must be called before SetProj().
+	 *
+	 * @see AnimationPlayer
+	 * @see FrameRenderer
+	 */
 	class AnimationManager {
 		public:
 		AnimationManager(SharedPtr<ProjectFile> proj, AssetLoader* assetLoader,

@@ -1,5 +1,5 @@
 #include "Keybinds.h"
-#include "exepath.h"
+#include "ExePath.h"
 #include "imgui.h"
 #include <iterator>
 #define TOML_EXCEPTIONS 0

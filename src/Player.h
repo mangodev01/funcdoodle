@@ -1,9 +1,39 @@
+/**
+ * @file Player.h
+ * @brief Defines AnimationPlayer, responsible for animation playback control.
+ *
+ * This file contains the AnimationPlayer class, which manages playback of
+ * a ProjectFile animation over time.
+ *
+ * Responsibilities include:
+ * - Controlling play/pause state of the animation
+ * - Advancing frames based on elapsed time
+ * - Managing current frame index
+ * - Rewinding and resetting playback state
+ *
+ * The player operates directly on a ProjectFile instance and maintains
+ * internal timing state used for frame progression.
+ *
+ * @note m_CurFrame is always expected to be a valid index within the project frame list.
+ * @note Playback timing is accumulated using m_TimeElapsed.
+ */
+
 #pragma once
 
 #include "Project.h"
 #include "Ptr.h"
 
 namespace FuncDoodle {
+	/**
+	 * @class AnimationPlayer
+	 * @brief Responsible for playing a users' animation.
+	 *
+	 * @invariant m_CurFrame is always a valid frame index within m_Proj
+	 *
+	 * @note Play() advances frames over time using m_TimeElapsed
+	 * @note AnimationPlayer maintains internal playback state (frame + time accumulator)
+	 * @note Rewind() resets playback to the first frame
+	 */
 	class AnimationPlayer {
 		public:
 		AnimationPlayer(const SharedPtr<ProjectFile>& proj);

@@ -1,21 +1,48 @@
+/**
+ * @file Frame.h
+ * @brief Defines pixel color structures and frame/image data containers.
+ *
+ * This file provides the core low-level image representation used by
+ * FuncDoodle, including:
+ * - Col: an RGB8 color struct with utility operations
+ * - ImageArray: a 2D pixel buffer backed by a flat vector
+ * - Frame: a higher-level wrapper around ImageArray with editing operations
+ *
+ * It supports basic image manipulation such as rotation, selection-based edits,
+ * copying to clipboard, and exporting to disk using stb_image_write.
+ *
+ * These structures form the foundation of all rendering and pixel editing
+ * functionality in the application.
+ */
+
 #pragma once
+
+/**
+ * @file Frame.h
+ * @brief Defines pixel color structures and frame/image data containers.
+ *
+ * This file provides the core low-level image representation used by
+ * FuncDoodle, including the Col struct (RGB8) and ImageArray (2D pixel grid).
+ * Also defines the Frame class, which wraps ImageArray for animation frames.
+ */
 
 #include <cmath>
 #include <iostream>
-#include <stdexcept>
 #include <vector>
 
 #include "Action/Direction.h"
-#include "Gui.h"
 
+#include "Constants.h"
 #include "Ptr.h"
 #include "Selection.h"
 
 #include "stb_image_write.h"
 
 namespace FuncDoodle {
-	class MoveSelectionAction;
-
+	/**
+	 * @struct Col
+	 * @brief A struct holding an RGB8 color
+	 */
 	struct Col {
 		public:
 		unsigned char r = 255, g = 255, b = 255;
@@ -48,12 +75,33 @@ namespace FuncDoodle {
 			return stream;
 		}
 	};
+	/**
+	 * @class ImageArray
+	 * @brief 2D array of RGB8 color pixels.
+	 *
+	 * Stores a width x height grid of Col (RGB8) values in a flat vector.
+	 * Used by Frame to store pixel data. Supports bounds-checked get/set.
+	 *
+	 * @invariant Width() > 0 && Height() > 0
+	 * @invariant m_Data.size() == Width() * Height()
+	 *
+	 * @note Thread-unsafe: no locking.
+	 * @warning Accessing out of bounds is undefined behavior.
+	 */
 	class ImageArray {
 		public:
 		ImageArray& operator=(const ImageArray&) = default;
 		ImageArray& operator=(ImageArray&&) = default;
 		ImageArray(const ImageArray&) = default;
 		ImageArray(ImageArray&&) = default;
+
+		/**
+		 * @brief Construct array with dimensions.
+		 * @param width Must be > 0.
+		 * @param height Must be > 0.
+		 * @param bgCol Background color for unfilled pixels.
+		 * @pre width > 0 && height > 0
+		 */
 		ImageArray(int width, int height, Col bgCol);
 		~ImageArray();
 
@@ -76,8 +124,8 @@ namespace FuncDoodle {
 		inline void SetBG(const Col bgCol) { m_BG = bgCol; }
 
 		private:
-		int m_Width = 32;
-		int m_Height = 32;
+		int m_Width = g_DefaultCanvasWidth;
+		int m_Height = g_DefaultCanvasHeight;
 		std::vector<Col> m_Data;
 		Col m_BG;
 	};

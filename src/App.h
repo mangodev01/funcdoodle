@@ -1,4 +1,21 @@
+/**
+ * @file App.h
+ * @brief Core FuncDoodle application class and runtime control interface.
+ *
+ * This header defines the Application class, which manages the main
+ * lifecycle of FuncDoodle including initialization, rendering, project
+ * management, input handling, theming, and editor coordination.
+ */
+
 #pragma once
+
+/**
+ * @file App.h
+ * @brief Core FuncDoodle application class and runtime control interface.
+ *
+ * This header defines the Application class, which manages the main
+ * event loop, window, UI, tools, and project lifecycle.
+ */
 
 #include "AppSettings.h"
 #include "AssetLoader.h"
@@ -18,6 +35,17 @@
 #include <string>
 
 namespace FuncDoodle {
+	/**
+	 * @class Application
+	 * @brief Class holding most of the data required to launch FuncDoodle.
+	 *
+	 * Main application class.
+	 *
+	 * @invariant s_Instance != nullptr when application is running
+	 * @invariant GetCurProj() may be nullptr but will never be invalid pointer
+	 * @note Constructing multiple Application instances is unsupported, because
+	 * it is a semi-singleton.
+	 */
 	class Application {
 		public:
 		Application();

@@ -1,3 +1,16 @@
+/**
+ * @file Window.h
+ * @brief GLFW-based window abstraction for FuncDoodle.
+ *
+ * Provides a RAII wrapper around GLFWwindow, handling:
+ * - Window lifecycle (create/destroy)
+ * - Input/event polling
+ * - Buffer swapping
+ * - Cursor control
+ * - File drop callbacks
+ * - ImGui initialization
+ */
+
 #pragma once
 
 #define GLFW_INCLUDE_NONE
@@ -7,55 +20,126 @@
 #include <functional>
 
 namespace FuncDoodle::Platform {
+
+	/**
+	 * @brief Global flag indicating whether GLFW has been initialized.
+	 */
 	extern bool g_GlfwInitted;
 
+	/**
+	 * @struct WindowSpec
+	 * @brief Initial configuration used to create a window.
+	 */
 	struct WindowSpec {
-		/// window width at startup
+
+		/**
+		 * @brief Window width at startup.
+		 */
 		int Width;
 
-		/// window height at startup
+		/**
+		 * @brief Window height at startup.
+		 */
 		int Height;
 
-		/// window title at startup
+		/**
+		 * @brief Window title at startup.
+		 */
 		const char* Title;
 
-		/// monitor - 0 for primary, 1 for secondary, etc.
+		/**
+		 * @brief Monitor index (0 = primary, 1 = secondary, etc.).
+		 */
 		int Monitor;
 	};
 
+	/**
+	 * @class Window
+	 * @brief Abstraction over a GLFW window with input, rendering, and lifecycle utilities.
+	 */
 	class Window {
 		public:
 		Window(WindowSpec spec);
 		~Window();
 
+		/**
+		 * @brief Sets the window title.
+		 */
 		void SetTitle(const char* title);
+
+		/**
+		 * @brief Sets the window icon from a file path.
+		 */
 		void SetIcon(std::filesystem::path icon);
 
 		using DropCallback = std::function<void(Window*, int, const char**)>;
+
+		/**
+		 * @brief Sets callback for file drop events.
+		 */
 		void SetDropCallback(DropCallback cb);
 
 		using ErrorCallback = void (*)(int err, const char* desc);
+
+		/**
+		 * @brief Sets GLFW error callback.
+		 */
 		void SetErrorCallback(ErrorCallback cb);
 
 		using CloseCallback = std::function<void(Window*)>;
+
+		/**
+		 * @brief Sets callback for window close events.
+		 */
 		void SetCloseCallback(CloseCallback cb);
 
+		/**
+		 * @brief Requests the window to close.
+		 */
 		void SetShouldClose(bool shouldClose);
+
+		/**
+		 * @brief Returns whether the window should close.
+		 */
 		bool ShouldClose();
 
+		/**
+		 * @brief Polls OS and input events.
+		 */
 		void PollEvents();
+
+		/**
+		 * @brief Retrieves framebuffer size in pixels.
+		 */
 		void GetFramebufferSize(int* width, int* height);
+
+		/**
+		 * @brief Swaps front and back buffers.
+		 */
 		void SwapBuffers();
 
+		/**
+		 * @brief Enables or disables cursor visibility.
+		 */
 		void SetCursorHidden(bool hidden);
-		inline bool GetCursorHidden() const { return m_CursorHidden; };
 
+		/**
+		 * @brief Returns whether the cursor is currently hidden.
+		 */
+		inline bool GetCursorHidden() const { return m_CursorHidden; }
+
+		/**
+		 * @brief Initializes GLFW (must be called once before creating windows).
+		 */
 		static void InitGlfw();
+
+		/**
+		 * @brief Initializes ImGui for this window.
+		 */
 		void InitImGui();
 
 		private:
-		static void GlfwDropTrampoline(
-			GLFWwindow* glfwWin, int count, const char** paths);
+		static void GlfwDropTrampoline(GLFWwindow* glfwWin, int count, const char** paths);
 		static void GlfwCloseTrampoline(GLFWwindow* glfwWin);
 
 		protected:
@@ -68,4 +152,5 @@ namespace FuncDoodle::Platform {
 		WindowSpec m_Spec;
 		GLFWcursor* m_BlankCursor = nullptr;
 	};
+
 }  // namespace FuncDoodle::Platform

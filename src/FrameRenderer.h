@@ -1,3 +1,19 @@
+/**
+ * @file FrameRenderer.h
+ * @brief Responsible for rendering individual animation frames and canvas UI.
+ *
+ * This file defines the FrameRenderer class, which handles:
+ * - Rendering the pixel canvas for a single frame
+ * - Drawing status bar information for the frame view
+ * - Forwarding user input and painting actions to EditorController
+ * - Managing a CanvasContext that bundles rendering and input state
+ *
+ * FrameRenderer acts as the bridge between the UI layer (ImGui rendering)
+ * and the editor logic (EditorController).
+ *
+ * @see EditorController
+ */
+
 #pragma once
 
 #include "AppSettings.h"
@@ -17,6 +33,15 @@
 #include "imgui.h"
 
 namespace FuncDoodle {
+	/**
+	 * @class FrameRenderer
+	 * @brief Responible for rendering a single frame, status bar and dispatching painting to EditorController
+	 *
+	 * Handles drawing the frame canvas, status bar, and forwarding painting
+	 * operations to the EditorController through a CanvasContext.
+	 *
+	 * @see EditorController
+	 */
 	class FrameRenderer {
 		public:
 		FrameRenderer(Frame* frame, unsigned long index, ToolManager* manager,
