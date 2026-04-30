@@ -15,6 +15,7 @@ Checks: >
   -readability-identifier-length,
   -readability-magic-numbers
 
-HeaderFilterRegex: ".*\\/src\\/.*"
+HeaderFilterRegex: "^/home/illia/proj/funcdoodle/src/"
+ExcludeHeaderFilterRegex: ".*lib/.*"
 
 FormatStyle: none

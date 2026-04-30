@@ -42,14 +42,12 @@ cp "$tmp_cc" "$cc_file"
 
 echo "[fix] running clang-tidy (no fixes)..."
 
-run-clang-tidy -p "$build_dir" -fix
+run-clang-tidy -p "$build_dir" -header-filter='^'"$root_dir"'/src/' -fix
 # -j "$(nproc 2>/dev/null || sysctl -n hw.ncpu)" 
 
 # clang-apply-replacements fixes/
 
 mv "$build_dir/compile_commands_tmp.json" "$cc_file"
 
-# HACK because clang-tidy SUCKS
-git submodule deinit -f .
-git submodule sync --recursive
-git submodule update --init --recursive --force
+# Restore any clang-tidy modifications to third-party libs
+git checkout -- lib/ 2>/dev/null || true
