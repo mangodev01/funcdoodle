@@ -37,9 +37,12 @@ namespace FuncDoodle {
 		public:
 		UIManager();
 
+		/** @brief Renders the top-level UI for the current frame. */
 		void Render();
+		/** @brief Renders the main options/preferences UI. */
 		void Options();
 
+		/** @brief Returns the popup state registry owned by the UI manager. */
 		inline PopupRegistry& GetPopups() { return m_Popups; }
 
 		private:

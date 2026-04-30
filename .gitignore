@@ -1,4 +1,5 @@
 docs/
+doxy/
 appbin/
 .cache/
 release.sh

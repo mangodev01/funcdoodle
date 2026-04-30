@@ -25,6 +25,13 @@
 #include <ostream>
 #include <vector>
 
+/**
+ * @brief Streams a readable dump of an ImGui style object.
+ *
+ * @param os Output stream to write into.
+ * @param style ImGui style instance to serialize.
+ * @return Reference to @p os.
+ */
 inline std::ostream& operator<<(std::ostream& os, const ImGuiStyle& style) {
 	os << "ImGuiStyle { "
 	   << "Alpha: " << style.Alpha << ", "
@@ -54,12 +61,28 @@ inline std::ostream& operator<<(std::ostream& os, const ImGuiStyle& style) {
 	return os;
 }
 
+/**
+ * @class FileDialog
+ * @brief Lightweight wrapper around Native File Dialog operations.
+ */
 class FileDialog {
 	public:
+	/**
+	 * @fn FileDialog
+	 * @brief Creates a file dialog helper with optional filter and start path.
+	 * @param filterList Native File Dialog filter list.
+	 * @param defaultPath Initial directory or path hint.
+	 */
 	FileDialog(
 		const char* filterList = nullptr, const char* defaultPath = nullptr)
 		: m_FilterList(filterList), m_DefaultPath(defaultPath) {}
 
+	/**
+	 * @fn Open
+	 * @brief Opens a single-file picker dialog.
+	 *
+	 * @return Selected file path, or an empty path if cancelled.
+	 */
 	[[nodiscard]] std::filesystem::path Open() const {
 		nfdchar_t* outPath = nullptr;
 		nfdresult_t result =
@@ -73,6 +96,12 @@ class FileDialog {
 		return {};
 	}
 
+	/**
+	 * @fn Save
+	 * @brief Opens a save-file dialog.
+	 *
+	 * @return Selected output path, or an empty path if cancelled.
+	 */
 	[[nodiscard]] std::filesystem::path Save() const {
 		nfdchar_t* outPath = nullptr;
 		nfdresult_t result =
@@ -86,6 +115,12 @@ class FileDialog {
 		return {};
 	}
 
+	/**
+	 * @fn OpenMultiple
+	 * @brief Opens a multi-select file picker dialog.
+	 *
+	 * @return All selected file paths, or an empty list if cancelled.
+	 */
 	[[nodiscard]] std::vector<std::filesystem::path> OpenMultiple() const {
 		nfdpathset_t pathSet;
 		nfdresult_t result =
@@ -105,6 +140,12 @@ class FileDialog {
 		return {};
 	}
 
+	/**
+	 * @fn Dir
+	 * @brief Opens a directory picker dialog.
+	 *
+	 * @return Selected directory path, or an empty path if cancelled.
+	 */
 	[[nodiscard]] std::filesystem::path Dir() const {
 		nfdchar_t* outPath = nullptr;
 		nfdresult_t result = NFD_PickFolder(m_DefaultPath, &outPath);

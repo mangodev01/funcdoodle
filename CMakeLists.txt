@@ -90,10 +90,8 @@ option(BUILD_DOCS "Build Doxygen docs" OFF)
 if(BUILD_DOCS)
     find_package(Doxygen REQUIRED)
     
-    configure_file(Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
-    
     add_custom_target(docs
-        COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+		COMMAND ${DOXYGEN_EXECUTABLE} ${PROJECT_SOURCE_DIR}/Doxyfile
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         COMMENT "Generating Doxygen docs..."
         VERBATIM)

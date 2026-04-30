@@ -22,8 +22,11 @@
 // in-case i'd ever want to make my own smart ptr thing or smth
 // with like ref count
 // for debugging
+/** @brief Alias for an exclusively owned smart pointer. */
 template <typename T> using UniquePtr = std::unique_ptr<T>;
 
+/** @brief Alias for a reference-counted shared smart pointer. */
 template <typename T> using SharedPtr = std::shared_ptr<T>;
 
+/** @brief Alias for a non-owning observer of a SharedPtr. */
 template <typename T> using WeakPtr = std::weak_ptr<T>;

@@ -16,10 +16,30 @@ namespace FuncDoodle {
 	 * @brief Represents raw PCM audio data.
 	 */
 	struct AudioData {
+		/**
+		 * @var samples
+		 * @brief Interleaved PCM samples in float format.
+		 */
 		std::vector<float> samples;
+		/**
+		 * @var sampleRate
+		 * @brief Sample rate in Hz.
+		 */
 		int sampleRate;
+		/**
+		 * @var numChannels
+		 * @brief Number of audio channels in the sample buffer.
+		 */
 		int numChannels;
+		/**
+		 * @var cur
+		 * @brief Current playback frame offset.
+		 */
 		size_t cur = 0;
+		/**
+		 * @var total
+		 * @brief Total number of frames available.
+		 */
 		size_t total = 0;
 	};
 };	// namespace FuncDoodle

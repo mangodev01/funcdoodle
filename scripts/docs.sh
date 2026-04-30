@@ -26,22 +26,8 @@ DOXYFILE="${root_dir}/Doxyfile"
 OUT_DIR="${root_dir}/docs/html"
 # Create Doxyfile if missing
 if [ ! -f "${DOXYFILE}" ]; then
-    warn "Doxyfile not found, creating default..."
-    cat > "${DOXYFILE}" << 'EOF'
-PROJECT_NAME           = "FuncDoodle"
-OUTPUT_DIRECTORY       = docs
-INPUT                  = src
-RECURSIVE             = YES
-FILE_PATTERNS          = *.h *.cc
-GENERATE_HTML          = YES
-GENERATE_LATEX          = NO
-GENERATE_XML           = NO
-EXTRACT_ALL            = NO
-WARNINGS_AS_ERROR      = NO
-WARN_IF_UNDOCUMENTED = YES
-QUIET                  = YES
-EOF
-    success "Created ${DOXYFILE}"
+    error "Doxyfile not found"
+	exit -1
 fi
 # Run doxygen
 info "Generating Doxygen documentation..."

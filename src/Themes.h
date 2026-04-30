@@ -36,6 +36,9 @@ namespace FuncDoodle {
 	 * @brief Helper utilities for applying, creating and saving FuncDoodle themes.
 	 */
 	namespace Themes {
+		/**
+		 * @brief UUID string of the built-in default theme.
+		 */
 		constexpr const char* s_DefaultTheme =
 			"d0c1a009-d09c-4fe6-84f8-eddcb2da38f9";
 
@@ -44,14 +47,23 @@ namespace FuncDoodle {
 		 * @brief Represents a users' custom theme for FuncDoodle.
 		 */
 		struct CustomTheme {
-			const char* Name;
-			const char* Author;
-			ImGuiStyle Style;
-			UUID Uuid;
-			bool OwnsMeta = false;
+			const char* Name;   ///< Theme display name.
+			const char* Author; ///< Theme author name.
+			ImGuiStyle Style;   ///< ImGui style payload for the theme.
+			UUID Uuid;          ///< Stable UUID identifying the theme.
+			bool OwnsMeta = false; ///< Whether Name and Author memory must be freed.
 			CustomTheme()
 				: Uuid(UUID()), Name(""), Author(""), Style(ImGuiStyle()),
 				  OwnsMeta(false) {}
+			/**
+			 * @brief Creates a theme with explicit metadata and style.
+			 *
+			 * @param name Theme display name.
+			 * @param author Theme author name.
+			 * @param style ImGui style payload.
+			 * @param uuid Theme UUID.
+			 * @param ownsMeta Whether metadata strings are owned by this theme.
+			 */
 			CustomTheme(const char* name, const char* author, ImGuiStyle style,
 				UUID uuid, bool ownsMeta = false)
 				: Uuid(uuid), Name(name), Author(author), Style(style),
@@ -59,9 +71,16 @@ namespace FuncDoodle {
 		};
 
 		// this is bad
+		/** Registry of all loaded themes keyed by UUID. */
 		inline std::map<UUID, CustomTheme> g_Themes;
+		/** Whether the live theme editor window is open. */
 		inline bool g_ThemeEditorOpen = false;
+		/** Whether the save-theme popup is open. */
 		inline bool g_SaveThemeOpen = false;
+		/**
+		 * @fn ClearThemes
+		 * @brief Clears the loaded theme registry and frees owned metadata.
+		 */
 		inline void ClearThemes() {
 			for (auto& [uuid, theme] : g_Themes) {
 				(void)uuid;
@@ -75,13 +94,25 @@ namespace FuncDoodle {
 			}
 			g_Themes.clear();
 		}
+		/**
+		 * @fn ThemeEditor
+		 * @brief Renders the ImGui style editor when enabled.
+		 */
 		inline void ThemeEditor() {
 			if (!g_ThemeEditorOpen) {
 				return;
 			}
 			ImGui::ShowStyleEditor(&ImGui::GetStyle());
 		}
+		/** Cached copy of the most recently loaded theme. */
 		inline CustomTheme g_LastLoadedTheme;
+		/**
+		 * @fn LoadThemeFromFile
+		 * @brief Loads a theme from a TOML file.
+		 *
+		 * @param path Path to the theme file.
+		 * @return Pointer to the cached loaded theme, or nullptr on failure.
+		 */
 		inline CustomTheme* LoadThemeFromFile(const char* path) {
 			using namespace std::string_view_literals;
 
@@ -314,6 +345,12 @@ namespace FuncDoodle {
 
 			return &g_LastLoadedTheme;
 		}
+		/**
+		 * @fn LoadThemes
+		 * @brief Loads every theme file in a directory.
+		 *
+		 * @param path Directory containing theme files.
+		 */
 		inline void LoadThemes(std::filesystem::path path) {
 			ClearThemes();
 			if (std::filesystem::exists(path) &&
@@ -352,6 +389,10 @@ namespace FuncDoodle {
 			// intentionally omitted here.
 		}
 
+		/**
+		 * @fn SaveCurrentTheme
+		 * @brief Renders and processes the save-theme UI.
+		 */
 		inline void SaveCurrentTheme() {
 // Save macros for ImGuiStyle fields
 #define SAVE_FLOAT(field) other.insert(#field, style.field)

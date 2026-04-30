@@ -33,7 +33,9 @@ namespace FuncDoodle {
 
 		/**
 		 * @brief Creates a delete-frame action storing frame data.
+		 * @param frameI Index of the frame to remove.
 		 * @param frame Frame to delete (copied internally).
+		 * @param proj Project that owns the frame.
 		 */
 		DeleteFrameAction(unsigned long frameI,
 			Frame* frame,
@@ -110,6 +112,7 @@ namespace FuncDoodle {
 	 */
 	class MoveFrameLeftAction : public Action {
 	public:
+		/** @brief Creates an action that shifts a frame one slot to the left. */
 		MoveFrameLeftAction(unsigned long frameI,
 			const SharedPtr<ProjectFile>& proj)
 			: m_Proj(proj),
@@ -129,6 +132,7 @@ namespace FuncDoodle {
 	 */
 	class MoveFrameRightAction : public Action {
 	public:
+		/** @brief Creates an action that shifts a frame one slot to the right. */
 		MoveFrameRightAction(unsigned long frameI,
 			const SharedPtr<ProjectFile>& proj)
 			: m_Proj(proj),

@@ -32,21 +32,31 @@ namespace FuncDoodle {
 	 */
 	class Grid {
 		public:
+		/** @brief Creates a grid overlay with the given cell size and contrast color. */
 		Grid(int gridWidth, int gridHeight, Col opposite);
 		~Grid();
+		/** @brief Draws the grid into the provided ImGui draw list. */
 		void RenderWithDrawList(
 			ImDrawList* drawList, ImVec2 startPos, ImVec2 endPos);
+		/** @brief Makes the grid visible. */
 		inline const void ShowGrid() { m_ShowGrid = true; };
+		/** @brief Hides the grid. */
 		inline const void HideGrid() { m_ShowGrid = false; };
+		/** @brief Toggles grid visibility. */
 		inline const void ToggleGrid() { m_ShowGrid = !m_ShowGrid; };
+		/** @brief Returns whether the grid is currently visible. */
 		inline const bool GridVisibility() { return m_ShowGrid; };
+		/** @brief Updates the horizontal grid spacing. */
 		inline const void SetGridWidth(int gridWidth) {
 			m_GridWidth = gridWidth;
 		}
+		/** @brief Updates the vertical grid spacing. */
 		inline const void SetGridHeight(int gridHeight) {
 			m_GridHeight = gridHeight;
 		}
+		/** @brief Returns the horizontal grid spacing. */
 		inline const int GridWidth() { return m_GridWidth; }
+		/** @brief Returns the vertical grid spacing. */
 		inline const int GridHeight() { return m_GridHeight; }
 
 		private:

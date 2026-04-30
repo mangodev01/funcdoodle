@@ -30,9 +30,25 @@ namespace FuncDoodle {
 	 * timeline rendering functions.
 	 */
 	struct TimelineKeyContext {
+		/**
+		 * @var Proj
+		 * @brief Project whose timeline is being edited.
+		 */
 		SharedPtr<ProjectFile> Proj;
+		/**
+		 * @var Player
+		 * @brief Playback controller for the active project.
+		 */
 		AnimationPlayer* Player = nullptr;
+		/**
+		 * @var FrameRenderer
+		 * @brief Renderer used for frame thumbnails and previews.
+		 */
 		FrameRenderer* FrameRenderer = nullptr;
+		/**
+		 * @var SelectedFrame
+		 * @brief Pointer to the active timeline frame index.
+		 */
 		unsigned long* SelectedFrame = nullptr;
 	};
 
@@ -42,8 +58,16 @@ namespace FuncDoodle {
 	 */
 	class KeyHandler {
 		public:
+			/**
+			 * @fn HandleTimelineShortcuts(TimelineKeyContext& context, KeybindsRegistry& keybinds)
+			 * @brief Processes timeline-scoped shortcuts for the current frame.
+			 */
 			static void HandleTimelineShortcuts(
 				TimelineKeyContext& context, KeybindsRegistry& keybinds);
+			/**
+			 * @fn RegisterKeybinds(KeybindsRegistry& keybinds)
+			 * @brief Registers timeline shortcut bindings in the registry.
+			 */
 			static void RegisterKeybinds(KeybindsRegistry& keybinds);
 	};
 }  // namespace FuncDoodle

@@ -39,8 +39,10 @@ extern std::vector<char*> s_Logs;
 
 #if __cplusplus >= 202002L && defined(__cpp_lib_format)
 #include <format>
+/** @def FUNC_FORMAT_AVAILABLE @brief Indicates whether std::format support is available. */
 #define FUNC_FORMAT_AVAILABLE 1
 #else
+/** @def FUNC_FORMAT_AVAILABLE @brief Indicates whether std::format support is available. */
 #define FUNC_FORMAT_AVAILABLE 0
 #endif
 
@@ -164,8 +166,8 @@ extern std::vector<char*> s_Logs;
 
 
 /**
- * @def FUNC_INF
- * @brief Info log.
+ * @def FUNC_WARN
+ * @brief Warning log.
  */
 #define FUNC_WARN(x)                                                    \
 	do {                                                                \
@@ -206,10 +208,15 @@ extern std::vector<char*> s_Logs;
 
 #include "Gui.h"
 
+/**
+ * @def INVERTED_IMCOL
+ * @brief Produces an inverted opaque ImGui color from RGB components.
+ */
 #define INVERTED_IMCOL(r, g, b) IM_COL32(255 - (r), 255 - (g), 255 - (b), 255)
 
 #ifdef _WIN32
 #include <windows.h>
+/** @def OPEN_FILE_EXPLORER @brief Opens a path in the platform file explorer. */
 #define OPEN_FILE_EXPLORER(path) \
 	ShellExecuteA(               \
 		nullptr, "open", path.string().c_str(), nullptr, nullptr, SW_SHOW)
@@ -219,13 +226,16 @@ extern std::vector<char*> s_Logs;
 #define strcasecmp _stricmp
 #elif __APPLE__
 #include <cstdlib>
+/** @def OPEN_FILE_EXPLORER @brief Opens a path in the platform file explorer. */
 #define OPEN_FILE_EXPLORER(path) \
 	std::system(("open " + path.string() + " &").c_str())
 #elif __linux__
 #include <cstdlib>
+/** @def OPEN_FILE_EXPLORER @brief Opens a path in the platform file explorer. */
 #define OPEN_FILE_EXPLORER(path) \
 	std::system(("xdg-open " + path.string() + " &").c_str())
 #else
+/** @def OPEN_FILE_EXPLORER @brief Opens a path in the platform file explorer. */
 #define OPEN_FILE_EXPLORER(path) \
 	std::cerr << "Unsupported platform!" << std::endl
 #endif

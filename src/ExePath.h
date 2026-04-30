@@ -31,6 +31,11 @@
 #endif
 
 namespace ExePath {
+	/**
+	 * @brief Returns the full path to the currently running executable.
+	 *
+	 * @return Pointer to internal static storage containing the executable path.
+	 */
 	inline const char* Get() {
 		static std::vector<char> buffer(1024);
 

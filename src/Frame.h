@@ -45,8 +45,17 @@ namespace FuncDoodle {
 	 */
 	struct Col {
 		public:
-		unsigned char r = 255, g = 255, b = 255;
+		unsigned char r = 255;  ///< Red channel in 8-bit RGB space.
+		unsigned char g = 255;  ///< Green channel in 8-bit RGB space.
+		unsigned char b = 255;  ///< Blue channel in 8-bit RGB space.
 
+		/**
+		 * @fn FromFloat3
+		 * @brief Converts a normalized RGB float triplet into an 8-bit color.
+		 *
+		 * @param f Pointer to three normalized RGB float values.
+		 * @return Converted 8-bit RGB color.
+		 */
 		static Col FromFloat3(const float* f) {
 			Col col;
 
@@ -57,10 +66,28 @@ namespace FuncDoodle {
 			return col;
 		}
 
+		/**
+		 * @brief Returns whether two colors are identical.
+		 *
+		 * @param other Color to compare against.
+		 * @return Whether both colors match.
+		 */
 		bool operator==(const Col& other) const {
 			return r == other.r && g == other.g && b == other.b;
 		}
+		/**
+		 * @brief Returns whether two colors differ.
+		 *
+		 * @param other Color to compare against.
+		 * @return Whether the colors differ.
+		 */
 		bool operator!=(const Col& other) const { return !(*this == other); }
+		/**
+		 * @brief Orders colors lexicographically by RGB channels.
+		 *
+		 * @param other Color to compare against.
+		 * @return Whether this color sorts before @p other.
+		 */
 		bool operator<(const Col& other) const {
 			if (r != other.r)
 				return r < other.r;
@@ -69,6 +96,13 @@ namespace FuncDoodle {
 			return b < other.b;
 		}
 
+		/**
+		 * @brief Streams a color in human-readable form.
+		 *
+		 * @param stream Output stream to write into.
+		 * @param col Color value to serialize.
+		 * @return Reference to @p stream.
+		 */
 		friend std::ostream& operator<<(std::ostream& stream, const Col& col) {
 			stream << "Col{" << (unsigned int)col.r << ", "
 				   << (unsigned int)col.g << ", " << (unsigned int)col.b << "}";
@@ -90,9 +124,13 @@ namespace FuncDoodle {
 	 */
 	class ImageArray {
 		public:
+		/** @brief Copies pixel data from another image array. */
 		ImageArray& operator=(const ImageArray&) = default;
+		/** @brief Moves pixel data from another image array. */
 		ImageArray& operator=(ImageArray&&) = default;
+		/** @brief Copies an existing image array. */
 		ImageArray(const ImageArray&) = default;
+		/** @brief Moves an existing image array. */
 		ImageArray(ImageArray&&) = default;
 
 		/**
@@ -105,22 +143,98 @@ namespace FuncDoodle {
 		ImageArray(int width, int height, Col bgCol);
 		~ImageArray();
 
+		/**
+		 * @fn RedoColorAdjustment
+		 * @brief Reapplies background-color dependent adjustments after a color change.
+		 *
+		 * @param bgCol New background color.
+		 */
 		void RedoColorAdjustment(Col bgCol);
+		/**
+		 * @fn Resize
+		 * @brief Resizes the backing pixel buffer to match current dimensions.
+		 */
 		void Resize();
+		/**
+		 * @fn Set
+		 * @brief Sets a pixel color.
+		 *
+		 * @param x Pixel X coordinate.
+		 * @param y Pixel Y coordinate.
+		 * @param color New pixel color.
+		 */
 		void Set(int x, int y, const Col& color);
+		/**
+		 * @fn Get
+		 * @brief Returns a pixel color.
+		 *
+		 * @param x Pixel X coordinate.
+		 * @param y Pixel Y coordinate.
+		 * @return Pixel color at the requested coordinate.
+		 */
 		Col Get(int x, int y) const;
 
+		/**
+		 * @fn Width
+		 * @brief Returns the image width in pixels.
+		 *
+		 * @return Image width.
+		 */
 		inline int Width() const { return m_Width; }
+		/**
+		 * @fn SetWidth
+		 * @brief Sets the image width.
+		 *
+		 * @param width New image width.
+		 * @param clear Whether pixel contents should be cleared.
+		 */
 		inline void SetWidth(int width, bool clear = false) { m_Width = width; }
+		/**
+		 * @fn Height
+		 * @brief Returns the image height in pixels.
+		 *
+		 * @return Image height.
+		 */
 		inline int Height() const { return m_Height; }
+		/**
+		 * @fn SetHeight
+		 * @brief Sets the image height.
+		 *
+		 * @param height New image height.
+		 * @param clear Whether pixel contents should be cleared.
+		 */
 		inline void SetHeight(int height, bool clear = false) {
 			m_Height = height;
 		}
+		/**
+		 * @fn SetData
+		 * @brief Replaces the raw pixel buffer.
+		 *
+		 * @param data New pixel buffer.
+		 */
 		inline void SetData(const std::vector<Col>& data) {
 			this->m_Data = data;
 		}
+		/**
+		 * @fn Data
+		 * @brief Returns the raw pixel buffer.
+		 *
+		 * @return Const reference to pixel data.
+		 */
 		inline const std::vector<Col>& Data() const { return m_Data; }
+		/**
+		 * @fn BgCol
+		 * @brief Returns the image background color.
+		 *
+		 * @return Background color.
+		 */
 		inline const Col BgCol() const { return m_BG; }
+		/**
+		 * @fn SetBG
+		 * @brief Sets the background color.
+		 *
+		 * @param bgCol New background color.
+		 */
 		inline void SetBG(const Col bgCol) { m_BG = bgCol; }
 
 		private:
@@ -129,26 +243,64 @@ namespace FuncDoodle {
 		std::vector<Col> m_Data;
 		Col m_BG;
 	};
+	/**
+	 * @class Frame
+	 * @brief Wraps an ImageArray with higher-level frame editing operations.
+	 */
 	class Frame {
 		public:
 		Frame() : m_Pixels(1, 1, Col()) {}
+		/** @brief Copies an existing frame. @param other Frame to copy. */
 		Frame(const Frame& other) : m_Pixels(other.m_Pixels) {}
+		/** @brief Creates a frame with explicit dimensions and background color. @param width Frame width. @param height Frame height. @param bgCol Background color. */
 		Frame(int width, int height, Col bgCol)
 			: m_Pixels(width, height, bgCol) {}
+		/** @brief Creates a frame from an image array copy. @param arr Image array to copy. */
 		Frame(const ImageArray& arr) : m_Pixels(arr) {}
+		/** @brief Creates a frame from an optional image array pointer. @param arr Image array pointer to copy when non-null. */
 		Frame(const ImageArray* arr)
 			: m_Pixels(arr ? *arr : ImageArray(1, 1, Col())) {}
 
 		~Frame() = default;
 
+		/**
+		 * @fn ReInit
+		 * @brief Reinitializes the frame with new dimensions and background color.
+		 *
+		 * @param width New frame width.
+		 * @param height New frame height.
+		 * @param bgCol New background color.
+		 */
 		void ReInit(int width, int height, Col bgCol) {
 			m_Pixels = ImageArray(width, height, bgCol);
 		}
+		/** @brief Copies another frame into this one. @param other Frame to copy. @return Reference to this frame. */
 		Frame& operator=(const Frame& other);
+		/** @brief Returns whether two frames contain identical pixel data. @param other Frame to compare against. @return Whether the frames match. */
 		bool operator==(const Frame& other) const;
+		/**
+		 * @fn SetWidth
+		 * @brief Sets the frame width.
+		 *
+		 * @param width New frame width.
+		 * @param clear Whether to clear contents while resizing.
+		 */
 		void SetWidth(int width, bool clear = false);
+		/**
+		 * @fn SetHeight
+		 * @brief Sets the frame height.
+		 *
+		 * @param height New frame height.
+		 * @param clear Whether to clear contents while resizing.
+		 */
 		void SetHeight(int height, bool clear = false);
 
+		/**
+		 * @fn Rotate
+		 * @brief Rotates the frame contents around the frame center.
+		 *
+		 * @param deg Rotation angle in degrees.
+		 */
 		void Rotate(int deg) {
 			float rad = deg * M_PI / 180.0f;
 			float cos_r = cos(rad);
@@ -180,19 +332,95 @@ namespace FuncDoodle {
 			m_Pixels.SetData(result);
 		}
 
+		/**
+		 * @fn RotateSelection
+		 * @brief Rotates only the selected region.
+		 *
+		 * @param sel Selection to rotate.
+		 * @param deg Rotation angle in degrees.
+		 */
 		void RotateSelection(WeakPtr<Selection> sel, int deg);
+		/**
+		 * @fn DeleteSelection
+		 * @brief Replaces the selected region with background color.
+		 *
+		 * @param sel Selection to clear.
+		 * @param bg Background color to write.
+		 */
 		void DeleteSelection(WeakPtr<Selection> sel, Col bg);
+		/**
+		 * @fn MoveSelection
+		 * @brief Moves the selected region by one step.
+		 *
+		 * @param sel Selection to move.
+		 * @param moveDir Direction to move in.
+		 * @param bg Background color used to fill vacated pixels.
+		 */
 		void MoveSelection(WeakPtr<Selection> sel, Direction moveDir, Col bg);
 
+		/**
+		 * @fn CopyToClipboard
+		 * @brief Copies the frame image to the system clipboard.
+		 */
 		void CopyToClipboard();
+		/**
+		 * @fn PastedFrame
+		 * @brief Returns a frame created from clipboard image data.
+		 *
+		 * @return Newly allocated pasted frame, or nullptr on failure.
+		 */
 		static Frame* PastedFrame();
+		/**
+		 * @fn Export
+		 * @brief Writes the frame to an image file.
+		 *
+		 * @param filePath Output image path.
+		 */
 		void Export(const char* filePath);
 
+		/**
+		 * @fn Pixels
+		 * @brief Returns immutable access to the backing pixel array.
+		 *
+		 * @return Pointer to image data.
+		 */
 		inline const ImageArray* Pixels() const { return &m_Pixels; }
+		/**
+		 * @fn PixelsMut
+		 * @brief Returns mutable access to the backing pixel array.
+		 *
+		 * @return Pointer to mutable image data.
+		 */
 		inline ImageArray* PixelsMut() { return &m_Pixels; }
+		/**
+		 * @fn SetPixel
+		 * @brief Sets a single frame pixel.
+		 *
+		 * @param x Pixel X coordinate.
+		 * @param y Pixel Y coordinate.
+		 * @param px New pixel color.
+		 */
 		inline void SetPixel(int x, int y, Col px) { m_Pixels.Set(x, y, px); }
+		/**
+		 * @fn Width
+		 * @brief Returns the frame width in pixels.
+		 *
+		 * @return Frame width.
+		 */
 		inline const int Width() const { return m_Pixels.Width(); }
+		/**
+		 * @fn Height
+		 * @brief Returns the frame height in pixels.
+		 *
+		 * @return Frame height.
+		 */
 		inline const int Height() const { return m_Pixels.Height(); }
+		/**
+		 * @fn Data
+		 * @brief Returns a copy of the frame pixel buffer.
+		 *
+		 * @return Pixel buffer copy.
+		 */
 		inline std::vector<Col> Data() const { return m_Pixels.Data(); }
 
 		private:

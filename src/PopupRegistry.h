@@ -36,14 +36,56 @@ namespace FuncDoodle {
 		PopupRegistry() = default;
 		~PopupRegistry() = default;
 
+		/**
+		 * @fn Register
+		 * @brief Registers a popup identifier in the registry.
+		 *
+		 * @param id Popup identifier to track.
+		 */
 		void Register(std::string_view id);
+		/**
+		 * @fn Open
+		 * @brief Marks a popup as open.
+		 *
+		 * @param id Popup identifier to open.
+		 */
 		void Open(std::string_view id);
+		/**
+		 * @fn Close
+		 * @brief Marks a popup as closed.
+		 *
+		 * @param id Popup identifier to close.
+		 */
 		void Close(std::string_view id);
 
+		/**
+		 * @fn IsOpen
+		 * @brief Returns whether a popup is currently open.
+		 *
+		 * @param id Popup identifier to query.
+		 * @return Whether the popup is open.
+		 */
 		[[nodiscard]] bool IsOpen(std::string_view id) const;
 
+		/**
+		 * @fn Get
+		 * @brief Returns direct access to a popup open-state flag.
+		 *
+		 * @param id Popup identifier to query.
+		 * @return Pointer to the popup flag, or nullptr if missing.
+		 */
 		bool* Get(std::string_view id);
+		/**
+		 * @fn CloseAll
+		 * @brief Closes every registered popup.
+		 */
 		void CloseAll();
+		/**
+		 * @fn CloseAllExcept
+		 * @brief Closes every popup except one.
+		 *
+		 * @param exception Popup identifier to keep open.
+		 */
 		void CloseAllExcept(std::string_view exception);
 
 		private:

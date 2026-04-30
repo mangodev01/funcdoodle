@@ -34,8 +34,10 @@ int FuncDoodle_RunTests();
 #endif
 
 #if defined(_MSC_VER)
+/** @def CURRENT_FUNC @brief Expands to the current function name on MSVC. */
 #define CURRENT_FUNC __FUNCTION__
 #else
+/** @def CURRENT_FUNC @brief Expands to the current function name on non-MSVC compilers. */
 #define CURRENT_FUNC __func__
 #endif
 
@@ -79,6 +81,12 @@ namespace FuncDoodle {
 	 */
 	class TestRegistry {
 		public:
+		/**
+		 * @fn Instance
+		 * @brief Returns the global test registry singleton.
+		 *
+		 * @return Singleton test registry instance.
+		 */
 		static TestRegistry& Instance() {
 			static TestRegistry instance;
 			return instance;
@@ -159,6 +167,12 @@ namespace FuncDoodle {
 	 */
 	class TestScope {
 		public:
+		/**
+		 * @fn TestScope
+		 * @brief Creates a named test scope.
+		 *
+		 * @param name Name printed in test output.
+		 */
 		explicit TestScope(const char* name)
 			: m_Name(name), m_Total(0), m_Passed(0), m_Failed(0) {}
 
@@ -222,14 +236,54 @@ namespace FuncDoodle {
 
 // ================= MACROS =================
 
+/**
+ * @def TEST_SCOPE
+ * @brief Starts a named RAII test scope.
+ */
 #define TEST_SCOPE(name) FuncDoodle::TestScope _test_scope(name)
 
+/**
+ * @def CHECK
+ * @brief Records whether a condition is true.
+ */
 #define CHECK(cond, msg) _test_scope.Check(cond, #cond, msg)
+/**
+ * @def CHECK_EQ
+ * @brief Records whether two expressions are equal.
+ */
 #define CHECK_EQ(a, b, msg) _test_scope.Check((a) == (b), #a " == " #b, msg)
+/**
+ * @def CHECK_NE
+ * @brief Records whether two expressions are not equal.
+ */
 #define CHECK_NE(a, b, msg) _test_scope.Check((a) != (b), #a " != " #b, msg)
+/**
+ * @def CHECK_LT
+ * @brief Records whether the left expression is less than the right.
+ */
 #define CHECK_LT(a, b, msg) _test_scope.Check((a) < (b), #a " < " #b, msg)
+/**
+ * @def CHECK_LE
+ * @brief Records whether the left expression is less than or equal to the right.
+ */
 #define CHECK_LE(a, b, msg) _test_scope.Check((a) <= (b), #a " <= " #b, msg)
+/**
+ * @def CHECK_GT
+ * @brief Records whether the left expression is greater than the right.
+ */
 #define CHECK_GT(a, b, msg) _test_scope.Check((a) > (b), #a " > " #b, msg)
+/**
+ * @def CHECK_GE
+ * @brief Records whether the left expression is greater than or equal to the right.
+ */
 #define CHECK_GE(a, b, msg) _test_scope.Check((a) >= (b), #a " >= " #b, msg)
+/**
+ * @def CHECK_NULL
+ * @brief Records whether a pointer is null.
+ */
 #define CHECK_NULL(ptr, msg) _test_scope.Check((ptr) == nullptr, #ptr " == nullptr", msg)
+/**
+ * @def CHECK_NOT_NULL
+ * @brief Records whether a pointer is non-null.
+ */
 #define CHECK_NOT_NULL(ptr, msg) _test_scope.Check((ptr) != nullptr, #ptr " != nullptr", msg)

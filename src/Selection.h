@@ -32,6 +32,10 @@ namespace FuncDoodle {
 	class Selection {
 		public:
 		virtual ~Selection();
+		/**
+		 * @fn All()
+		 * @brief Returns every pixel coordinate contained in the selection.
+		 */
 		virtual std::vector<ImVec2i> All();
 	};
 
@@ -43,10 +47,26 @@ namespace FuncDoodle {
 	 * coordinate. Used to collect all points inside the defined bounds.
 	 */
 	struct SquareSelection : public Selection {
+		/**
+		 * @var Active
+		 * @brief Whether the rectangular selection is currently active.
+		 */
 		bool Active;
+		/**
+		 * @var Min
+		 * @brief Inclusive minimum corner of the selection.
+		 */
 		ImVec2i Min;
+		/**
+		 * @var Max
+		 * @brief Inclusive maximum corner of the selection.
+		 */
 		ImVec2i Max;
 
+		/**
+		 * @fn All()
+		 * @brief Returns every coordinate inside the rectangular bounds.
+		 */
 		std::vector<ImVec2i> All() override;
 	};
 

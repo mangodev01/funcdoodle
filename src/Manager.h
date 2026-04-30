@@ -64,30 +64,106 @@ namespace FuncDoodle {
 	 */
 	class AnimationManager {
 		public:
+		/**
+		 * @fn AnimationManager
+		 * @brief Creates an animation manager for a project and its UI state.
+		 *
+		 * @param proj Active project to manage.
+		 * @param assetLoader Asset loader used for icons and sounds.
+		 * @param editorController Shared editor controller used by frame renderers.
+		 * @param keybinds Registry containing animation-related keybinds.
+		 * @param settings Mutable application settings.
+		 */
 		AnimationManager(SharedPtr<ProjectFile> proj, AssetLoader* assetLoader,
 			SharedPtr<EditorController> editorController,
 			KeybindsRegistry& keybinds, AppSettings& settings);
 		~AnimationManager();
 
+		/**
+		 * @fn RegisterKeybinds
+		 * @brief Registers animation-specific keybinds.
+		 */
 		void RegisterKeybinds();
+		/**
+		 * @fn RenderTimeline
+		 * @brief Renders the timeline UI.
+		 *
+		 * @param prevEnabled Whether previous-frame preview is enabled.
+		 */
 		void RenderTimeline(bool prevEnabled);
+		/**
+		 * @fn RenderControls
+		 * @brief Renders playback and frame-management controls.
+		 */
 		void RenderControls();
+		/**
+		 * @fn RenderLogs
+		 * @brief Renders animation-related log or debug output.
+		 */
 		void RenderLogs();
 
+		/**
+		 * @fn Proj
+		 * @brief Returns the currently managed project.
+		 *
+		 * @return Shared pointer to the active project.
+		 */
 		const SharedPtr<ProjectFile> Proj() const { return m_Proj; }
+		/**
+		 * @fn SetProj
+		 * @brief Replaces the active project and updates the player to match.
+		 *
+		 * @param proj Project to manage.
+		 */
 		void SetProj(SharedPtr<ProjectFile> proj) {
 			m_Proj = proj;
 			m_Player->SetProj(proj);
 		}
+		/**
+		 * @fn SetSettings
+		 * @brief Rebinds the manager to a different settings object.
+		 *
+		 * @param settings Settings reference to store.
+		 */
 		void SetSettings(AppSettings& settings) { m_Settings = settings; }
+		/**
+		 * @fn Player
+		 * @brief Returns the animation player.
+		 *
+		 * @return Pointer to the playback controller.
+		 */
 		AnimationPlayer* Player() const { return m_Player.get(); }
+		/**
+		 * @fn SetPlayer
+		 * @brief Replaces the owned animation player.
+		 *
+		 * @param player New player instance to own.
+		 */
 		void SetPlayer(AnimationPlayer* player) { m_Player.reset(player); }
 
+		/**
+		 * @fn SelectedFrameI
+		 * @brief Returns the selected frame index.
+		 *
+		 * @return Current frame index.
+		 */
 		unsigned long SelectedFrameI() const { return m_SelectedFrame; }
+		/**
+		 * @fn SelectedFrame
+		 * @brief Returns the selected frame object.
+		 *
+		 * @return Pointer to the selected frame.
+		 */
 		Frame* SelectedFrame() {
 			return m_Proj->AnimFrames()->Get(m_SelectedFrame);
 		}
 
+		/**
+		 * @fn GetFrameRenderer
+		 * @brief Returns the primary frame renderer.
+		 *
+		 * @return Owned frame renderer pointer wrapper.
+		 */
 		inline const UniquePtr<FrameRenderer>& GetFrameRenderer() const {
 			return m_FrameRenderer;
 		}

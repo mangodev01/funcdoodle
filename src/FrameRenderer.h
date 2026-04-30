@@ -44,6 +44,17 @@ namespace FuncDoodle {
 	 */
 	class FrameRenderer {
 		public:
+		/**
+		 * @fn FrameRenderer
+		 * @brief Creates a renderer for a single frame view.
+		 *
+		 * @param frame Frame to render.
+		 * @param index Timeline index of the frame.
+		 * @param manager Tool manager used for painting and UI state.
+		 * @param player Animation player attached to the project.
+		 * @param editorController Shared editor controller used for painting.
+		 * @param settings Application settings used for rendering behavior.
+		 */
 		FrameRenderer(Frame* frame, unsigned long index, ToolManager* manager,
 			AnimationPlayer* player,
 			const SharedPtr<EditorController>& editorController,
@@ -60,16 +71,50 @@ namespace FuncDoodle {
 
 			m_EditorController = editorController;
 		}
+		/**
+		 * @fn RenderFrame
+		 * @brief Renders the complete frame view.
+		 */
 		void RenderFrame();
+		/**
+		 * @fn RenderStatusBar
+		 * @brief Renders status information associated with the frame view.
+		 */
 		void RenderStatusBar();
+		/**
+		 * @fn InitPixels
+		 * @brief Initializes pixel-related state before rendering.
+		 */
 		void InitPixels();
 
+		/**
+		 * @fn GetCtx
+		 * @brief Returns the mutable canvas context used by this renderer.
+		 *
+		 * @return Pointer to the canvas context.
+		 */
 		inline EditorController::CanvasContext* GetCtx() { return &m_Ctx; }
+		/**
+		 * @fn SetUndoByStroke
+		 * @brief Forwards undo-by-stroke preference to the editor controller.
+		 *
+		 * @param undoByStroke Whether strokes should be grouped into one undo step.
+		 */
 		void SetUndoByStroke(bool undoByStroke) {
 			if (m_EditorController) {
 				m_EditorController->SetUndoByStroke(undoByStroke, m_Ctx.Player);
 			}
 		}
+		/**
+		 * @fn RenderFramePixels
+		 * @brief Draws frame pixels into a draw list.
+		 *
+		 * @param startX Canvas start X coordinate.
+		 * @param startY Canvas start Y coordinate.
+		 * @param drawList Draw list receiving pixel primitives.
+		 * @param usePrevPxScale Whether to reuse cached pixel scale values.
+		 * @param renderPreview Whether to render previous-frame preview pixels.
+		 */
 		void RenderFramePixels(int startX, int startY, ImDrawList* drawList,
 			bool usePrevPxScale = true, bool renderPreview = true);
 

@@ -45,31 +45,90 @@
 #include <vector>
 
 namespace FuncDoodle {
+	/**
+	 * @class EditorController
+	 * @brief Handles canvas editing, painting tools, and stroke recording.
+	 *
+	 * Bridges canvas input, tool execution, and frame mutation logic.
+	 */
 	class EditorController {
 		public:
+		/**
+		 * @struct CanvasContext
+		 * @brief Bundles per-frame canvas state used during rendering and input handling.
+		 */
 		struct CanvasContext {
-			class Frame* Frame = nullptr;
-			class Frame* PreviousFrame = nullptr;
-			unsigned long Index = 0;
-			ToolManager* ToolManager = nullptr;
-			AnimationPlayer* Player = nullptr;
-			UniquePtr<Grid> Grid = nullptr;
-			int PixelScale = 8;
-			ImVec2 LastMousePos = {-1, -1};
-			ImVec2 LastHoverMousePos = {-1, -1};
-			AppSettings& Settings;
+			class Frame* Frame = nullptr;               ///< Frame currently being rendered and edited.
+			class Frame* PreviousFrame = nullptr;       ///< Previous frame used for preview rendering.
+			unsigned long Index = 0;                    ///< Timeline index of the active frame.
+			ToolManager* ToolManager = nullptr;         ///< Tool state used for painting.
+			AnimationPlayer* Player = nullptr;          ///< Player attached to the current project.
+			UniquePtr<Grid> Grid = nullptr;             ///< Optional grid overlay for the canvas.
+			int PixelScale = 8;                         ///< Screen-space size of one pixel.
+			ImVec2 LastMousePos = {-1, -1};             ///< Last mouse position used for stroke interpolation.
+			ImVec2 LastHoverMousePos = {-1, -1};        ///< Last hovered mouse position over the canvas.
+			AppSettings& Settings;                     ///< Application settings affecting canvas behavior.
 
+			/**
+			 * @fn CanvasContext
+			 * @brief Creates a canvas context bound to application settings.
+			 *
+			 * @param settings Settings reference used while editing.
+			 */
 			CanvasContext(AppSettings& settings) : Settings(settings) {}
 		};
 
+		/**
+		 * @fn EditorController
+		 * @brief Creates an editor controller.
+		 */
 		EditorController();
 
+		/**
+		 * @fn Paint
+		 * @brief Applies the active tool to a frame at a specific pixel.
+		 *
+		 * @param frame Frame being edited.
+		 * @param frameI Frame index within the project.
+		 * @param toolManager Tool state and color source.
+		 * @param player Animation player for project access.
+		 * @param pixelX Target pixel X coordinate.
+		 * @param pixelY Target pixel Y coordinate.
+		 * @param mouseDown Whether the primary mouse button is held.
+		 * @param mouseClicked Whether the primary mouse button was clicked this frame.
+		 * @return Whether the frame was modified.
+		 */
 		bool Paint(Frame* frame, unsigned long frameI, ToolManager* toolManager,
 			AnimationPlayer* player, int pixelX, int pixelY, bool mouseDown,
 			bool mouseClicked);
+		/**
+		 * @fn SetUndoByStroke
+		 * @brief Enables or disables stroke-grouped undo behavior.
+		 *
+		 * @param undoByStroke Whether strokes should become single undo entries.
+		 * @param player Player providing project access for flushing active strokes.
+		 */
 		void SetUndoByStroke(bool undoByStroke, AnimationPlayer* player);
+		/**
+		 * @fn RenderCanvas
+		 * @brief Renders the frame canvas and handles its live interaction.
+		 *
+		 * @param context Canvas state for the frame being rendered.
+		 */
 		void RenderCanvas(CanvasContext& context);
+		/**
+		 * @fn EndStroke
+		 * @brief Finalizes the active stroke and pushes its undo record.
+		 *
+		 * @param player Player providing access to the current project.
+		 */
 		void EndStroke(AnimationPlayer* player);
+		/**
+		 * @fn Sel
+		 * @brief Returns the active selection object.
+		 *
+		 * @return Shared selection pointer.
+		 */
 		SharedPtr<Selection> Sel() { return m_Sel; }
 
 		private:

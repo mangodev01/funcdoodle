@@ -59,6 +59,12 @@ namespace FuncDoodle::Platform {
 	 */
 	class Window {
 		public:
+		/**
+		 * @fn Window
+		 * @brief Creates a window from an initial specification.
+		 *
+		 * @param spec Window creation parameters.
+		 */
 		Window(WindowSpec spec);
 		~Window();
 
@@ -72,6 +78,10 @@ namespace FuncDoodle::Platform {
 		 */
 		void SetIcon(std::filesystem::path icon);
 
+		/**
+		 * @typedef DropCallback
+		 * @brief Callback type invoked for file-drop events.
+		 */
 		using DropCallback = std::function<void(Window*, int, const char**)>;
 
 		/**
@@ -79,6 +89,10 @@ namespace FuncDoodle::Platform {
 		 */
 		void SetDropCallback(DropCallback cb);
 
+		/**
+		 * @typedef ErrorCallback
+		 * @brief Callback type invoked for GLFW errors.
+		 */
 		using ErrorCallback = void (*)(int err, const char* desc);
 
 		/**
@@ -86,6 +100,10 @@ namespace FuncDoodle::Platform {
 		 */
 		void SetErrorCallback(ErrorCallback cb);
 
+		/**
+		 * @typedef CloseCallback
+		 * @brief Callback type invoked when the window is asked to close.
+		 */
 		using CloseCallback = std::function<void(Window*)>;
 
 		/**
@@ -143,8 +161,8 @@ namespace FuncDoodle::Platform {
 		static void GlfwCloseTrampoline(GLFWwindow* glfwWin);
 
 		protected:
-		DropCallback mp_DropCallback;
-		CloseCallback mp_CloseCallback;
+		DropCallback mp_DropCallback;   ///< Stored file-drop callback.
+		CloseCallback mp_CloseCallback; ///< Stored close callback.
 
 		private:
 		GLFWwindow* m_Handle;

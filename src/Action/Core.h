@@ -127,10 +127,10 @@ namespace FuncDoodle {
 		 * @brief Represents a single pixel modification in a stroke.
 		 */
 		struct PixelChange {
-			int x;
-			int y;
-			Col prev;
-			Col next;
+			int x;     ///< X coordinate of the changed pixel.
+			int y;     ///< Y coordinate of the changed pixel.
+			Col prev;  ///< Pixel color before the stroke touched it.
+			Col next;  ///< Pixel color after the stroke applied.
 		};
 
 		/**

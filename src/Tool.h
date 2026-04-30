@@ -40,6 +40,7 @@ namespace FuncDoodle {
 
 
 	// i really don't like that i have to do this, but i do, because as it is right now, there is no consistent way to iterate over an enum class, without adding Start and End members which aren't that clean imo.
+	/** @brief Ordered list of tools used for iteration and UI rendering. */
 	constexpr std::array<ToolType, 5> ToolTypes{
 		ToolType::Pencil,
 		ToolType::Eraser,
@@ -50,6 +51,7 @@ namespace FuncDoodle {
 
 	// don't like this either, but i have to do it..
 	// actually i COULD use a constexpr std::unordered_map here but idk
+	/** @brief Returns the user-facing name of a tool type. */
 	constexpr const char* ToolTypeName(ToolType t) {
 		switch (t) {
 			case ToolType::Pencil:
@@ -68,6 +70,7 @@ namespace FuncDoodle {
 
 	// also could use a constexpr std::unordered_map here but idk
 	// rather than having 2 unordered_maps it would be better to have one with a struct that holds both the name and the texid for each tool.
+	/** @brief Returns the toolbar texture ID associated with a tool. */
 	constexpr uint32_t ToolTexID(ToolType tool) {
 		switch (tool) {
 			case ToolType::Pencil:

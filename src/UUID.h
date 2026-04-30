@@ -30,16 +30,26 @@ namespace FuncDoodle {
 	 */
 	class UUID {
 		public:
+		/** @brief Constructs a UUID from raw bytes. */
 		UUID(std::array<unsigned char, 16> bytes) { m_Bytes = bytes; }
 		UUID() { m_Bytes = std::array<unsigned char, 16>(); }
+		/** @brief Returns the raw 16-byte UUID payload. */
 		inline std::array<unsigned char, 16> Bytes() { return m_Bytes; }
+		/** @brief Converts the UUID into its string form. */
 		const char* ToString() const;
+		/** @brief Compares two UUID values for equality. */
 		bool operator==(const UUID& other) const;
+		/** @brief Compares two UUID values for inequality. */
 		bool operator!=(const UUID& other) const;
+		/** @brief Generates a new UUID value. */
 		static UUID Gen();
+		/** @brief Parses a UUID from a string representation. */
 		static UUID FromString(const char* str);
+		/** @brief Streams the UUID in its string form. */
 		friend std::ostream& operator<<(std::ostream& os, const UUID& uuid);
+		/** @brief Hash functor for using UUID as an associative-container key. */
 		struct Hash {
+			/** @brief Computes a stable hash for a UUID value. */
 			size_t operator()(const UUID& uuid) const {
 				static const size_t FNV_PRIME = 1099511628211ULL;
 				static const size_t FNV_OFFSET_BASIS = 14695981039346656037ULL;
@@ -51,19 +61,24 @@ namespace FuncDoodle {
 				return hash;
 			}
 		};
+		/** @brief Orders UUID values lexicographically by raw bytes. */
 		bool operator<(const UUID& other) const {
 			return m_Bytes < other.m_Bytes;
 		}
+		/** @brief Orders UUID values lexicographically by raw bytes. */
 		bool operator>(const UUID& other) const {
 			return m_Bytes > other.m_Bytes;
 		}
+		/** @brief Returns true when this UUID sorts before or equal to another. */
 		bool operator<=(const UUID& other) const {
 			return m_Bytes <= other.m_Bytes;
 		}
+		/** @brief Returns true when this UUID sorts after or equal to another. */
 		bool operator>=(const UUID& other) const {
 			return m_Bytes >= other.m_Bytes;
 		}
 
+		/** @brief Combines two UUID values with byte-wise XOR. */
 		UUID operator+(const UUID& other) const {
 			UUID result;
 			for (int i = 0; i < 16; ++i) {
@@ -73,6 +88,7 @@ namespace FuncDoodle {
 			return result;
 		}
 
+		/** @brief Subtracts UUID bytes pairwise. */
 		UUID operator-(const UUID& other) const {
 			UUID result;
 			for (int i = 0; i < 16; ++i) {

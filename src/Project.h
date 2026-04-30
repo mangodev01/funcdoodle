@@ -57,23 +57,128 @@ namespace FuncDoodle {
 	 */
 	class ProjectFile {
 		public:
+		/**
+		 * @fn ProjectFile
+		 * @brief Creates a new in-memory project file.
+		 *
+		 * @param name Animation name buffer.
+		 * @param width Initial canvas width.
+		 * @param height Initial canvas height.
+		 * @param author Animation author buffer.
+		 * @param fps Initial playback FPS.
+		 * @param desc Animation description buffer.
+		 * @param win Window used for title updates.
+		 * @param bgCol Initial background color.
+		 */
 		ProjectFile(char name[256], int width, int height, char author[100],
 			int fps, char desc[512], Platform::Window* win, Col bgCol);
 		~ProjectFile();
+		/**
+		 * @fn AnimName
+		 * @brief Returns the animation name.
+		 *
+		 * @return Animation name string.
+		 */
 		const char* AnimName() const;
+		/**
+		 * @fn SetAnimName
+		 * @brief Sets the animation name.
+		 *
+		 * @param name New animation name buffer.
+		 */
 		void SetAnimName(char name[256]);
+		/**
+		 * @fn AnimWidth
+		 * @brief Returns the animation width in pixels.
+		 *
+		 * @return Canvas width.
+		 */
 		const int AnimWidth() const;
+		/**
+		 * @fn SetAnimWidth
+		 * @brief Sets the animation width.
+		 *
+		 * @param width New canvas width.
+		 * @param clear Whether to clear existing frame data.
+		 */
 		void SetAnimWidth(int width, bool clear = false);
+		/**
+		 * @fn AnimHeight
+		 * @brief Returns the animation height in pixels.
+		 *
+		 * @return Canvas height.
+		 */
 		const int AnimHeight() const;
+		/**
+		 * @fn SetAnimHeight
+		 * @brief Sets the animation height.
+		 *
+		 * @param height New canvas height.
+		 * @param clear Whether to clear existing frame data.
+		 */
 		void SetAnimHeight(int height, bool clear = false);
+		/**
+		 * @fn AnimAuthor
+		 * @brief Returns the animation author.
+		 *
+		 * @return Author string.
+		 */
 		const char* AnimAuthor() const;
+		/**
+		 * @fn SetAnimAuthor
+		 * @brief Sets the animation author.
+		 *
+		 * @param author New author buffer.
+		 */
 		void SetAnimAuthor(char* author);
+		/**
+		 * @fn AnimFPS
+		 * @brief Returns the animation frame rate.
+		 *
+		 * @return Frames per second.
+		 */
 		const int AnimFPS() const;
+		/**
+		 * @fn SetAnimFPS
+		 * @brief Sets the animation frame rate.
+		 *
+		 * @param FPS New frames-per-second value.
+		 */
 		void SetAnimFPS(int FPS);
+		/**
+		 * @fn AnimDesc
+		 * @brief Returns the animation description.
+		 *
+		 * @return Description string.
+		 */
 		const char* AnimDesc() const;
+		/**
+		 * @fn SetAnimDesc
+		 * @brief Sets the animation description.
+		 *
+		 * @param desc New description buffer.
+		 */
 		void SetAnimDesc(char* desc);
+		/**
+		 * @fn AnimFrameCount
+		 * @brief Returns the number of frames in the animation.
+		 *
+		 * @return Frame count.
+		 */
 		const unsigned long AnimFrameCount() const;
+		/**
+		 * @fn SetAnimFrameCount
+		 * @brief Resizes the animation frame count.
+		 *
+		 * @param count New frame count.
+		 */
 		void SetAnimFrameCount(unsigned long count);
+		/**
+		 * @fn SetBgCol
+		 * @brief Sets the project background color and rebuilds backing frame storage.
+		 *
+		 * @param bgCol Pointer to three normalized RGB float values.
+		 */
 		inline void SetBgCol(const float* bgCol) {
 			// Ensure bgCol is valid and has at least 3 elements
 			if (bgCol) {
@@ -90,18 +195,83 @@ namespace FuncDoodle {
 
 			m_Frames->PushBackEmpty();
 		}
+		/**
+		 * @fn BgCol
+		 * @brief Returns the current background color.
+		 *
+		 * @return Background color.
+		 */
 		inline const Col BgCol() const { return m_BG; }
+		/**
+		 * @fn LastSavePath
+		 * @brief Returns the last saved file path.
+		 *
+		 * @return Last save path string.
+		 */
 		inline const char* LastSavePath() const { return m_LastSavePath; };
+		/**
+		 * @fn AnimFrames
+		 * @brief Returns the animation frame storage.
+		 *
+		 * @return Shared frame array.
+		 */
 		SharedPtr<LongIndexArray> AnimFrames();
+		/**
+		 * @fn Write
+		 * @brief Serializes the project to disk.
+		 *
+		 * @param filePath Output project path.
+		 */
 		void Write(const char* filePath);
+		/**
+		 * @fn ReadAndPopulate
+		 * @brief Loads project data from disk into this instance.
+		 *
+		 * @param filePath Project path to read.
+		 */
 		void ReadAndPopulate(const char* filePath);
+		/**
+		 * @fn Export
+		 * @brief Exports the animation using the chosen format.
+		 *
+		 * @param filePath Output path.
+		 * @param format Export format identifier.
+		 */
 		void Export(const char* filePath, int format);
+		/**
+		 * @fn Window
+		 * @brief Returns the owning application window.
+		 *
+		 * @return Window pointer.
+		 */
 		constexpr inline Platform::Window* Window() const { return m_Window; }
+		/**
+		 * @fn Saved
+		 * @brief Returns whether the project matches the last saved state.
+		 *
+		 * @return Save-state flag.
+		 */
 		inline bool Saved() { return m_Saved; }
+		/**
+		 * @fn DisplayAltFPS
+		 * @brief Shows a temporary FPS value in the window title.
+		 *
+		 * @param fps FPS value to display.
+		 */
 		void DisplayAltFPS(double fps);
+		/**
+		 * @fn UpdateTitle
+		 * @brief Refreshes the window title using current project state.
+		 */
 		void UpdateTitle();
 
 		// Undo management
+		/**
+		 * @fn PushUndoable
+		 * @brief Pushes a new undoable action and clears redo history.
+		 *
+		 * @param action Action instance to store on the undo stack.
+		 */
 		template <typename T>
 			requires std::derived_from<std::remove_cvref_t<T>, Action>
 		void PushUndoable(T&& action) {
@@ -112,9 +282,21 @@ namespace FuncDoodle {
 			m_Saved = false;
 		}
 
+		/**
+		 * @fn Undo
+		 * @brief Undoes the most recent action on the undo stack.
+		 */
 		void Undo();
+		/**
+		 * @fn Redo
+		 * @brief Reapplies the most recent action on the redo stack.
+		 */
 		void Redo();
 
+		/**
+		 * @fn ClearRedoStack
+		 * @brief Removes all actions from the redo stack.
+		 */
 		void ClearRedoStack() {
 			while (!m_RedoStack.empty()) {
 				m_RedoStack.pop();
