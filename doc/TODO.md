@@ -11,7 +11,7 @@
 - [x] fix tool keybinds (p0)
 - [x] moving selections
 - [x] FIGURE OUT WHATS CURRENTLY WRONG WITH THEME - it applies incorrectly on startup for some reason
-- [ ] make .clang-tidy work
+- [x] make .clang-tidy work
 - [ ] non-destructive moving of selections
 - [ ] copy & pasting selections
 - [ ] qol stuff
