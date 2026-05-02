@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <stdexcept>
+#include <utility>
 #include <vector>
 
 #include "Constants.h"
@@ -50,7 +51,7 @@ namespace FuncDoodle {
 			// no
 			throw std::out_of_range("Index out of range");
 		}
-		m_Data[y * m_Width + x] = color;
+		m_Data[(y * m_Width) + x] = color;
 	}
 
 	// Get the color at the specified (x, y) position
@@ -59,7 +60,7 @@ namespace FuncDoodle {
 			// no
 			throw std::out_of_range("Index out of range");
 		}
-		return m_Data[y * m_Width + x];
+		return m_Data[(y * m_Width) + x];
 	}
 
 	void Frame::SetWidth(int width, bool clear) {
@@ -74,10 +75,10 @@ namespace FuncDoodle {
 			for (int y = 0; y < oldHeight; y++) {
 				for (int x = 0; x < oldWidth; x++) {
 					if (newData.size() >= oldData.size()) {
-						newData[y * width + (x + xOffset)] =
-							oldData[y * oldWidth + x];
+						newData[(y * width) + (x + xOffset)] =
+							oldData[(y * oldWidth) + x];
 					} else {
-						newData[y * oldWidth + x] = oldData[y * oldWidth + x];
+						newData[(y * oldWidth) + x] = oldData[(y * oldWidth) + x];
 					}
 				}
 			}
@@ -98,10 +99,10 @@ namespace FuncDoodle {
 			for (int y = 0; y < oldHeight; y++) {
 				for (int x = 0; x < oldWidth; x++) {
 					if (newData.size() >= oldData.size()) {
-						newData[(y + yOffset) * oldWidth + x] =
-							oldData[y * oldWidth + x];
+						newData[((y + yOffset) * oldWidth) + x] =
+							oldData[(y * oldWidth) + x];
 					} else {
-						newData[y * oldWidth + x] = oldData[y * oldWidth + x];
+						newData[(y * oldWidth) + x] = oldData[(y * oldWidth) + x];
 					}
 				}
 			}
@@ -123,7 +124,7 @@ namespace FuncDoodle {
 			}
 		}
 
-		char* fdata = (char*)malloc(bufferSize);
+		auto* fdata = (char*)malloc(bufferSize);
 		if (!fdata)
 			return;
 
@@ -148,7 +149,7 @@ namespace FuncDoodle {
 		free(fdata);
 	}
 	Frame* Frame::PastedFrame() {
-		char* pasted = const_cast<char*>(ImGui::GetClipboardText());
+		auto* pasted = const_cast<char*>(ImGui::GetClipboardText());
 		if (!pasted)
 			return nullptr;
 
@@ -178,7 +179,7 @@ namespace FuncDoodle {
 		if (width <= 0 || height <= 0)
 			return nullptr;
 
-		Frame* frame = new Frame(width, height,
+		auto* frame = new Frame(width, height,
 			Col{.r = g_MaxColorValue,
 				.g = g_MaxColorValue,
 				.b = g_MaxColorValue});
@@ -216,7 +217,7 @@ namespace FuncDoodle {
 			}
 		}
 
-		Col bgCol = Col{
+		auto bgCol = Col{
 			.r = g_MaxColorValue, .g = g_MaxColorValue, .b = g_MaxColorValue};
 
 		bgCol.r = atoi(ptr);
@@ -235,7 +236,7 @@ namespace FuncDoodle {
 
 		return frame;
 	}
-	void Frame::Export(const char* filePath) {
+	void Frame::Export(const char* filePath) const {
 		stbi_write_png(
 			filePath, Width(), Height(), 3, Data().data(), Width() * 3);
 	}
@@ -251,7 +252,7 @@ namespace FuncDoodle {
 			m_Pixels.BgCol() != other.m_Pixels.BgCol()) {
 			return false;
 		}
-		for (unsigned long i = 0; i < m_Pixels.Width() * m_Pixels.Height();
+		for (unsigned long i = 0; std::cmp_less(i , m_Pixels.Width() * m_Pixels.Height());
 			i++) {
 			if (m_Pixels.Data()[i] != other.m_Pixels.Data()[i]) {
 				return false;
@@ -270,8 +271,10 @@ namespace FuncDoodle {
 			return;
 		}
 
-		int minX = pixels[0].x, maxX = pixels[0].x;
-		int minY = pixels[0].y, maxY = pixels[0].y;
+		int minX = pixels[0].x;
+		int maxX = pixels[0].x;
+		int minY = pixels[0].y;
+		int maxY = pixels[0].y;
 		for (const auto& p : pixels) {
 			minX = std::min(minX, p.x);
 			maxX = std::max(maxX, p.x);
@@ -284,7 +287,7 @@ namespace FuncDoodle {
 
 		std::vector<Col> temp(selW * selH);
 		for (const auto& p : pixels) {
-			temp[(p.y - minY) * selW + (p.x - minX)] = m_Pixels.Get(p.x, p.y);
+			temp[((p.y - minY) * selW) + (p.x - minX)] = m_Pixels.Get(p.x, p.y);
 		}
 
 		float rad = deg * M_PI / 180.0f;
@@ -298,13 +301,13 @@ namespace FuncDoodle {
 			for (int x = 0; x < selW; x++) {
 				float dx = x - cx;
 				float dy = y - cy;
-				int sx =
-					static_cast<int>(std::lround(dx * cos_r + dy * sin_r + cx));
-				int sy = static_cast<int>(
-					std::lround(-dx * sin_r + dy * cos_r + cy));
+				auto sx =
+					static_cast<int>(std::lround((dx * cos_r) + (dy * sin_r) + cx));
+				auto sy = static_cast<int>(
+					std::lround((-dx * sin_r) + (dy * cos_r) + cy));
 
 				if (sx >= 0 && sx < selW && sy >= 0 && sy < selH) {
-					m_Pixels.Set(minX + x, minY + y, temp[sy * selW + sx]);
+					m_Pixels.Set(minX + x, minY + y, temp[(sy * selW) + sx]);
 				}
 			}
 		}
@@ -333,7 +336,7 @@ namespace FuncDoodle {
 		std::vector<std::pair<ImVec2i, Col>> pixelData;
 		pixelData.reserve(all.size());
 		for (const auto& p : all) {
-			pixelData.push_back({p, m_Pixels.Get(p.x, p.y)});
+			pixelData.emplace_back(p, m_Pixels.Get(p.x, p.y));
 		}
 
 		for (const auto& [p, col] : pixelData) {

@@ -238,7 +238,7 @@ extern std::vector<std::string> s_Logs;
  * @brief Opens a path in the platform file explorer.
  */
 #define OPEN_FILE_EXPLORER(path) \
-	std::system(("xdg-open " + path.string() + " &").c_str())
+	std::system(("xdg-open " + (path).string() + " &").c_str())
 #else
 /**
  * @def OPEN_FILE_EXPLORER

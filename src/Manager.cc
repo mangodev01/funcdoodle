@@ -10,10 +10,12 @@
 
 #include "ToolManager.h"
 
+#include <algorithm>
 #include <cstdint>
 #include <cstring>
 #include <memory>
 #include <string>
+#include <utility>
 
 #include "LoadedAssets.h"
 
@@ -24,8 +26,8 @@ namespace FuncDoodle {
 	AnimationManager::AnimationManager(SharedPtr<ProjectFile> proj,
 		AssetLoader* assetLoader, SharedPtr<EditorController> editorController,
 		KeybindsRegistry& keybinds, AppSettings& appSettings)
-		: m_Proj(proj), m_SelectedFrame(0), m_Player(new AnimationPlayer(proj)),
-		  m_EditorController(editorController), m_AssetLoader(assetLoader),
+		: m_Proj(proj),  m_Player(new AnimationPlayer(proj)),
+		  m_EditorController(std::move(editorController)), m_AssetLoader(assetLoader),
 		  m_Keybinds(keybinds),
 		  m_ToolManager(std::make_unique<ToolManager>(keybinds)),
 		  m_Settings(appSettings) {
@@ -38,7 +40,7 @@ namespace FuncDoodle {
 		m_FrameRenderer->SetUndoByStroke(m_Settings.UndoByStroke);
 	}
 
-	AnimationManager::~AnimationManager() {}
+	AnimationManager::~AnimationManager() = default;
 
 	void AnimationManager::RegisterKeybinds() {
 		m_Keybinds.Register("rewind", {false, false, false, ImGuiKey_J});
@@ -63,8 +65,8 @@ namespace FuncDoodle {
 		ImGui::Begin("Timeline", nullptr,
 			ImGuiWindowFlags_HorizontalScrollbar |
 				ImGuiWindowFlags_NoBackground);
-		float frameWidth = (float)m_Proj->AnimWidth();
-		float frameHeight = (float)m_Proj->AnimHeight();
+		auto frameWidth = (float)m_Proj->AnimWidth();
+		auto frameHeight = (float)m_Proj->AnimHeight();
 		float padding = 25.0f;
 
 		// Calculate total width required for all frames
@@ -74,8 +76,7 @@ namespace FuncDoodle {
 		ImGuiStyle& style = ImGui::GetStyle();
 		float childHeight = ImGui::GetWindowHeight() - ImGui::GetCursorPosY() -
 							style.WindowPadding.y;
-		if (childHeight < 0.0f)
-			childHeight = 0.0f;
+		childHeight = std::max(childHeight, 0.0f);
 		ImGui::BeginChild("FrameScrollRegion",
 			ImVec2(ImGui::GetContentRegionAvail().x, childHeight), false,
 			ImGuiWindowFlags_HorizontalScrollbar);
@@ -104,8 +105,8 @@ namespace FuncDoodle {
 		for (unsigned long i = 0; i < m_Proj->AnimFrameCount(); i++) {
 			drawList->AddText(font, fontSize,
 				m_SelectedFrame == i
-					? ImVec2(topLeft.x + frameWidth / 2, bottomRight.y + 10)
-					: ImVec2(topLeft.x + frameWidth / 2, bottomRight.y),
+					? ImVec2(topLeft.x + (frameWidth / 2), bottomRight.y + 10)
+					: ImVec2(topLeft.x + (frameWidth / 2), bottomRight.y),
 				IM_COL32(g_MaxColorValue, g_MaxColorValue, g_MaxColorValue,
 					g_AlphaOpaque),
 				std::to_string(i).c_str());
@@ -291,7 +292,7 @@ namespace FuncDoodle {
 			ImGui::LogToClipboard();
 
 			// don't really like that i have to use std::string for logs, but i think thats necessary
-			for (std::string str : s_Logs) {
+			for (const std::string& str : s_Logs) {
 				ImGui::LogText("%s\n", str.c_str() ? str.c_str() : "");
 			}
 
@@ -302,7 +303,7 @@ namespace FuncDoodle {
 		ImGui::BeginChild("##logscroll", ImVec2(-1, -1), false,
 			ImGuiWindowFlags_HorizontalScrollbar);
 
-		for (std::string str : s_Logs) {
+		for (const std::string& str : s_Logs) {
 			ImGui::TextColored(logColor(str.c_str()), "%s", str.c_str() ? str.c_str(): "");
 		}
 

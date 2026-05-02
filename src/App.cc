@@ -18,8 +18,8 @@
 #include <fstream>
 #include <imgui.h>
 #include <iostream>
-#include <stdint.h>
-#include <string.h>
+#include <cstdint>
+#include <cstring>
 #include <string>
 #include <thread>
 
@@ -29,7 +29,6 @@
 #include "Platform/Window.h"
 #include "TextUtil.h"
 
-#include "MacroUtils.h"
 
 #include "ImUtil.h"
 #include "Themes.h"
@@ -49,7 +48,7 @@ namespace FuncDoodle {
 
 	Application* Application::s_Instance = nullptr;
 	Application::Application()
-		: m_FilePath(""), m_CurrentProj(nullptr), m_CacheProj(nullptr),
+		:  m_CurrentProj(nullptr), m_CacheProj(nullptr),
 		  m_EditorController(std::make_shared<EditorController>()),
 		  m_CacheBGCol({g_MaxColorValue, g_MaxColorValue, g_MaxColorValue}),
 		  m_Theme(UUID::FromString("d0c1a009-d09c-4fe6-84f8-eddcb2da38f9")),
@@ -226,7 +225,8 @@ namespace FuncDoodle {
 			RenderImGui();
 
 			// Rendering
-			int display_w, display_h;
+			int display_w;
+			int display_h;
 			m_Window.GetFramebufferSize(&display_w, &display_h);
 			glViewport(0, 0, display_w, display_h);
 			glClearColor(0.0f, 0.0f, 0.0f, 1.00f);
@@ -300,7 +300,7 @@ namespace FuncDoodle {
 	char* GlobalGetShortcut(const char* key, bool shift, bool super) {
 		int maxLen = 11 + strlen(key);
 
-		char* shortcut = (char*)malloc(maxLen);
+		auto* shortcut = (char*)malloc(maxLen);
 
 #if defined(_WIN32) || defined(__linux__)
 		strcpy(shortcut, "Ctrl");
@@ -451,10 +451,10 @@ namespace FuncDoodle {
 				if (m_Settings.Sfx)
 					m_AssetLoader->PlaySound(s_ProjSaveEndSound);
 
-				if (exit) {
+				
 					m_ShouldClose = true;
 					ImGui::CloseCurrentPopup();
-				}
+				
 			});
 		} else {
 #ifndef MACOS
@@ -486,8 +486,8 @@ namespace FuncDoodle {
 	}
 
 	void Application::MoveCurrentSelection(Direction direction) {
-		MoveSelectionActionContext ctx{m_Manager->SelectedFrameI(),
-			m_EditorController->Sel(), direction, m_CurrentProj};
+		MoveSelectionActionContext ctx{.FrameIndex=m_Manager->SelectedFrameI(),
+			.Sel=m_EditorController->Sel(), .MoveDir=direction, .Proj=m_CurrentProj};
 		auto action =
 			MoveSelectionAction(Frame(*m_Manager->SelectedFrame()), ctx);
 
@@ -516,10 +516,10 @@ namespace FuncDoodle {
 		ImVec2 contentRegion = frameWindow->ContentRegionRect.GetSize();
 		ImVec2 windowPos = frameWindow->Pos;
 
-		float startX = windowPos.x + (contentRegion.x - frameWidth) * 0.5f + 9;
+		float startX = windowPos.x + ((contentRegion.x - frameWidth) * 0.5f) + 9;
 		float startY =
 			windowPos.y +
-			((contentRegion.y - statusBarHeight) - frameHeight) * 0.5f + 41;
+			(((contentRegion.y - statusBarHeight) - frameHeight) * 0.5f) + 41;
 
 		ImVec2 frameMin(startX, startY);
 		ImVec2 frameMax(startX + frameWidth, startY + frameHeight);
@@ -536,7 +536,9 @@ namespace FuncDoodle {
 			return;
 		}
 
-		int width, height, channels;
+		int width;
+		int height;
+		int channels;
 
 		// data is R G B R G B R G B etc. because we're doing 3 channels
 		unsigned char* data =
@@ -561,7 +563,7 @@ namespace FuncDoodle {
 				unsigned char g = data[i + 1];
 				unsigned char b = data[i + 2];
 
-				Col col = Col{.r = r, .g = g, .b = b};
+				auto col = Col{.r = r, .g = g, .b = b};
 
 				frame.SetPixel(x, y, col);
 			}

@@ -53,7 +53,7 @@ namespace FuncDoodle {
 		 * @param initial_capacity Initial reserved frame capacity.
 		 */
 		LongIndexArray(int width, int height, Col bgCol,
-			unsigned long initial_capacity = 10);
+			unsigned long initialcap = 10);
 		~LongIndexArray();
 
 		/**
@@ -95,7 +95,7 @@ namespace FuncDoodle {
 		 * @param index Index after which to insert.
 		 * @param val Frame value to copy.
 		 */
-		void InsertAfter(unsigned long index, const Frame val);
+		void InsertAfter(unsigned long index, Frame val);
 		/**
 		 * @brief Inserts a frame copy before an index.
 		 *
@@ -109,7 +109,7 @@ namespace FuncDoodle {
 		 * @param index Index before which to insert.
 		 * @param val Frame value to copy.
 		 */
-		void InsertBefore(unsigned long index, const Frame val);
+		void InsertBefore(unsigned long index, Frame val);
 		/**
 		 * @fn MoveBackward
 		 * @brief Moves a frame one slot toward the beginning.
@@ -151,14 +151,14 @@ namespace FuncDoodle {
 		 *
 		 * @return Current frame count.
 		 */
-		inline unsigned long Size() const { return size; }
+		[[nodiscard]] unsigned long Size() const { return size; }
 		/**
 		 * @fn Capacity
 		 * @brief Returns the reserved frame capacity.
 		 *
 		 * @return Current capacity.
 		 */
-		inline unsigned long Capacity() const { return m_Capacity; }
+		[[nodiscard]] unsigned long Capacity() const { return m_Capacity; }
 
 		private:
 		std::vector<Frame> m_Data;
@@ -168,6 +168,6 @@ namespace FuncDoodle {
 		int m_Height;
 		Col m_BG;
 
-		void Resize(unsigned long new_capacity);
+		void Resize(unsigned long newCap);
 	};
 }  // namespace FuncDoodle

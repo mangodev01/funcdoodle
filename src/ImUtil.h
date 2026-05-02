@@ -17,12 +17,12 @@
 
 #include "imgui.h"
 
-namespace FuncDoodle {
+
 	/**
 	 * @namespace ImUtil
 	 * @brief Helper utilities for building ImGui-based UI components.
 	 */
-	namespace ImUtil {
+	namespace FuncDoodle::ImUtil {
 		/**
 		 * @enum ButtonRowResult
 		 * @brief Identifies which button was pressed in a button row.
@@ -36,7 +36,7 @@ namespace FuncDoodle {
 		 */
 		inline float ButtonWidth(const char* label) {
 			ImVec2 size = ImGui::CalcTextSize(label);
-			return size.x + ImGui::GetStyle().FramePadding.x * 2.0f;
+			return size.x + (ImGui::GetStyle().FramePadding.x * 2.0f);
 		}
 
 		/**
@@ -88,7 +88,7 @@ namespace FuncDoodle {
 			float tertiaryWidth = tertiary ? ButtonWidth(tertiary) : 0.0f;
 			int count = tertiary ? 3 : 2;
 			float totalWidth = primaryWidth + secondaryWidth + tertiaryWidth +
-							   spacing * (count - 1);
+							   (spacing * (count - 1));
 			AlignButtonsRight(totalWidth);
 
 			ButtonRowResult result = ButtonRowResult::None;
@@ -193,7 +193,7 @@ namespace FuncDoodle {
 		inline ImGuiKey GetAnyReleasedKey() {
 			for (int i = ImGuiKey_NamedKey_BEGIN; i < ImGuiKey_NamedKey_END;
 				i++) {
-				ImGuiKey key = (ImGuiKey)i;
+				auto key = (ImGuiKey)i;
 				if (key == ImGuiKey_LeftCtrl || key == ImGuiKey_RightCtrl ||
 					key == ImGuiKey_LeftShift || key == ImGuiKey_RightShift ||
 					key == ImGuiKey_LeftAlt || key == ImGuiKey_RightAlt ||
@@ -230,5 +230,5 @@ namespace FuncDoodle {
 
 			return username;
 		}
-	}  // namespace ImUtil
-}  // namespace FuncDoodle
+	} // namespace FuncDoodle::ImUtil
+

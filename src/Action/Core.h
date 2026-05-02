@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include <utility>
+
 #include "Common.h"
 #include "Project.h"
 #include "../Frame.h"
@@ -37,14 +39,12 @@ namespace FuncDoodle {
 		 * @brief Copy constructor.
 		 */
 		DrawAction(const DrawAction& other)
-			: Action(other), m_X(other.m_X), m_Y(other.m_Y),
-			  m_Prev(other.m_Prev), m_Next(other.m_Next),
-			  m_FrameIndex(other.m_FrameIndex), m_Proj(other.m_Proj) {};
+			 = default;
 
 		/**
 		 * @brief Destructor.
 		 */
-		~DrawAction() {}
+		~DrawAction() override = default;
 
 		/**
 		 * @brief Reverts the pixel to its previous color.
@@ -80,20 +80,19 @@ namespace FuncDoodle {
 			const SharedPtr<ProjectFile>& proj,
 			std::vector<std::pair<int, int>> affected)
 			: m_Prev(prev), m_Next(next), m_FrameIndex(frameI), m_Proj(proj),
-			  m_Pixels(affected) {};
+			  m_Pixels(std::move(affected)) {};
 
 		/**
 		 * @brief Copy constructor.
 		 */
 		FillAction(const FillAction& other)
-			: Action(other), m_Prev(other.m_Prev), m_Next(other.m_Next),
-			  m_FrameIndex(other.m_FrameIndex), m_Proj(other.m_Proj),
-			  m_Pixels(other.m_Pixels) {};
+			
+			  = default;
 
 		/**
 		 * @brief Destructor.
 		 */
-		~FillAction() {}
+		~FillAction() override = default;
 
 		/**
 		 * @brief Reverts the fill operation.

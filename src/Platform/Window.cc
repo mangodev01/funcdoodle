@@ -44,7 +44,7 @@ namespace FuncDoodle::Platform {
 #endif
 
 		m_Handle =
-			glfwCreateWindow(spec.Width, spec.Height, spec.Title, monitor, 0);
+			glfwCreateWindow(spec.Width, spec.Height, spec.Title, monitor, nullptr);
 
 		if (!m_Handle) {
 			const char* desc;
@@ -80,7 +80,7 @@ namespace FuncDoodle::Platform {
 
 	void Window::GlfwDropTrampoline(
 		GLFWwindow* glfwWin, int count, const char** paths) {
-		Window* self = static_cast<Window*>(glfwGetWindowUserPointer(glfwWin));
+		auto* self = static_cast<Window*>(glfwGetWindowUserPointer(glfwWin));
 
 		if (!self)
 			return;
@@ -90,7 +90,7 @@ namespace FuncDoodle::Platform {
 	}
 
 	void Window::GlfwCloseTrampoline(GLFWwindow* glfwWin) {
-		Window* self = static_cast<Window*>(glfwGetWindowUserPointer(glfwWin));
+		auto* self = static_cast<Window*>(glfwGetWindowUserPointer(glfwWin));
 
 		if (!self)
 			return;
@@ -117,12 +117,14 @@ namespace FuncDoodle::Platform {
 
 	void Window::SetIcon(std::filesystem::path icon) {
 		FUNC_DBG("Setting window icon to {}...", icon.string());
-		int width, height, chan;
+		int width;
+		int height;
+		int chan;
 		unsigned char* data =
 			stbi_load(icon.string().c_str(), &width, &height, &chan, 0);
 
 		if (data) {
-			GLFWimage* glfwIcon = (GLFWimage*)malloc(sizeof(GLFWimage));
+			auto* glfwIcon = (GLFWimage*)malloc(sizeof(GLFWimage));
 			glfwIcon->width = width;
 			glfwIcon->height = height;
 			glfwIcon->pixels = data;
@@ -198,7 +200,8 @@ namespace FuncDoodle::Platform {
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
 		io.ConfigErrorRecovery = true;
 		io.ConfigWindowsMoveFromTitleBarOnly = true;
-		float xScale, yScale;
+		float xScale;
+		float yScale;
 		glfwGetWindowContentScale(m_Handle, &xScale, &yScale);
 		float dpiScale = xScale;
 

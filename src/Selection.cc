@@ -1,7 +1,7 @@
 #include "Selection.h"
 #include <ranges>
 
-FuncDoodle::Selection::~Selection() {}
+FuncDoodle::Selection::~Selection() = default;
 
 std::vector<ImVec2i> FuncDoodle::Selection::All() {
 	return {};
@@ -10,8 +10,7 @@ std::vector<ImVec2i> FuncDoodle::Selection::All() {
 std::vector<ImVec2i> FuncDoodle::SquareSelection::All() {
 	if (Active) {
 		return {};
-	} else {
-		int minX = std::min(Min.x, Max.x);
+	} 		int minX = std::min(Min.x, Max.x);
 		int maxX = std::max(Min.x, Max.x);
 		int minY = std::min(Min.y, Max.y);
 		int maxY = std::max(Min.y, Max.y);
@@ -23,5 +22,5 @@ std::vector<ImVec2i> FuncDoodle::SquareSelection::All() {
 				points.emplace_back(x, y);
 
 		return points;
-	}
+
 }

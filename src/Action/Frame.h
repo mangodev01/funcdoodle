@@ -171,7 +171,7 @@ namespace FuncDoodle {
 		/**
 		 * @brief Returns rotation angle in degrees.
 		 */
-		inline int32_t Deg() const { return m_Deg; }
+		[[nodiscard]] int32_t Deg() const { return m_Deg; }
 
 	private:
 		unsigned long m_FrameIndex;   ///< Frame index

@@ -28,6 +28,7 @@
 
 #include <cmath>
 #include <iostream>
+#include <utility>
 #include <vector>
 
 #include "Action/Direction.h"
@@ -59,9 +60,9 @@ namespace FuncDoodle {
 		static Col FromFloat3(const float* f) {
 			Col col;
 
-			col.r = (unsigned char)(f[0] * 255.0f + 0.5f);
-			col.g = (unsigned char)(f[1] * 255.0f + 0.5f);
-			col.b = (unsigned char)(f[2] * 255.0f + 0.5f);
+			col.r = (unsigned char)((f[0] * 255.0f) + 0.5f);
+			col.g = (unsigned char)((f[1] * 255.0f) + 0.5f);
+			col.b = (unsigned char)((f[2] * 255.0f) + 0.5f);
 
 			return col;
 		}
@@ -172,7 +173,7 @@ namespace FuncDoodle {
 		 * @param y Pixel Y coordinate.
 		 * @return Pixel color at the requested coordinate.
 		 */
-		Col Get(int x, int y) const;
+		[[nodiscard]] Col Get(int x, int y) const;
 
 		/**
 		 * @fn Width
@@ -180,7 +181,7 @@ namespace FuncDoodle {
 		 *
 		 * @return Image width.
 		 */
-		inline int Width() const { return m_Width; }
+		[[nodiscard]] int Width() const { return m_Width; }
 		/**
 		 * @fn SetWidth
 		 * @brief Sets the image width.
@@ -188,14 +189,14 @@ namespace FuncDoodle {
 		 * @param width New image width.
 		 * @param clear Whether pixel contents should be cleared.
 		 */
-		inline void SetWidth(int width, bool clear = false) { m_Width = width; }
+		void SetWidth(int width, bool clear = false) { m_Width = width; }
 		/**
 		 * @fn Height
 		 * @brief Returns the image height in pixels.
 		 *
 		 * @return Image height.
 		 */
-		inline int Height() const { return m_Height; }
+		[[nodiscard]] int Height() const { return m_Height; }
 		/**
 		 * @fn SetHeight
 		 * @brief Sets the image height.
@@ -203,7 +204,7 @@ namespace FuncDoodle {
 		 * @param height New image height.
 		 * @param clear Whether pixel contents should be cleared.
 		 */
-		inline void SetHeight(int height, bool clear = false) {
+		void SetHeight(int height, bool clear = false) {
 			m_Height = height;
 		}
 		/**
@@ -212,7 +213,7 @@ namespace FuncDoodle {
 		 *
 		 * @param data New pixel buffer.
 		 */
-		inline void SetData(const std::vector<Col>& data) {
+		void SetData(const std::vector<Col>& data) {
 			this->m_Data = data;
 		}
 		/**
@@ -221,21 +222,21 @@ namespace FuncDoodle {
 		 *
 		 * @return Const reference to pixel data.
 		 */
-		inline const std::vector<Col>& Data() const { return m_Data; }
+		[[nodiscard]] const std::vector<Col>& Data() const { return m_Data; }
 		/**
 		 * @fn BgCol
 		 * @brief Returns the image background color.
 		 *
 		 * @return Background color.
 		 */
-		inline const Col BgCol() const { return m_BG; }
+		[[nodiscard]] Col BgCol() const { return m_BG; }
 		/**
 		 * @fn SetBG
 		 * @brief Sets the background color.
 		 *
 		 * @param bgCol New background color.
 		 */
-		inline void SetBG(const Col bgCol) { m_BG = bgCol; }
+		void SetBG(const Col bgCol) { m_BG = bgCol; }
 
 		private:
 		int m_Width = g_DefaultCanvasWidth;
@@ -251,12 +252,12 @@ namespace FuncDoodle {
 		public:
 		Frame() : m_Pixels(1, 1, Col()) {}
 		/** @brief Copies an existing frame. @param other Frame to copy. */
-		Frame(const Frame& other) : m_Pixels(other.m_Pixels) {}
+		Frame(const Frame& other)  = default;
 		/** @brief Creates a frame with explicit dimensions and background color. @param width Frame width. @param height Frame height. @param bgCol Background color. */
 		Frame(int width, int height, Col bgCol)
 			: m_Pixels(width, height, bgCol) {}
 		/** @brief Creates a frame from an image array copy. @param arr Image array to copy. */
-		Frame(const ImageArray& arr) : m_Pixels(arr) {}
+		Frame(ImageArray  arr) : m_Pixels(std::move(arr)) {}
 		/** @brief Creates a frame from an optional image array pointer. @param arr Image array pointer to copy when non-null. */
 		Frame(const ImageArray* arr)
 			: m_Pixels(arr ? *arr : ImageArray(1, 1, Col())) {}
@@ -306,26 +307,30 @@ namespace FuncDoodle {
 			float cos_r = cos(rad);
 			float sin_r = sin(rad);
 
-			int w = m_Pixels.Width(), h = m_Pixels.Height();
-			int newW = m_Pixels.Width(),
-				newH = m_Pixels.Height();  // or calculate bounding box
+			int w = m_Pixels.Width();
+			int h = m_Pixels.Height();
+			int newW = m_Pixels.Width();
+			int newH = m_Pixels.Height();  // or calculate bounding box
 			std::vector<Col> result(newW * newH);
 
-			float cx = (w - 1) / 2.0f, cy = (h - 1) / 2.0f;
-			float ncx = (newW - 1) / 2.0f, ncy = (newH - 1) / 2.0f;
+			float cx = (w - 1) / 2.0f;
+			float cy = (h - 1) / 2.0f;
+			float ncx = (newW - 1) / 2.0f;
+			float ncy = (newH - 1) / 2.0f;
 
 			for (int y = 0; y < newH; y++) {
 				for (int x = 0; x < newW; x++) {
 					// Map output pixel to input coordinates
-					float dx = x - ncx, dy = y - ncy;
-					float sx = dx * cos_r + dy * sin_r + cx;
-					float sy = -dx * sin_r + dy * cos_r + cy;
+					float dx = x - ncx;
+					float dy = y - ncy;
+					float sx = (dx * cos_r) + (dy * sin_r) + cx;
+					float sy = (-dx * sin_r) + (dy * cos_r) + cy;
 
 					// Nearest neighbor
-					int isx = static_cast<int>(std::lround(sx));
-					int isy = static_cast<int>(std::lround(sy));
+					auto isx = static_cast<int>(std::lround(sx));
+					auto isy = static_cast<int>(std::lround(sy));
 					if (isx >= 0 && isx < w && isy >= 0 && isy < h) {
-						result[y * newW + x] = m_Pixels.Data()[isy * w + isx];
+						result[(y * newW) + x] = m_Pixels.Data()[(isy * w) + isx];
 					}
 				}
 			}
@@ -376,7 +381,7 @@ namespace FuncDoodle {
 		 *
 		 * @param filePath Output image path.
 		 */
-		void Export(const char* filePath);
+		void Export(const char* filePath) const;
 
 		/**
 		 * @fn Pixels
@@ -384,14 +389,14 @@ namespace FuncDoodle {
 		 *
 		 * @return Pointer to image data.
 		 */
-		inline const ImageArray* Pixels() const { return &m_Pixels; }
+		[[nodiscard]] const ImageArray* Pixels() const { return &m_Pixels; }
 		/**
 		 * @fn PixelsMut
 		 * @brief Returns mutable access to the backing pixel array.
 		 *
 		 * @return Pointer to mutable image data.
 		 */
-		inline ImageArray* PixelsMut() { return &m_Pixels; }
+		ImageArray* PixelsMut() { return &m_Pixels; }
 		/**
 		 * @fn SetPixel
 		 * @brief Sets a single frame pixel.
@@ -400,28 +405,28 @@ namespace FuncDoodle {
 		 * @param y Pixel Y coordinate.
 		 * @param px New pixel color.
 		 */
-		inline void SetPixel(int x, int y, Col px) { m_Pixels.Set(x, y, px); }
+		void SetPixel(int x, int y, Col px) { m_Pixels.Set(x, y, px); }
 		/**
 		 * @fn Width
 		 * @brief Returns the frame width in pixels.
 		 *
 		 * @return Frame width.
 		 */
-		inline const int Width() const { return m_Pixels.Width(); }
+		[[nodiscard]] int Width() const { return m_Pixels.Width(); }
 		/**
 		 * @fn Height
 		 * @brief Returns the frame height in pixels.
 		 *
 		 * @return Frame height.
 		 */
-		inline const int Height() const { return m_Pixels.Height(); }
+		[[nodiscard]] int Height() const { return m_Pixels.Height(); }
 		/**
 		 * @fn Data
 		 * @brief Returns a copy of the frame pixel buffer.
 		 *
 		 * @return Pixel buffer copy.
 		 */
-		inline std::vector<Col> Data() const { return m_Pixels.Data(); }
+		[[nodiscard]] std::vector<Col> Data() const { return m_Pixels.Data(); }
 
 		private:
 		ImageArray m_Pixels;

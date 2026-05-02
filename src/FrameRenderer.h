@@ -80,7 +80,7 @@ namespace FuncDoodle {
 		 * @fn RenderStatusBar
 		 * @brief Renders status information associated with the frame view.
 		 */
-		void RenderStatusBar();
+		void RenderStatusBar() const;
 		/**
 		 * @fn InitPixels
 		 * @brief Initializes pixel-related state before rendering.
@@ -93,7 +93,7 @@ namespace FuncDoodle {
 		 *
 		 * @return Pointer to the canvas context.
 		 */
-		inline EditorController::CanvasContext* GetCtx() { return &m_Ctx; }
+		EditorController::CanvasContext* GetCtx() { return &m_Ctx; }
 		/**
 		 * @fn SetUndoByStroke
 		 * @brief Forwards undo-by-stroke preference to the editor controller.
@@ -116,7 +116,7 @@ namespace FuncDoodle {
 		 * @param renderPreview Whether to render previous-frame preview pixels.
 		 */
 		void RenderFramePixels(int startX, int startY, ImDrawList* drawList,
-			bool usePrevPxScale = true, bool renderPreview = true);
+			bool usePrevPxScale = true, bool renderPreview = true) const;
 
 		private:
 		EditorController::CanvasContext m_Ctx;

@@ -8,10 +8,12 @@ Checks: >
   modernize-*,
 
   -clang-diagnostic-unused-command-line-argument,
+  -bugprone-implicit-widening-of-multiplication-result,
 
   -readability-identifier-length,
   -readability-magic-numbers,
   -readability-uppercase-literal-suffix,
+  -readability-braces-around-statements,
 
   -bugprone-narrowing-conversions,
   -bugprone-easily-swappable-parameters,
@@ -19,10 +21,13 @@ Checks: >
   -readability-implicit-bool-conversion,
   -readability-simplify-boolean-expr,
 
-  -modernize-macro-to-enum,
-  -modernize-macro-to-constant
+  -modernize-use-trailing-return-type,
 
-HeaderFilterRegex: ".*\\/src\\/.*"
+  -modernize-macro-to-enum,
+  -modernize-macro-to-constant,
+  -readability-non-const-parameter,
+  -performance-unnecessary-value-param
+
 FormatStyle: none
 
 CheckOptions:

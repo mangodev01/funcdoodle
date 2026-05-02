@@ -9,13 +9,13 @@ namespace FuncDoodle {
 		: m_Proj(proj) {
 		m_Playing = false;
 	}
-	AnimationPlayer::~AnimationPlayer() {}
+	AnimationPlayer::~AnimationPlayer() = default;
 
 	void AnimationPlayer::Play() {
 		if (!m_Playing)
 			return;
 		float dt = ImGui::GetIO().DeltaTime;
-		float fps = static_cast<float>(m_Proj->AnimFPS());
+		auto fps = static_cast<float>(m_Proj->AnimFPS());
 		m_TimeElapsed += dt;
 		m_CurFrame = static_cast<unsigned long>(m_TimeElapsed * fps) %
 					 m_Proj->AnimFrameCount();

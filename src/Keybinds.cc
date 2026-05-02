@@ -1,24 +1,26 @@
 #include "Keybinds.h"
 #include "ExePath.h"
 #include "imgui.h"
+#include <algorithm>
 #include <iterator>
 #define TOML_EXCEPTIONS 0
 #include "toml++.h"
 #include <cstring>
 #include <map>
+#include <utility>
 
 #include "MacroUtils.h"
 
 namespace FuncDoodle {
 	KeyMask::KeyMask() {
-		for (int i = 0; i < KEY_MASK_SIZE; i++) {
-			m_Keys[i] = 0;
+		for (unsigned long long & m_Key : m_Keys) {
+			m_Key = 0;
 		}
 	}
 
 	KeyMask::KeyMask(ImGuiKey key) {
-		for (int i = 0; i < KEY_MASK_SIZE; i++) {
-			m_Keys[i] = 0;
+		for (unsigned long long & m_Key : m_Keys) {
+			m_Key = 0;
 		}
 		if (key != ImGuiKey_None) {
 			int bucket = key / 64;
@@ -32,7 +34,7 @@ namespace FuncDoodle {
 				continue;
 			for (int j = 0; j < 64; j++) {
 				if (m_Keys[i] & (1ull << j)) {
-					ImGuiKey key = (ImGuiKey)(i * 64 + j);
+					auto key = (ImGuiKey)((i * 64) + j);
 
 					if (ImGui::IsKeyPressed(key)) {
 						return true;
@@ -164,7 +166,7 @@ namespace FuncDoodle {
 	Shortcut::operator char*() const {
 		static char buf[256] = {};
 
-		const char* key_str = (const char*)Key;
+		const auto* key_str = (const char*)Key;
 
 		snprintf(buf, sizeof(buf), "%s%s%s%s", RequiresCtrl ? "Ctrl + " : "",
 			RequiresShift ? "Shift + " : "", RequiresSuper ? "Cmd + " : "",
@@ -181,13 +183,13 @@ namespace FuncDoodle {
 	}
 
 	KeybindsRegistry::KeybindsRegistry(std::filesystem::path rootPath)
-		: m_Reg({}), m_RootPath(rootPath) {}
+		: m_Reg({}), m_RootPath(std::move(rootPath)) {}
 	KeybindsRegistry::~KeybindsRegistry() {
 		Write();
 	}
 
 	Shortcut KeybindsRegistry::Get(const char* id) {
-		auto it = std::find_if(m_Reg.begin(), m_Reg.end(),
+		auto it = std::ranges::find_if(m_Reg,
 			[id](const auto& pair) { return strcmp(pair.first, id) == 0; });
 		if (it != m_Reg.end()) {
 			return it->second.User.value_or(it->second.Default);

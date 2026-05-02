@@ -88,7 +88,7 @@ namespace FuncDoodle {
 		 *
 		 * @return Active tool type.
 		 */
-		const ToolType GetSelectedTool() { return m_SelectedTool; }
+		ToolType GetSelectedTool() { return m_SelectedTool; }
 		/**
 		 * @fn GetCol
 		 * @brief Returns the current tool color as normalized RGB values.
@@ -114,7 +114,7 @@ namespace FuncDoodle {
 		 *
 		 * @return Brush or tool size.
 		 */
-		const int GetSize() const { return m_Size; }
+		[[nodiscard]] int GetSize() const { return m_Size; }
 		/**
 		 * @fn SetSize
 		 * @brief Sets the current tool size.

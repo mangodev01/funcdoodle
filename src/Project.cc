@@ -6,13 +6,14 @@
 
 #include <cstdio>
 #include <memory>
-#include <string.h>
+#include <cstring>
 
 #include <fstream>
 #include <iostream>
 #include <map>
 #include <stack>
 #include <type_traits>
+#include <utility>
 #include <vector>
 
 #include "MacroUtils.h"
@@ -24,7 +25,7 @@
 
 #include <ctime>
 
-#include <stdlib.h>
+#include <cstdlib>
 
 #define WRITEB(b)                                                        \
 	do {                                                                 \
@@ -44,13 +45,13 @@ namespace FuncDoodle {
 
 		m_BG = bgCol;
 
-		m_Frames.reset(new LongIndexArray(width, height, bgCol));
+		m_Frames = std::make_shared<LongIndexArray>(width, height, bgCol);
 		m_Frames->PushBackEmpty();
 
 		m_UndoStack = std::stack<UniquePtr<Action>>();
 		m_RedoStack = std::stack<UniquePtr<Action>>();
 	}
-	ProjectFile::~ProjectFile() {}
+	ProjectFile::~ProjectFile() = default;
 
 	const char* ProjectFile::AnimName() const {
 		return m_Name;
@@ -118,7 +119,7 @@ namespace FuncDoodle {
 		}
 	}
 
-	const int ProjectFile::AnimWidth() const {
+	int ProjectFile::AnimWidth() const {
 		return m_Width;
 	}
 
@@ -129,7 +130,7 @@ namespace FuncDoodle {
 		m_Width = width;
 	}
 
-	const int ProjectFile::AnimHeight() const {
+	int ProjectFile::AnimHeight() const {
 		return m_Height;
 	}
 	void ProjectFile::SetAnimHeight(int height, bool clear) {
@@ -146,7 +147,7 @@ namespace FuncDoodle {
 		strcpy(m_Author, author);
 	}
 
-	const int ProjectFile::AnimFPS() const {
+	int ProjectFile::AnimFPS() const {
 		return m_FPS;
 	}
 	void ProjectFile::SetAnimFPS(int FPS) {
@@ -160,7 +161,7 @@ namespace FuncDoodle {
 		strcpy(m_Desc, desc);
 	}
 
-	const unsigned long ProjectFile::AnimFrameCount() const {
+	unsigned long ProjectFile::AnimFrameCount() const {
 		return m_Frames->Size();
 	}
 	SharedPtr<LongIndexArray> ProjectFile::AnimFrames() {
@@ -238,11 +239,11 @@ namespace FuncDoodle {
 
 		// First pass: collect unique colors with stable ordering
 		for (unsigned long i = 0; i < AnimFrameCount(); i++) {
-			auto pixels = frameData->Get(i)->Pixels();
+			const auto *pixels = frameData->Get(i)->Pixels();
 			for (int x = 0; x < pixels->Width(); x++) {
 				for (int y = 0; y < pixels->Height(); y++) {
 					Col px = pixels->Get(x, y);
-					if (colorToIndex.find(px) == colorToIndex.end()) {
+					if (!colorToIndex.contains(px)) {
 						colorToIndex[px] = uniqueColors.size();
 						uniqueColors.push_back(px);
 					}
@@ -267,7 +268,7 @@ namespace FuncDoodle {
 
 		// Write frame data using stable indices
 		for (unsigned long i = 0; i < AnimFrameCount(); i++) {
-			auto pixels = frameData->Get(i)->Pixels();
+			const auto *pixels = frameData->Get(i)->Pixels();
 			for (int y = 0; y < pixels->Height(); y++) {
 				for (int x = 0; x < pixels->Width(); x++) {
 					Col px = pixels->Get(x, y);
@@ -295,7 +296,7 @@ namespace FuncDoodle {
 		const int numBytes = 6;
 		std::string str(numBytes, '\0');
 
-		file.read(&str[0], numBytes);
+		file.read(str.data(), numBytes);
 
 		if (str != "FDProj") {
 			FUNC_FATAL("This isn't a funcdoodle project...");
@@ -379,10 +380,10 @@ namespace FuncDoodle {
 			plte.push_back(Col{.r = r, .g = g, .b = b});
 		}
 
-		m_Frames.reset(new LongIndexArray(m_Width, m_Height, m_BG));
+		m_Frames = std::make_shared<LongIndexArray>(m_Width, m_Height, m_BG);
 		if (verMajor >= 0 && verMinor >= 2) {
 			FUNC_GRAY("Reading {} frames...", (unsigned long)frameCount);
-			for (unsigned long i = 0; i < (unsigned long)frameCount; i++) {
+			for (unsigned long i = 0; i < frameCount; i++) {
 				ImageArray img(animWidth, animHeight, m_BG);
 				for (int y = 0; y < animHeight; y++) {
 					for (int x = 0; x < animWidth; x++) {
@@ -390,7 +391,7 @@ namespace FuncDoodle {
 						unsigned char bytes[sizeof(int)];
 						file.read(reinterpret_cast<char*>(bytes), sizeof(int));
 						int index = *reinterpret_cast<int*>(bytes);
-						if (index >= (int)plteLen) {
+						if (std::cmp_greater_equal(index ,plteLen)) {
 							FUNC_DBG("Index: {}", index);
 							FUNC_DBG("Index out of bounds; maybe the project file is corrupted..?");
 							FUNC_DBG("trying to break...");
@@ -409,7 +410,7 @@ namespace FuncDoodle {
 			}
 		} else {
 			FUNC_GRAY("Reading {} frames...", (long)frameCount);
-			for (long i = 0; i < (long)frameCount; i++) {
+			for (long i = 0; std::cmp_less(i ,frameCount); i++) {
 				ImageArray img(animWidth, animHeight, m_BG);
 				for (int y = 0; y < animHeight; y++) {
 					for (int x = 0; x < animWidth; x++) {
@@ -420,7 +421,7 @@ namespace FuncDoodle {
 
 						FUNC_DBG("Reading index, x={} y={} index={}", x, y, index);
 
-						if (index < 0 || index >= (int)plteLen) {
+						if (index < 0 || std::cmp_greater_equal(index ,plteLen)) {
 							FUNC_WARN("Index out of bounds -- maybe the project file is corrupted..?");
 							FUNC_INF("Index: {}", index);
 							std::exit(-1);
@@ -465,7 +466,7 @@ namespace FuncDoodle {
 
 	void ProjectFile::DisplayAltFPS(double fps) {
 		if (ImGui::GetIO().KeyAlt) {
-			char* title = (char*)malloc(g_LargeBufferSize);
+			auto* title = (char*)malloc(g_LargeBufferSize);
 			snprintf(title, g_LargeBufferSize, "FuncDoodle %s: %s%s (%d FPS)",
 				FUNCVER, AnimName(), !m_Saved ? "*" : "",
 				(int)(fps > 0.0 ? fps : ImGui::GetIO().Framerate));
@@ -476,7 +477,7 @@ namespace FuncDoodle {
 	}
 
 	void ProjectFile::UpdateTitle() {
-		char* title = (char*)malloc(g_LargeBufferSize);
+		auto* title = (char*)malloc(g_LargeBufferSize);
 
 		snprintf(title, g_LargeBufferSize,
 			"FuncDoodle %s: %s%s (alt for details)", FUNCVER, AnimName(),

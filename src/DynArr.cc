@@ -1,5 +1,7 @@
 #include "DynArr.h"
 
+#include <algorithm>
+
 #include "Frame.h"
 
 #include "MacroUtils.h"
@@ -7,18 +9,15 @@
 namespace FuncDoodle {
 	LongIndexArray::LongIndexArray(
 		int width, int height, Col bgCol, unsigned long initialcap)
-		: m_Capacity(initialcap), size(0), m_Width(width), m_Height(height),
+		: m_Capacity(initialcap),  m_Width(width), m_Height(height),
 		  m_BG(bgCol) {
-		if (m_Capacity < 1)
-			m_Capacity = 1;
-		if (m_Width < 1)
-			m_Width = 1;
-		if (m_Height < 1)
-			m_Height = 1;
+		m_Capacity = std::max<unsigned long>(m_Capacity, 1);
+		m_Width = std::max(m_Width, 1);
+		m_Height = std::max(m_Height, 1);
 		m_Data.reserve(m_Capacity);
 	}
 
-	LongIndexArray::~LongIndexArray() {}
+	LongIndexArray::~LongIndexArray() = default;
 
 	void LongIndexArray::PushBack(const Frame* value) {
 		if (!value) {

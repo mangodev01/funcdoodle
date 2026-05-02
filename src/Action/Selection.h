@@ -14,6 +14,7 @@
 #include "Project.h"
 #include "Ptr.h"
 #include <cstdint>
+#include <utility>
 
 namespace FuncDoodle {
 
@@ -123,7 +124,7 @@ namespace FuncDoodle {
 		 */
 		MoveSelectionAction(Frame frame, MoveSelectionActionContext ctx)
 			: m_FrameBeforeMove(frame),
-			  m_Ctx(ctx) {}
+			  m_Ctx(std::move(ctx)) {}
 
 		/**
 		 * @brief Undoes movement.

@@ -34,9 +34,9 @@ namespace FuncDoodle {
 		UUID(std::array<unsigned char, 16> bytes) { m_Bytes = bytes; }
 		UUID() { m_Bytes = std::array<unsigned char, 16>(); }
 		/** @brief Returns the raw 16-byte UUID payload. */
-		inline std::array<unsigned char, 16> Bytes() { return m_Bytes; }
+		std::array<unsigned char, 16> Bytes() { return m_Bytes; }
 		/** @brief Converts the UUID into its string form. */
-		const char* ToString() const;
+		[[nodiscard]] const char* ToString() const;
 		/** @brief Compares two UUID values for equality. */
 		bool operator==(const UUID& other) const;
 		/** @brief Compares two UUID values for inequality. */
@@ -46,7 +46,7 @@ namespace FuncDoodle {
 		/** @brief Parses a UUID from a string representation. */
 		static UUID FromString(const char* str);
 		/** @brief Streams the UUID in its string form. */
-		friend std::ostream& operator<<(std::ostream& os, const UUID& uuid);
+		friend std::ostream& operator<<(std::ostream& os, const UUID& obj);
 		/** @brief Hash functor for using UUID as an associative-container key. */
 		struct Hash {
 			/** @brief Computes a stable hash for a UUID value. */

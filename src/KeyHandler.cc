@@ -146,7 +146,7 @@ namespace FuncDoodle {
 			context.Proj->AnimFrames()->InsertAfter(selectedFrame, frame);
 		}
 		if (keybinds.Get("duplicate_frame_after").IsPressed()) {
-			Frame* frame =
+			auto* frame =
 				new Frame(*context.Proj->AnimFrames()->Get(selectedFrame));
 			context.Proj->AnimFrames()->InsertAfter(selectedFrame, frame);
 			InsertFrameAction action =
@@ -154,7 +154,7 @@ namespace FuncDoodle {
 			context.Proj->PushUndoable(action);
 		}
 		if (keybinds.Get("duplicate_frame_before").IsPressed()) {
-			Frame* frame =
+			auto* frame =
 				new Frame(*context.Proj->AnimFrames()->Get(selectedFrame));
 			context.Proj->AnimFrames()->InsertBefore(selectedFrame, frame);
 			selectedFrame++;

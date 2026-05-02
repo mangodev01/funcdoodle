@@ -49,7 +49,7 @@ namespace FuncDoodle {
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0);
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
 
-		ImGui::Begin("Options", 0,
+		ImGui::Begin("Options", nullptr,
 			ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize |
 				ImGuiWindowFlags_NoScrollbar |
 				ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoMove |
@@ -89,12 +89,12 @@ namespace FuncDoodle {
 			openProjDesc);
 
 		float groupWidth = btnSize.x + textGap + maxWidth;
-		float groupHeight = btnSize.y * 2 + rowGap;
+		float groupHeight = (btnSize.y * 2) + rowGap;
 
 		ImVec2 contentMin = ImGui::GetWindowContentRegionMin();
 		ImVec2 contentMax = ImGui::GetWindowContentRegionMax();
 		float contentWidth = contentMax.x - contentMin.x;
-		float rowStartX = contentMin.x + (contentWidth - groupWidth) * 0.5f;
+		float rowStartX = contentMin.x + ((contentWidth - groupWidth) * 0.5f);
 		ImGui::SetCursorPosX(rowStartX);
 
 		ImVec2 windowPos = ImGui::GetWindowPos();
@@ -124,7 +124,7 @@ namespace FuncDoodle {
 			float textYOffset = std::round(titleHeight * textYOffsetFactor);
 			ImGui::SetCursorPosX(textX);
 			ImGui::SetCursorPosY(
-				btnTopY + (btnSize.y - titleHeight) * 0.5f - textYOffset);
+				btnTopY + ((btnSize.y - titleHeight) * 0.5f) - textYOffset);
 			ImGui::Text("%s", title);
 			ImGui::PopFont();
 
@@ -224,9 +224,8 @@ namespace FuncDoodle {
 				std::vector<std::filesystem::path> themes =
 					dialog.OpenMultiple();
 
-				for (size_t i = 0; i < themes.size(); i++) {
-					std::filesystem::path path = themes[i];
-					style = Themes::LoadThemeFromFile(path.string().c_str());
+				for (auto path : themes) {
+						style = Themes::LoadThemeFromFile(path.string().c_str());
 
 					if (style) {
 						auto [it, inserted] =

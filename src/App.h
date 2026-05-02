@@ -56,7 +56,7 @@ namespace FuncDoodle {
 		 *
 		 * @return Current application instance.
 		 */
-		inline static Application* Get() { return s_Instance; };
+		static Application* Get() { return s_Instance; };
 		/**
 		 * @fn Run
 		 * @brief Runs the main application loop.
@@ -167,14 +167,14 @@ namespace FuncDoodle {
 		 *
 		 * @return Shared pointer to the active project.
 		 */
-		inline SharedPtr<ProjectFile> GetCurProj() { return m_CurrentProj; }
+		SharedPtr<ProjectFile> GetCurProj() { return m_CurrentProj; }
 		/**
 		 * @fn SetCurProj
 		 * @brief Sets the currently open project.
 		 *
 		 * @param proj Project to make active.
 		 */
-		inline void SetCurProj(SharedPtr<ProjectFile> proj) {
+		void SetCurProj(SharedPtr<ProjectFile> proj) {
 			m_CurrentProj = proj;
 		}
 		/**
@@ -183,14 +183,14 @@ namespace FuncDoodle {
 		 *
 		 * @return Cached project pointer.
 		 */
-		inline SharedPtr<ProjectFile> GetCacheProj() { return m_CacheProj; }
+		SharedPtr<ProjectFile> GetCacheProj() { return m_CacheProj; }
 		/**
 		 * @fn SetCacheProj
 		 * @brief Sets the cached project reference.
 		 *
 		 * @param proj Project to cache.
 		 */
-		inline void SetCacheProj(SharedPtr<ProjectFile> proj) {
+		void SetCacheProj(SharedPtr<ProjectFile> proj) {
 			m_CacheProj = proj;
 		}
 		/**
@@ -199,35 +199,35 @@ namespace FuncDoodle {
 		 *
 		 * @return Asset loader pointer.
 		 */
-		inline AssetLoader* GetAssetLoader() { return m_AssetLoader.get(); }
+		AssetLoader* GetAssetLoader() { return m_AssetLoader.get(); }
 		/**
 		 * @fn GetShouldClose
 		 * @brief Returns whether the application should exit.
 		 *
 		 * @return Close flag.
 		 */
-		inline bool GetShouldClose() { return m_ShouldClose; }
+		bool GetShouldClose() const { return m_ShouldClose; }
 		/**
 		 * @fn GetTheme
 		 * @brief Returns the currently selected theme UUID.
 		 *
 		 * @return Active theme UUID.
 		 */
-		inline UUID GetTheme() { return m_Theme; }
+		UUID GetTheme() { return m_Theme; }
 		/**
 		 * @fn SetTheme
 		 * @brief Sets the current theme UUID.
 		 *
 		 * @param theme Theme UUID to store.
 		 */
-		inline void SetTheme(UUID theme) { m_Theme = theme; }
+		void SetTheme(UUID theme) { m_Theme = theme; }
 		/**
 		 * @fn SetFrameLimit
 		 * @brief Sets the main-loop frame cap.
 		 *
 		 * @param frameLimit Target frame limit.
 		 */
-		inline void SetFrameLimit(double frameLimit) {
+		void SetFrameLimit(double frameLimit) {
 			m_Settings.FrameLimit = frameLimit;
 		}
 		/**
@@ -236,7 +236,7 @@ namespace FuncDoodle {
 		 *
 		 * @param shouldClose New close flag value.
 		 */
-		inline void SetShouldClose(bool shouldClose) {
+		void SetShouldClose(bool shouldClose) {
 			m_ShouldClose = shouldClose;
 		}
 
@@ -246,70 +246,70 @@ namespace FuncDoodle {
 		 *
 		 * @return Window pointer.
 		 */
-		inline Platform::Window* GetWindow() { return &m_Window; }
+		Platform::Window* GetWindow() { return &m_Window; }
 		/**
 		 * @fn GetSettings
 		 * @brief Returns mutable application settings.
 		 *
 		 * @return Settings reference.
 		 */
-		inline AppSettings& GetSettings() { return m_Settings; }
+		AppSettings& GetSettings() { return m_Settings; }
 		/**
 		 * @fn GetFrameTime
 		 * @brief Returns target frame time derived from the frame limit.
 		 *
 		 * @return Seconds per frame.
 		 */
-		inline double GetFrameTime() { return 1.0 / m_Settings.FrameLimit; }
+		double GetFrameTime() const { return 1.0 / m_Settings.FrameLimit; }
 		/**
 		 * @fn GetKeybinds
 		 * @brief Returns the application keybind registry.
 		 *
 		 * @return Keybind registry reference.
 		 */
-		inline KeybindsRegistry& GetKeybinds() { return m_Keybinds; }
+		KeybindsRegistry& GetKeybinds() { return m_Keybinds; }
 		/**
 		 * @fn GetExportFormat
 		 * @brief Returns the selected export format identifier.
 		 *
 		 * @return Export format value.
 		 */
-		inline int GetExportFormat() { return m_ExportFormat; }
+		int GetExportFormat() const { return m_ExportFormat; }
 		/**
 		 * @fn GetUiManager
 		 * @brief Returns the top-level UI manager.
 		 *
 		 * @return UI manager reference.
 		 */
-		inline UIManager& GetUiManager() { return m_UiManager; }
+		UIManager& GetUiManager() { return m_UiManager; }
 		/**
 		 * @fn GetExportFormatPtr
 		 * @brief Returns a mutable reference to the export format field.
 		 *
 		 * @return Export format reference.
 		 */
-		inline int& GetExportFormatPtr() { return m_ExportFormat; }
+		int& GetExportFormatPtr() { return m_ExportFormat; }
 		/**
 		 * @fn GetThemesPath
 		 * @brief Returns the directory used for theme files.
 		 *
 		 * @return Themes directory path.
 		 */
-		inline std::filesystem::path GetThemesPath() { return m_ThemesPath; }
+		std::filesystem::path GetThemesPath() { return m_ThemesPath; }
 		/**
 		 * @fn GetFrameLimitCache
 		 * @brief Returns the cached previous frame limit.
 		 *
 		 * @return Cached frame limit reference.
 		 */
-		inline double& GetFrameLimitCache() { return m_FrameLimitCache; }
+		double& GetFrameLimitCache() { return m_FrameLimitCache; }
 		/**
 		 * @fn SetExportFormat
 		 * @brief Sets the export format identifier.
 		 *
 		 * @param format Export format value.
 		 */
-		inline void SetExportFormat(int format) { m_ExportFormat = format; }
+		void SetExportFormat(int format) { m_ExportFormat = format; }
 
 		/**
 		 * @fn GetManager
@@ -317,7 +317,7 @@ namespace FuncDoodle {
 		 *
 		 * @return Animation manager pointer.
 		 */
-		inline AnimationManager* GetManager() { return m_Manager.get(); }
+		AnimationManager* GetManager() { return m_Manager.get(); }
 
 		/**
 		 * @fn GetController
@@ -325,7 +325,7 @@ namespace FuncDoodle {
 		 *
 		 * @return Editor controller pointer.
 		 */
-		inline SharedPtr<EditorController> GetController() {
+		SharedPtr<EditorController> GetController() {
 			return m_EditorController;
 		}
 
@@ -334,7 +334,7 @@ namespace FuncDoodle {
 		 *
 		 * @return Window wrapper copy.
 		 */
-		inline Platform::Window GetWindow() const { return m_Window; }
+		[[nodiscard]] Platform::Window GetWindow() const { return m_Window; }
 
 		/**
 		 * @fn UpdateFPS
@@ -416,7 +416,7 @@ namespace FuncDoodle {
 		 * @param pos Position to test.
 		 * @return Whether the position is inside the frame area.
 		 */
-		bool IsPosInFrame(ImVec2 pos);
+		static bool IsPosInFrame(ImVec2 pos);
 
 		private:
 		std::string m_FilePath;

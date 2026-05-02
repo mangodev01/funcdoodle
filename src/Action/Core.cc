@@ -1,3 +1,5 @@
+#include <ranges>
+
 #include "Action.h"
 
 #include "Project.h"
@@ -37,8 +39,8 @@ namespace FuncDoodle {
 			Frame* frame = proj->AnimFrames()->Get(m_FrameIndex);
 			if (!frame)
 				return;
-			for (auto it = m_Changes.rbegin(); it != m_Changes.rend(); ++it) {
-				frame->SetPixel(it->x, it->y, it->prev);
+			for (auto & m_Change : std::ranges::reverse_view(m_Changes)) {
+				frame->SetPixel(m_Change.x, m_Change.y, m_Change.prev);
 			}
 		}
 	}

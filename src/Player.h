@@ -65,14 +65,14 @@ namespace FuncDoodle {
 		 *
 		 * @param playing New playback state.
 		 */
-		constexpr inline void SetPlaying(bool playing) { m_Playing = playing; }
+		constexpr void SetPlaying(bool playing) { m_Playing = playing; }
 		/**
 		 * @fn Playing
 		 * @brief Returns whether playback is currently active.
 		 *
 		 * @return Playback state.
 		 */
-		constexpr inline bool Playing() const { return m_Playing; }
+		[[nodiscard]] constexpr bool Playing() const { return m_Playing; }
 
 		/**
 		 * @fn SetProj
@@ -80,14 +80,14 @@ namespace FuncDoodle {
 		 *
 		 * @param proj Project to play.
 		 */
-		inline void SetProj(SharedPtr<ProjectFile> proj) { m_Proj = proj; }
+		void SetProj(SharedPtr<ProjectFile> proj) { m_Proj = proj; }
 		/**
 		 * @fn Proj
 		 * @brief Returns the project used for playback.
 		 *
 		 * @return Shared pointer to the active project.
 		 */
-		inline SharedPtr<ProjectFile> Proj() const { return m_Proj; }
+		[[nodiscard]] SharedPtr<ProjectFile> Proj() const { return m_Proj; }
 
 		/**
 		 * @fn CurFrame
@@ -95,14 +95,14 @@ namespace FuncDoodle {
 		 *
 		 * @return Current frame index.
 		 */
-		constexpr inline unsigned long CurFrame() const { return m_CurFrame; }
+		[[nodiscard]] constexpr unsigned long CurFrame() const { return m_CurFrame; }
 		/**
 		 * @fn SetCurFrame
 		 * @brief Sets the current playback frame index.
 		 *
 		 * @param frame Frame index to jump to.
 		 */
-		constexpr inline void SetCurFrame(unsigned long frame) {
+		constexpr void SetCurFrame(unsigned long frame) {
 			m_CurFrame = frame;
 		}
 

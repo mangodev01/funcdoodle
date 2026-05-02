@@ -37,15 +37,15 @@ namespace FuncDoodle {
 	 */
 	class AudioManager {
 		public:
-		AudioManager() {}
-		~AudioManager() {}
+		AudioManager() = default;
+		~AudioManager() = default;
 		/**
 		 * @fn PlayWav
 		 * @brief Plays decoded WAV audio data.
 		 *
 		 * @param wavPath Audio data to play.
 		 */
-		void PlayWav(AudioData wavPath);
+		static void PlayWav(AudioData wavPath);
 		/**
 		 * @fn ParseWav
 		 * @brief Loads a WAV file from disk and decodes it.
@@ -53,7 +53,7 @@ namespace FuncDoodle {
 		 * @param wav Path to the WAV file.
 		 * @return Decoded audio data.
 		 */
-		AudioData ParseWav(std::filesystem::path wav);
+		static AudioData ParseWav(std::filesystem::path wav);
 		/**
 		 * @fn WaitForAllPlayback
 		 * @brief Blocks until all active playback operations finish.

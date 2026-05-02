@@ -98,7 +98,7 @@ namespace FuncDoodle::Platform {
 		/**
 		 * @brief Sets GLFW error callback.
 		 */
-		void SetErrorCallback(ErrorCallback cb);
+		static void SetErrorCallback(ErrorCallback cb);
 
 		/**
 		 * @typedef CloseCallback
@@ -124,7 +124,7 @@ namespace FuncDoodle::Platform {
 		/**
 		 * @brief Polls OS and input events.
 		 */
-		void PollEvents();
+		static void PollEvents();
 
 		/**
 		 * @brief Retrieves framebuffer size in pixels.
@@ -144,7 +144,7 @@ namespace FuncDoodle::Platform {
 		/**
 		 * @brief Returns whether the cursor is currently hidden.
 		 */
-		inline bool GetCursorHidden() const { return m_CursorHidden; }
+		[[nodiscard]] bool GetCursorHidden() const { return m_CursorHidden; }
 
 		/**
 		 * @brief Initializes GLFW (must be called once before creating windows).

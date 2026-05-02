@@ -36,7 +36,6 @@
 
 #include "AssetLoader.h"
 
-#include "Ptr.h"
 
 namespace FuncDoodle {
 	/**
@@ -100,7 +99,7 @@ namespace FuncDoodle {
 		 * @fn RenderLogs
 		 * @brief Renders animation-related log or debug output.
 		 */
-		void RenderLogs();
+		static void RenderLogs();
 
 		/**
 		 * @fn Proj
@@ -108,7 +107,7 @@ namespace FuncDoodle {
 		 *
 		 * @return Shared pointer to the active project.
 		 */
-		const SharedPtr<ProjectFile> Proj() const { return m_Proj; }
+		[[nodiscard]] SharedPtr<ProjectFile> Proj() const { return m_Proj; }
 		/**
 		 * @fn SetProj
 		 * @brief Replaces the active project and updates the player to match.
@@ -132,7 +131,7 @@ namespace FuncDoodle {
 		 *
 		 * @return Pointer to the playback controller.
 		 */
-		AnimationPlayer* Player() const { return m_Player.get(); }
+		[[nodiscard]] AnimationPlayer* Player() const { return m_Player.get(); }
 		/**
 		 * @fn SetPlayer
 		 * @brief Replaces the owned animation player.
@@ -147,7 +146,7 @@ namespace FuncDoodle {
 		 *
 		 * @return Current frame index.
 		 */
-		unsigned long SelectedFrameI() const { return m_SelectedFrame; }
+		[[nodiscard]] unsigned long SelectedFrameI() const { return m_SelectedFrame; }
 		/**
 		 * @fn SelectedFrame
 		 * @brief Returns the selected frame object.
@@ -164,13 +163,13 @@ namespace FuncDoodle {
 		 *
 		 * @return Owned frame renderer pointer wrapper.
 		 */
-		inline const UniquePtr<FrameRenderer>& GetFrameRenderer() const {
+		[[nodiscard]] const UniquePtr<FrameRenderer>& GetFrameRenderer() const {
 			return m_FrameRenderer;
 		}
 
 		private:
 		SharedPtr<ProjectFile> m_Proj;
-		unsigned long m_SelectedFrame;
+		unsigned long m_SelectedFrame{0};
 		UniquePtr<FrameRenderer> m_FrameRenderer;
 		UniquePtr<FrameRenderer> m_TimelineFrameRenderer;
 		UniquePtr<ToolManager> m_ToolManager;

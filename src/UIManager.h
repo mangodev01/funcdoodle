@@ -43,7 +43,7 @@ namespace FuncDoodle {
 		void Options();
 
 		/** @brief Returns the popup state registry owned by the UI manager. */
-		inline PopupRegistry& GetPopups() { return m_Popups; }
+		PopupRegistry& GetPopups() { return m_Popups; }
 
 		private:
 		void SaveChanges();
@@ -56,7 +56,7 @@ namespace FuncDoodle {
 		void EditPrefs();
 		void Rotate();
 
-		private:
+		
 		const char* m_WaitingForKey = nullptr;
 		std::array<float, 3> m_CacheBGCol = {1.0f, 1.0f, 1.0f};
 		PopupRegistry m_Popups;

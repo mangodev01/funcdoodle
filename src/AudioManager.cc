@@ -14,9 +14,9 @@ namespace FuncDoodle {
 	// Plays the provided AudioData asynchronously.
 	void AudioManager::PlayWav(AudioData wav) {
 		// Allocate a heap copy so that the callback has a valid pointer
-		AudioData* audioData = new AudioData(std::move(wav));
+		auto* audioData = new AudioData(std::move(wav));
 		{
-			std::lock_guard<std::mutex> lk(s_PlaybackMutex);
+			std::scoped_lock lk(s_PlaybackMutex);
 			++s_ActivePlaybacks;
 		}
 
@@ -30,10 +30,10 @@ namespace FuncDoodle {
 			audioData);	 // user data
 		if (err != paNoError) {
 			std::cerr << "Error opening default stream: "
-					  << Pa_GetErrorText(err) << std::endl;
+					  << Pa_GetErrorText(err) << '\n';
 			delete audioData;
 			{
-				std::lock_guard<std::mutex> lk(s_PlaybackMutex);
+				std::scoped_lock lk(s_PlaybackMutex);
 				--s_ActivePlaybacks;
 			}
 			s_PlaybackCv.notify_all();
@@ -43,11 +43,11 @@ namespace FuncDoodle {
 		err = Pa_StartStream(stream);
 		if (err != paNoError) {
 			std::cerr << "Error starting stream: " << Pa_GetErrorText(err)
-					  << std::endl;
+					  << '\n';
 			Pa_CloseStream(stream);
 			delete audioData;
 			{
-				std::lock_guard<std::mutex> lk(s_PlaybackMutex);
+				std::scoped_lock lk(s_PlaybackMutex);
 				--s_ActivePlaybacks;
 			}
 			s_PlaybackCv.notify_all();
@@ -67,7 +67,7 @@ namespace FuncDoodle {
 			// Free the audio data allocated in PlayWav
 			delete audioData;
 			{
-				std::lock_guard<std::mutex> lk(s_PlaybackMutex);
+				std::scoped_lock lk(s_PlaybackMutex);
 				--s_ActivePlaybacks;
 			}
 			s_PlaybackCv.notify_all();
@@ -83,7 +83,7 @@ namespace FuncDoodle {
 	AudioData AudioManager::ParseWav(std::filesystem::path wavPath) {
 		AudioFile<float> audioFile;
 		if (!audioFile.load(wavPath.string())) {
-			std::cerr << "Failed to load wav file: " << wavPath << std::endl;
+			std::cerr << "Failed to load wav file: " << wavPath << '\n';
 			std::exit(-1);
 		}
 
@@ -100,7 +100,7 @@ namespace FuncDoodle {
 		// Interleave the channels into a single vector.
 		for (int ch = 0; ch < audioData.numChannels; ++ch) {
 			for (size_t i = 0; i < audioData.total; ++i) {
-				audioData.samples[i * audioData.numChannels + ch] =
+				audioData.samples[(i * audioData.numChannels) + ch] =
 					audioFile.samples[ch][i];
 			}
 		}

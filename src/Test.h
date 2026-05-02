@@ -33,7 +33,7 @@
 int FuncDoodle_RunTests();
 #endif
 
-#if defined(_MSC_VER)
+#ifdef _MSC_VER
 /** @def CURRENT_FUNC @brief Expands to the current function name on MSVC. */
 #define CURRENT_FUNC __FUNCTION__
 #else
@@ -105,7 +105,9 @@ namespace FuncDoodle {
 		 * Displays total, passed, failed, and success percentage.
 		 */
 		void PrintSummary() {
-			int total_tests = 0, total_passed = 0, total_failed = 0;
+			int total_tests = 0;
+			int total_passed = 0;
+			int total_failed = 0;
 
 			for (const auto& r : m_Results) {
 				total_tests += r.total;
@@ -122,7 +124,7 @@ namespace FuncDoodle {
 
 			std::cout << "\n";
 			std::cout << "╔" << Repeat("═", 62) << "╗\n";
-			std::cout << "║                      TEST SUMMARY                      ║\n";
+			std::cout << "║                      TEST SUMMARY                            ║\n";
 			std::cout << "╠" << Repeat("═", 62) << "╣\n";
 
 			std::cout << "║  Total:  " << total_tests
@@ -174,7 +176,7 @@ namespace FuncDoodle {
 		 * @param name Name printed in test output.
 		 */
 		explicit TestScope(const char* name)
-			: m_Name(name), m_Total(0), m_Passed(0), m_Failed(0) {}
+			: m_Name(name) {}
 
 		/**
 		 * @brief Finalizes and prints test scope results.

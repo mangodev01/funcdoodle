@@ -24,7 +24,7 @@ namespace FuncDoodle {
 	void FrameRenderer::RenderFrame() {
 		ImGui::SetNextWindowPos(ImVec2(0, 32), ImGuiCond_FirstUseEver);
 		ImGui::SetNextWindowSize(ImVec2(1073, 862), ImGuiCond_FirstUseEver);
-		ImGui::Begin("Frame", 0,
+		ImGui::Begin("Frame", nullptr,
 			ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 
 		if (!m_Ctx.Frame || !m_Ctx.ToolManager) {
@@ -72,7 +72,7 @@ namespace FuncDoodle {
 		ImGui::End();
 	}
 
-	void FrameRenderer::RenderStatusBar() {
+	void FrameRenderer::RenderStatusBar() const {
 		float availY = ImGui::GetContentRegionAvail().y;
 		ImGui::SetCursorPosY(
 			ImGui::GetCursorPosY() + availY - c_StatusBarHeight);
@@ -98,7 +98,7 @@ namespace FuncDoodle {
 	}
 
 	void FrameRenderer::RenderFramePixels(int startX, int startY,
-		ImDrawList* drawList, bool usePrevPxScale, bool renderPreview) {
+		ImDrawList* drawList, bool usePrevPxScale, bool renderPreview) const {
 		// Use the appropriate frame for rendering
 		const ImageArray* pixels = m_Ctx.Frame->Pixels();
 
@@ -106,12 +106,13 @@ namespace FuncDoodle {
 			for (int x = 0; x < pixels->Width(); x++) {
 				Col col = pixels->Get(x, y);
 
-				ImVec2 topLeft, bottomRight;
+				ImVec2 topLeft;
+				ImVec2 bottomRight;
 				if (usePrevPxScale) {
-					topLeft = ImVec2(startX + x * m_Ctx.PixelScale,
-						startY + y * m_Ctx.PixelScale);
-					bottomRight = ImVec2(startX + (x + 1) * m_Ctx.PixelScale,
-						startY + (y + 1) * m_Ctx.PixelScale);
+					topLeft = ImVec2(startX + (x * m_Ctx.PixelScale),
+						startY + (y * m_Ctx.PixelScale));
+					bottomRight = ImVec2(startX + ((x + 1) * m_Ctx.PixelScale),
+						startY + ((y + 1) * m_Ctx.PixelScale));
 				} else {
 					topLeft = ImVec2(startX + x, startY + y);
 					bottomRight = ImVec2(startX + x + 1, startY + y + 1);

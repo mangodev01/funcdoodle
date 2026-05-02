@@ -63,13 +63,13 @@ static int paCB(const void* inBuf, void* outBuf, unsigned long framesPerBuf,
 		return paAbort;
 	}
 
-	FuncDoodle::AudioData* data = static_cast<FuncDoodle::AudioData*>(userData);
-	float* out = static_cast<float*>(outBuf);
+	auto* data = static_cast<FuncDoodle::AudioData*>(userData);
+	auto* out = static_cast<float*>(outBuf);
 	unsigned long framesLeft = data->total - data->cur;
 	unsigned long framesToProcess =
 		(framesLeft < framesPerBuf) ? framesLeft : framesPerBuf;
 
-	std::memcpy(out, data->samples.data() + data->cur * data->numChannels,
+	std::memcpy(out, data->samples.data() + (data->cur * data->numChannels),
 		framesToProcess * data->numChannels * sizeof(float));
 
 	data->cur += framesToProcess;

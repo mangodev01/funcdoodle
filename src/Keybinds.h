@@ -26,7 +26,6 @@
 #include <imgui.h>
 #include <map>
 #include <optional>
-#include <vector>
 
 namespace FuncDoodle {
 	/**
@@ -72,7 +71,7 @@ namespace FuncDoodle {
 		 *
 		 * @return Whether the masked key set is active.
 		 */
-		bool IsPressed() const;
+		[[nodiscard]] bool IsPressed() const;
 		/**
 		 * @brief Converts the key mask to a display string.
 		 *
@@ -85,8 +84,8 @@ namespace FuncDoodle {
 		 * @brief Clears all keys from the mask.
 		 */
 		void Reset() {
-			for (int i = 0; i < KEY_MASK_SIZE; i++) {
-				m_Keys[i] = 0;
+			for (unsigned long long & m_Key : m_Keys) {
+				m_Key = 0;
 			}
 		}
 
@@ -96,14 +95,14 @@ namespace FuncDoodle {
 		 *
 		 * @return Vector of ImGui keys contained in the mask.
 		 */
-		std::vector<ImGuiKey> All() const {
+		[[nodiscard]] std::vector<ImGuiKey> All() const {
 			std::vector<ImGuiKey> keys;
 			for (int i = 0; i < KEY_MASK_SIZE; i++) {
 				if (m_Keys[i] == 0)
 					continue;
 				for (int j = 0; j < 64; j++) {
 					if (m_Keys[i] & (1ull << j)) {
-						ImGuiKey key = (ImGuiKey)(i * 64 + j);
+						auto key = (ImGuiKey)((i * 64) + j);
 						keys.push_back(key);
 					}
 				}
@@ -200,7 +199,7 @@ namespace FuncDoodle {
 		 *
 		 * @return Whether the shortcut is currently pressed.
 		 */
-		bool IsPressed() const;
+		[[nodiscard]] bool IsPressed() const;
 		/**
 		 * @brief Returns whether two shortcuts are identical.
 		 *

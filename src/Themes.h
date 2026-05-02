@@ -30,12 +30,12 @@
 
 #include "UUID.h"
 
-namespace FuncDoodle {
+
 	/**
 	 * @namespace Themes
 	 * @brief Helper utilities for applying, creating and saving FuncDoodle themes.
 	 */
-	namespace Themes {
+	namespace FuncDoodle::Themes {
 		/**
 		 * @brief UUID string of the built-in default theme.
 		 */
@@ -53,8 +53,8 @@ namespace FuncDoodle {
 			UUID Uuid;          ///< Stable UUID identifying the theme.
 			bool OwnsMeta = false; ///< Whether Name and Author memory must be freed.
 			CustomTheme()
-				: Uuid(UUID()), Name(""), Author(""), Style(ImGuiStyle()),
-				  OwnsMeta(false) {}
+				:  Name(""), Author("")
+				  {}
 			/**
 			 * @brief Creates a theme with explicit metadata and style.
 			 *
@@ -138,9 +138,9 @@ namespace FuncDoodle {
 
 			// Allocate memory for name and author (because TOML parser returns
 			// temporary strings)
-			char* name_copy = (char*)malloc(strlen(name) + 1);
-			char* author_copy = (char*)malloc(strlen(author) + 1);
-			char* uuid_copy = (char*)malloc(strlen(uuid) + 1);
+			auto* name_copy = (char*)malloc(strlen(name) + 1);
+			auto* author_copy = (char*)malloc(strlen(author) + 1);
+			auto* uuid_copy = (char*)malloc(strlen(uuid) + 1);
 
 			if (!name_copy || !author_copy || !uuid_copy) {
 				if (name_copy)
@@ -196,11 +196,11 @@ namespace FuncDoodle {
 					if (!node) {
 						return false;
 					}
-					if (auto fp = node->as_floating_point()) {
+					if (const auto *fp = node->as_floating_point()) {
 						out = fp->get();
 						return true;
 					}
-					if (auto i = node->as_integer()) {
+					if (const auto *i = node->as_integer()) {
 						out = static_cast<double>(i->get());
 						return true;
 					}
@@ -237,7 +237,7 @@ namespace FuncDoodle {
 					if (!node) {
 						return;
 					}
-					if (auto b = node->as_boolean()) {
+					if (const auto *b = node->as_boolean()) {
 						out = b->get();
 						return;
 					}
@@ -353,7 +353,7 @@ namespace FuncDoodle {
 			ClearThemes();
 			if (std::filesystem::exists(path) &&
 				std::filesystem::is_directory(path)) {
-				for (std::filesystem::directory_entry e :
+				for (const std::filesystem::directory_entry& e :
 					std::filesystem::directory_iterator(path)) {
 					if (!e.is_regular_file()) {
 						FUNC_GRAY("Skipping {} because it isn't a regular file", e.path().string());
@@ -425,7 +425,7 @@ namespace FuncDoodle {
 
 						for (unsigned char i = 0; i < ImGuiCol_COUNT; ++i) {
 							std::string is = std::to_string(i);
-							std::string_view iv = std::string_view(is);
+							auto iv = std::string_view(is);
 							colors.insert(
 								iv, toml::array{style.Colors[i].x,
 										style.Colors[i].y, style.Colors[i].z,
@@ -521,5 +521,5 @@ namespace FuncDoodle {
 #undef SAVE_VEC2
 #undef SAVE_BOOL
 #undef SAVE_ENUM
-	}  // namespace Themes
-}  // namespace FuncDoodle
+	} // namespace FuncDoodle::Themes
+

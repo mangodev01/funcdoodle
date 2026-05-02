@@ -79,7 +79,7 @@ namespace FuncDoodle {
 		 *
 		 * @return Animation name string.
 		 */
-		const char* AnimName() const;
+		[[nodiscard]] const char* AnimName() const;
 		/**
 		 * @fn SetAnimName
 		 * @brief Sets the animation name.
@@ -93,7 +93,7 @@ namespace FuncDoodle {
 		 *
 		 * @return Canvas width.
 		 */
-		const int AnimWidth() const;
+		[[nodiscard]] int AnimWidth() const;
 		/**
 		 * @fn SetAnimWidth
 		 * @brief Sets the animation width.
@@ -108,7 +108,7 @@ namespace FuncDoodle {
 		 *
 		 * @return Canvas height.
 		 */
-		const int AnimHeight() const;
+		[[nodiscard]] int AnimHeight() const;
 		/**
 		 * @fn SetAnimHeight
 		 * @brief Sets the animation height.
@@ -123,7 +123,7 @@ namespace FuncDoodle {
 		 *
 		 * @return Author string.
 		 */
-		const char* AnimAuthor() const;
+		[[nodiscard]] const char* AnimAuthor() const;
 		/**
 		 * @fn SetAnimAuthor
 		 * @brief Sets the animation author.
@@ -137,7 +137,7 @@ namespace FuncDoodle {
 		 *
 		 * @return Frames per second.
 		 */
-		const int AnimFPS() const;
+		[[nodiscard]] int AnimFPS() const;
 		/**
 		 * @fn SetAnimFPS
 		 * @brief Sets the animation frame rate.
@@ -151,7 +151,7 @@ namespace FuncDoodle {
 		 *
 		 * @return Description string.
 		 */
-		const char* AnimDesc() const;
+		[[nodiscard]] const char* AnimDesc() const;
 		/**
 		 * @fn SetAnimDesc
 		 * @brief Sets the animation description.
@@ -165,7 +165,7 @@ namespace FuncDoodle {
 		 *
 		 * @return Frame count.
 		 */
-		const unsigned long AnimFrameCount() const;
+		[[nodiscard]] unsigned long AnimFrameCount() const;
 		/**
 		 * @fn SetAnimFrameCount
 		 * @brief Resizes the animation frame count.
@@ -179,7 +179,7 @@ namespace FuncDoodle {
 		 *
 		 * @param bgCol Pointer to three normalized RGB float values.
 		 */
-		inline void SetBgCol(const float* bgCol) {
+		void SetBgCol(const float* bgCol) {
 			// Ensure bgCol is valid and has at least 3 elements
 			if (bgCol) {
 				m_BG = Col{.r = static_cast<unsigned char>(
@@ -201,14 +201,14 @@ namespace FuncDoodle {
 		 *
 		 * @return Background color.
 		 */
-		inline const Col BgCol() const { return m_BG; }
+		[[nodiscard]] Col BgCol() const { return m_BG; }
 		/**
 		 * @fn LastSavePath
 		 * @brief Returns the last saved file path.
 		 *
 		 * @return Last save path string.
 		 */
-		inline const char* LastSavePath() const { return m_LastSavePath; };
+		[[nodiscard]] const char* LastSavePath() const { return m_LastSavePath; };
 		/**
 		 * @fn AnimFrames
 		 * @brief Returns the animation frame storage.
@@ -222,7 +222,7 @@ namespace FuncDoodle {
 		 *
 		 * @param filePath Output project path.
 		 */
-		void Write(const char* filePath);
+		void Write(const char* fileName);
 		/**
 		 * @fn ReadAndPopulate
 		 * @brief Loads project data from disk into this instance.
@@ -244,14 +244,14 @@ namespace FuncDoodle {
 		 *
 		 * @return Window pointer.
 		 */
-		constexpr inline Platform::Window* Window() const { return m_Window; }
+		[[nodiscard]] constexpr Platform::Window* Window() const { return m_Window; }
 		/**
 		 * @fn Saved
 		 * @brief Returns whether the project matches the last saved state.
 		 *
 		 * @return Save-state flag.
 		 */
-		inline bool Saved() { return m_Saved; }
+		bool Saved() const { return m_Saved; }
 		/**
 		 * @fn DisplayAltFPS
 		 * @brief Shows a temporary FPS value in the window title.

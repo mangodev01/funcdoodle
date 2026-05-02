@@ -16,7 +16,7 @@
 namespace FuncDoodle {
 	const float c_StatusBarHeight = 20.0f;
 
-	EditorController::EditorController() {}
+	EditorController::EditorController() = default;
 
 	bool EditorController::Paint(Frame* frame, unsigned long frameI,
 		ToolManager* toolManager, AnimationPlayer* player, int pixelX,
@@ -68,9 +68,9 @@ namespace FuncDoodle {
 		}
 		const float* colOld = toolManager->GetCol();
 		Col newColor = {
-			static_cast<unsigned char>(colOld[0] * g_MaxColorValue + 0.5f),
-			static_cast<unsigned char>(colOld[1] * g_MaxColorValue + 0.5f),
-			static_cast<unsigned char>(colOld[2] * g_MaxColorValue + 0.5f)};
+			.r=static_cast<unsigned char>((colOld[0] * g_MaxColorValue) + 0.5f),
+			.g=static_cast<unsigned char>((colOld[1] * g_MaxColorValue) + 0.5f),
+			.b=static_cast<unsigned char>((colOld[2] * g_MaxColorValue) + 0.5f)};
 
 		int size = toolManager->GetSize();
 		bool actionPerformed = false;
@@ -160,9 +160,9 @@ namespace FuncDoodle {
 
 		const float* colOld = toolManager->GetCol();
 		Col fillColor = {
-			static_cast<unsigned char>(colOld[0] * g_MaxColorValue + 0.5f),
-			static_cast<unsigned char>(colOld[1] * g_MaxColorValue + 0.5f),
-			static_cast<unsigned char>(colOld[2] * g_MaxColorValue + 0.5f)};
+			.r=static_cast<unsigned char>((colOld[0] * g_MaxColorValue) + 0.5f),
+			.g=static_cast<unsigned char>((colOld[1] * g_MaxColorValue) + 0.5f),
+			.b=static_cast<unsigned char>((colOld[2] * g_MaxColorValue) + 0.5f)};
 		Col curPixelCol = frame->Pixels()->Get(pixelX, pixelY);
 
 		if (curPixelCol == fillColor) {
@@ -222,7 +222,7 @@ namespace FuncDoodle {
 		}
 
 		std::stack<std::pair<int, int>> pixelStack;
-		pixelStack.push({x, y});
+		pixelStack.emplace(x, y);
 
 		while (!pixelStack.empty()) {
 			auto [currentX, currentY] = pixelStack.top();
@@ -241,10 +241,10 @@ namespace FuncDoodle {
 			changed.emplace_back(currentX, currentY);
 			targetFrame->SetPixel(currentX, currentY, fillCol);
 
-			pixelStack.push({currentX + 1, currentY});
-			pixelStack.push({currentX - 1, currentY});
-			pixelStack.push({currentX, currentY + 1});
-			pixelStack.push({currentX, currentY - 1});
+			pixelStack.emplace(currentX + 1, currentY);
+			pixelStack.emplace(currentX - 1, currentY);
+			pixelStack.emplace(currentX, currentY + 1);
+			pixelStack.emplace(currentX, currentY - 1);
 		}
 	}
 
@@ -312,10 +312,10 @@ namespace FuncDoodle {
 		const float frameWidth = pixels->Width() * context.PixelScale;
 		const float frameHeight = pixels->Height() * context.PixelScale;
 		const float startX =
-			windowPos.x + (contentRegion.x - frameWidth) * 0.5f + 9;
+			windowPos.x + ((contentRegion.x - frameWidth) * 0.5f) + 9;
 		const float startY =
 			windowPos.y +
-			((contentRegion.y - c_StatusBarHeight) - frameHeight) * 0.5f + 41;
+			(((contentRegion.y - c_StatusBarHeight) - frameHeight) * 0.5f) + 41;
 		ImDrawList* drawList = ImGui::GetWindowDrawList();
 
 		ApplyToolAt(context, pixels, startX, startY, frameWidth, frameHeight);
@@ -385,13 +385,13 @@ namespace FuncDoodle {
 						const float dy =
 							currentPixel.y - context.LastMousePos.y;
 						const int steps =
-							std::max(1, std::max(static_cast<int>(std::abs(dx)),
-											static_cast<int>(std::abs(dy))));
+							std::max({1, static_cast<int>(std::abs(dx)),
+											static_cast<int>(std::abs(dy))});
 						for (int i = 0; i <= steps; i++) {
 							const float t = static_cast<float>(i) / steps;
 							const ImVec2 interpPixel(
-								context.LastMousePos.x + dx * t,
-								context.LastMousePos.y + dy * t);
+								context.LastMousePos.x + (dx * t),
+								context.LastMousePos.y + (dy * t));
 
 							Paint(context.Frame, context.Index,
 								context.ToolManager, context.Player,
@@ -452,18 +452,18 @@ namespace FuncDoodle {
 				ImVec2 pixel = context.LastHoverMousePos;
 
 				if (pixel.x >= 0 && pixel.y >= 0) {
-					int px = (int)pixel.x;
-					int py = (int)pixel.y;
+					auto px = (int)pixel.x;
+					auto py = (int)pixel.y;
 
-					float brushSize = (float)context.ToolManager->GetSize();
+					auto brushSize = (float)context.ToolManager->GetSize();
 					float scaledSize = brushSize * context.PixelScale;
 
 					int startOffset = -(int)(brushSize / 2);
 
 					float brushOriginX =
-						startX + (px + startOffset) * context.PixelScale;
+						startX + ((px + startOffset) * context.PixelScale);
 					float brushOriginY =
-						startY + (py + startOffset) * context.PixelScale;
+						startY + ((py + startOffset) * context.PixelScale);
 
 					// calc brush bounds in pixel coordinates
 					int brushMinX = px + startOffset;
@@ -482,9 +482,9 @@ namespace FuncDoodle {
 					// only render if there's any visible area
 					if (clipMaxX > clipMinX && clipMaxY > clipMinY) {
 						float clipOriginX =
-							startX + clipMinX * context.PixelScale;
+							startX + (clipMinX * context.PixelScale);
 						float clipOriginY =
-							startY + clipMinY * context.PixelScale;
+							startY + (clipMinY * context.PixelScale);
 						float clipWidth =
 							(clipMaxX - clipMinX) * context.PixelScale;
 						float clipHeight =
@@ -517,10 +517,10 @@ namespace FuncDoodle {
 		for (int y = 0; y < pixels->Height(); y++) {
 			for (int x = 0; x < pixels->Width(); x++) {
 				const Col col = pixels->Get(x, y);
-				const ImVec2 topLeft(startX + x * context.PixelScale,
-					startY + y * context.PixelScale);
-				const ImVec2 bottomRight(startX + (x + 1) * context.PixelScale,
-					startY + (y + 1) * context.PixelScale);
+				const ImVec2 topLeft(startX + (x * context.PixelScale),
+					startY + (y * context.PixelScale));
+				const ImVec2 bottomRight(startX + ((x + 1) * context.PixelScale),
+					startY + ((y + 1) * context.PixelScale));
 				drawList->AddRectFilled(
 					topLeft, bottomRight, IM_COL32(col.r, col.g, col.b, 255));
 			}
@@ -536,11 +536,11 @@ namespace FuncDoodle {
 					if (curCol.r == g_MaxColorValue &&
 						curCol.g == g_MaxColorValue &&
 						curCol.b == g_MaxColorValue) {
-						const ImVec2 topLeft(startX + x * context.PixelScale,
-							startY + y * context.PixelScale);
+						const ImVec2 topLeft(startX + (x * context.PixelScale),
+							startY + (y * context.PixelScale));
 						const ImVec2 bottomRight(
-							startX + (x + 1) * context.PixelScale,
-							startY + (y + 1) * context.PixelScale);
+							startX + ((x + 1) * context.PixelScale),
+							startY + ((y + 1) * context.PixelScale));
 						drawList->AddRectFilled(topLeft, bottomRight,
 							IM_COL32(col.r, col.g, col.b, g_HalfAlpha));
 					}
@@ -560,12 +560,12 @@ namespace FuncDoodle {
 		float gap = 6.0f;
 		float offset = fmod(t * 60.0f, dash + gap);
 
-		float screenMinX = startX + m_SquareSel.Min.x * context.PixelScale;
-		float screenMinY = startY + m_SquareSel.Min.y * context.PixelScale;
+		float screenMinX = startX + (m_SquareSel.Min.x * context.PixelScale);
+		float screenMinY = startY + (m_SquareSel.Min.y * context.PixelScale);
 		float screenMaxX =
-			startX + (m_SquareSel.Max.x + 1) * context.PixelScale;
+			startX + ((m_SquareSel.Max.x + 1) * context.PixelScale);
 		float screenMaxY =
-			startY + (m_SquareSel.Max.y + 1) * context.PixelScale;
+			startY + ((m_SquareSel.Max.y + 1) * context.PixelScale);
 
 		for (float x = screenMinX - offset; x < screenMaxX; x += dash + gap)
 			drawList->AddLine({x, screenMinY},

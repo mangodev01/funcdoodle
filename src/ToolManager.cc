@@ -1,5 +1,7 @@
 #include "ToolManager.h"
 
+#include <algorithm>
+
 #include "App.h"
 #include "Keybinds.h"
 #include "Tool.h"
@@ -9,18 +11,17 @@
 
 namespace FuncDoodle {
 	ToolManager::ToolManager(KeybindsRegistry& keybinds)
-		: m_SelectedTool(ToolType::Pencil), m_Keybinds(keybinds) {}
+		:  m_Keybinds(keybinds) {}
 
-	ToolManager::~ToolManager() {}
+	ToolManager::~ToolManager() = default;
 
 	void ToolManager::Buttons() {
 		float avail = ImGui::GetContentRegionAvail().x;
 		float btnSize = 36.0f;
 		float spacing = ImGui::GetStyle().ItemSpacing.x;
 
-		int columns = (int)(avail / (btnSize + spacing));
-		if (columns < 1)
-			columns = 1;
+		auto columns = (int)(avail / (btnSize + spacing));
+		columns = std::max(columns, 1);
 
 		int i = 0;
 		for (ToolType t : ToolTypes) {
@@ -72,8 +73,7 @@ namespace FuncDoodle {
 			m_Size++;
 		}
 
-		if (m_Size < 1)
-			m_Size = 1;
+		m_Size = std::max(m_Size, 1);
 
 		if (showColorPredicate) {
 			if (ImGui::ColorButton(
@@ -126,7 +126,7 @@ namespace FuncDoodle {
 		ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
 
 		ImDrawList* dl = ImGui::GetForegroundDrawList();
-		float scale =
+		auto scale =
 			(float)app->GetManager()->GetFrameRenderer()->GetCtx()->PixelScale;
 		float offsetFactor = scale / 2.0f;
 
@@ -145,8 +145,8 @@ namespace FuncDoodle {
 			for (int dy = -1; dy <= 1; dy++) {
 				if (dx == 0 && dy == 0)
 					continue;
-				dl->AddImage(texID, ImVec2(pos.x + dx * off, pos.y + dy * off),
-					ImVec2(pos.x + 32 + dx * off, pos.y + 32 + dy * off),
+				dl->AddImage(texID, ImVec2(pos.x + (dx * off), pos.y + (dy * off)),
+					ImVec2(pos.x + 32 + (dx * off), pos.y + 32 + (dy * off)),
 					ImVec2(0, 0), ImVec2(1, 1), IM_COL32_BLACK);
 			}
 		}

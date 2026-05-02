@@ -141,15 +141,15 @@ namespace FuncDoodle {
 		bool PaintBucket(Frame* frame, unsigned long frameI,
 			ToolManager* toolManager, AnimationPlayer* player, int pixelX,
 			int pixelY, bool mouseClicked);
-		bool PaintPicker(
+		static bool PaintPicker(
 			Frame* frame, ToolManager* toolManager, int pixelX, int pixelY);
 		bool PaintSelect(
 			Frame* frame, ToolManager* toolManager, int pixelX, int pixelY);
-		void FloodFill(int x, int y, Col targetCol, Col fillCol,
+		static void FloodFill(int x, int y, Col targetCol, Col fillCol,
 			Frame* targetFrame, std::vector<std::pair<int, int>>& changed);
 		void RecordStrokeChange(unsigned long frameI, int x, int y,
 			const Col& prev, const Col& next);
-		void HandleCanvasInput(CanvasContext& context);
+		static void HandleCanvasInput(CanvasContext& context);
 		void ApplyToolAt(CanvasContext& context, const ImageArray* pixels,
 			float startX, float startY, float frameWidth, float frameHeight);
 		void DrawCanvas(CanvasContext& context, const ImageArray* pixels,

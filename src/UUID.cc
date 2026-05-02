@@ -83,6 +83,6 @@ namespace FuncDoodle {
 			FUNC_FATAL("UUID string did not yield 16 bytes");
 		}
 
-		return UUID(bytes);
+		return {bytes};
 	}
 }  // namespace FuncDoodle

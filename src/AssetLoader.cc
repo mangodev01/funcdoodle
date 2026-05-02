@@ -7,6 +7,7 @@
 
 #include <filesystem>
 #include <iostream>
+#include <utility>
 
 #include "MacroUtils.h"
 
@@ -15,8 +16,8 @@
 #include "AudioManager.h"
 
 namespace FuncDoodle {
-	AssetLoader::AssetLoader(const std::filesystem::path& assetsPath)
-		: m_AssetsPath(assetsPath), m_AudioManager(new AudioManager) {
+	AssetLoader::AssetLoader(std::filesystem::path  assetsPath)
+		: m_AssetsPath(std::move(assetsPath)), m_AudioManager(new AudioManager) {
 		InitAssets();
 	}
 	AssetLoader::~AssetLoader() {
@@ -55,7 +56,9 @@ namespace FuncDoodle {
 	// what was i even thinking with this comment? isn't this obvious?
 	void AssetLoader::RenderImage(const char* name, ImDrawList* drawList,
 		const ImVec2& pos, const ImVec2& size, const ImVec4& tint) {
-		int width, height, channels;
+		int width;
+		int height;
+		int channels;
 		unsigned char* data = stbi_load((m_AssetsPath / name).string().c_str(),
 			&width, &height, &channels, 0);
 		if (!data) {
@@ -79,7 +82,9 @@ namespace FuncDoodle {
 			ImGui::ColorConvertFloat4ToU32(tint));
 	}
 	uint32_t AssetLoader::LoadImage(const char* name) {
-		int width, height, channels;
+		int width;
+		int height;
+		int channels;
 		unsigned char* data = stbi_load((m_AssetsPath / name).string().c_str(),
 			&width, &height, &channels, 0);
 		if (!data) {
@@ -103,9 +108,8 @@ namespace FuncDoodle {
 	AudioData AssetLoader::LoadSound(std::filesystem::path soundPath) {
 		if (std::filesystem::exists(m_AssetsPath / soundPath)) {
 			return m_AudioManager->ParseWav(m_AssetsPath / soundPath);
-		} else {
-			FUNC_FATAL("Sound assets/{} doesn't exist", soundPath.string());
-		}
+		} 			FUNC_FATAL("Sound assets/{} doesn't exist", soundPath.string());
+	
 	}
 	void AssetLoader::PlaySound(AudioData data) {
 		m_AudioManager->PlayWav(data);

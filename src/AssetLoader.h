@@ -40,7 +40,7 @@ namespace FuncDoodle {
 		 *
 		 * @param assetsPath Filesystem path containing runtime assets.
 		 */
-		explicit AssetLoader(const std::filesystem::path& assetsPath);
+		explicit AssetLoader(std::filesystem::path  assetsPath);
 		~AssetLoader();
 		/**
 		 * @fn GetPath
@@ -48,7 +48,7 @@ namespace FuncDoodle {
 		 *
 		 * @return Path used for asset loading.
 		 */
-		[[nodiscard]] inline const std::filesystem::path& GetPath() const {
+		[[nodiscard]] const std::filesystem::path& GetPath() const {
 			return m_AssetsPath;
 		};
 		/**
@@ -57,7 +57,7 @@ namespace FuncDoodle {
 		 *
 		 * @param assetsPath New assets directory.
 		 */
-		inline void SetPath(const std::filesystem::path& assetsPath) {
+		void SetPath(const std::filesystem::path& assetsPath) {
 			m_AssetsPath = assetsPath;
 		};
 		/**
@@ -103,7 +103,7 @@ namespace FuncDoodle {
 		 * @param soundName Relative sound asset path.
 		 * @return Decoded audio data.
 		 */
-		AudioData LoadSound(std::filesystem::path soundName);
+		AudioData LoadSound(std::filesystem::path soundPath);
 		/**
 		 * @fn PlaySound
 		 * @brief Plays decoded audio data through the audio manager.
@@ -117,14 +117,14 @@ namespace FuncDoodle {
 		 *
 		 * @return Pointer to the regular font.
 		 */
-		[[nodiscard]] inline ImFont* GetFontRegular() const { return m_FontRegular; }
+		[[nodiscard]] ImFont* GetFontRegular() const { return m_FontRegular; }
 		/**
 		 * @fn GetFontBold
 		 * @brief Returns the bold UI font.
 		 *
 		 * @return Pointer to the bold font.
 		 */
-		[[nodiscard]] inline ImFont* GetFontBold() const { return m_FontBold; }
+		[[nodiscard]] ImFont* GetFontBold() const { return m_FontBold; }
 
 		private:
 		std::filesystem::path m_AssetsPath;
