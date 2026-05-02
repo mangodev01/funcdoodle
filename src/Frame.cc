@@ -78,7 +78,8 @@ namespace FuncDoodle {
 						newData[(y * width) + (x + xOffset)] =
 							oldData[(y * oldWidth) + x];
 					} else {
-						newData[(y * oldWidth) + x] = oldData[(y * oldWidth) + x];
+						newData[(y * oldWidth) + x] =
+							oldData[(y * oldWidth) + x];
 					}
 				}
 			}
@@ -102,7 +103,8 @@ namespace FuncDoodle {
 						newData[((y + yOffset) * oldWidth) + x] =
 							oldData[(y * oldWidth) + x];
 					} else {
-						newData[(y * oldWidth) + x] = oldData[(y * oldWidth) + x];
+						newData[(y * oldWidth) + x] =
+							oldData[(y * oldWidth) + x];
 					}
 				}
 			}
@@ -252,8 +254,8 @@ namespace FuncDoodle {
 			m_Pixels.BgCol() != other.m_Pixels.BgCol()) {
 			return false;
 		}
-		for (unsigned long i = 0; std::cmp_less(i , m_Pixels.Width() * m_Pixels.Height());
-			i++) {
+		for (unsigned long i = 0;
+			std::cmp_less(i, m_Pixels.Width() * m_Pixels.Height()); i++) {
 			if (m_Pixels.Data()[i] != other.m_Pixels.Data()[i]) {
 				return false;
 			}
@@ -301,8 +303,8 @@ namespace FuncDoodle {
 			for (int x = 0; x < selW; x++) {
 				float dx = x - cx;
 				float dy = y - cy;
-				auto sx =
-					static_cast<int>(std::lround((dx * cos_r) + (dy * sin_r) + cx));
+				auto sx = static_cast<int>(
+					std::lround((dx * cos_r) + (dy * sin_r) + cx));
 				auto sy = static_cast<int>(
 					std::lround((-dx * sin_r) + (dy * cos_r) + cy));
 

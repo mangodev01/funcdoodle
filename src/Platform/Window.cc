@@ -43,8 +43,8 @@ namespace FuncDoodle::Platform {
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #endif
 
-		m_Handle =
-			glfwCreateWindow(spec.Width, spec.Height, spec.Title, monitor, nullptr);
+		m_Handle = glfwCreateWindow(
+			spec.Width, spec.Height, spec.Title, monitor, nullptr);
 
 		if (!m_Handle) {
 			const char* desc;
@@ -72,7 +72,8 @@ namespace FuncDoodle::Platform {
 
 		PaError err = Pa_Initialize();
 		if (err != paNoError) {
-			FUNC_FATAL("Failed to initialize port audio: {}", Pa_GetErrorText(err));
+			FUNC_FATAL(
+				"Failed to initialize port audio: {}", Pa_GetErrorText(err));
 		}
 
 		InitImGui();
@@ -164,7 +165,8 @@ namespace FuncDoodle::Platform {
 		if (!glfwInit()) {
 			const char* description;
 			int error = glfwGetError(&description);
-			FUNC_FATAL("Failed to initialize GLFW: {}: {}\n", error, description);
+			FUNC_FATAL(
+				"Failed to initialize GLFW: {}: {}\n", error, description);
 		}
 
 		g_GlfwInitted = true;

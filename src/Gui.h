@@ -4,7 +4,8 @@
  *
  * This header provides:
  * - Stream operator overload for ImGuiStyle debugging/printing
- * - FileDialog wrapper around Native File Dialog (NFD) for open/save/folder selection
+ * - FileDialog wrapper around Native File Dialog (NFD) for open/save/folder
+ * selection
  *
  * The FileDialog class simplifies cross-platform file operations and integrates
  * with std::filesystem for type-safe path handling.

@@ -10,7 +10,8 @@
  * It also defines TimelineKeyContext, a lightweight structure used to bundle
  * commonly required parameters for timeline shortcut processing.
  *
- * @note This module does not own application state; it operates on provided references.
+ * @note This module does not own application state; it operates on provided
+ * references.
  */
 
 #pragma once
@@ -58,16 +59,17 @@ namespace FuncDoodle {
 	 */
 	class KeyHandler {
 		public:
-			/**
-			 * @fn HandleTimelineShortcuts(TimelineKeyContext& context, KeybindsRegistry& keybinds)
-			 * @brief Processes timeline-scoped shortcuts for the current frame.
-			 */
-			static void HandleTimelineShortcuts(
-				TimelineKeyContext& context, KeybindsRegistry& keybinds);
-			/**
-			 * @fn RegisterKeybinds(KeybindsRegistry& keybinds)
-			 * @brief Registers timeline shortcut bindings in the registry.
-			 */
-			static void RegisterKeybinds(KeybindsRegistry& keybinds);
+		/**
+		 * @fn HandleTimelineShortcuts(TimelineKeyContext& context,
+		 * KeybindsRegistry& keybinds)
+		 * @brief Processes timeline-scoped shortcuts for the current frame.
+		 */
+		static void HandleTimelineShortcuts(
+			TimelineKeyContext& context, KeybindsRegistry& keybinds);
+		/**
+		 * @fn RegisterKeybinds(KeybindsRegistry& keybinds)
+		 * @brief Registers timeline shortcut bindings in the registry.
+		 */
+		static void RegisterKeybinds(KeybindsRegistry& keybinds);
 	};
 }  // namespace FuncDoodle

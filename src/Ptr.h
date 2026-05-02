@@ -2,7 +2,8 @@
  * @file Ptr.h
  * @brief Convenience type aliases for standard smart pointers.
  *
- * This header provides simple aliases over the C++ standard library smart pointers:
+ * This header provides simple aliases over the C++ standard library smart
+ * pointers:
  * - UniquePtr: exclusive ownership (std::unique_ptr)
  * - SharedPtr: shared ownership with reference counting (std::shared_ptr)
  * - WeakPtr: non-owning weak reference to a SharedPtr (std::weak_ptr)
@@ -17,7 +18,8 @@
 
 #include <memory>
 
-// don't think any Doxygen comments are needed here - pretty self-explanatory header file
+// don't think any Doxygen comments are needed here - pretty self-explanatory
+// header file
 
 // in-case i'd ever want to make my own smart ptr thing or smth
 // with like ref count

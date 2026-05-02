@@ -47,16 +47,22 @@ namespace FuncDoodle {
 /**
  * @brief PortAudio callback function.
  *
- * @param inBuf Input audio buffer provided by the stream (may be nullptr depending on configuration).
+ * @param inBuf Input audio buffer provided by the stream (may be nullptr
+ * depending on configuration).
  * @param outBuf Output audio buffer that must be filled with audio samples.
- * @param framesPerBuf Number of audio frames to process in this callback invocation.
- * @param timeInfo Timing information for the current callback (stream time, input/output timestamps).
- * @param statusFlags Flags indicating stream status (e.g., underflow, overflow, clipping).
- * @param userData Pointer to user-defined data passed when the stream was opened.
+ * @param framesPerBuf Number of audio frames to process in this callback
+ * invocation.
+ * @param timeInfo Timing information for the current callback (stream time,
+ * input/output timestamps).
+ * @param statusFlags Flags indicating stream status (e.g., underflow, overflow,
+ * clipping).
+ * @param userData Pointer to user-defined data passed when the stream was
+ * opened.
  *
- * @return PortAudio callback status code (e.g., continue streaming, complete, or abort).
+ * @return PortAudio callback status code (e.g., continue streaming, complete,
+ * or abort).
  */
-static int paCB(const void* inBuf, void* outBuf, unsigned long framesPerBuf, 
+static int paCB(const void* inBuf, void* outBuf, unsigned long framesPerBuf,
 	const PaStreamCallbackTimeInfo* timeInfo, PaStreamCallbackFlags statusFlags,
 	void* userData) {
 	if (!userData) {

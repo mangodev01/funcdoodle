@@ -26,9 +26,9 @@ namespace FuncDoodle {
 	AnimationManager::AnimationManager(SharedPtr<ProjectFile> proj,
 		AssetLoader* assetLoader, SharedPtr<EditorController> editorController,
 		KeybindsRegistry& keybinds, AppSettings& appSettings)
-		: m_Proj(proj),  m_Player(new AnimationPlayer(proj)),
-		  m_EditorController(std::move(editorController)), m_AssetLoader(assetLoader),
-		  m_Keybinds(keybinds),
+		: m_Proj(proj), m_Player(new AnimationPlayer(proj)),
+		  m_EditorController(std::move(editorController)),
+		  m_AssetLoader(assetLoader), m_Keybinds(keybinds),
 		  m_ToolManager(std::make_unique<ToolManager>(keybinds)),
 		  m_Settings(appSettings) {
 		m_FrameRenderer =
@@ -291,7 +291,8 @@ namespace FuncDoodle {
 		if (ImGui::Button("Copy")) {
 			ImGui::LogToClipboard();
 
-			// don't really like that i have to use std::string for logs, but i think thats necessary
+			// don't really like that i have to use std::string for logs, but i
+			// think thats necessary
 			for (const std::string& str : s_Logs) {
 				ImGui::LogText("%s\n", str.c_str() ? str.c_str() : "");
 			}
@@ -304,7 +305,8 @@ namespace FuncDoodle {
 			ImGuiWindowFlags_HorizontalScrollbar);
 
 		for (const std::string& str : s_Logs) {
-			ImGui::TextColored(logColor(str.c_str()), "%s", str.c_str() ? str.c_str(): "");
+			ImGui::TextColored(
+				logColor(str.c_str()), "%s", str.c_str() ? str.c_str() : "");
 		}
 
 		if (ImGui::GetScrollY() >= ImGui::GetScrollMaxY())

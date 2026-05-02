@@ -40,7 +40,7 @@ namespace FuncDoodle {
 		}
 	}
 	Grid::Grid(int gridWidth, int gridHeight, Col opposite)
-		: m_GridWidth(gridWidth), m_GridHeight(gridHeight), 
+		: m_GridWidth(gridWidth), m_GridHeight(gridHeight),
 		  m_OppositeCol(opposite) {}
 	Grid::~Grid() = default;
 }  // namespace FuncDoodle

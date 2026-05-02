@@ -11,7 +11,8 @@
  * - Linux: readlink("/proc/self/exe")
  *
  * @note Internally uses a static buffer resized as needed on macOS.
- * @warning The returned pointer is to a static buffer and may be overwritten on subsequent calls.
+ * @warning The returned pointer is to a static buffer and may be overwritten on
+ * subsequent calls.
  * @warning Not thread-safe due to shared static storage.
  */
 
@@ -34,7 +35,8 @@ namespace ExePath {
 	/**
 	 * @brief Returns the full path to the currently running executable.
 	 *
-	 * @return Pointer to internal static storage containing the executable path.
+	 * @return Pointer to internal static storage containing the executable
+	 * path.
 	 */
 	inline const char* Get() {
 		static std::vector<char> buffer(1024);

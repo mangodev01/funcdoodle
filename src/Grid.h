@@ -32,7 +32,8 @@ namespace FuncDoodle {
 	 */
 	class Grid {
 		public:
-		/** @brief Creates a grid overlay with the given cell size and contrast color. */
+		/** @brief Creates a grid overlay with the given cell size and contrast
+		 * color. */
 		Grid(int gridWidth, int gridHeight, Col opposite);
 		~Grid();
 		/** @brief Draws the grid into the provided ImGui draw list. */
@@ -47,13 +48,9 @@ namespace FuncDoodle {
 		/** @brief Returns whether the grid is currently visible. */
 		bool GridVisibility() const { return m_ShowGrid; };
 		/** @brief Updates the horizontal grid spacing. */
-		void SetGridWidth(int gridWidth) {
-			m_GridWidth = gridWidth;
-		}
+		void SetGridWidth(int gridWidth) { m_GridWidth = gridWidth; }
 		/** @brief Updates the vertical grid spacing. */
-		void SetGridHeight(int gridHeight) {
-			m_GridHeight = gridHeight;
-		}
+		void SetGridHeight(int gridHeight) { m_GridHeight = gridHeight; }
 		/** @brief Returns the horizontal grid spacing. */
 		int GridWidth() const { return m_GridWidth; }
 		/** @brief Returns the vertical grid spacing. */

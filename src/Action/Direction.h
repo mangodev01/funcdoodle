@@ -7,11 +7,10 @@
  * required to execute a move-selection action within a project.
  */
 
-
 #pragma once
 
-#include "Ptr.h"
 #include "../Selection.h"
+#include "Ptr.h"
 
 namespace FuncDoodle {
 
@@ -21,13 +20,7 @@ namespace FuncDoodle {
 	 * @enum Direction
 	 * @brief Direction used for moving a selection.
 	 */
-	enum class Direction {
-		None = 0,
-		Left,
-		Right,
-		Up,
-		Down
-	};
+	enum class Direction { None = 0, Left, Right, Up, Down };
 
 	/**
 	 * @struct MoveSelectionActionContext
@@ -51,4 +44,4 @@ namespace FuncDoodle {
 		const SharedPtr<ProjectFile>& Proj;
 	};
 
-} // namespace FuncDoodle
+}  // namespace FuncDoodle

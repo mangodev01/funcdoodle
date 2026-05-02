@@ -175,7 +175,8 @@ namespace FuncDoodle {
 		void SetAnimFrameCount(unsigned long count);
 		/**
 		 * @fn SetBgCol
-		 * @brief Sets the project background color and rebuilds backing frame storage.
+		 * @brief Sets the project background color and rebuilds backing frame
+		 * storage.
 		 *
 		 * @param bgCol Pointer to three normalized RGB float values.
 		 */
@@ -208,7 +209,9 @@ namespace FuncDoodle {
 		 *
 		 * @return Last save path string.
 		 */
-		[[nodiscard]] const char* LastSavePath() const { return m_LastSavePath; };
+		[[nodiscard]] const char* LastSavePath() const {
+			return m_LastSavePath;
+		};
 		/**
 		 * @fn AnimFrames
 		 * @brief Returns the animation frame storage.
@@ -244,7 +247,9 @@ namespace FuncDoodle {
 		 *
 		 * @return Window pointer.
 		 */
-		[[nodiscard]] constexpr Platform::Window* Window() const { return m_Window; }
+		[[nodiscard]] constexpr Platform::Window* Window() const {
+			return m_Window;
+		}
 		/**
 		 * @fn Saved
 		 * @brief Returns whether the project matches the last saved state.

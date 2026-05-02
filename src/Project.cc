@@ -5,8 +5,8 @@
 #include "Frame.h"
 
 #include <cstdio>
-#include <memory>
 #include <cstring>
+#include <memory>
 
 #include <fstream>
 #include <iostream>
@@ -239,7 +239,7 @@ namespace FuncDoodle {
 
 		// First pass: collect unique colors with stable ordering
 		for (unsigned long i = 0; i < AnimFrameCount(); i++) {
-			const auto *pixels = frameData->Get(i)->Pixels();
+			const auto* pixels = frameData->Get(i)->Pixels();
 			for (int x = 0; x < pixels->Width(); x++) {
 				for (int y = 0; y < pixels->Height(); y++) {
 					Col px = pixels->Get(x, y);
@@ -268,7 +268,7 @@ namespace FuncDoodle {
 
 		// Write frame data using stable indices
 		for (unsigned long i = 0; i < AnimFrameCount(); i++) {
-			const auto *pixels = frameData->Get(i)->Pixels();
+			const auto* pixels = frameData->Get(i)->Pixels();
 			for (int y = 0; y < pixels->Height(); y++) {
 				for (int x = 0; x < pixels->Width(); x++) {
 					Col px = pixels->Get(x, y);
@@ -391,9 +391,10 @@ namespace FuncDoodle {
 						unsigned char bytes[sizeof(int)];
 						file.read(reinterpret_cast<char*>(bytes), sizeof(int));
 						int index = *reinterpret_cast<int*>(bytes);
-						if (std::cmp_greater_equal(index ,plteLen)) {
+						if (std::cmp_greater_equal(index, plteLen)) {
 							FUNC_DBG("Index: {}", index);
-							FUNC_DBG("Index out of bounds; maybe the project file is corrupted..?");
+							FUNC_DBG("Index out of bounds; maybe the project "
+									 "file is corrupted..?");
 							FUNC_DBG("trying to break...");
 							file.seekg(start);
 							break;
@@ -410,7 +411,7 @@ namespace FuncDoodle {
 			}
 		} else {
 			FUNC_GRAY("Reading {} frames...", (long)frameCount);
-			for (long i = 0; std::cmp_less(i ,frameCount); i++) {
+			for (long i = 0; std::cmp_less(i, frameCount); i++) {
 				ImageArray img(animWidth, animHeight, m_BG);
 				for (int y = 0; y < animHeight; y++) {
 					for (int x = 0; x < animWidth; x++) {
@@ -419,10 +420,13 @@ namespace FuncDoodle {
 
 						int index = *reinterpret_cast<int*>(bytes);
 
-						FUNC_DBG("Reading index, x={} y={} index={}", x, y, index);
+						FUNC_DBG(
+							"Reading index, x={} y={} index={}", x, y, index);
 
-						if (index < 0 || std::cmp_greater_equal(index ,plteLen)) {
-							FUNC_WARN("Index out of bounds -- maybe the project file is corrupted..?");
+						if (index < 0 ||
+							std::cmp_greater_equal(index, plteLen)) {
+							FUNC_WARN("Index out of bounds -- maybe the "
+									  "project file is corrupted..?");
 							FUNC_INF("Index: {}", index);
 							std::exit(-1);
 						}

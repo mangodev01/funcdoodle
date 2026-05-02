@@ -8,7 +8,7 @@ namespace FuncDoodle {
 		ImGui::PushFont(font, size);
 		ImVec2 sizePx = ImGui::CalcTextSize(text);
 		ImGui::PopFont();
-		return {.Width=sizePx.x, .Height=sizePx.y};
+		return {.Width = sizePx.x, .Height = sizePx.y};
 	}
 
 	float TextUtil::TextWidth(ImFont* font, float size, const char* text) {

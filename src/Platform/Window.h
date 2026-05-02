@@ -55,7 +55,8 @@ namespace FuncDoodle::Platform {
 
 	/**
 	 * @class Window
-	 * @brief Abstraction over a GLFW window with input, rendering, and lifecycle utilities.
+	 * @brief Abstraction over a GLFW window with input, rendering, and
+	 * lifecycle utilities.
 	 */
 	class Window {
 		public:
@@ -147,7 +148,8 @@ namespace FuncDoodle::Platform {
 		[[nodiscard]] bool GetCursorHidden() const { return m_CursorHidden; }
 
 		/**
-		 * @brief Initializes GLFW (must be called once before creating windows).
+		 * @brief Initializes GLFW (must be called once before creating
+		 * windows).
 		 */
 		static void InitGlfw();
 
@@ -157,12 +159,13 @@ namespace FuncDoodle::Platform {
 		void InitImGui();
 
 		private:
-		static void GlfwDropTrampoline(GLFWwindow* glfwWin, int count, const char** paths);
+		static void GlfwDropTrampoline(
+			GLFWwindow* glfwWin, int count, const char** paths);
 		static void GlfwCloseTrampoline(GLFWwindow* glfwWin);
 
 		protected:
-		DropCallback mp_DropCallback;   ///< Stored file-drop callback.
-		CloseCallback mp_CloseCallback; ///< Stored close callback.
+		DropCallback mp_DropCallback;	 ///< Stored file-drop callback.
+		CloseCallback mp_CloseCallback;	 ///< Stored close callback.
 
 		private:
 		GLFWwindow* m_Handle;

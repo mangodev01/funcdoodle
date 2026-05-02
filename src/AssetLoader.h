@@ -12,7 +12,8 @@
  * - Providing access to application fonts
  *
  * @note Designed to be instantiated once per application lifecycle.
- * @note Acts as a central abstraction layer over asset I/O and runtime resources.
+ * @note Acts as a central abstraction layer over asset I/O and runtime
+ * resources.
  */
 
 #pragma once
@@ -27,7 +28,8 @@
 namespace FuncDoodle {
 	/**
 	 * @class AssetLoader
-	 * @brief Convenient abstraction that's responsible for loading assets at a given assetsPath.
+	 * @brief Convenient abstraction that's responsible for loading assets at a
+	 * given assetsPath.
 	 *
 	 * @note Responsible for images, sounds and fonts.
 	 * @note Should be instantiated once per program execution.
@@ -40,7 +42,7 @@ namespace FuncDoodle {
 		 *
 		 * @param assetsPath Filesystem path containing runtime assets.
 		 */
-		explicit AssetLoader(std::filesystem::path  assetsPath);
+		explicit AssetLoader(std::filesystem::path assetsPath);
 		~AssetLoader();
 		/**
 		 * @fn GetPath

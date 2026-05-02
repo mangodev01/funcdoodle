@@ -47,7 +47,8 @@ namespace FuncDoodle {
 		public:
 		/**
 		 * @fn Measure(ImFont* font, float size, const char* text)
-		 * @brief Measures the width and height of a text string for a font and size.
+		 * @brief Measures the width and height of a text string for a font and
+		 * size.
 		 */
 		static TextMetrics Measure(ImFont* font, float size, const char* text);
 		/**
@@ -61,7 +62,9 @@ namespace FuncDoodle {
 		 */
 		static float TextHeight(ImFont* font, float size, const char* text);
 		/**
-		 * @fn MaxWidth(ImFont* titleFont, float titleSize, const char* titleA, const char* titleB, ImFont* descFont, float descSize, const char* descA, const char* descB)
+		 * @fn MaxWidth(ImFont* titleFont, float titleSize, const char* titleA,
+		 * const char* titleB, ImFont* descFont, float descSize, const char*
+		 * descA, const char* descB)
 		 * @brief Returns the widest of two title/description text pairings.
 		 */
 		static float MaxWidth(ImFont* titleFont, float titleSize,

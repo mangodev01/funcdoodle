@@ -7,10 +7,11 @@
  * - Handling the main menu bar
  * - Managing application popups via PopupRegistry
  * - Providing access to UI configuration and preferences
- * - Dispatching UI-related actions such as project creation, export, and settings editing
+ * - Dispatching UI-related actions such as project creation, export, and
+ * settings editing
  *
- * UIManager acts as the top-level coordinator for all immediate-mode UI rendering
- * in the application.
+ * UIManager acts as the top-level coordinator for all immediate-mode UI
+ * rendering in the application.
  *
  * @invariant m_CacheBGCol values are normalized in the range [0.0f, 1.0f].
  *
@@ -56,7 +57,6 @@ namespace FuncDoodle {
 		void EditPrefs();
 		void Rotate();
 
-		
 		const char* m_WaitingForKey = nullptr;
 		std::array<float, 3> m_CacheBGCol = {1.0f, 1.0f, 1.0f};
 		PopupRegistry m_Popups;

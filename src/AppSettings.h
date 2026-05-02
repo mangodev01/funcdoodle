@@ -16,12 +16,14 @@
 namespace FuncDoodle {
 	/**
 	 * @struct AppSettings
-	 * @brief Represents the application's current settings and loaded from imgui.ini.
+	 * @brief Represents the application's current settings and loaded from
+	 * imgui.ini.
 	 */
 	struct AppSettings {
-		bool Sfx = false;             ///< Enables UI and project sound effects.
-		bool Preview = true;          ///< Enables previous-frame preview rendering.
-		bool UndoByStroke = true;     ///< Groups freehand strokes into single undo steps.
-		float FrameLimit = 1000.0;    ///< Target frame cap used by the main loop.
+		bool Sfx = false;	  ///< Enables UI and project sound effects.
+		bool Preview = true;  ///< Enables previous-frame preview rendering.
+		bool UndoByStroke =
+			true;  ///< Groups freehand strokes into single undo steps.
+		float FrameLimit = 1000.0;	///< Target frame cap used by the main loop.
 	};
 }  // namespace FuncDoodle

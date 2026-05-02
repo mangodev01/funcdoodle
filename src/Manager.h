@@ -1,6 +1,7 @@
 /**
  * @file Manager.h
- * @brief Defines AnimationManager, the central coordinator for animation playback, timeline UI, and editor integration.
+ * @brief Defines AnimationManager, the central coordinator for animation
+ * playback, timeline UI, and editor integration.
  *
  * This file contains the AnimationManager class, which is responsible for:
  * - Managing animation playback state via AnimationPlayer
@@ -17,7 +18,8 @@
  * and provides the main UI entry points for animation-related controls.
  *
  * @note AnimationManager does not own AssetLoader.
- * @warning SetPlayer() must be called before replacing or assigning project data.
+ * @warning SetPlayer() must be called before replacing or assigning project
+ * data.
  */
 
 #pragma once
@@ -36,24 +38,28 @@
 
 #include "AssetLoader.h"
 
-
 namespace FuncDoodle {
 	/**
 	 * @class AnimationManager
-	 * @brief Responsible for registering keybinds for animations, rendering timeline, logs window, controls window, etc.
+	 * @brief Responsible for registering keybinds for animations, rendering
+	 * timeline, logs window, controls window, etc.
 	 *
-	 * Manages animation playback and user interaction, including handling input bindings
-	 * and coordinating UI elements such as the timeline, logs, and control panels.
-	 * Keeps animation state in sync with the editor and ensures consistent behavior
-	 * during playback and editing.
+	 * Manages animation playback and user interaction, including handling input
+	 * bindings and coordinating UI elements such as the timeline, logs, and
+	 * control panels. Keeps animation state in sync with the editor and ensures
+	 * consistent behavior during playback and editing.
 	 *
 	 * @invariant m_Proj is always non-null after construction.
-	 * @invariant m_Player is always non-null and references the same ProjectFile as m_Proj.
-	 * @invariant m_SelectedFrame is always a valid index into m_Proj->AnimFrames().
-	 * @invariant m_FrameRenderer and m_TimelineFrameRenderer are initialized before any render call.
+	 * @invariant m_Player is always non-null and references the same
+	 * ProjectFile as m_Proj.
+	 * @invariant m_SelectedFrame is always a valid index into
+	 * m_Proj->AnimFrames().
+	 * @invariant m_FrameRenderer and m_TimelineFrameRenderer are initialized
+	 * before any render call.
 	 * @invariant m_EditorController is always non-null.
 	 * @invariant m_AssetLoader is non-null and owned externally.
-	 * @invariant m_Settings and m_Keybinds remain valid for the lifetime of this instance.k
+	 * @invariant m_Settings and m_Keybinds remain valid for the lifetime of
+	 * this instance.k
 	 *
 	 * @note This class does not own the AssetLoader.
 	 * @warning SetPlayer() must be called before SetProj().
@@ -69,7 +75,8 @@ namespace FuncDoodle {
 		 *
 		 * @param proj Active project to manage.
 		 * @param assetLoader Asset loader used for icons and sounds.
-		 * @param editorController Shared editor controller used by frame renderers.
+		 * @param editorController Shared editor controller used by frame
+		 * renderers.
 		 * @param keybinds Registry containing animation-related keybinds.
 		 * @param settings Mutable application settings.
 		 */
@@ -146,7 +153,9 @@ namespace FuncDoodle {
 		 *
 		 * @return Current frame index.
 		 */
-		[[nodiscard]] unsigned long SelectedFrameI() const { return m_SelectedFrame; }
+		[[nodiscard]] unsigned long SelectedFrameI() const {
+			return m_SelectedFrame;
+		}
 		/**
 		 * @fn SelectedFrame
 		 * @brief Returns the selected frame object.

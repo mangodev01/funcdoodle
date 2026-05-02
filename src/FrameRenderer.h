@@ -35,7 +35,8 @@
 namespace FuncDoodle {
 	/**
 	 * @class FrameRenderer
-	 * @brief Responible for rendering a single frame, status bar and dispatching painting to EditorController
+	 * @brief Responible for rendering a single frame, status bar and
+	 * dispatching painting to EditorController
 	 *
 	 * Handles drawing the frame canvas, status bar, and forwarding painting
 	 * operations to the EditorController through a CanvasContext.
@@ -98,7 +99,8 @@ namespace FuncDoodle {
 		 * @fn SetUndoByStroke
 		 * @brief Forwards undo-by-stroke preference to the editor controller.
 		 *
-		 * @param undoByStroke Whether strokes should be grouped into one undo step.
+		 * @param undoByStroke Whether strokes should be grouped into one undo
+		 * step.
 		 */
 		void SetUndoByStroke(bool undoByStroke) {
 			if (m_EditorController) {

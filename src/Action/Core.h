@@ -6,14 +6,13 @@
  * editor operations that support undo/redo behavior.
  */
 
-
 #pragma once
 
 #include <utility>
 
+#include "../Frame.h"
 #include "Common.h"
 #include "Project.h"
-#include "../Frame.h"
 
 namespace FuncDoodle {
 
@@ -26,7 +25,6 @@ namespace FuncDoodle {
 	 */
 	class DrawAction : public Action {
 		public:
-
 		/**
 		 * @brief Creates a draw action for a single pixel change.
 		 */
@@ -38,8 +36,7 @@ namespace FuncDoodle {
 		/**
 		 * @brief Copy constructor.
 		 */
-		DrawAction(const DrawAction& other)
-			 = default;
+		DrawAction(const DrawAction& other) = default;
 
 		/**
 		 * @brief Destructor.
@@ -72,7 +69,6 @@ namespace FuncDoodle {
 	 */
 	class FillAction : public Action {
 		public:
-
 		/**
 		 * @brief Creates a fill action from a flood-fill operation.
 		 */
@@ -86,8 +82,8 @@ namespace FuncDoodle {
 		 * @brief Copy constructor.
 		 */
 		FillAction(const FillAction& other)
-			
-			  = default;
+
+			= default;
 
 		/**
 		 * @brief Destructor.
@@ -120,14 +116,13 @@ namespace FuncDoodle {
 	 */
 	class StrokeAction : public Action {
 		public:
-
 		/**
 		 * @struct PixelChange
 		 * @brief Represents a single pixel modification in a stroke.
 		 */
 		struct PixelChange {
-			int x;     ///< X coordinate of the changed pixel.
-			int y;     ///< Y coordinate of the changed pixel.
+			int x;	   ///< X coordinate of the changed pixel.
+			int y;	   ///< Y coordinate of the changed pixel.
 			Col prev;  ///< Pixel color before the stroke touched it.
 			Col next;  ///< Pixel color after the stroke applied.
 		};

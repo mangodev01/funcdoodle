@@ -174,9 +174,7 @@ namespace FuncDoodle {
 		 *
 		 * @param proj Project to make active.
 		 */
-		void SetCurProj(SharedPtr<ProjectFile> proj) {
-			m_CurrentProj = proj;
-		}
+		void SetCurProj(SharedPtr<ProjectFile> proj) { m_CurrentProj = proj; }
 		/**
 		 * @fn GetCacheProj
 		 * @brief Returns the cached project used during prompts and swaps.
@@ -190,9 +188,7 @@ namespace FuncDoodle {
 		 *
 		 * @param proj Project to cache.
 		 */
-		void SetCacheProj(SharedPtr<ProjectFile> proj) {
-			m_CacheProj = proj;
-		}
+		void SetCacheProj(SharedPtr<ProjectFile> proj) { m_CacheProj = proj; }
 		/**
 		 * @fn GetAssetLoader
 		 * @brief Returns the global asset loader.
@@ -236,9 +232,7 @@ namespace FuncDoodle {
 		 *
 		 * @param shouldClose New close flag value.
 		 */
-		void SetShouldClose(bool shouldClose) {
-			m_ShouldClose = shouldClose;
-		}
+		void SetShouldClose(bool shouldClose) { m_ShouldClose = shouldClose; }
 
 		/**
 		 * @fn GetWindow
@@ -386,7 +380,8 @@ namespace FuncDoodle {
 		// lol idk what to call this
 		/**
 		 * @enum Where
-		 * @brief Controls whether imported content is inserted before or after the current frame.
+		 * @brief Controls whether imported content is inserted before or after
+		 * the current frame.
 		 */
 		enum class Where { Before = 0, After = 1 };
 		/**
@@ -411,7 +406,8 @@ namespace FuncDoodle {
 		void MoveCurrentSelection(Direction direction);
 		/**
 		 * @fn IsPosInFrame
-		 * @brief Returns whether a screen-space point lies within the frame view.
+		 * @brief Returns whether a screen-space point lies within the frame
+		 * view.
 		 *
 		 * @param pos Position to test.
 		 * @return Whether the position is inside the frame area.

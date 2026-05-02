@@ -13,13 +13,12 @@
 #include <array>
 #include <chrono>
 #include <cmath>
+#include <cstdint>
 #include <cstdlib>
 #include <cstring>
 #include <fstream>
 #include <imgui.h>
 #include <iostream>
-#include <cstdint>
-#include <cstring>
 #include <string>
 #include <thread>
 
@@ -28,7 +27,6 @@
 #include "LoadedAssets.h"
 #include "Platform/Window.h"
 #include "TextUtil.h"
-
 
 #include "ImUtil.h"
 #include "Themes.h"
@@ -48,7 +46,7 @@ namespace FuncDoodle {
 
 	Application* Application::s_Instance = nullptr;
 	Application::Application()
-		:  m_CurrentProj(nullptr), m_CacheProj(nullptr),
+		: m_CurrentProj(nullptr), m_CacheProj(nullptr),
 		  m_EditorController(std::make_shared<EditorController>()),
 		  m_CacheBGCol({g_MaxColorValue, g_MaxColorValue, g_MaxColorValue}),
 		  m_Theme(UUID::FromString("d0c1a009-d09c-4fe6-84f8-eddcb2da38f9")),
@@ -383,7 +381,8 @@ namespace FuncDoodle {
 	void Application::ReadProjectFile() {
 		// m_FilePath is the actual file that we're going to read
 		if (m_FilePath.empty()) {
-			FUNC_DBG("tried reading but m_FilePath is nullptr, probably means that the file dialog was cancelled");
+			FUNC_DBG("tried reading but m_FilePath is nullptr, probably means "
+					 "that the file dialog was cancelled");
 			return;
 		}
 
@@ -451,10 +450,8 @@ namespace FuncDoodle {
 				if (m_Settings.Sfx)
 					m_AssetLoader->PlaySound(s_ProjSaveEndSound);
 
-				
-					m_ShouldClose = true;
-					ImGui::CloseCurrentPopup();
-				
+				m_ShouldClose = true;
+				ImGui::CloseCurrentPopup();
 			});
 		} else {
 #ifndef MACOS
@@ -486,8 +483,11 @@ namespace FuncDoodle {
 	}
 
 	void Application::MoveCurrentSelection(Direction direction) {
-		MoveSelectionActionContext ctx{.FrameIndex=m_Manager->SelectedFrameI(),
-			.Sel=m_EditorController->Sel(), .MoveDir=direction, .Proj=m_CurrentProj};
+		MoveSelectionActionContext ctx{
+			.FrameIndex = m_Manager->SelectedFrameI(),
+			.Sel = m_EditorController->Sel(),
+			.MoveDir = direction,
+			.Proj = m_CurrentProj};
 		auto action =
 			MoveSelectionAction(Frame(*m_Manager->SelectedFrame()), ctx);
 
@@ -516,7 +516,8 @@ namespace FuncDoodle {
 		ImVec2 contentRegion = frameWindow->ContentRegionRect.GetSize();
 		ImVec2 windowPos = frameWindow->Pos;
 
-		float startX = windowPos.x + ((contentRegion.x - frameWidth) * 0.5f) + 9;
+		float startX =
+			windowPos.x + ((contentRegion.x - frameWidth) * 0.5f) + 9;
 		float startY =
 			windowPos.y +
 			(((contentRegion.y - statusBarHeight) - frameHeight) * 0.5f) + 41;

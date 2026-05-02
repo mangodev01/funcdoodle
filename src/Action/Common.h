@@ -7,7 +7,6 @@
  * Typical actions include drawing, filling, and deleting frames.
  */
 
-
 #pragma once
 
 namespace FuncDoodle {
@@ -24,7 +23,6 @@ namespace FuncDoodle {
 	 */
 	class Action {
 		public:
-
 		/**
 		 * @brief Reverts the effects of this action.
 		 */
@@ -45,4 +43,4 @@ namespace FuncDoodle {
 		// friend class FillAction;
 		// friend class DeleteFrameAction;
 	};
-}
+}  // namespace FuncDoodle

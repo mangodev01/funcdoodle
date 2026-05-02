@@ -225,7 +225,7 @@ namespace FuncDoodle {
 					dialog.OpenMultiple();
 
 				for (auto path : themes) {
-						style = Themes::LoadThemeFromFile(path.string().c_str());
+					style = Themes::LoadThemeFromFile(path.string().c_str());
 
 					if (style) {
 						auto [it, inserted] =

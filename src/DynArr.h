@@ -52,8 +52,8 @@ namespace FuncDoodle {
 		 * @param bgCol Background color used for empty frames.
 		 * @param initial_capacity Initial reserved frame capacity.
 		 */
-		LongIndexArray(int width, int height, Col bgCol,
-			unsigned long initialcap = 10);
+		LongIndexArray(
+			int width, int height, Col bgCol, unsigned long initialcap = 10);
 		~LongIndexArray();
 
 		/**
@@ -132,9 +132,11 @@ namespace FuncDoodle {
 		 */
 		void Remove(unsigned long index);
 
-		/** @brief Returns mutable frame access by index. @param index Frame index. @return Pointer to the frame. */
+		/** @brief Returns mutable frame access by index. @param index Frame
+		 * index. @return Pointer to the frame. */
 		Frame* operator[](unsigned long index);
-		/** @brief Returns immutable frame access by index. @param index Frame index. @return Pointer to the frame. */
+		/** @brief Returns immutable frame access by index. @param index Frame
+		 * index. @return Pointer to the frame. */
 		const Frame* operator[](unsigned long index) const;
 		/**
 		 * @fn Get

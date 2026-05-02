@@ -14,7 +14,8 @@
  * The player operates directly on a ProjectFile instance and maintains
  * internal timing state used for frame progression.
  *
- * @note m_CurFrame is always expected to be a valid index within the project frame list.
+ * @note m_CurFrame is always expected to be a valid index within the project
+ * frame list.
  * @note Playback timing is accumulated using m_TimeElapsed.
  */
 
@@ -31,7 +32,8 @@ namespace FuncDoodle {
 	 * @invariant m_CurFrame is always a valid frame index within m_Proj
 	 *
 	 * @note Play() advances frames over time using m_TimeElapsed
-	 * @note AnimationPlayer maintains internal playback state (frame + time accumulator)
+	 * @note AnimationPlayer maintains internal playback state (frame + time
+	 * accumulator)
 	 * @note Rewind() resets playback to the first frame
 	 */
 	class AnimationPlayer {
@@ -95,16 +97,16 @@ namespace FuncDoodle {
 		 *
 		 * @return Current frame index.
 		 */
-		[[nodiscard]] constexpr unsigned long CurFrame() const { return m_CurFrame; }
+		[[nodiscard]] constexpr unsigned long CurFrame() const {
+			return m_CurFrame;
+		}
 		/**
 		 * @fn SetCurFrame
 		 * @brief Sets the current playback frame index.
 		 *
 		 * @param frame Frame index to jump to.
 		 */
-		constexpr void SetCurFrame(unsigned long frame) {
-			m_CurFrame = frame;
-		}
+		constexpr void SetCurFrame(unsigned long frame) { m_CurFrame = frame; }
 
 		private:
 		bool m_Playing;

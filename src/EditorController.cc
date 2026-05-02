@@ -67,10 +67,12 @@ namespace FuncDoodle {
 			return false;
 		}
 		const float* colOld = toolManager->GetCol();
-		Col newColor = {
-			.r=static_cast<unsigned char>((colOld[0] * g_MaxColorValue) + 0.5f),
-			.g=static_cast<unsigned char>((colOld[1] * g_MaxColorValue) + 0.5f),
-			.b=static_cast<unsigned char>((colOld[2] * g_MaxColorValue) + 0.5f)};
+		Col newColor = {.r = static_cast<unsigned char>(
+							(colOld[0] * g_MaxColorValue) + 0.5f),
+			.g = static_cast<unsigned char>(
+				(colOld[1] * g_MaxColorValue) + 0.5f),
+			.b = static_cast<unsigned char>(
+				(colOld[2] * g_MaxColorValue) + 0.5f)};
 
 		int size = toolManager->GetSize();
 		bool actionPerformed = false;
@@ -159,10 +161,12 @@ namespace FuncDoodle {
 		}
 
 		const float* colOld = toolManager->GetCol();
-		Col fillColor = {
-			.r=static_cast<unsigned char>((colOld[0] * g_MaxColorValue) + 0.5f),
-			.g=static_cast<unsigned char>((colOld[1] * g_MaxColorValue) + 0.5f),
-			.b=static_cast<unsigned char>((colOld[2] * g_MaxColorValue) + 0.5f)};
+		Col fillColor = {.r = static_cast<unsigned char>(
+							 (colOld[0] * g_MaxColorValue) + 0.5f),
+			.g = static_cast<unsigned char>(
+				(colOld[1] * g_MaxColorValue) + 0.5f),
+			.b = static_cast<unsigned char>(
+				(colOld[2] * g_MaxColorValue) + 0.5f)};
 		Col curPixelCol = frame->Pixels()->Get(pixelX, pixelY);
 
 		if (curPixelCol == fillColor) {
@@ -386,7 +390,7 @@ namespace FuncDoodle {
 							currentPixel.y - context.LastMousePos.y;
 						const int steps =
 							std::max({1, static_cast<int>(std::abs(dx)),
-											static_cast<int>(std::abs(dy))});
+								static_cast<int>(std::abs(dy))});
 						for (int i = 0; i <= steps; i++) {
 							const float t = static_cast<float>(i) / steps;
 							const ImVec2 interpPixel(
@@ -433,11 +437,8 @@ namespace FuncDoodle {
 			} else {
 				m_Sel = std::make_unique<SquareSelection>(m_SquareSel);
 			}
-			FUNC_DBG("m_SquareSel min: {}, {}; max: {}, {}",
-					m_SquareSel.Min.x,
-					m_SquareSel.Min.y,
-					m_SquareSel.Max.x,
-					m_SquareSel.Max.y);
+			FUNC_DBG("m_SquareSel min: {}, {}; max: {}, {}", m_SquareSel.Min.x,
+				m_SquareSel.Min.y, m_SquareSel.Max.x, m_SquareSel.Max.y);
 		}
 
 		if (ImGui::IsMouseHoveringRect(frameMin, frameMax) && !shouldDraw &&
@@ -519,7 +520,8 @@ namespace FuncDoodle {
 				const Col col = pixels->Get(x, y);
 				const ImVec2 topLeft(startX + (x * context.PixelScale),
 					startY + (y * context.PixelScale));
-				const ImVec2 bottomRight(startX + ((x + 1) * context.PixelScale),
+				const ImVec2 bottomRight(
+					startX + ((x + 1) * context.PixelScale),
 					startY + ((y + 1) * context.PixelScale));
 				drawList->AddRectFilled(
 					topLeft, bottomRight, IM_COL32(col.r, col.g, col.b, 255));

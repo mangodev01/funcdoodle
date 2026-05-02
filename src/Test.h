@@ -37,7 +37,8 @@ int FuncDoodle_RunTests();
 /** @def CURRENT_FUNC @brief Expands to the current function name on MSVC. */
 #define CURRENT_FUNC __FUNCTION__
 #else
-/** @def CURRENT_FUNC @brief Expands to the current function name on non-MSVC compilers. */
+/** @def CURRENT_FUNC @brief Expands to the current function name on non-MSVC
+ * compilers. */
 #define CURRENT_FUNC __func__
 #endif
 
@@ -68,16 +69,17 @@ namespace FuncDoodle {
 	 * @brief Represents a single failed or recorded test assertion.
 	 */
 	struct TestResult {
-		std::string condition;  ///< Stringified test condition
-		std::string message;    ///< Optional failure message
-		bool passed;            ///< Whether the test passed
+		std::string condition;	///< Stringified test condition
+		std::string message;	///< Optional failure message
+		bool passed;			///< Whether the test passed
 	};
 
 	/**
 	 * @class TestRegistry
 	 * @brief Global singleton collecting test scope results.
 	 *
-	 * Aggregates results from all TestScope instances and prints a final summary.
+	 * Aggregates results from all TestScope instances and prints a final
+	 * summary.
 	 */
 	class TestRegistry {
 		public:
@@ -95,7 +97,8 @@ namespace FuncDoodle {
 		/**
 		 * @brief Registers a completed test scope.
 		 */
-		void RegisterScope(const char* name, int passed, int total, int failed) {
+		void RegisterScope(
+			const char* name, int passed, int total, int failed) {
 			m_Results.push_back({name, passed, total, failed});
 		}
 
@@ -116,27 +119,31 @@ namespace FuncDoodle {
 			}
 
 			double percentage = total_tests > 0
-				? (double)total_passed / total_tests * 100.0
-				: 0.0;
+									? (double)total_passed / total_tests * 100.0
+									: 0.0;
 
 			std::string percent_str = std::to_string(percentage);
 			percent_str = percent_str.substr(0, percent_str.find('.') + 2);
 
 			std::cout << "\n";
 			std::cout << "╔" << Repeat("═", 62) << "╗\n";
-			std::cout << "║                      TEST SUMMARY                            ║\n";
+			std::cout << "║                      TEST SUMMARY                  "
+						 "          ║\n";
 			std::cout << "╠" << Repeat("═", 62) << "╣\n";
 
 			std::cout << "║  Total:  " << total_tests
-					  << std::string(48 - std::to_string(total_tests).length(), ' ')
+					  << std::string(
+							 48 - std::to_string(total_tests).length(), ' ')
 					  << "    ║\n";
 
 			std::cout << "║  \033[32mPassed:  " << total_passed << "\033[0m"
-					  << std::string(47 - std::to_string(total_passed).length(), ' ')
+					  << std::string(
+							 47 - std::to_string(total_passed).length(), ' ')
 					  << "    ║\n";
 
 			std::cout << "║  \033[31mFailed:  " << total_failed << "\033[0m"
-					  << std::string(47 - std::to_string(total_failed).length(), ' ')
+					  << std::string(
+							 47 - std::to_string(total_failed).length(), ' ')
 					  << "    ║\n";
 
 			std::string color =
@@ -175,8 +182,7 @@ namespace FuncDoodle {
 		 *
 		 * @param name Name printed in test output.
 		 */
-		explicit TestScope(const char* name)
-			: m_Name(name) {}
+		explicit TestScope(const char* name) : m_Name(name) {}
 
 		/**
 		 * @brief Finalizes and prints test scope results.
@@ -195,20 +201,23 @@ namespace FuncDoodle {
 				std::cout << "║  \033[32m[PASS]\033[0m " << m_Passed << "/"
 						  << m_Total << " passed"
 						  << std::string(45 -
-							 std::to_string(m_Passed).length() -
-							 std::to_string(m_Total).length(), ' ')
+											 std::to_string(m_Passed).length() -
+											 std::to_string(m_Total).length(),
+								 ' ')
 						  << "║\n";
 			} else {
 				std::cout << "║  \033[32m[PASS]\033[0m " << m_Passed << "/"
 						  << m_Total << " passed"
 						  << std::string(44 -
-							 std::to_string(m_Passed).length() -
-							 std::to_string(m_Total).length(), ' ')
+											 std::to_string(m_Passed).length() -
+											 std::to_string(m_Total).length(),
+								 ' ')
 						  << "║\n";
 
 				std::cout << "║  \033[31m[FAIL]\033[0m " << m_Failed
 						  << " failed"
-						  << std::string(47 - std::to_string(m_Failed).length(), ' ')
+						  << std::string(
+								 47 - std::to_string(m_Failed).length(), ' ')
 						  << "║\n";
 			}
 
@@ -234,7 +243,7 @@ namespace FuncDoodle {
 		std::vector<TestResult> m_Results;
 	};
 
-} // namespace FuncDoodle
+}  // namespace FuncDoodle
 
 // ================= MACROS =================
 
@@ -266,7 +275,8 @@ namespace FuncDoodle {
 #define CHECK_LT(a, b, msg) _test_scope.Check((a) < (b), #a " < " #b, msg)
 /**
  * @def CHECK_LE
- * @brief Records whether the left expression is less than or equal to the right.
+ * @brief Records whether the left expression is less than or equal to the
+ * right.
  */
 #define CHECK_LE(a, b, msg) _test_scope.Check((a) <= (b), #a " <= " #b, msg)
 /**
@@ -276,16 +286,19 @@ namespace FuncDoodle {
 #define CHECK_GT(a, b, msg) _test_scope.Check((a) > (b), #a " > " #b, msg)
 /**
  * @def CHECK_GE
- * @brief Records whether the left expression is greater than or equal to the right.
+ * @brief Records whether the left expression is greater than or equal to the
+ * right.
  */
 #define CHECK_GE(a, b, msg) _test_scope.Check((a) >= (b), #a " >= " #b, msg)
 /**
  * @def CHECK_NULL
  * @brief Records whether a pointer is null.
  */
-#define CHECK_NULL(ptr, msg) _test_scope.Check((ptr) == nullptr, #ptr " == nullptr", msg)
+#define CHECK_NULL(ptr, msg) \
+	_test_scope.Check((ptr) == nullptr, #ptr " == nullptr", msg)
 /**
  * @def CHECK_NOT_NULL
  * @brief Records whether a pointer is non-null.
  */
-#define CHECK_NOT_NULL(ptr, msg) _test_scope.Check((ptr) != nullptr, #ptr " != nullptr", msg)
+#define CHECK_NOT_NULL(ptr, msg) \
+	_test_scope.Check((ptr) != nullptr, #ptr " != nullptr", msg)

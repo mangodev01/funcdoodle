@@ -9,7 +9,7 @@
 namespace FuncDoodle {
 	LongIndexArray::LongIndexArray(
 		int width, int height, Col bgCol, unsigned long initialcap)
-		: m_Capacity(initialcap),  m_Width(width), m_Height(height),
+		: m_Capacity(initialcap), m_Width(width), m_Height(height),
 		  m_BG(bgCol) {
 		m_Capacity = std::max<unsigned long>(m_Capacity, 1);
 		m_Width = std::max(m_Width, 1);

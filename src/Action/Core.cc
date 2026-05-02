@@ -39,7 +39,7 @@ namespace FuncDoodle {
 			Frame* frame = proj->AnimFrames()->Get(m_FrameIndex);
 			if (!frame)
 				return;
-			for (auto & m_Change : std::ranges::reverse_view(m_Changes)) {
+			for (auto& m_Change : std::ranges::reverse_view(m_Changes)) {
 				frame->SetPixel(m_Change.x, m_Change.y, m_Change.prev);
 			}
 		}

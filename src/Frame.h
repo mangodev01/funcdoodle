@@ -46,9 +46,9 @@ namespace FuncDoodle {
 	 */
 	struct Col {
 		public:
-		unsigned char r = 255;  ///< Red channel in 8-bit RGB space.
-		unsigned char g = 255;  ///< Green channel in 8-bit RGB space.
-		unsigned char b = 255;  ///< Blue channel in 8-bit RGB space.
+		unsigned char r = 255;	///< Red channel in 8-bit RGB space.
+		unsigned char g = 255;	///< Green channel in 8-bit RGB space.
+		unsigned char b = 255;	///< Blue channel in 8-bit RGB space.
 
 		/**
 		 * @fn FromFloat3
@@ -146,7 +146,8 @@ namespace FuncDoodle {
 
 		/**
 		 * @fn RedoColorAdjustment
-		 * @brief Reapplies background-color dependent adjustments after a color change.
+		 * @brief Reapplies background-color dependent adjustments after a color
+		 * change.
 		 *
 		 * @param bgCol New background color.
 		 */
@@ -204,18 +205,14 @@ namespace FuncDoodle {
 		 * @param height New image height.
 		 * @param clear Whether pixel contents should be cleared.
 		 */
-		void SetHeight(int height, bool clear = false) {
-			m_Height = height;
-		}
+		void SetHeight(int height, bool clear = false) { m_Height = height; }
 		/**
 		 * @fn SetData
 		 * @brief Replaces the raw pixel buffer.
 		 *
 		 * @param data New pixel buffer.
 		 */
-		void SetData(const std::vector<Col>& data) {
-			this->m_Data = data;
-		}
+		void SetData(const std::vector<Col>& data) { this->m_Data = data; }
 		/**
 		 * @fn Data
 		 * @brief Returns the raw pixel buffer.
@@ -252,13 +249,17 @@ namespace FuncDoodle {
 		public:
 		Frame() : m_Pixels(1, 1, Col()) {}
 		/** @brief Copies an existing frame. @param other Frame to copy. */
-		Frame(const Frame& other)  = default;
-		/** @brief Creates a frame with explicit dimensions and background color. @param width Frame width. @param height Frame height. @param bgCol Background color. */
+		Frame(const Frame& other) = default;
+		/** @brief Creates a frame with explicit dimensions and background
+		 * color. @param width Frame width. @param height Frame height. @param
+		 * bgCol Background color. */
 		Frame(int width, int height, Col bgCol)
 			: m_Pixels(width, height, bgCol) {}
-		/** @brief Creates a frame from an image array copy. @param arr Image array to copy. */
-		Frame(ImageArray  arr) : m_Pixels(std::move(arr)) {}
-		/** @brief Creates a frame from an optional image array pointer. @param arr Image array pointer to copy when non-null. */
+		/** @brief Creates a frame from an image array copy. @param arr Image
+		 * array to copy. */
+		Frame(ImageArray arr) : m_Pixels(std::move(arr)) {}
+		/** @brief Creates a frame from an optional image array pointer. @param
+		 * arr Image array pointer to copy when non-null. */
 		Frame(const ImageArray* arr)
 			: m_Pixels(arr ? *arr : ImageArray(1, 1, Col())) {}
 
@@ -266,7 +267,8 @@ namespace FuncDoodle {
 
 		/**
 		 * @fn ReInit
-		 * @brief Reinitializes the frame with new dimensions and background color.
+		 * @brief Reinitializes the frame with new dimensions and background
+		 * color.
 		 *
 		 * @param width New frame width.
 		 * @param height New frame height.
@@ -275,9 +277,12 @@ namespace FuncDoodle {
 		void ReInit(int width, int height, Col bgCol) {
 			m_Pixels = ImageArray(width, height, bgCol);
 		}
-		/** @brief Copies another frame into this one. @param other Frame to copy. @return Reference to this frame. */
+		/** @brief Copies another frame into this one. @param other Frame to
+		 * copy. @return Reference to this frame. */
 		Frame& operator=(const Frame& other);
-		/** @brief Returns whether two frames contain identical pixel data. @param other Frame to compare against. @return Whether the frames match. */
+		/** @brief Returns whether two frames contain identical pixel data.
+		 * @param other Frame to compare against. @return Whether the frames
+		 * match. */
 		bool operator==(const Frame& other) const;
 		/**
 		 * @fn SetWidth
@@ -330,7 +335,8 @@ namespace FuncDoodle {
 					auto isx = static_cast<int>(std::lround(sx));
 					auto isy = static_cast<int>(std::lround(sy));
 					if (isx >= 0 && isx < w && isy >= 0 && isy < h) {
-						result[(y * newW) + x] = m_Pixels.Data()[(isy * w) + isx];
+						result[(y * newW) + x] =
+							m_Pixels.Data()[(isy * w) + isx];
 					}
 				}
 			}

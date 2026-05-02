@@ -11,7 +11,7 @@
 
 namespace FuncDoodle {
 	ToolManager::ToolManager(KeybindsRegistry& keybinds)
-		:  m_Keybinds(keybinds) {}
+		: m_Keybinds(keybinds) {}
 
 	ToolManager::~ToolManager() = default;
 
@@ -145,7 +145,8 @@ namespace FuncDoodle {
 			for (int dy = -1; dy <= 1; dy++) {
 				if (dx == 0 && dy == 0)
 					continue;
-				dl->AddImage(texID, ImVec2(pos.x + (dx * off), pos.y + (dy * off)),
+				dl->AddImage(texID,
+					ImVec2(pos.x + (dx * off), pos.y + (dy * off)),
 					ImVec2(pos.x + 32 + (dx * off), pos.y + 32 + (dy * off)),
 					ImVec2(0, 0), ImVec2(1, 1), IM_COL32_BLACK);
 			}

@@ -20,15 +20,13 @@ namespace FuncDoodle {
 	 * @brief Removes a frame from a project with undo support.
 	 */
 	class DeleteFrameAction : public Action {
-	public:
+		public:
 		/**
 		 * @brief Creates an empty delete-frame action.
 		 */
-		DeleteFrameAction(unsigned long frameI,
-			const SharedPtr<ProjectFile>& proj)
-			: m_Proj(proj),
-			  m_FrameIndex(frameI),
-			  m_Empty(true),
+		DeleteFrameAction(
+			unsigned long frameI, const SharedPtr<ProjectFile>& proj)
+			: m_Proj(proj), m_FrameIndex(frameI), m_Empty(true),
 			  m_Frame(std::nullopt) {}
 
 		/**
@@ -37,12 +35,9 @@ namespace FuncDoodle {
 		 * @param frame Frame to delete (copied internally).
 		 * @param proj Project that owns the frame.
 		 */
-		DeleteFrameAction(unsigned long frameI,
-			Frame* frame,
+		DeleteFrameAction(unsigned long frameI, Frame* frame,
 			const SharedPtr<ProjectFile>& proj)
-			: m_Proj(proj),
-			  m_FrameIndex(frameI),
-			  m_Empty(frame == nullptr),
+			: m_Proj(proj), m_FrameIndex(frameI), m_Empty(frame == nullptr),
 			  m_Frame(frame ? std::optional<Frame>(*frame) : std::nullopt) {}
 
 		/**
@@ -55,10 +50,10 @@ namespace FuncDoodle {
 		 */
 		void Redo() override;
 
-	private:
-		unsigned long m_FrameIndex;     ///< Frame index affected
-		bool m_Empty;                   ///< Whether frame data exists
-		std::optional<Frame> m_Frame;   ///< Stored frame data for undo
+		private:
+		unsigned long m_FrameIndex;	   ///< Frame index affected
+		bool m_Empty;				   ///< Whether frame data exists
+		std::optional<Frame> m_Frame;  ///< Stored frame data for undo
 		WeakPtr<ProjectFile> m_Proj;   ///< Owning project
 	};
 
@@ -67,26 +62,21 @@ namespace FuncDoodle {
 	 * @brief Inserts a frame into a project with undo support.
 	 */
 	class InsertFrameAction : public Action {
-	public:
+		public:
 		/**
 		 * @brief Creates an empty insert-frame action.
 		 */
-		InsertFrameAction(unsigned long frameI,
-			const SharedPtr<ProjectFile>& proj)
-			: m_Proj(proj),
-			  m_FrameIndex(frameI),
-			  m_Empty(true),
+		InsertFrameAction(
+			unsigned long frameI, const SharedPtr<ProjectFile>& proj)
+			: m_Proj(proj), m_FrameIndex(frameI), m_Empty(true),
 			  m_Frame(std::nullopt) {}
 
 		/**
 		 * @brief Creates an insert-frame action with frame data.
 		 */
-		InsertFrameAction(unsigned long frameI,
-			Frame* frame,
+		InsertFrameAction(unsigned long frameI, Frame* frame,
 			const SharedPtr<ProjectFile>& proj)
-			: m_FrameIndex(frameI),
-			  m_Proj(proj),
-			  m_Empty(frame == nullptr),
+			: m_FrameIndex(frameI), m_Proj(proj), m_Empty(frame == nullptr),
 			  m_Frame(frame ? std::optional<Frame>(*frame) : std::nullopt) {}
 
 		/**
@@ -99,10 +89,10 @@ namespace FuncDoodle {
 		 */
 		void Redo() override;
 
-	private:
-		unsigned long m_FrameIndex;     ///< Frame index affected
-		bool m_Empty;                   ///< Whether frame data exists
-		std::optional<Frame> m_Frame;   ///< Stored frame data
+		private:
+		unsigned long m_FrameIndex;	   ///< Frame index affected
+		bool m_Empty;				   ///< Whether frame data exists
+		std::optional<Frame> m_Frame;  ///< Stored frame data
 		WeakPtr<ProjectFile> m_Proj;   ///< Owning project
 	};
 
@@ -111,19 +101,19 @@ namespace FuncDoodle {
 	 * @brief Moves a frame one position to the left.
 	 */
 	class MoveFrameLeftAction : public Action {
-	public:
-		/** @brief Creates an action that shifts a frame one slot to the left. */
-		MoveFrameLeftAction(unsigned long frameI,
-			const SharedPtr<ProjectFile>& proj)
-			: m_Proj(proj),
-			  m_FrameIndex(frameI) {}
+		public:
+		/** @brief Creates an action that shifts a frame one slot to the left.
+		 */
+		MoveFrameLeftAction(
+			unsigned long frameI, const SharedPtr<ProjectFile>& proj)
+			: m_Proj(proj), m_FrameIndex(frameI) {}
 
 		void Undo() override;
 		void Redo() override;
 
-	private:
-		unsigned long m_FrameIndex;   ///< Frame index
-		WeakPtr<ProjectFile> m_Proj; ///< Owning project
+		private:
+		unsigned long m_FrameIndex;	  ///< Frame index
+		WeakPtr<ProjectFile> m_Proj;  ///< Owning project
 	};
 
 	/**
@@ -131,19 +121,19 @@ namespace FuncDoodle {
 	 * @brief Moves a frame one position to the right.
 	 */
 	class MoveFrameRightAction : public Action {
-	public:
-		/** @brief Creates an action that shifts a frame one slot to the right. */
-		MoveFrameRightAction(unsigned long frameI,
-			const SharedPtr<ProjectFile>& proj)
-			: m_Proj(proj),
-			  m_FrameIndex(frameI) {}
+		public:
+		/** @brief Creates an action that shifts a frame one slot to the right.
+		 */
+		MoveFrameRightAction(
+			unsigned long frameI, const SharedPtr<ProjectFile>& proj)
+			: m_Proj(proj), m_FrameIndex(frameI) {}
 
 		void Undo() override;
 		void Redo() override;
 
-	private:
-		unsigned long m_FrameIndex;   ///< Frame index
-		WeakPtr<ProjectFile> m_Proj; ///< Owning project
+		private:
+		unsigned long m_FrameIndex;	  ///< Frame index
+		WeakPtr<ProjectFile> m_Proj;  ///< Owning project
 	};
 
 	/**
@@ -151,19 +141,16 @@ namespace FuncDoodle {
 	 * @brief Rotates a frame by a fixed angle.
 	 */
 	class RotateFrameAction : public Action {
-	public:
+		public:
 		/**
 		 * @brief Creates a frame rotation action.
 		 * @param frameIndex Frame to rotate
 		 * @param deg Rotation in degrees
 		 * @param proj Owning project
 		 */
-		RotateFrameAction(unsigned long frameIndex,
-			int32_t deg,
+		RotateFrameAction(unsigned long frameIndex, int32_t deg,
 			const SharedPtr<ProjectFile>& proj)
-			: m_FrameIndex(frameIndex),
-			  m_Proj(proj),
-			  m_Deg(deg) {}
+			: m_FrameIndex(frameIndex), m_Proj(proj), m_Deg(deg) {}
 
 		void Undo() override;
 		void Redo() override;
@@ -173,10 +160,10 @@ namespace FuncDoodle {
 		 */
 		[[nodiscard]] int32_t Deg() const { return m_Deg; }
 
-	private:
-		unsigned long m_FrameIndex;   ///< Frame index
-		int32_t m_Deg;               ///< Rotation angle
-		WeakPtr<ProjectFile> m_Proj; ///< Owning project
+		private:
+		unsigned long m_FrameIndex;	  ///< Frame index
+		int32_t m_Deg;				  ///< Rotation angle
+		WeakPtr<ProjectFile> m_Proj;  ///< Owning project
 	};
 
-} // namespace FuncDoodle
+}  // namespace FuncDoodle

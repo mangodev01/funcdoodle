@@ -1,18 +1,20 @@
 /**
  * @file Keybinds.h
- * @brief Keyboard input system including key masks, shortcuts, and keybind registry.
+ * @brief Keyboard input system including key masks, shortcuts, and keybind
+ * registry.
  *
  * This file defines the input abstraction layer used by FuncDoodle for handling
  * keyboard shortcuts and user-configurable bindings.
  *
  * It includes:
- * - KeyMask: a bitmask representation of ImGui keys for efficient combination handling
+ * - KeyMask: a bitmask representation of ImGui keys for efficient combination
+ * handling
  * - Shortcut: a key + modifier combination representing an action trigger
  * - ShortcutWithUser: a default shortcut with optional user override
  * - KeybindsRegistry: system for registering, storing, and persisting keybinds
  *
- * Keybinds are stored and loaded from disk (keybinds.toml) and support user overrides
- * over default application bindings.
+ * Keybinds are stored and loaded from disk (keybinds.toml) and support user
+ * overrides over default application bindings.
  *
  * @note This system is tightly integrated with ImGui input handling.
  */
@@ -84,7 +86,7 @@ namespace FuncDoodle {
 		 * @brief Clears all keys from the mask.
 		 */
 		void Reset() {
-			for (unsigned long long & m_Key : m_Keys) {
+			for (unsigned long long& m_Key : m_Keys) {
 				m_Key = 0;
 			}
 		}
@@ -238,7 +240,8 @@ namespace FuncDoodle {
 
 	/**
 	 * @class KeybindsRegistry
-	 * @brief Stores and persists all keybinds used in FuncDoodle (default + user-defined)
+	 * @brief Stores and persists all keybinds used in FuncDoodle (default +
+	 * user-defined)
 	 *
 	 * Handles loading and saving keybinds via keybinds.toml.
 	 *
@@ -248,7 +251,8 @@ namespace FuncDoodle {
 		public:
 		/**
 		 * @fn KeybindsRegistry
-		 * @brief Creates a keybind registry rooted at a configuration directory.
+		 * @brief Creates a keybind registry rooted at a configuration
+		 * directory.
 		 *
 		 * @param rootPath Directory containing keybind storage files.
 		 */

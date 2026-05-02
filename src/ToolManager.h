@@ -46,7 +46,8 @@ namespace FuncDoodle {
 		public:
 		/**
 		 * @fn ToolManager
-		 * @brief Creates a tool manager bound to the application keybind registry.
+		 * @brief Creates a tool manager bound to the application keybind
+		 * registry.
 		 *
 		 * @param keybinds Keybind registry used for tool shortcuts.
 		 */

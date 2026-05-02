@@ -11,7 +11,8 @@
  * Playback tracking is implemented using mutex + condition variable
  * to safely coordinate concurrent audio operations.
  *
- * @note Designed for simple sound effect playback rather than full audio engine usage.
+ * @note Designed for simple sound effect playback rather than full audio engine
+ * usage.
  * @warning Static playback state is shared across all instances.
  */
 

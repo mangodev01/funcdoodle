@@ -11,8 +11,8 @@
  * - Basic arithmetic operators (XOR and -)
  *
  * @note This UUID implementation is custom and does NOT follow RFC 4122.
- * @warning Operator+ and operator- are not mathematically meaningful UUID operations;
- *          they are used purely for internal utility behavior.
+ * @warning Operator+ and operator- are not mathematically meaningful UUID
+ * operations; they are used purely for internal utility behavior.
  */
 
 #pragma once
@@ -47,7 +47,8 @@ namespace FuncDoodle {
 		static UUID FromString(const char* str);
 		/** @brief Streams the UUID in its string form. */
 		friend std::ostream& operator<<(std::ostream& os, const UUID& obj);
-		/** @brief Hash functor for using UUID as an associative-container key. */
+		/** @brief Hash functor for using UUID as an associative-container key.
+		 */
 		struct Hash {
 			/** @brief Computes a stable hash for a UUID value. */
 			size_t operator()(const UUID& uuid) const {
@@ -69,11 +70,13 @@ namespace FuncDoodle {
 		bool operator>(const UUID& other) const {
 			return m_Bytes > other.m_Bytes;
 		}
-		/** @brief Returns true when this UUID sorts before or equal to another. */
+		/** @brief Returns true when this UUID sorts before or equal to another.
+		 */
 		bool operator<=(const UUID& other) const {
 			return m_Bytes <= other.m_Bytes;
 		}
-		/** @brief Returns true when this UUID sorts after or equal to another. */
+		/** @brief Returns true when this UUID sorts after or equal to another.
+		 */
 		bool operator>=(const UUID& other) const {
 			return m_Bytes >= other.m_Bytes;
 		}
