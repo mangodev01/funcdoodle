@@ -1,3 +1,4 @@
 #include "MacroUtils.h"
+#include <string>
 
-std::vector<char*> s_Logs;
+std::vector<std::string> s_Logs;

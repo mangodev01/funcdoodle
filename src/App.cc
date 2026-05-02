@@ -104,7 +104,7 @@ namespace FuncDoodle {
 
 #ifdef DEBUG
 		m_Window.SetErrorCallback([](int err, const char* desc) {
-			FUNC_ERR("GLFW ERROR (" << err << "): " << desc);
+			FUNC_ERR("GLFW ERROR ({}): {}", err, desc);
 		});
 #endif
 
@@ -133,7 +133,7 @@ namespace FuncDoodle {
 			(void)entry;
 			char sel[37] = {0};
 			if (std::sscanf(line, "Theme=\"%36s\"", sel) == 1) {
-				FUNC_DBG("ReadLineFn read Theme: " << sel);
+				FUNC_DBG("ReadLineFn read Theme: {}", sel);
 				Get()->SetTheme(UUID::FromString(sel));
 			}
 			int sfxEnabled;
@@ -283,9 +283,6 @@ namespace FuncDoodle {
 	}
 
 	Application::~Application() {
-		for (char* log : s_Logs) {
-			delete[] log;
-		}
 		s_Logs.clear();
 	}
 
@@ -386,8 +383,7 @@ namespace FuncDoodle {
 	void Application::ReadProjectFile() {
 		// m_FilePath is the actual file that we're going to read
 		if (m_FilePath.empty()) {
-			FUNC_DBG("tried reading but m_FilePath is nullptr, probably means "
-					 "that the file dialog was cancelled");
+			FUNC_DBG("tried reading but m_FilePath is nullptr, probably means that the file dialog was cancelled");
 			return;
 		}
 

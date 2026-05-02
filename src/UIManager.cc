@@ -757,7 +757,9 @@ namespace FuncDoodle {
 
 				if (app->GetSettings().Sfx)
 					app->GetAssetLoader()->PlaySound(s_ExportSound);
-				FUNC_INF("Exporting to " << path);
+
+				FUNC_INF("Exporting to {}", path.string());
+
 				app->GetCurProj()->Export(
 					path.string().c_str(), app->GetExportFormat());
 

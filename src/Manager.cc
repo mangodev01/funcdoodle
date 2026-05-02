@@ -261,30 +261,27 @@ namespace FuncDoodle {
 
 		const auto logColor = [](const char* s) -> ImVec4 {
 			if (!s) {
-				return ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
+				return {1.0f, 1.0f, 1.0f, 1.0f};
 			}
 			if (std::strstr(s, "[Error]") || std::strstr(s, "[FATAL]")) {
-				return ImVec4(1.0f, 0.35f, 0.35f, 1.0f);
+				return {1.0f, 0.35f, 0.35f, 1.0f};
 			}
 			if (std::strstr(s, "[Warn]")) {
-				return ImVec4(1.0f, 0.75f, 0.25f, 1.0f);
+				return {1.0f, 0.75f, 0.25f, 1.0f};
 			}
 			if (std::strstr(s, "[Debug]")) {
-				return ImVec4(0.45f, 0.85f, 1.0f, 1.0f);
+				return {0.45f, 0.85f, 1.0f, 1.0f};
 			}
 			if (std::strstr(s, "[Info]")) {
-				return ImVec4(0.55f, 0.75f, 1.0f, 1.0f);
+				return {0.55f, 0.75f, 1.0f, 1.0f};
 			}
 			if (std::strstr(s, "[Note]")) {
-				return ImVec4(0.7f, 0.7f, 0.7f, 1.0f);
+				return {0.7f, 0.7f, 0.7f, 1.0f};
 			}
-			return ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
+			return {1.0f, 1.0f, 1.0f, 1.0f};
 		};
 
 		if (ImGui::Button("Clear")) {
-			for (char* log : s_Logs) {
-				delete[] log;
-			}
 			s_Logs.clear();
 		}
 
@@ -293,8 +290,9 @@ namespace FuncDoodle {
 		if (ImGui::Button("Copy")) {
 			ImGui::LogToClipboard();
 
-			for (const char* str : s_Logs) {
-				ImGui::LogText("%s\n", str ? str : "");
+			// don't really like that i have to use std::string for logs, but i think thats necessary
+			for (std::string str : s_Logs) {
+				ImGui::LogText("%s\n", str.c_str() ? str.c_str() : "");
 			}
 
 			ImGui::LogFinish();
@@ -304,8 +302,8 @@ namespace FuncDoodle {
 		ImGui::BeginChild("##logscroll", ImVec2(-1, -1), false,
 			ImGuiWindowFlags_HorizontalScrollbar);
 
-		for (const char* str : s_Logs) {
-			ImGui::TextColored(logColor(str), "%s", str ? str : "");
+		for (std::string str : s_Logs) {
+			ImGui::TextColored(logColor(str.c_str()), "%s", str.c_str() ? str.c_str(): "");
 		}
 
 		if (ImGui::GetScrollY() >= ImGui::GetScrollMaxY())

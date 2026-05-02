@@ -60,7 +60,7 @@ namespace FuncDoodle {
 	}
 
 	void ProjectFile::Export(const char* filePath, int format) {
-		FUNC_GRAY("Exporting to " << filePath);
+		FUNC_GRAY("Exporting to {}", filePath);
 
 		auto frames = AnimFrames();
 
@@ -361,7 +361,7 @@ namespace FuncDoodle {
 		}
 
 		file.read(reinterpret_cast<char*>(&plteLen), sizeof(plteLen));
-		FUNC_DBG("plteLen = " << plteLen);
+		FUNC_DBG("plteLen = {}", plteLen);
 
 		if (file.fail()) {
 			FUNC_FATAL("Failed to read file");
@@ -381,7 +381,7 @@ namespace FuncDoodle {
 
 		m_Frames.reset(new LongIndexArray(m_Width, m_Height, m_BG));
 		if (verMajor >= 0 && verMinor >= 2) {
-			FUNC_GRAY("Reading " << (unsigned long)frameCount << "frames...");
+			FUNC_GRAY("Reading {} frames...", (unsigned long)frameCount);
 			for (unsigned long i = 0; i < (unsigned long)frameCount; i++) {
 				ImageArray img(animWidth, animHeight, m_BG);
 				for (int y = 0; y < animHeight; y++) {
@@ -391,9 +391,8 @@ namespace FuncDoodle {
 						file.read(reinterpret_cast<char*>(bytes), sizeof(int));
 						int index = *reinterpret_cast<int*>(bytes);
 						if (index >= (int)plteLen) {
-							FUNC_DBG("Index -- " << index);
-							FUNC_DBG("Index out of bounds -- maybe the project "
-									 "file is corrupted..?");
+							FUNC_DBG("Index: {}", index);
+							FUNC_DBG("Index out of bounds; maybe the project file is corrupted..?");
 							FUNC_DBG("trying to break...");
 							file.seekg(start);
 							break;
@@ -409,7 +408,7 @@ namespace FuncDoodle {
 				file.read(reinterpret_cast<char*>(&null), 1);
 			}
 		} else {
-			FUNC_GRAY("Reading " << (long)frameCount << "frames...");
+			FUNC_GRAY("Reading {} frames...", (long)frameCount);
 			for (long i = 0; i < (long)frameCount; i++) {
 				ImageArray img(animWidth, animHeight, m_BG);
 				for (int y = 0; y < animHeight; y++) {
@@ -419,13 +418,11 @@ namespace FuncDoodle {
 
 						int index = *reinterpret_cast<int*>(bytes);
 
-						FUNC_DBG("Reading index, x=" << x << " y=" << y
-													 << " index=" << index);
+						FUNC_DBG("Reading index, x={} y={} index={}", x, y, index);
 
 						if (index < 0 || index >= (int)plteLen) {
-							FUNC_WARN("Index out of bounds -- maybe the "
-									  "project file is corrupted..?");
-							FUNC_INF("Index: " << index);
+							FUNC_WARN("Index out of bounds -- maybe the project file is corrupted..?");
+							FUNC_INF("Index: {}", index);
 							std::exit(-1);
 						}
 

@@ -28,8 +28,7 @@ namespace FuncDoodle::Platform {
 		bool invalid = false;
 
 		if (spec.Monitor < 0 || spec.Monitor >= monitorCount) {
-			FUNC_WARN(
-				"monitor " << spec.Monitor << " is invalid, using primary...");
+			FUNC_WARN("monitor {} is invalid, using primary...", spec.Monitor);
 			invalid = true;
 		}
 
@@ -55,7 +54,7 @@ namespace FuncDoodle::Platform {
 			// this->~Window();
 			// delete this;
 
-			FUNC_FATAL("Failed to initialize GLFW window -- " << desc);
+			FUNC_FATAL("Failed to initialize GLFW window: {}", desc);
 		}
 
 		glfwMakeContextCurrent(m_Handle);
@@ -73,8 +72,7 @@ namespace FuncDoodle::Platform {
 
 		PaError err = Pa_Initialize();
 		if (err != paNoError) {
-			FUNC_FATAL("Failed to initialize port audio: " +
-					   (std::string)Pa_GetErrorText(err));
+			FUNC_FATAL("Failed to initialize port audio: {}", Pa_GetErrorText(err));
 		}
 
 		InitImGui();
@@ -118,7 +116,7 @@ namespace FuncDoodle::Platform {
 	}
 
 	void Window::SetIcon(std::filesystem::path icon) {
-		FUNC_DBG("Setting window icon to " << icon << "...");
+		FUNC_DBG("Setting window icon to {}...", icon.string());
 		int width, height, chan;
 		unsigned char* data =
 			stbi_load(icon.string().c_str(), &width, &height, &chan, 0);
@@ -164,8 +162,7 @@ namespace FuncDoodle::Platform {
 		if (!glfwInit()) {
 			const char* description;
 			int error = glfwGetError(&description);
-			FUNC_FATAL("Failed to initialize GLFW: " << error << " -- "
-													 << description << "\n");
+			FUNC_FATAL("Failed to initialize GLFW: {}: {}\n", error, description);
 		}
 
 		g_GlfwInitted = true;

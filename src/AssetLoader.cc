@@ -26,10 +26,9 @@ namespace FuncDoodle {
 	void AssetLoader::InitAssets() {
 		FUNC_DBG("Finding assets path...");
 		if (std::filesystem::exists(m_AssetsPath)) {
-			FUNC_DBG("Found assets path @" << m_AssetsPath.string());
+			FUNC_DBG("Found assets path at {}", m_AssetsPath.string());
 		} else {
-			FUNC_FATAL("Failed to find assets path -- " << m_AssetsPath
-														<< " doesn't exist");
+			FUNC_FATAL("Failed to find assets path: {} doesn't exist", m_AssetsPath.string());
 		}
 
 		ImGuiIO& io = ImGui::GetIO();
@@ -60,10 +59,8 @@ namespace FuncDoodle {
 		unsigned char* data = stbi_load((m_AssetsPath / name).string().c_str(),
 			&width, &height, &channels, 0);
 		if (!data) {
-			FUNC_FATAL("Failed to load image\n"
-					   << (m_AssetsPath / name)
-					   << "\nTried to load from assets path -- " << m_AssetsPath
-					   << ", error: " << stbi_failure_reason());
+			FUNC_FATAL("Failed to load image\n{}\nTried to load from assets path -- {}, error: {}",
+				(m_AssetsPath / name).string(), m_AssetsPath.string(), stbi_failure_reason());
 		}
 
 		uint32_t textureID;
@@ -86,10 +83,8 @@ namespace FuncDoodle {
 		unsigned char* data = stbi_load((m_AssetsPath / name).string().c_str(),
 			&width, &height, &channels, 0);
 		if (!data) {
-			FUNC_FATAL("Failed to load image\n"
-					   << (m_AssetsPath / name)
-					   << "\nTried to load from assets path -- " << m_AssetsPath
-					   << ", error: " << stbi_failure_reason());
+			FUNC_FATAL("Failed to load image\n{}\nTried to load from assets path -- {}, error: {}",
+				(m_AssetsPath / name).string(), m_AssetsPath.string(), stbi_failure_reason());
 		}
 
 		uint32_t textureID;
@@ -105,11 +100,11 @@ namespace FuncDoodle {
 
 		return textureID;
 	}
-	AudioData AssetLoader::LoadSound(std::filesystem::path soundName) {
-		if (std::filesystem::exists(m_AssetsPath / soundName)) {
-			return m_AudioManager->ParseWav(m_AssetsPath / soundName);
+	AudioData AssetLoader::LoadSound(std::filesystem::path soundPath) {
+		if (std::filesystem::exists(m_AssetsPath / soundPath)) {
+			return m_AudioManager->ParseWav(m_AssetsPath / soundPath);
 		} else {
-			FUNC_FATAL("Sound " << soundName << " doesn't exist in assets/");
+			FUNC_FATAL("Sound assets/{} doesn't exist", soundPath.string());
 		}
 	}
 	void AssetLoader::PlaySound(AudioData data) {

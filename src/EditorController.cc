@@ -433,10 +433,11 @@ namespace FuncDoodle {
 			} else {
 				m_Sel = std::make_unique<SquareSelection>(m_SquareSel);
 			}
-			FUNC_DBG("m_SquareSel min: " << m_SquareSel.Min.x << ","
-										 << m_SquareSel.Min.y
-										 << "; max: " << m_SquareSel.Max.x
-										 << "," << m_SquareSel.Max.y);
+			FUNC_DBG("m_SquareSel min: {}, {}; max: {}, {}",
+					m_SquareSel.Min.x,
+					m_SquareSel.Min.y,
+					m_SquareSel.Max.x,
+					m_SquareSel.Max.y);
 		}
 
 		if (ImGui::IsMouseHoveringRect(frameMin, frameMax) && !shouldDraw &&

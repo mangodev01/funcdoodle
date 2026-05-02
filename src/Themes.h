@@ -119,16 +119,14 @@ namespace FuncDoodle {
 			toml::parse_result result =
 				toml::parse_file(std::string_view(path));
 			if (!result) {
-				FUNC_WARN("Failed to parse theme file... it's probably not "
-						  "valid TOML");
-				FUNC_WARN("error: " << result.error());
+				FUNC_WARN("Failed to parse theme file... it's probably not valid TOML");
+				FUNC_WARN("error: {}", result.error().description());
 				return nullptr;
 			}
 
 			toml::table table = result.table();
 			if (!table.contains("meta"sv) || !table.contains("colors"sv)) {
-				FUNC_WARN(
-					"Theme file is missing required fields (meta/colors)");
+				FUNC_WARN("Theme file is missing required fields (meta/colors)");
 				return nullptr;
 			}
 
@@ -171,12 +169,12 @@ namespace FuncDoodle {
 				try {
 					parsed = std::stoi(std::string(k.str()));
 				} catch (...) {
-					FUNC_WARN("Invalid color key: " << k.str());
+					FUNC_WARN("Invalid color key: {}", k.str());
 					continue;
 				}
 
 				if (parsed < 0 || parsed >= ImGuiCol_COUNT) {
-					FUNC_WARN("Invalid ImGui color index: " << parsed);
+					FUNC_WARN("Invalid ImGui color index: {}", parsed);
 					continue;
 				}
 
@@ -358,9 +356,7 @@ namespace FuncDoodle {
 				for (std::filesystem::directory_entry e :
 					std::filesystem::directory_iterator(path)) {
 					if (!e.is_regular_file()) {
-						FUNC_GRAY("Skipping "
-								  << e.path()
-								  << "because it isn't a regular file");
+						FUNC_GRAY("Skipping {} because it isn't a regular file", e.path().string());
 						continue;
 					}
 					if (e.path().filename().string().starts_with(".")) {
@@ -512,7 +508,7 @@ namespace FuncDoodle {
 							ImGui::End();
 							return;
 						}
-						FUNC_INF("Saving current theme to " << res << "!");
+						FUNC_INF("Saving current theme to {}!", res.string());
 						f << theme;
 						f.close();
 						g_SaveThemeOpen = false;
