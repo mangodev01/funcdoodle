@@ -5,8 +5,8 @@
 
 #include "Audio/AudioManager.h"
 #include "Test/Test.h"
-#include "UI/Themes.h"
 #include "UI/ImUtil.h"
+#include "UI/Themes.h"
 #include "Util/MacroUtils.h"
 #include "imgui_impl_glfw.h"
 
@@ -44,7 +44,8 @@ namespace FuncDoodle::Platform {
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #endif
 
-		// makes window floating by default on tiling compositors such as hyprland
+		// makes window floating by default on tiling compositors such as
+		// hyprland
 		glfwWindowHint(GLFW_FLOATING, GLFW_TRUE);
 
 		glfwWindowHintString(GLFW_X11_CLASS_NAME, "FuncDoodle");

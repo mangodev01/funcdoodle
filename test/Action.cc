@@ -11,19 +11,20 @@ int FuncDoodle_RunActionTests() {
 		char name[] = "Test";
 		char author[] = "Tester";
 		char desc[] = "Rotate frame";
-		auto proj = std::make_shared<FuncDoodle::ProjectFile>(name, 3, 3,
-			author, 12, desc, nullptr, FuncDoodle::Col{.r=255, .g=255, .b=255});
+		auto proj =
+			std::make_shared<FuncDoodle::ProjectFile>(name, 3, 3, author, 12,
+				desc, nullptr, FuncDoodle::Col{.r = 255, .g = 255, .b = 255});
 
 		FuncDoodle::Frame* frame = proj->AnimFrames()->Get(0);
-		FuncDoodle::Col A{.r=255, .g=0, .b=0};
-		FuncDoodle::Col B{.r=0, .g=255, .b=0};
-		FuncDoodle::Col C{.r=0, .g=0, .b=255};
-		FuncDoodle::Col D{.r=255, .g=255, .b=0};
-		FuncDoodle::Col E{.r=255, .g=0, .b=255};
-		FuncDoodle::Col F{.r=0, .g=255, .b=255};
-		FuncDoodle::Col G{.r=128, .g=128, .b=128};
-		FuncDoodle::Col H{.r=64, .g=64, .b=64};
-		FuncDoodle::Col I{.r=32, .g=32, .b=32};
+		FuncDoodle::Col A{.r = 255, .g = 0, .b = 0};
+		FuncDoodle::Col B{.r = 0, .g = 255, .b = 0};
+		FuncDoodle::Col C{.r = 0, .g = 0, .b = 255};
+		FuncDoodle::Col D{.r = 255, .g = 255, .b = 0};
+		FuncDoodle::Col E{.r = 255, .g = 0, .b = 255};
+		FuncDoodle::Col F{.r = 0, .g = 255, .b = 255};
+		FuncDoodle::Col G{.r = 128, .g = 128, .b = 128};
+		FuncDoodle::Col H{.r = 64, .g = 64, .b = 64};
+		FuncDoodle::Col I{.r = 32, .g = 32, .b = 32};
 
 		frame->SetPixel(0, 0, A);
 		frame->SetPixel(1, 0, B);
@@ -55,8 +56,9 @@ int FuncDoodle_RunActionTests() {
 		char name[] = "Test";
 		char author[] = "Tester";
 		char desc[] = "Rotate selection";
-		auto proj = std::make_shared<FuncDoodle::ProjectFile>(name, 4, 4,
-			author, 12, desc, nullptr, FuncDoodle::Col{.r=255, .g=255, .b=255});
+		auto proj =
+			std::make_shared<FuncDoodle::ProjectFile>(name, 4, 4, author, 12,
+				desc, nullptr, FuncDoodle::Col{.r = 255, .g = 255, .b = 255});
 		FuncDoodle::Frame* frame = proj->AnimFrames()->Get(0);
 
 		auto sel = std::make_shared<FuncDoodle::SquareSelection>();
@@ -64,10 +66,10 @@ int FuncDoodle_RunActionTests() {
 		sel->Min = ImVec2i(1, 1);
 		sel->Max = ImVec2i(2, 2);
 
-		FuncDoodle::Col SA{.r=10, .g=20, .b=30};
-		FuncDoodle::Col SB{.r=40, .g=50, .b=60};
-		FuncDoodle::Col SC{.r=70, .g=80, .b=90};
-		FuncDoodle::Col SD{.r=100, .g=110, .b=120};
+		FuncDoodle::Col SA{.r = 10, .g = 20, .b = 30};
+		FuncDoodle::Col SB{.r = 40, .g = 50, .b = 60};
+		FuncDoodle::Col SC{.r = 70, .g = 80, .b = 90};
+		FuncDoodle::Col SD{.r = 100, .g = 110, .b = 120};
 
 		frame->SetPixel(1, 1, SA);
 		frame->SetPixel(2, 1, SB);
@@ -94,8 +96,9 @@ int FuncDoodle_RunActionTests() {
 		char name[] = "Test";
 		char author[] = "Tester";
 		char desc[] = "Delete selection";
-		auto proj = std::make_shared<FuncDoodle::ProjectFile>(name, 4, 4,
-			author, 12, desc, nullptr, FuncDoodle::Col{.r=255, .g=255, .b=255});
+		auto proj =
+			std::make_shared<FuncDoodle::ProjectFile>(name, 4, 4, author, 12,
+				desc, nullptr, FuncDoodle::Col{.r = 255, .g = 255, .b = 255});
 		FuncDoodle::Frame* frame = proj->AnimFrames()->Get(0);
 
 		auto sel = std::make_shared<FuncDoodle::SquareSelection>();
@@ -103,10 +106,10 @@ int FuncDoodle_RunActionTests() {
 		sel->Min = ImVec2i(1, 1);
 		sel->Max = ImVec2i(2, 2);
 
-		FuncDoodle::Col SA{.r=10, .g=20, .b=30};
-		FuncDoodle::Col SB{.r=40, .g=50, .b=60};
-		FuncDoodle::Col SC{.r=70, .g=80, .b=90};
-		FuncDoodle::Col SD{.r=100, .g=110, .b=120};
+		FuncDoodle::Col SA{.r = 10, .g = 20, .b = 30};
+		FuncDoodle::Col SB{.r = 40, .g = 50, .b = 60};
+		FuncDoodle::Col SC{.r = 70, .g = 80, .b = 90};
+		FuncDoodle::Col SD{.r = 100, .g = 110, .b = 120};
 
 		frame->SetPixel(1, 1, SA);
 		frame->SetPixel(2, 1, SB);

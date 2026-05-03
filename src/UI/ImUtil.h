@@ -14,9 +14,9 @@
 
 #pragma once
 
+#include "UI/Gui.h"
 #include <algorithm>
 #include <filesystem>
-#include "UI/Gui.h"
 
 /**
  * @namespace ImUtil
@@ -26,14 +26,14 @@ namespace FuncDoodle::ImUtil {
 	// NOLINTBEGIN
 	inline constexpr char s_DefaultLayout[] = {
 #embed "../Conf/imgui.ini"
-		, 0
-	};
+		, 0};
 	// NOLINTEND
 
 	/**
 	 * @fn SetupDefaultLayout
 	 *
-	 * @brief Sets up the default ImGui layout in-case there's no user-defined one.
+	 * @brief Sets up the default ImGui layout in-case there's no user-defined
+	 * one.
 	 */
 	inline void SetupDefaultLayout() {
 		ImGuiIO& io = ImGui::GetIO();

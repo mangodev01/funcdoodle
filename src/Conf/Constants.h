@@ -145,7 +145,6 @@ namespace FuncDoodle {
 	 */
 	constexpr float g_FrameTimeDivisor = 1000.0f;
 
-
 #ifdef DEBUG
 	inline constexpr bool c_Debug = true;
 #else
@@ -155,7 +154,7 @@ namespace FuncDoodle {
 	/**
 	 * @fn FuncVer
 	 * @note Helper for initializing c_FuncVer
-	*/
+	 */
 	consteval const char* FuncVer() {
 		if constexpr (c_Debug) {
 			return "0.1.2-dev";

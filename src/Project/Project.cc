@@ -19,9 +19,9 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include <stb_image_write.h>
 
-#include <format>
-#include <ctime>
 #include <cstdlib>
+#include <ctime>
+#include <format>
 
 #define WRITEB(b)                                                        \
 	do {                                                                 \

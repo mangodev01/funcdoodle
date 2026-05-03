@@ -168,6 +168,8 @@ namespace FuncDoodle {
 		 * @return Pointer to the selected frame.
 		 */
 		Frame* SelectedFrame() {
+			if (!m_Proj)
+				return nullptr;
 			return m_Proj->AnimFrames()->Get(m_SelectedFrame);
 		}
 

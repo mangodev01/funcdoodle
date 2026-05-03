@@ -4,8 +4,8 @@
 
 #include "Conf/Constants.h"
 
-#include "Keybinds/Keybinds.h"
 #include "Keybinds/KeyHandler.h"
+#include "Keybinds/Keybinds.h"
 
 #include "Project/Project.h"
 
@@ -15,8 +15,8 @@
 
 #include "Asset/LoadedAssets.h"
 
-#include "Util/Ptr.h"
 #include "UI/Gui.h"
+#include "Util/Ptr.h"
 
 #include <algorithm>
 #include <cstdint>
@@ -84,6 +84,9 @@ namespace FuncDoodle {
 	}
 
 	void AnimationManager::RenderTimeline(bool prevEnabled) {
+		if (!m_Proj)
+			return;
+
 		// Set scrollbar size (thickness)
 		ImGui::GetStyle().ScrollbarSize =
 			20.0f;	// Increase the thickness of the scrollbars

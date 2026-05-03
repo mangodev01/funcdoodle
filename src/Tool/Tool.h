@@ -19,8 +19,8 @@
 
 #include "Project/Frame.h"
 
-#include "Keybinds/Keybinds.h"
 #include "Asset/LoadedAssets.h"
+#include "Keybinds/Keybinds.h"
 #include "UI/Gui.h"
 
 #include "Util/MacroUtils.h"

@@ -34,8 +34,9 @@
  * - Cross-platform support (Linux, macOS, Windows)
  *
  * @section build Building
- * FuncDoodle uses CMake. Debug builds are tagged with the `-dev` version suffix.
- * The project file format is versioned via @ref FDPVERMAJOR and @ref FDPVERMINOR.
+ * FuncDoodle uses CMake. Debug builds are tagged with the `-dev` version
+ * suffix. The project file format is versioned via @ref FDPVERMAJOR and @ref
+ * FDPVERMINOR.
  *
  * @section structure Code Structure
  * - `src/` — application source

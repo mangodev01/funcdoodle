@@ -24,8 +24,8 @@
 #pragma once
 
 #include <algorithm>
-#include <print>
 #include <filesystem>
+#include <print>
 #include <string>
 #include <vector>
 
@@ -72,8 +72,8 @@ extern std::vector<std::string> s_Logs;
 #define FUNC_AOV(x)                                                       \
 	do {                                                                  \
 		if (!(x)) {                                                       \
-			std::println("ASSERTION FAILED(DEBUG) at line {} in file {}",  \
-						 __LINE__, __FILE__);                             \
+			std::println("ASSERTION FAILED(DEBUG) at line {} in file {}", \
+				__LINE__, __FILE__);                                      \
 		}                                                                 \
 	} while (0)
 #else
@@ -82,7 +82,7 @@ extern std::vector<std::string> s_Logs;
 	do {                                                              \
 		if (!(x)) {                                                   \
 			std::println("VERIFICATION FAILED at line {} in file {}", \
-						 __LINE__, __FILE__);                         \
+				__LINE__, __FILE__);                                  \
 		}                                                             \
 	} while (0)
 #endif
@@ -96,12 +96,12 @@ extern std::vector<std::string> s_Logs;
  * allows you to provide a message
  */
 #ifdef DEBUG
-#define FUNC_AOV_EX(x, str)                         \
-	do {                                            \
-		if (!(x)) {                                 \
-			std::println("VERIFICATION FAILED: ");  \
-			FUNC_INF(str);                          \
-		}                                           \
+#define FUNC_AOV_EX(x, str)                        \
+	do {                                           \
+		if (!(x)) {                                \
+			std::println("VERIFICATION FAILED: "); \
+			FUNC_INF(str);                         \
+		}                                          \
 	} while (0)
 #else
 #ifdef NDEBUG
@@ -126,7 +126,7 @@ extern std::vector<std::string> s_Logs;
 	do {                                                                    \
 		if (!(x)) {                                                         \
 			std::println("STRIPPED ASSERTION FAILED at line {} in file {}", \
-						 __LINE__, __FILE__);                               \
+				__LINE__, __FILE__);                                        \
 		}                                                                   \
 	} while (0)
 #else
@@ -200,11 +200,11 @@ extern std::vector<std::string> s_Logs;
  * @def FUNC_FATAL
  * @brief Same as FUNC_ERR, but exits directly after logging.
  */
-#define FUNC_FATAL(...)                                                       \
-	do {                                                                      \
+#define FUNC_FATAL(...)                                                      \
+	do {                                                                     \
 		std::println("\033[1;31m[FATAL]: {}\033[0m", FUNC_FMT(__VA_ARGS__)); \
-		PUSH_LOG("[FATAL]: ", __VA_ARGS__);                                   \
-		std::exit(-1);                                                        \
+		PUSH_LOG("[FATAL]: ", __VA_ARGS__);                                  \
+		std::exit(-1);                                                       \
 	} while (0)
 
 /**
@@ -216,17 +216,17 @@ inline ImGuiCol InvertedImCol(uint8_t r, uint8_t g, uint8_t b) {
 }
 
 #ifdef _WIN32
-    #ifndef WIN32_LEAN_AND_MEAN
-        #define WIN32_LEAN_AND_MEAN
-    #endif
-    #include <windows.h>
-    #include <shellapi.h>
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+#include <shellapi.h>
+#include <windows.h>
 
-    #undef LoadImage
-    #undef PlaySound
-    
-    #define strncasecmp _strnicmp
-    #define strcasecmp _stricmp
+#undef LoadImage
+#undef PlaySound
+
+#define strncasecmp _strnicmp
+#define strcasecmp _stricmp
 #endif
 
 /**
@@ -235,7 +235,8 @@ inline ImGuiCol InvertedImCol(uint8_t r, uint8_t g, uint8_t b) {
  */
 inline void OpenFileExplorer(const std::filesystem::path& path) {
 #if defined(_WIN32)
-	ShellExecuteA(nullptr, "open", path.string().c_str(), nullptr, nullptr, SW_SHOW);
+	ShellExecuteA(
+		nullptr, "open", path.string().c_str(), nullptr, nullptr, SW_SHOW);
 #elif defined(__APPLE__)
 	std::system(("open " + path.string() + " &").c_str());
 #elif defined(__linux__)
