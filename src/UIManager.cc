@@ -241,7 +241,7 @@ namespace FuncDoodle {
 				}
 			}
 			if (ImGui::Button("Open themes directory")) {
-				OPEN_FILE_EXPLORER(app->GetThemesPath());
+				OpenFileExplorer(app->GetThemesPath());
 			}
 			ImGui::SameLine();
 			if (ImGui::Button("Refresh")) {

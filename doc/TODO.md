@@ -12,6 +12,7 @@
 - [x] moving selections
 - [x] FIGURE OUT WHATS CURRENTLY WRONG WITH THEME - it applies incorrectly on startup for some reason
 - [x] make .clang-tidy work
+- [ ] replace .fdp unsigned long frame indices with uint64_t for more consistency across various systems
 - [ ] non-destructive moving of selections
 - [ ] copy & pasting selections
 - [ ] qol stuff

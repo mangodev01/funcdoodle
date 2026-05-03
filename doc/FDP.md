@@ -23,7 +23,7 @@
 | str  | Animation description, terminating with byte 0 |
 | str  | Animation author, terminating with byte 0 |
 | [col](#Color) | BG color |
-| std::size_t | Palette length |
+| size_t | Palette length |
   
 
 ## <span style="color: cyan;">Palette</span>

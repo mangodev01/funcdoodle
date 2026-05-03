@@ -212,8 +212,8 @@ namespace FuncDoodle {
 		// 0.3
 		unsigned long frames = m_Frames->Size();
 
-		int major = FDPVERMAJOR;
-		int minor = FDPVERMINOR;
+		int major = c_FdpVerMajor;
+		int minor = c_FdpVerMinor;
 		WRITEB(major);
 		WRITEB(minor);
 		WRITEB(frames);		// frame count (default)
@@ -344,7 +344,7 @@ namespace FuncDoodle {
 			unsigned char null;
 			file.read(reinterpret_cast<char*>(&null), 1);
 		} else {
-			if (verMajor != FDPVERMAJOR && verMinor != FDPVERMINOR) {
+			if (verMajor != c_FdpVerMajor && verMinor != c_FdpVerMinor) {
 				verMinor++;
 				if (verMinor >= 10) {
 					verMinor = 0;
@@ -439,7 +439,7 @@ namespace FuncDoodle {
 				unsigned char null;
 				file.read(reinterpret_cast<char*>(&null), 1);
 			}
-			if (verMajor != FDPVERMAJOR && verMinor != FDPVERMINOR) {
+			if (verMajor != c_FdpVerMajor && verMinor != c_FdpVerMinor) {
 				verMinor++;
 				if (verMinor >= 10) {
 					verMinor = 0;
@@ -472,7 +472,7 @@ namespace FuncDoodle {
 		if (ImGui::GetIO().KeyAlt) {
 			auto* title = (char*)malloc(g_LargeBufferSize);
 			snprintf(title, g_LargeBufferSize, "FuncDoodle %s: %s%s (%d FPS)",
-				FUNCVER, AnimName(), !m_Saved ? "*" : "",
+				c_FuncVer, AnimName(), !m_Saved ? "*" : "",
 				(int)(fps > 0.0 ? fps : ImGui::GetIO().Framerate));
 
 			m_Window->SetTitle(title);
@@ -484,7 +484,7 @@ namespace FuncDoodle {
 		auto* title = (char*)malloc(g_LargeBufferSize);
 
 		snprintf(title, g_LargeBufferSize,
-			"FuncDoodle %s: %s%s (alt for details)", FUNCVER, AnimName(),
+			"FuncDoodle %s: %s%s (alt for details)", c_FuncVer, AnimName(),
 			!m_Saved ? "*" : "");
 
 		m_Window->SetTitle(title);

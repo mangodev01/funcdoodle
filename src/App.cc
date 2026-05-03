@@ -80,7 +80,7 @@ namespace FuncDoodle {
 
 		RegisterKeybinds();
 
-		auto title = FUNC_FMT("FuncDoodle {}", FUNCVER);
+		auto title = FUNC_FMT("FuncDoodle {}", c_FuncVer);
 		m_Window.SetTitle(title.c_str());
 
 		m_AssetLoader->LoadAssets();

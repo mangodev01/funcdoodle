@@ -24,16 +24,17 @@
 #pragma once
 
 #include <algorithm>
-#include <iostream>
+#include <print>
+#include <filesystem>
 #include <string>
 #include <vector>
+
+#include "Gui.h"
 
 /**
  * Global log storage.
  *
  * Stores log messages produced by logging macros.
- *
- * @warning Elements are raw pointers; lifetime is managed externally.
  */
 extern std::vector<std::string> s_Logs;
 
@@ -68,21 +69,21 @@ extern std::vector<std::string> s_Logs;
  * - NDEBUG: verification-style logging
  */
 #ifdef DEBUG
-#define FUNC_AOV(x)                                                    \
-	do {                                                               \
-		if (!(x)) {                                                    \
-			std::cout << "ASSERTION FAILED(DEBUG) at line" << __LINE__ \
-					  << " in file " << __FILE__ << std::endl;         \
-		}                                                              \
+#define FUNC_AOV(x)                                                       \
+	do {                                                                  \
+		if (!(x)) {                                                       \
+			std::println("ASSERTION FAILED(DEBUG) at line {} in file {}",  \
+						 __LINE__, __FILE__);                             \
+		}                                                                 \
 	} while (0)
 #else
 #ifdef NDEBUG
-#define FUNC_AOV(x)                                                \
-	do {                                                           \
-		if (!(x)) {                                                \
-			std::cout << "VERIFICATION FAILED at line" << __LINE__ \
-					  << " in file " << __FILE__ << std::endl;     \
-		}                                                          \
+#define FUNC_AOV(x)                                                   \
+	do {                                                              \
+		if (!(x)) {                                                   \
+			std::println("VERIFICATION FAILED at line {} in file {}", \
+						 __LINE__, __FILE__);                         \
+		}                                                             \
 	} while (0)
 #endif
 #endif
@@ -95,12 +96,12 @@ extern std::vector<std::string> s_Logs;
  * allows you to provide a message
  */
 #ifdef DEBUG
-#define FUNC_AOV_EX(x, str)                                    \
-	do {                                                       \
-		if (!(x)) {                                            \
-			std::cout << "VERIFICATION FAILED: " << std::endl; \
-			FUNC_INF(str);                                     \
-		}                                                      \
+#define FUNC_AOV_EX(x, str)                         \
+	do {                                            \
+		if (!(x)) {                                 \
+			std::println("VERIFICATION FAILED: ");  \
+			FUNC_INF(str);                          \
+		}                                           \
 	} while (0)
 #else
 #ifdef NDEBUG
@@ -121,12 +122,12 @@ extern std::vector<std::string> s_Logs;
  * Only present in DEBUG builds. Has no effect in release builds.
  */
 #ifdef DEBUG
-#define FUNC_DASS(x)                                                     \
-	do {                                                                 \
-		if (!(x)) {                                                      \
-			std::cout << "STRIPPED ASSERTION FAILED at line" << __LINE__ \
-					  << " in file " << __FILE__ << std::endl;           \
-		}                                                                \
+#define FUNC_DASS(x)                                                        \
+	do {                                                                    \
+		if (!(x)) {                                                         \
+			std::println("STRIPPED ASSERTION FAILED at line {} in file {}", \
+						 __LINE__, __FILE__);                               \
+		}                                                                   \
 	} while (0)
 #else
 #define FUNC_DASS(x)
@@ -146,11 +147,10 @@ extern std::vector<std::string> s_Logs;
  * @brief Debug log, only present in debug builds.
  */
 #ifdef DEBUG
-#define FUNC_DBG(...)                                                          \
-	do {                                                                       \
-		std::cout << "\033[36m[Debug]: " << FUNC_FMT(__VA_ARGS__) << "\033[0m" \
-				  << std::endl;                                                \
-		PUSH_LOG("[Debug]: ", __VA_ARGS__);                                    \
+#define FUNC_DBG(...)                                                      \
+	do {                                                                   \
+		std::println("\033[36m[Debug]: {}\033[0m", FUNC_FMT(__VA_ARGS__)); \
+		PUSH_LOG("[Debug]: ", __VA_ARGS__);                                \
 	} while (0)
 #else
 #define FUNC_DBG(...)
@@ -160,130 +160,87 @@ extern std::vector<std::string> s_Logs;
  * @def FUNC_INF
  * @brief Info log.
  */
-#define FUNC_INF(...)                                                         \
-	do {                                                                      \
-		std::cout << "\033[34m[Info]: " << FUNC_FMT(__VA_ARGS__) << "\033[0m" \
-				  << std::endl;                                               \
-		PUSH_LOG("[Info]: ", __VA_ARGS__);                                    \
+#define FUNC_INF(...)                                                     \
+	do {                                                                  \
+		std::println("\033[34m[Info]: {}\033[0m", FUNC_FMT(__VA_ARGS__)); \
+		PUSH_LOG("[Info]: ", __VA_ARGS__);                                \
 	} while (0)
 
 /**
  * @def FUNC_WARN
  * @brief Warning log.
  */
-#define FUNC_WARN(...)                                                        \
-	do {                                                                      \
-		std::cout << "\033[33m[Warn]: " << FUNC_FMT(__VA_ARGS__) << "\033[0m" \
-				  << std::endl;                                               \
-		PUSH_LOG("[Warn]: ", __VA_ARGS__);                                    \
+#define FUNC_WARN(...)                                                    \
+	do {                                                                  \
+		std::println("\033[33m[Warn]: {}\033[0m", FUNC_FMT(__VA_ARGS__)); \
+		PUSH_LOG("[Warn]: ", __VA_ARGS__);                                \
 	} while (0)
 
 /**
  * @def FUNC_GRAY
  * @brief Note log.
  */
-#define FUNC_GRAY(...)                                                        \
-	do {                                                                      \
-		std::cout << "\033[90m[Note]: " << FUNC_FMT(__VA_ARGS__) << "\033[0m" \
-				  << std::endl;                                               \
-		PUSH_LOG("[Note]: ", __VA_ARGS__);                                    \
+#define FUNC_GRAY(...)                                                    \
+	do {                                                                  \
+		std::println("\033[90m[Note]: {}\033[0m", FUNC_FMT(__VA_ARGS__)); \
+		PUSH_LOG("[Note]: ", __VA_ARGS__);                                \
 	} while (0)
 
 /**
  * @def FUNC_ERR
  * @brief A non-fatal, recoverable from error.
  */
-#define FUNC_ERR(...)                                               \
-	do {                                                            \
-		std::cout << "\033[1;35m[Error]: " << FUNC_FMT(__VA_ARGS__) \
-				  << "\033[0m" << std::endl;                        \
-		PUSH_LOG("[Error]: ", __VA_ARGS__);                         \
+#define FUNC_ERR(...)                                                        \
+	do {                                                                     \
+		std::println("\033[1;35m[Error]: {}\033[0m", FUNC_FMT(__VA_ARGS__)); \
+		PUSH_LOG("[Error]: ", __VA_ARGS__);                                  \
 	} while (0)
 
 /**
  * @def FUNC_FATAL
  * @brief Same as FUNC_ERR, but exits directly after logging.
  */
-#define FUNC_FATAL(...)                                             \
-	do {                                                            \
-		std::cout << "\033[1;31m[FATAL]: " << FUNC_FMT(__VA_ARGS__) \
-				  << "\033[0m" << std::endl;                        \
-		PUSH_LOG("[FATAL]: ", __VA_ARGS__);                         \
-		std::exit(-1);                                              \
+#define FUNC_FATAL(...)                                                       \
+	do {                                                                      \
+		std::println("\033[1;31m[FATAL]: {}\033[0m", FUNC_FMT(__VA_ARGS__)); \
+		PUSH_LOG("[FATAL]: ", __VA_ARGS__);                                   \
+		std::exit(-1);                                                        \
 	} while (0)
 
-#include "Gui.h"
-
 /**
- * @def INVERTED_IMCOL
+ * @fn InvertedImCol
  * @brief Produces an inverted opaque ImGui color from RGB components.
  */
-#define INVERTED_IMCOL(r, g, b) IM_COL32(255 - (r), 255 - (g), 255 - (b), 255)
+inline ImGuiCol InvertedImCol(uint8_t r, uint8_t g, uint8_t b) {
+	return IM_COL32(255 - r, 255 - g, 255 - b, 255);
+}
 
 #ifdef _WIN32
-#include <windows.h>
-/**
- * @def OPEN_FILE_EXPLORER
- * @brief Opens a path in the platform file explorer.
- */
-#define OPEN_FILE_EXPLORER(path) \
-	ShellExecuteA(               \
-		nullptr, "open", path.string().c_str(), nullptr, nullptr, SW_SHOW)
-#undef LoadImage
-#undef PlaySound
-#define strncasecmp _strnicmp
-#define strcasecmp _stricmp
-#elif __APPLE__
-#include <cstdlib>
-/**
- * @def OPEN_FILE_EXPLORER
- * @brief Opens a path in the platform file explorer.
- */
-#define OPEN_FILE_EXPLORER(path) \
-	std::system(("open " + path.string() + " &").c_str())
-#elif __linux__
-#include <cstdlib>
-/**
- * @def OPEN_FILE_EXPLORER
- * @brief Opens a path in the platform file explorer.
- */
-#define OPEN_FILE_EXPLORER(path) \
-	std::system(("xdg-open " + (path).string() + " &").c_str())
-#else
-/**
- * @def OPEN_FILE_EXPLORER
- * @brief Opens a path in the platform file explorer.
- */
-#define OPEN_FILE_EXPLORER(path) \
-	std::cerr << "Unsupported platform!" << std::endl
+    #ifndef WIN32_LEAN_AND_MEAN
+        #define WIN32_LEAN_AND_MEAN
+    #endif
+    #include <windows.h>
+    #include <shellapi.h>
+
+    #undef LoadImage
+    #undef PlaySound
+    
+    #define strncasecmp _strnicmp
+    #define strcasecmp _stricmp
 #endif
 
 /**
- * @def FUNCVER
- * @brief FuncDoodle version
- *
- * FuncDoodle now uses a semver-style version system
- * its just semver + an optional '-dev' suffix for debug builds
+ * @fn OpenFileExplorer
+ * @brief Opens a path in the platform file explorer.
  */
-
-#ifdef DEBUG
-#define FUNCVER "0.1.2-dev"
+inline void OpenFileExplorer(const std::filesystem::path& path) {
+#if defined(_WIN32)
+	ShellExecuteA(nullptr, "open", path.string().c_str(), nullptr, nullptr, SW_SHOW);
+#elif defined(__APPLE__)
+	std::system(("open " + path.string() + " &").c_str());
+#elif defined(__linux__)
+	std::system(("xdg-open " + path.string() + " &").c_str());
 #else
-#define FUNCVER "0.1.2"
+	FUNC_ERR("Unsupported platform!");
 #endif
-
-/**
- * @def FDPVERMAJOR
- * @brief FuncDoodle project file format major version.
- *
- * Indicates breaking changes in the .fdp file format.
- */
-#define FDPVERMAJOR 0
-
-/**
- * @def FDPVERMINOR
- * @brief FuncDoodle project file format minor version.
- *
- * Indicates minor changes in the .fdp file format.
- */
-#define FDPVERMINOR 4
+}

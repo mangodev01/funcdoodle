@@ -145,4 +145,43 @@ namespace FuncDoodle {
 	 */
 	constexpr float g_FrameTimeDivisor = 1000.0f;
 
+
+#ifdef DEBUG
+	inline constexpr bool c_Debug = true;
+#else
+	inline constexpr bool c_Debug = false;
+#endif
+
+	/**
+	 * @fn FuncVer
+	 * @note Helper for initializing c_FuncVer
+	*/
+	consteval const char* FuncVer() {
+		if constexpr (c_Debug) {
+			return "0.1.2-dev";
+		} else {
+			return "0.1.2";
+		}
+	}
+
+	/**
+	 * @brief The FuncDoodle version string.
+	 *
+	 * Evaluated entirely at compile-time via FuncVer().
+	 */
+	static constexpr const char* c_FuncVer = FuncVer();
+
+	/**
+	 * @brief FuncDoodle project file format major version.
+	 *
+	 * Indicates breaking changes in the .fdp file format.
+	 */
+	static constexpr uint8_t c_FdpVerMajor = 0;
+
+	/**
+	 * @brief FuncDoodle project file format minor version.
+	 *
+	 * Indicates minor changes in the .fdp file format.
+	 */
+	static constexpr uint8_t c_FdpVerMinor = 4;
 }  // namespace FuncDoodle
