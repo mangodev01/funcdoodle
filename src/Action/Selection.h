@@ -9,10 +9,11 @@
 
 #pragma once
 
-#include "../Selection.h"
-#include "Common.h"
-#include "Project.h"
-#include "Ptr.h"
+#include "Selection/Selection.h"
+#include "Action/Common.h"
+#include "Project/Project.h"
+#include "Util/Ptr.h"
+
 #include <cstdint>
 #include <utility>
 

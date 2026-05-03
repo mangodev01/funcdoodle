@@ -10,9 +10,9 @@
 
 #include <utility>
 
-#include "../Frame.h"
 #include "Common.h"
-#include "Project.h"
+#include "Project/Frame.h"
+#include "Project/Project.h"
 
 namespace FuncDoodle {
 

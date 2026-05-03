@@ -9,8 +9,8 @@
 
 #pragma once
 
-#include "../Selection.h"
-#include "Ptr.h"
+#include "Selection/Selection.h"
+#include "Util/Ptr.h"
 
 namespace FuncDoodle {
 

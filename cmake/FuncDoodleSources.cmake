@@ -32,6 +32,8 @@ function(funcdoodle_sources)
 		"lib/imgui_test_engine/imgui_test_engine/*.cpp"
 	)
 
+	add_compile_options(-Wno-c23-extensions)
+
 	add_executable(FuncDoodle
 		${FUNCDOODLE_GLAD_SOURCES}
 		${FUNCDOODLE_IMGUI_SOURCES}

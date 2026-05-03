@@ -3,10 +3,11 @@
 
 #include "Window.h"
 
-#include "AudioManager.h"
-#include "MacroUtils.h"
-#include "Test.h"
-#include "Themes.h"
+#include "Audio/AudioManager.h"
+#include "Test/Test.h"
+#include "UI/Themes.h"
+#include "UI/ImUtil.h"
+#include "Util/MacroUtils.h"
 #include "imgui_impl_glfw.h"
 
 #include <GLFW/glfw3.h>
@@ -42,6 +43,12 @@ namespace FuncDoodle::Platform {
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, 1);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #endif
+
+		// makes window floating by default on tiling compositors such as hyprland
+		glfwWindowHint(GLFW_FLOATING, GLFW_TRUE);
+
+		glfwWindowHintString(GLFW_X11_CLASS_NAME, "FuncDoodle");
+		glfwWindowHintString(GLFW_WAYLAND_APP_ID, "funcdoodle");
 
 		m_Handle = glfwCreateWindow(
 			spec.Width, spec.Height, spec.Title, monitor, nullptr);
@@ -177,6 +184,8 @@ namespace FuncDoodle::Platform {
 
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
+
+		ImUtil::SetupDefaultLayout();
 
 		FUNC_DBG("Window::InitImGui context created");
 

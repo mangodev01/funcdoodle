@@ -10,7 +10,7 @@
 #pragma once
 
 #include "Common.h"
-#include "Project.h"
+#include "Project/Project.h"
 #include <optional>
 
 namespace FuncDoodle {

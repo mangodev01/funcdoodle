@@ -1,6 +1,6 @@
 #include "Action.h"
 
-#include "Project.h"
+#include "Project/Project.h"
 
 namespace FuncDoodle {
 	void DeleteFrameAction::Undo() {

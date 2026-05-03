@@ -9,8 +9,8 @@
 
 #pragma once
 
-#include "Common.h"
-#include "Core.h"
-#include "Direction.h"
-#include "Frame.h"
-#include "Selection.h"
+#include "Action/Common.h"
+#include "Action/Core.h"
+#include "Action/Direction.h"
+#include "Action/Frame.h"
+#include "Action/Selection.h"
