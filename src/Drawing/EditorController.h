@@ -136,6 +136,11 @@ namespace FuncDoodle {
 		 */
 		void EndStroke(AnimationPlayer* player);
 		/**
+		 * @fn ResetState
+		 * @brief Clears transient editor state tied to the active project.
+		 */
+		void ResetState();
+		/**
 		 * @fn Sel
 		 * @brief Returns the active selection object.
 		 *

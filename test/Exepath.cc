@@ -1,5 +1,6 @@
-#include "ExePath.h"
-#include "Test.h"
+#include "Util/ExePath.h"
+#include "Test/Test.h"
+
 #include <cstring>
 
 int FuncDoodle_RunExePathTests() {

@@ -1,13 +1,13 @@
-#include "App.h"
+#include "Core/App.h"
 #include "GLFW/glfw3.h"
-#include "Test.h"
+#include "Test/Test.h"
 #include "imgui_internal.h"
 #include "imgui_te_context.h"
 #include "imgui_te_ui.h"
 #include "imgui_te_utils.h"
 
 static FuncDoodle::Application* GetApp() {
-	FuncDoodle::Application* app =
+	auto* app =
 		static_cast<FuncDoodle::Application*>(ImGui::GetIO().UserData);
 	if (!app) {
 		app = FuncDoodle::Application::Get();
@@ -16,7 +16,7 @@ static FuncDoodle::Application* GetApp() {
 }
 
 static void RegisterTests_FuncDoodle(ImGuiTestEngine* e) {
-	ImGuiTest* t = NULL;
+	ImGuiTest* t = nullptr;
 
 	t = IM_REGISTER_TEST(e, "funcdoodle", "menu_open_close");
 	t->GuiFunc = [](ImGuiTestContext*) {};

@@ -1,5 +1,5 @@
-#include "UUID.h"
-#include "Test.h"
+#include "Util/UUID.h"
+#include "Test/Test.h"
 
 int FuncDoodle_RunUUIDTests() {
 	TEST_SCOPE("UUID Tests");

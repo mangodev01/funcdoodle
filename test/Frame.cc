@@ -1,6 +1,6 @@
-#include "Frame.h"
+#include "Project/Frame.h"
 #include "Action/Direction.h"
-#include "Test.h"
+#include "Test/Test.h"
 
 int FuncDoodle_RunFrameTests() {
 	TEST_SCOPE("Frame Tests");

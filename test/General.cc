@@ -1,6 +1,6 @@
-#include "DynArr.h"
-#include "Frame.h"
-#include "Test.h"
+#include "Project/DynArr.h"
+#include "Project/Frame.h"
+#include "Test/Test.h"
 
 int FuncDoodle_RunColTests();
 int FuncDoodle_RunImageArrayTests();

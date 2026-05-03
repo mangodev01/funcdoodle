@@ -60,6 +60,16 @@ namespace FuncDoodle {
 		FinalizeStroke(player);
 	}
 
+	void EditorController::ResetState() {
+		m_Sel.reset();
+		m_SquareSel = SquareSelection{};
+		m_UndoByStroke = false;
+		m_StrokeActive = false;
+		m_StrokeFrameI = 0;
+		m_StrokeChanges.clear();
+		m_StrokeIndexByKey.clear();
+	}
+
 	bool EditorController::PaintPencil(Frame* frame, unsigned long frameI,
 		ToolManager* toolManager, AnimationPlayer* player, int pixelX,
 		int pixelY, bool mouseDown) {

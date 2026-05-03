@@ -344,8 +344,7 @@ namespace FuncDoodle {
 					}
 
 					if (ImGui::MenuItem("Close")) {
-						app->SetCurProj(nullptr);
-						app->GetManager()->SetProj(nullptr);
+						app->CloseCurrentProject();
 					}
 					if (ImGui::MenuItem("Edit project")) {
 						m_Popups.Open("edit_proj");

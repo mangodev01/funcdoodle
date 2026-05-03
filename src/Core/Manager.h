@@ -126,6 +126,11 @@ namespace FuncDoodle {
 			m_Player->SetProj(proj);
 		}
 		/**
+		 * @fn ResetProjectState
+		 * @brief Clears renderer/player state derived from the active project.
+		 */
+		void ResetProjectState();
+		/**
 		 * @fn SetSettings
 		 * @brief Rebinds the manager to a different settings object.
 		 *

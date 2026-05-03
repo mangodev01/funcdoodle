@@ -2,9 +2,13 @@
 
 Simple 2D frame-by-frame pixel-art animation program written in C++.
 
-## Screenshots
-![Welcome screen](screenshots/welcome.png)
-![Main animation screen](screenshots/main.png)
+## Screenshots (catppuccin)
+![Welcome screen](screenshots/catppuccin_welcome.png)
+![Main animation screen](screenshots/catppuccin_main.png)
+
+## Screenshots (normal)
+![Welcome screen](screenshots/normal_welcome.png)
+![Main animation screen](screenshots/normal_main.png)
 
 ## Doxygen documentation
 Doxygen documentation can be generated manually by invoking

@@ -45,6 +45,33 @@ namespace FuncDoodle {
 
 	AnimationManager::~AnimationManager() = default;
 
+	void AnimationManager::ResetProjectState() {
+		m_Proj.reset();
+		m_SelectedFrame = 0;
+		m_Player->SetPlaying(false);
+		m_Player->SetCurFrame(0);
+		m_Player->SetProj(nullptr);
+
+		for (FrameRenderer* renderer :
+			{m_FrameRenderer.get(), m_TimelineFrameRenderer.get()}) {
+			if (!renderer) {
+				continue;
+			}
+
+			EditorController::CanvasContext* ctx = renderer->GetCtx();
+			ctx->Frame = nullptr;
+			ctx->PreviousFrame = nullptr;
+			ctx->Index = 0;
+			ctx->Grid.reset();
+			ctx->LastMousePos = ImVec2(-1, -1);
+			ctx->LastHoverMousePos = ImVec2(-1, -1);
+		}
+
+		if (m_EditorController) {
+			m_EditorController->ResetState();
+		}
+	}
+
 	void AnimationManager::RegisterKeybinds() {
 		m_Keybinds.Register("rewind", {false, false, false, ImGuiKey_J});
 		m_Keybinds.Register("play", {false, false, false, ImGuiKey_K});

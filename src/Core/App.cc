@@ -474,6 +474,15 @@ namespace FuncDoodle {
 		}
 	}
 
+	void Application::CloseCurrentProject() {
+		m_FilePath.clear();
+		m_CacheProj.reset();
+		m_CurrentProj.reset();
+		m_Manager->ResetProjectState();
+		m_Window.SetCursorHidden(false);
+		m_UiManager.GetPopups().CloseAll();
+	}
+
 	void Application::SaveAt(const char* path) {
 		if (m_Settings.Sfx)
 			m_AssetLoader->PlaySound(s_ProjSaveSound);

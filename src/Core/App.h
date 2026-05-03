@@ -358,6 +358,11 @@ namespace FuncDoodle {
 		 */
 		void Save(bool exit = false);
 		/**
+		 * @fn CloseCurrentProject
+		 * @brief Releases the active project and clears dependent UI state.
+		 */
+		void CloseCurrentProject();
+		/**
 		 * @fn SaveAt
 		 * @brief Saves the current project at an explicit path.
 		 *
