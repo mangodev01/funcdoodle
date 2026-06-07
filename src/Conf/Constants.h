@@ -16,6 +16,12 @@
 
 namespace FuncDoodle {
 	/**
+	 * @brief Supported file extensions for importing/exporting images
+	 */
+	constexpr const char* g_SupportedExtensionsForImporting =
+		"png,jpg,jpeg,bmp,tga,psd,gif,hdr,pic,ppm,pgm,pnm";
+
+	/**
 	 * @brief Maximum value for an 8-bit color channel.
 	 */
 	constexpr uint8_t g_MaxColorValue = 255;

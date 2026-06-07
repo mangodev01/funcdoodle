@@ -1,6 +1,7 @@
 #include "Drawing/EditorController.h"
 
 #include "Conf/Constants.h"
+#include "Core/App.h"
 #include "Core/Grid.h"
 #include "Core/Player.h"
 #include "Tool/Tool.h"
@@ -338,31 +339,41 @@ namespace FuncDoodle {
 	}
 
 	void EditorController::HandleCanvasInput(CanvasContext& context) {
+		Application* app = Application::Get();
+		KeybindsRegistry& keys = app->GetKeybinds();
+
 		if (!ImGui::IsAnyItemActive() && ImGui::IsWindowFocused()) {
-			if (ImGui::IsKeyPressed(ImGuiKey_Equal)) {
+			if (keys.Get("zoom_in").IsPressed()) {
 				context.PixelScale += 1;
 			}
-			if (ImGui::IsKeyPressed(ImGuiKey_Minus)) {
+			if (keys.Get("zoom_out").IsPressed()) {
 				context.PixelScale = std::max(1, context.PixelScale - 1);
 			}
-			if (ImGui::IsKeyPressed(ImGuiKey_0)) {
+			if (keys.Get("reset_zoom").IsPressed()) {
 				context.PixelScale = 1;
 			}
-			if (ImGui::IsKeyPressed(ImGuiKey_T)) {
+			if (keys.Get("decrease_grid").IsPressed()) {
 				if (context.Grid->GridWidth() > 1)
 					context.Grid->SetGridWidth(context.Grid->GridWidth() - 1);
 				if (context.Grid->GridHeight() > 1)
 					context.Grid->SetGridHeight(context.Grid->GridHeight() - 1);
 			}
-			if (ImGui::IsKeyPressed(ImGuiKey_Y)) {
+			if (keys.Get("increase_grid").IsPressed()) {
 				context.Grid->SetGridWidth(context.Grid->GridWidth() + 1);
 				context.Grid->SetGridHeight(context.Grid->GridHeight() + 1);
 			}
-			if (ImGui::IsKeyPressed(ImGuiKey_G)) {
+			if (keys.Get("toggle_grid").IsPressed()) {
 				if (context.Grid->GridVisibility())
 					context.Grid->HideGrid();
 				else
 					context.Grid->ShowGrid();
+			}
+			if (keys.Get("export_frame").IsPressed()) {
+				FileDialog diag(g_SupportedExtensionsForImporting);
+
+				std::filesystem::path path = diag.Save();
+
+				context.Frame->Export(path.c_str());
 			}
 		}
 	}

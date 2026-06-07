@@ -37,7 +37,17 @@ namespace FuncDoodle {
 			"duplicate_frame_after", {false, false, false, ImGuiKey_M});
 		keybinds.Register(
 			"duplicate_frame_before", {false, false, false, ImGuiKey_N});
+
 		keybinds.Register("toggle_grid", {false, false, false, ImGuiKey_G});
+		keybinds.Register("increase_grid", {false, false, false, ImGuiKey_Y});
+		keybinds.Register("decrease_grid", {false, false, false, ImGuiKey_T});
+
+		keybinds.Register("zoom_out", {false, false, false, ImGuiKey_Minus});
+		keybinds.Register("zoom_in", {false, false, false, ImGuiKey_Equal});
+
+		keybinds.Register("reset_zoom", {false, false, false, ImGuiKey_0});
+
+		keybinds.Register("export_frame", {false, false, false, ImGuiKey_X});
 	}
 
 	void KeyHandler::HandleTimelineShortcuts(

@@ -1,27 +1,26 @@
 #include "FrameRenderer.h"
 
-#include "UI/Gui.h"
+#include "Core/App.h"
 
-#include "imgui.h"
-#include "imgui_internal.h"
+#include <filesystem>
+#include <imgui.h>
 
 #include "Project/Frame.h"
 
-#include <iostream>
-
 #include <memory>
-#include <utility>
 
-#include "Util/MacroUtils.h"
+#include "Conf/Constants.h"
 
 #include "Core/Player.h"
-
-#include <cmath>
+#include "UI/Gui.h"
 
 namespace FuncDoodle {
 	const float c_StatusBarHeight = 24.0f;
 
 	void FrameRenderer::RenderFrame() {
+		Application* app = Application::Get();
+		KeybindsRegistry& keys = app->GetKeybinds();
+
 		ImGui::Begin("Frame", nullptr,
 			ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 
@@ -36,31 +35,47 @@ namespace FuncDoodle {
 		}
 
 		if (ImGui::BeginPopupContextWindow()) {
-			if (ImGui::MenuItem("Zoom out", "-")) {
+			Shortcut zoomOut = keys.Get("zoom_out");
+			Shortcut resetZoom = keys.Get("reset_zoom");
+			Shortcut zoomIn = keys.Get("zoom_in");
+			Shortcut toggleGrid = keys.Get("toggle_grid");
+			Shortcut decreaseGrid = keys.Get("decrease_grid");
+			Shortcut increaseGrid = keys.Get("increase_grid");
+			Shortcut exportFrame = keys.Get("export_frame");
+
+			if (ImGui::MenuItem("Zoom out", zoomOut)) {
 				m_Ctx.PixelScale = std::max(1, m_Ctx.PixelScale - 1);
 			}
-			if (ImGui::MenuItem("Zoom equal", "0")) {
+			if (ImGui::MenuItem("Reset zoom", resetZoom)) {
 				m_Ctx.PixelScale = 1;
 			}
-			if (ImGui::MenuItem("Zoom in", "=")) {
+			if (ImGui::MenuItem("Zoom in", zoomIn)) {
 				m_Ctx.PixelScale++;
 			}
-			if (ImGui::MenuItem("Toggle Grid", "G")) {
+			if (ImGui::MenuItem("Toggle Grid", toggleGrid)) {
 				if (m_Ctx.Grid->GridVisibility())
 					m_Ctx.Grid->HideGrid();
 				else
 					m_Ctx.Grid->ShowGrid();
 			}
-			if (ImGui::MenuItem("Increase grid size", "Y")) {
+			if (ImGui::MenuItem("Increase grid size", increaseGrid)) {
 				m_Ctx.Grid->SetGridWidth(m_Ctx.Grid->GridWidth() + 1);
 				m_Ctx.Grid->SetGridHeight(m_Ctx.Grid->GridHeight() + 1);
 			}
-			if (ImGui::MenuItem("Decrease grid size", "T")) {
+			if (ImGui::MenuItem("Decrease grid size", decreaseGrid)) {
 				if (m_Ctx.Grid->GridWidth() > 1)
 					m_Ctx.Grid->SetGridWidth(m_Ctx.Grid->GridWidth() - 1);
 				if (m_Ctx.Grid->GridHeight() > 1)
 					m_Ctx.Grid->SetGridHeight(m_Ctx.Grid->GridHeight() - 1);
 			}
+			if (ImGui::MenuItem("Export", exportFrame)) {
+				FileDialog diag(g_SupportedExtensionsForImporting);
+
+				std::filesystem::path path = diag.Save();
+
+				m_Ctx.Frame->Export(path.c_str());
+			}
+
 			ImGui::EndPopup();
 		}
 		InitPixels();

@@ -41,9 +41,6 @@
 #include "Test/Test.h"
 
 namespace FuncDoodle {
-	static constexpr const char* g_SupportedExtensionsForImporting =
-		"png,jpg,jpeg,bmp,tga,psd,gif,hdr,pic,ppm,pgm,pnm";
-
 	Application* Application::s_Instance = nullptr;
 	Application::Application()
 		: m_CurrentProj(nullptr), m_CacheProj(nullptr),

@@ -88,7 +88,7 @@ namespace FuncDoodle {
 			// i think the only reason i wrote this code was to avoid using a
 			// ffmpeg wrapper lib thing but like really..?
 			//
-			// so yea sorry for that
+			// so yea sorry about that
 			// idk if/when i'll fix this
 			// see you until then
 			char cmd[g_LargeBufferSize];

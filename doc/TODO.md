@@ -12,6 +12,8 @@
 - [x] moving selections
 - [x] FIGURE OUT WHATS CURRENTLY WRONG WITH THEME - it applies incorrectly on startup for some reason
 - [x] make .clang-tidy work
+- [x] cleanup settings menu
+- [x] frame importing/exporting
 - [ ] replace .fdp unsigned long frame indices with uint64_t for more consistency across various systems
 - [ ] non-destructive moving of selections
 - [ ] copy & pasting selections
@@ -24,4 +26,5 @@
 - [ ] add text functionality
 - [ ] bug fixing
 - [ ] gzip compression for .fdp
+- [ ] implement animations project-wide with ImAnim
 - [ ] shader system where you can select some frames, right click, click add shader, then literally **type out a GLSL shader** and AS you update it, the shader system will literally compile **what you're typing** and provide *real-time* ***imgui sliders and or imgui inputs***
