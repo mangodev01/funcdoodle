@@ -9,7 +9,7 @@
 #include <cstring>
 #include <utility>
 
-#include "Util/MacroUtils.h"
+#include "Conf/FuncPCH.h"
 
 namespace FuncDoodle {
 	KeyMask::KeyMask() {

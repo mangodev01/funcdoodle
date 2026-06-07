@@ -9,9 +9,8 @@
 #include <vector>
 
 #include "Conf/Constants.h"
+#include "Conf/FuncPCH.h"
 #include "UI/Gui.h"
-
-#include "Util/MacroUtils.h"
 
 #include "Util/Ptr.h"
 #include <stb_image_write.h>

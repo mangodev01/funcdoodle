@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.16)
 
 if(UNIX)
 	set(CMAKE_C_COMPILER /usr/bin/clang)

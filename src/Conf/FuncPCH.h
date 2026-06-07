@@ -1,5 +1,5 @@
 /**
- * @file MacroUtils.h
+ * @file FuncPCH.h
  * @brief Logging system, assertion macros, platform utilities, and build/config
  * macros.
  *
@@ -28,8 +28,6 @@
 #include <print>
 #include <string>
 #include <vector>
-
-#include "UI/Gui.h"
 
 /**
  * Global log storage.
@@ -206,14 +204,6 @@ extern std::vector<std::string> s_Logs;
 		PUSH_LOG("[FATAL]: ", __VA_ARGS__);                                  \
 		std::exit(-1);                                                       \
 	} while (0)
-
-/**
- * @fn InvertedImCol
- * @brief Produces an inverted opaque ImGui color from RGB components.
- */
-inline ImGuiCol InvertedImCol(uint8_t r, uint8_t g, uint8_t b) {
-	return IM_COL32(255 - r, 255 - g, 255 - b, 255);
-}
 
 #ifdef _WIN32
 #ifndef WIN32_LEAN_AND_MEAN

@@ -5,7 +5,7 @@
 
 #include <random>
 
-#include "MacroUtils.h"
+#include "Conf/FuncPCH.h"
 
 namespace FuncDoodle {
 	std::ostream& operator<<(std::ostream& os, const UUID& obj) {

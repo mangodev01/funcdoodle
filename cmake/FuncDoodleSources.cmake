@@ -41,4 +41,8 @@ function(funcdoodle_sources)
 		${NFD_SOURCES}
 		${SRC}
 	)
+
+	target_precompile_headers(FuncDoodle PRIVATE
+		"$<$<COMPILE_LANGUAGE:CXX>:Conf/FuncPCH.h>"
+	)
 endfunction()
