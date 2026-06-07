@@ -22,8 +22,6 @@ namespace FuncDoodle {
 	const float c_StatusBarHeight = 24.0f;
 
 	void FrameRenderer::RenderFrame() {
-		ImGui::SetNextWindowPos(ImVec2(0, 32), ImGuiCond_FirstUseEver);
-		ImGui::SetNextWindowSize(ImVec2(1073, 862), ImGuiCond_FirstUseEver);
 		ImGui::Begin("Frame", nullptr,
 			ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 

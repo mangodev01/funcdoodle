@@ -92,9 +92,6 @@ namespace FuncDoodle {
 			20.0f;	// Increase the thickness of the scrollbars
 
 		// Begin the window with horizontal scrollbar enabled
-		ImGui::SetNextWindowPos(ImVec2(0, 920), ImGuiCond_FirstUseEver);
-		ImGui::SetNextWindowSize(
-			ImVec2(g_TimelineWidth, g_TimelineHeight), ImGuiCond_FirstUseEver);
 		ImGui::Begin("Timeline", nullptr,
 			ImGuiWindowFlags_HorizontalScrollbar |
 				ImGuiWindowFlags_NoBackground);

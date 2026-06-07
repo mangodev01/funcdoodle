@@ -41,7 +41,7 @@ namespace FuncDoodle {
 		float menuBarHeight = ImGui::GetFrameHeight();
 		ImVec2 nextWindowPos = ImVec2(
 			vp->Pos.x + safe.x - 2, vp->Pos.y + menuBarHeight + safe.y - 3);
-		ImGui::SetNextWindowPos(nextWindowPos, ImGuiCond_Always);
+
 		size.y -= menuBarHeight;
 		ImGui::SetNextWindowSize(size, ImGuiCond_Always);
 		ImGui::SetNextWindowViewport(vp->ID);
@@ -195,6 +195,8 @@ namespace FuncDoodle {
 			m_Popups.Close("pref");
 		}
 		if (ImGui::BeginPopup("EditPrefs")) {
+			ImGui::SeparatorText("Themes");
+
 			if (ImGui::BeginCombo(
 					"Theme", Themes::g_Themes[app->GetTheme()].Name)) {
 				for (auto& [uuid, theme] : Themes::g_Themes) {
@@ -214,47 +216,68 @@ namespace FuncDoodle {
 				}
 				ImGui::EndCombo();
 			}
-			if (ImGui::Button("Save current")) {
-				Themes::g_SaveThemeOpen = true;
-			}
-			ImGui::SameLine();
-			if (ImGui::Button("Add temporary from file")) {
-				FileDialog dialog = "toml";
-				static Themes::CustomTheme* style;
-				std::vector<std::filesystem::path> themes =
-					dialog.OpenMultiple();
 
-				for (auto path : themes) {
-					style = Themes::LoadThemeFromFile(path.string().c_str());
+			if (ImGui::BeginTable("themes", 2)) {
+				ImGui::TableSetupColumn(
+					"", ImGuiTableColumnFlags_WidthStretch, 1.0f);
+				ImGui::TableSetupColumn(
+					"", ImGuiTableColumnFlags_WidthStretch, 1.0f);
 
-					if (style) {
-						auto [it, inserted] =
-							Themes::g_Themes.emplace(style->Uuid, *style);
-						if (!inserted && style->OwnsMeta) {
-							std::free(const_cast<char*>(style->Name));
-							std::free(const_cast<char*>(style->Author));
-							style->Name = "";
-							style->Author = "";
-							style->OwnsMeta = false;
+				ImGui::TableNextColumn();
+				if (ImGui::Button("Save", ImVec2(-FLT_MIN, 0))) {
+					Themes::g_SaveThemeOpen = true;
+				}
+
+				ImGui::TableNextColumn();
+				if (ImGui::Button("Add", ImVec2(-FLT_MIN, 0))) {
+					FileDialog dialog = "toml";
+					static Themes::CustomTheme* style;
+					std::vector<std::filesystem::path> themes =
+						dialog.OpenMultiple();
+
+					for (const std::filesystem::path& path : themes) {
+						style =
+							Themes::LoadThemeFromFile(path.string().c_str());
+
+						if (style) {
+							auto [it, inserted] =
+								Themes::g_Themes.emplace(style->Uuid, *style);
+							if (!inserted && style->OwnsMeta) {
+								std::free(const_cast<char*>(style->Name));
+								std::free(const_cast<char*>(style->Author));
+								style->Name = "";
+								style->Author = "";
+								style->OwnsMeta = false;
+							}
 						}
 					}
 				}
-			}
-			if (ImGui::Button("Open themes directory")) {
-				OpenFileExplorer(app->GetThemesPath());
-			}
-			ImGui::SameLine();
-			if (ImGui::Button("Refresh")) {
-				Themes::ClearThemes();
-				Themes::LoadThemes(app->GetThemesPath());
+
+				ImGui::TableNextRow();
+				ImGui::TableNextColumn();
+
+				if (ImGui::Button("Open directory", ImVec2(-FLT_MIN, 0))) {
+					OpenFileExplorer(app->GetThemesPath());
+				}
+
+				ImGui::TableNextColumn();
+				if (ImGui::Button("Refresh", ImVec2(-FLT_MIN, 0))) {
+					Themes::ClearThemes();
+					Themes::LoadThemes(app->GetThemesPath());
+				}
+
+				ImGui::EndTable();
 			}
 
-			ImGui::Checkbox("SFX", &app->GetSettings().Sfx);
-			ImGui::SameLine();
+			ImGui::SeparatorText("Canvas");
 			ImGui::Checkbox("Preview", &app->GetSettings().Preview);
 			ImGui::SameLine();
 			ImGui::Checkbox("Undo by stroke", &app->GetSettings().UndoByStroke);
 
+			ImGui::SeparatorText("Audio");
+			ImGui::Checkbox("SFX", &app->GetSettings().Sfx);
+
+			ImGui::SeparatorText("Performance");
 			ImGui::InputDouble("FPS limit", &app->GetFrameLimitCache());
 
 			if (ImUtil::EnterPressed()) {
@@ -557,11 +580,6 @@ namespace FuncDoodle {
 			ImGui::OpenPopup("EditProj");
 		}
 
-		if (ImGui::IsPopupOpen("EditProj")) {
-			ImGui::SetNextWindowFocus();
-			ImGui::SetNextWindowPos(ImVec2(485, 384), ImGuiCond_FirstUseEver);
-			ImGui::SetNextWindowSize(ImVec2(309, 312), ImGuiCond_FirstUseEver);
-		}
 		if (ImGui::BeginPopupModal("EditProj", m_Popups.Get("edit_proj"),
 				ImGuiWindowFlags_AlwaysAutoResize) &&
 			app->GetCurProj()) {
@@ -632,12 +650,6 @@ namespace FuncDoodle {
 
 		if (m_Popups.IsOpen("new")) {
 			ImGui::OpenPopup("NewProj");
-		}
-
-		if (ImGui::IsPopupOpen("NewProj")) {
-			ImGui::SetNextWindowFocus();
-			ImGui::SetNextWindowPos(ImVec2(376, 436), ImGuiCond_FirstUseEver);
-			ImGui::SetNextWindowSize(ImVec2(350, 336), ImGuiCond_FirstUseEver);
 		}
 
 		if (ImGui::BeginPopupModal("NewProj", m_Popups.Get("new"),
