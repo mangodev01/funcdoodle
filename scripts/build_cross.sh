@@ -52,6 +52,9 @@ fi
 cmake_args=(
 	-DCMAKE_TOOLCHAIN_FILE="$root_dir/mingw.cmake"
 	-DCMAKE_BUILD_TYPE="$arg1"
+	-DCMAKE_C_COMPILER_LAUNCHER=ccache
+	-DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+	-G Ninja
 	-DFUNCDOODLE_USE_BUNDLED_PORTAUDIO="$use_bundled"
 	-DPA_USE_JACK=OFF
 )
@@ -155,7 +158,10 @@ if [[ "$use_bundled" == "ON" || ( -n "$mac_pa_incl" && -n "$mac_pa_lib_x86" && -
 		cmake_args=(
 			-DCMAKE_TOOLCHAIN_FILE="$root_dir/macos.cmake"
 			-DCMAKE_BUILD_TYPE="$arg1"
+			-DCMAKE_C_COMPILER_LAUNCHER=ccache
+			-DCMAKE_CXX_COMPILER_LAUNCHER=ccache
 			-DCMAKE_OSX_ARCHITECTURES="$arch"
+			-G Ninja
 			-DFUNCDOODLE_USE_BUNDLED_PORTAUDIO="$use_bundled"
 			-DPA_USE_JACK=OFF
 		)

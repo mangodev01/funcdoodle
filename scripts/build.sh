@@ -127,6 +127,8 @@ mkdir -p "$bin_dir" || exit -1
 pushd "$bin_dir" >/dev/null || exit -1
 cmake_args=(
 	-DCMAKE_BUILD_TYPE=$arg1
+	-DCMAKE_C_COMPILER_LAUNCHER=ccache
+	-DCMAKE_CXX_COMPILER_LAUNCHER=ccache
 	-DISTILING=$( (( arg2 == "true" )) && echo "ON" || echo "OFF" )
 	-DBUILD_TESTS=OFF
 	-DBUILD_IMTESTS=OFF
@@ -138,9 +140,9 @@ if [[ "${use_bundled:-OFF}" != "ON" ]]; then
 		cmake_args+=(-DPORTAUDIO_INCLDIR="$pa_incldir")
 	fi
 fi
-cmake "${cmake_args[@]}" "$root_dir" || exit -1
+cmake "${cmake_args[@]}" -G Ninja "$root_dir" || exit -1
 jobs=$(( ($(nproc_compat) + 2) / 2 ))
-make -j"$jobs" || exit -1
+ninja -j"$jobs" || exit -1
 cp -r "$root_dir/assets" . || exit -1
 cp -r "$root_dir/themes" . || exit -1
 popd >/dev/null || exit -1

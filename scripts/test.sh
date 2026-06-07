@@ -52,9 +52,9 @@ fi
 
 mkdir -p "$bin_dir"
 pushd "$bin_dir" >/dev/null
-cmake -DCMAKE_BUILD_TYPE="$mode" -DISTILING=ON -DBUILD_TESTS=ON "$root_dir"
+cmake -DCMAKE_BUILD_TYPE="$mode" -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -G Ninja -DISTILING=ON -DBUILD_TESTS=ON "$root_dir"
 jobs=$(( ($(nproc) + 2) / 3 ))
-make -j"$jobs"
+ninja -j"$jobs"
 popd >/dev/null
 
 ASAN_OPTIONS="${ASAN_OPTIONS:-detect_leaks=0}" \
