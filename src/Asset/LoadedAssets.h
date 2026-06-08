@@ -76,6 +76,30 @@ namespace FuncDoodle {
 	 */
 	extern uint32_t s_SelectTexId;
 	/**
+	 * @var s_Left
+	 * @brief Left arrow icon texture.
+	 */
+	extern uint32_t s_Left;
+
+	/**
+	 * @var s_Down
+	 * @brief Down arrow icon texture.
+	 */
+	extern uint32_t s_Down;
+
+	/**
+	 * @var s_Up
+	 * @brief Up arrow icon texture.
+	 */
+	extern uint32_t s_Up;
+
+	/**
+	 * @var s_Right
+	 * @brief Right arrow icon texture.
+	 */
+	extern uint32_t s_Right;
+
+	/**
 	 * @var s_ProjCreateSound
 	 * @brief Sound played when creating a project.
 	 */

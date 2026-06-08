@@ -15,6 +15,10 @@ namespace FuncDoodle {
 	uint32_t s_TextTexId = 0;
 	uint32_t s_AddTexId = 0;
 	uint32_t s_OpenTexId = 0;
+	uint32_t s_Left = 0;
+	uint32_t s_Down = 0;
+	uint32_t s_Up = 0;
+	uint32_t s_Right = 0;
 
 	AudioData s_ProjCreateSound;
 	AudioData s_ProjSaveSound;
@@ -35,6 +39,10 @@ namespace FuncDoodle {
 		s_AddTexId = LoadImage("add.png");
 		s_OpenTexId = LoadImage("folder.png");
 		s_SelectTexId = LoadImage("select.png");
+		s_Left = LoadImage("left.png");
+		s_Down = LoadImage("down.png");
+		s_Up = LoadImage("up.png");
+		s_Right = LoadImage("right.png");
 
 		// audio
 		s_ProjCreateSound = LoadSound("create.wav");

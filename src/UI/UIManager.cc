@@ -390,17 +390,104 @@ namespace FuncDoodle {
 			if (ImGui::BeginMenu("Edit", true)) {
 				if (app->GetCurProj()) {
 					if (ImGui::BeginMenu("Transform")) {
-						if (ImGui::MenuItem("Rotate 90°")) {
-							app->Rotate(90);
+						if (ImGui::BeginMenu("Rotate")) {
+							if (ImGui::MenuItem("90°")) {
+								app->Rotate(90);
+							}
+
+							if (ImGui::MenuItem("-90°")) {
+								app->Rotate(-90);
+							}
+
+							if (ImGui::MenuItem("Rotate")) {
+								m_Popups.Open("rotate");
+							}
+
+
+							ImGui::EndMenu();
 						}
 
-						if (ImGui::MenuItem("Rotate -90°")) {
-							app->Rotate(-90);
+						if (ImGui::BeginMenu("Move")) {
+							{
+								ImVec2 pos = ImGui::GetCursorScreenPos();
+								float h = ImGui::GetFrameHeight();
+
+								bool clicked = ImGui::Selectable("##left", false);
+
+								ImGui::SetCursorScreenPos(pos);
+								ImGui::Image((ImTextureID)(intptr_t)s_Left, ImVec2(20, 20));
+
+								ImGui::SameLine();
+								ImGui::TextUnformatted(m_WaitingForKey ? nullptr : app->GetKeybinds().Get("move_selection_left"));
+
+								if (clicked) {
+									if (app->GetController()->Sel()) {
+										app->MoveCurrentSelection(Direction::Left);
+									}
+								}
+							}
+
+							{
+								ImVec2 pos = ImGui::GetCursorScreenPos();
+								float h = ImGui::GetFrameHeight();
+
+								bool clicked = ImGui::Selectable("##right", false);
+
+								ImGui::SetCursorScreenPos(pos);
+								ImGui::Image((ImTextureID)(intptr_t)s_Right, ImVec2(20, 20));
+
+								ImGui::SameLine();
+								ImGui::TextUnformatted(m_WaitingForKey ? nullptr : app->GetKeybinds().Get("move_selection_right"));
+
+								if (clicked) {
+									if (app->GetController()->Sel()) {
+										app->MoveCurrentSelection(Direction::Right);
+									}
+								}
+							}
+
+							{
+								ImVec2 pos = ImGui::GetCursorScreenPos();
+								float h = ImGui::GetFrameHeight();
+
+								bool clicked = ImGui::Selectable("##up", false);
+
+								ImGui::SetCursorScreenPos(pos);
+								ImGui::Image((ImTextureID)(intptr_t)s_Up, ImVec2(20, 20));
+
+								ImGui::SameLine();
+								ImGui::TextUnformatted(m_WaitingForKey ? nullptr : app->GetKeybinds().Get("move_selection_up"));
+
+								if (clicked) {
+									if (app->GetController()->Sel()) {
+										app->MoveCurrentSelection(Direction::Up);
+									}
+								}
+							}
+
+
+							{
+								ImVec2 pos = ImGui::GetCursorScreenPos();
+								float h = ImGui::GetFrameHeight();
+
+								bool clicked = ImGui::Selectable("##down", false);
+
+								ImGui::SetCursorScreenPos(pos);
+								ImGui::Image((ImTextureID)(intptr_t)s_Down, ImVec2(20, 20));
+
+								ImGui::SameLine();
+								ImGui::TextUnformatted(m_WaitingForKey ? nullptr : app->GetKeybinds().Get("move_selection_down"));
+
+								if (clicked) {
+									if (app->GetController()->Sel()) {
+										app->MoveCurrentSelection(Direction::Down);
+									}
+								}
+							}
+
+							ImGui::EndMenu();
 						}
 
-						if (ImGui::MenuItem("Rotate...")) {
-							m_Popups.Open("rotate");
-						}
 
 						ImGui::EndMenu();
 					}
@@ -427,42 +514,6 @@ namespace FuncDoodle {
 											: app->GetKeybinds().Get("del"))) {
 						if (app->GetController()->Sel()) {
 							app->DeleteCurrentSelection();
-						}
-					}
-
-					if (ImGui::MenuItem("Move left",
-							m_WaitingForKey ? nullptr
-											: app->GetKeybinds().Get(
-												  "move_selection_left"))) {
-						if (app->GetController()->Sel()) {
-							app->MoveCurrentSelection(Direction::Left);
-						}
-					}
-
-					if (ImGui::MenuItem("Move right",
-							m_WaitingForKey ? nullptr
-											: app->GetKeybinds().Get(
-												  "move_selection_right"))) {
-						if (app->GetController()->Sel()) {
-							app->MoveCurrentSelection(Direction::Right);
-						}
-					}
-
-					if (ImGui::MenuItem("Move up",
-							m_WaitingForKey ? nullptr
-											: app->GetKeybinds().Get(
-												  "move_selection_up"))) {
-						if (app->GetController()->Sel()) {
-							app->MoveCurrentSelection(Direction::Up);
-						}
-					}
-
-					if (ImGui::MenuItem("Move down",
-							m_WaitingForKey ? nullptr
-											: app->GetKeybinds().Get(
-												  "move_selection_down"))) {
-						if (app->GetController()->Sel()) {
-							app->MoveCurrentSelection(Direction::Down);
 						}
 					}
 				}
