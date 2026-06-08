@@ -1,44 +1,32 @@
-#include "Asset/AssetLoader.h"
-#include "Conf/Constants.h"
-#include "Keybinds/KeyHandler.h"
-#include "Project/Frame.h"
-#include "UI/Gui.h"
 #include "Conf/FuncPCH.h"
-#include <glad/glad.h>
-
-#include "Action/Action.h"
 
 #include "App.h"
 
+#include "Asset/AssetLoader.h"
+#include "Asset/LoadedAssets.h"
+#include "Conf/Constants.h"
+#include "Keybinds/KeyHandler.h"
+#include "Keybinds/Keybinds.h"
+#include "Platform/Window.h"
+#include "Project/Frame.h"
+#include "Test/Test.h"
+#include "Tool/Tool.h"
+#include "UI/Gui.h"
+#include "UI/Themes.h"
+#include "Util/ExePath.h"
+
+#include <glad/glad.h>
+#include <imgui.h>
+#include <imgui_te_ui.h>
+#include <stb_image.h>
+
 #include <array>
 #include <chrono>
-#include <cmath>
 #include <cstdint>
 #include <cstdlib>
 #include <cstring>
-#include <fstream>
-#include <imgui.h>
-#include <iostream>
 #include <string>
 #include <thread>
-
-#include <stb_image.h>
-
-#include "Asset/LoadedAssets.h"
-#include "Platform/Window.h"
-#include "Util/TextUtil.h"
-
-#include "Tool/Tool.h"
-#include "UI/ImUtil.h"
-#include "UI/Themes.h"
-
-#include "Util/ExePath.h"
-#include "imgui_te_ui.h"
-#include "nfd.h"
-
-#include "Keybinds/Keybinds.h"
-
-#include "Test/Test.h"
 
 namespace FuncDoodle {
 	Application* Application::s_Instance = nullptr;
@@ -51,7 +39,7 @@ namespace FuncDoodle {
 		  m_Keybinds(std::filesystem::path("")),
 		  m_Window({.Width = g_DefaultWindowWidth,
 			  .Height = g_DefaultWindowHeight,
-			  .Title = "",
+			  .Title = "FuncDoodle",
 			  .Monitor = -1}) {
 #ifdef FUNCDOODLE_BUILD_TESTS
 		FuncDoodle_RunTests();

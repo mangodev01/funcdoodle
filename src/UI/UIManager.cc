@@ -408,82 +408,28 @@ namespace FuncDoodle {
 						}
 
 						if (ImGui::BeginMenu("Move")) {
-							{
+							auto moveItem = [&](ImTextureID tex, const char* keybindId, Direction dir) {
 								ImVec2 pos = ImGui::GetCursorScreenPos();
-								float h = ImGui::GetFrameHeight();
 
-								bool clicked = ImGui::Selectable("##left", false);
+								ImGui::PushID(keybindId);
+
+								bool clicked = ImGui::Selectable("##selectable", false);
+
+								ImGui::PopID();
 
 								ImGui::SetCursorScreenPos(pos);
-								ImGui::Image((ImTextureID)(intptr_t)s_Left, ImVec2(20, 20));
-
+								ImGui::Image(tex, ImVec2(20, 20));
 								ImGui::SameLine();
-								ImGui::TextUnformatted(m_WaitingForKey ? nullptr : app->GetKeybinds().Get("move_selection_left"));
+								ImGui::TextUnformatted(m_WaitingForKey ? nullptr
+										: app->GetKeybinds().Get(keybindId));
+								if (clicked && app->GetController()->Sel())
+									app->MoveCurrentSelection(dir);
+							};
 
-								if (clicked) {
-									if (app->GetController()->Sel()) {
-										app->MoveCurrentSelection(Direction::Left);
-									}
-								}
-							}
-
-							{
-								ImVec2 pos = ImGui::GetCursorScreenPos();
-								float h = ImGui::GetFrameHeight();
-
-								bool clicked = ImGui::Selectable("##right", false);
-
-								ImGui::SetCursorScreenPos(pos);
-								ImGui::Image((ImTextureID)(intptr_t)s_Right, ImVec2(20, 20));
-
-								ImGui::SameLine();
-								ImGui::TextUnformatted(m_WaitingForKey ? nullptr : app->GetKeybinds().Get("move_selection_right"));
-
-								if (clicked) {
-									if (app->GetController()->Sel()) {
-										app->MoveCurrentSelection(Direction::Right);
-									}
-								}
-							}
-
-							{
-								ImVec2 pos = ImGui::GetCursorScreenPos();
-								float h = ImGui::GetFrameHeight();
-
-								bool clicked = ImGui::Selectable("##up", false);
-
-								ImGui::SetCursorScreenPos(pos);
-								ImGui::Image((ImTextureID)(intptr_t)s_Up, ImVec2(20, 20));
-
-								ImGui::SameLine();
-								ImGui::TextUnformatted(m_WaitingForKey ? nullptr : app->GetKeybinds().Get("move_selection_up"));
-
-								if (clicked) {
-									if (app->GetController()->Sel()) {
-										app->MoveCurrentSelection(Direction::Up);
-									}
-								}
-							}
-
-
-							{
-								ImVec2 pos = ImGui::GetCursorScreenPos();
-								float h = ImGui::GetFrameHeight();
-
-								bool clicked = ImGui::Selectable("##down", false);
-
-								ImGui::SetCursorScreenPos(pos);
-								ImGui::Image((ImTextureID)(intptr_t)s_Down, ImVec2(20, 20));
-
-								ImGui::SameLine();
-								ImGui::TextUnformatted(m_WaitingForKey ? nullptr : app->GetKeybinds().Get("move_selection_down"));
-
-								if (clicked) {
-									if (app->GetController()->Sel()) {
-										app->MoveCurrentSelection(Direction::Down);
-									}
-								}
-							}
+							moveItem((ImTextureID)(intptr_t)s_Left, "move_selection_left", Direction::Left);
+							moveItem((ImTextureID)(intptr_t)s_Right, "move_selection_right", Direction::Right);
+							moveItem((ImTextureID)(intptr_t)s_Up, "move_selection_up", Direction::Up);
+							moveItem((ImTextureID)(intptr_t)s_Down, "move_selection_down", Direction::Down);
 
 							ImGui::EndMenu();
 						}

@@ -29,7 +29,7 @@ namespace FuncDoodle::Platform {
 		bool invalid = false;
 
 		if (spec.Monitor < 0 || spec.Monitor >= monitorCount) {
-			FUNC_WARN("monitor {} is invalid, using primary...", spec.Monitor);
+			// FUNC_WARN("monitor {} is invalid, using primary...", spec.Monitor);
 			invalid = true;
 		}
 
@@ -40,6 +40,7 @@ namespace FuncDoodle::Platform {
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 #ifdef __APPLE__
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, 1);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #endif
