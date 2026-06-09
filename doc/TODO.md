@@ -14,6 +14,8 @@
 - [x] make .clang-tidy work
 - [x] cleanup settings menu
 - [x] frame importing/exporting
+- [x] improvised new project popup
+- [x] improvised EDIT project popup
 - [ ] replace .fdp unsigned long frame indices with uint64_t for more consistency across various systems
 - [ ] non-destructive moving of selections
 - [ ] copy & pasting selections

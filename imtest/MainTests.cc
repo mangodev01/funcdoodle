@@ -23,14 +23,14 @@ static void RegisterTests_FuncDoodle(ImGuiTestEngine* e) {
 	t->TestFunc = [](ImGuiTestContext* ctx) {
 		FuncDoodle::Application* app = GetApp();
 		app->GetUiManager().GetPopups().Open("new");
-		ImGui::OpenPopup("NewProj");
+		ImGui::OpenPopup("New project");
 		ctx->Yield();
 
-		IM_CHECK(ImGui::IsPopupOpen("NewProj"));
+		IM_CHECK(ImGui::IsPopupOpen("New project"));
 		app->GetUiManager().GetPopups().Close("new");
 		ctx->Yield();
 
-		IM_CHECK(!ImGui::IsPopupOpen("NewProj"));
+		IM_CHECK(!ImGui::IsPopupOpen("New project"));
 	};
 
 	t = IM_REGISTER_TEST(e, "funcdoodle", "menu_show_keybinds");
@@ -51,10 +51,10 @@ static void RegisterTests_FuncDoodle(ImGuiTestEngine* e) {
 	t->TestFunc = [](ImGuiTestContext* ctx) {
 		FuncDoodle::Application* app = GetApp();
 		app->GetUiManager().GetPopups().Open("pref");
-		ImGui::OpenPopup("EditPrefs");
+		ImGui::OpenPopup("Preferences");
 		ctx->Yield();
 
-		IM_CHECK(ImGui::IsPopupOpen("EditPrefs"));
+		IM_CHECK(ImGui::IsPopupOpen("Preferences"));
 		app->GetUiManager().GetPopups().Close("pref");
 		ctx->Yield();
 	};
@@ -78,10 +78,10 @@ static void RegisterTests_FuncDoodle(ImGuiTestEngine* e) {
 	t->TestFunc = [](ImGuiTestContext* ctx) {
 		FuncDoodle::Application* app = GetApp();
 		app->GetUiManager().GetPopups().Open("new");
-		ImGui::OpenPopup("NewProj");
+		ImGui::OpenPopup("New project");
 		ctx->Yield();
 
-		IM_CHECK(ImGui::IsPopupOpen("NewProj"));
+		IM_CHECK(ImGui::IsPopupOpen("New project"));
 
 		app->GetUiManager().GetPopups().Close("new");
 		ctx->Yield();

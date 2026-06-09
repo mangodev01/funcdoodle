@@ -4,8 +4,9 @@
 #include "Core/App.h"
 #include "UI/ImUtil.h"
 #include "UI/Themes.h"
+#include "Util/Ptr.h"
 #include "Util/TextUtil.h"
-#include "imgui.h"
+#include <imgui.h>
 
 namespace FuncDoodle {
 	UIManager::UIManager() {
@@ -191,10 +192,10 @@ namespace FuncDoodle {
 		Application* app = Application::Get();
 
 		if (m_Popups.IsOpen("pref")) {
-			ImGui::OpenPopup("EditPrefs");
+			ImGui::OpenPopup("Preferences");
 			m_Popups.Close("pref");
 		}
-		if (ImGui::BeginPopup("EditPrefs")) {
+		if (ImGui::BeginPopup("Preferences")) {
 			ImGui::SeparatorText("Themes");
 
 			if (ImGui::BeginCombo(
@@ -369,7 +370,7 @@ namespace FuncDoodle {
 					if (ImGui::MenuItem("Close")) {
 						app->CloseCurrentProject();
 					}
-					if (ImGui::MenuItem("Edit project")) {
+					if (ImGui::MenuItem("Edit")) {
 						m_Popups.Open("edit_proj");
 					}
 					if (ImGui::MenuItem(
@@ -574,58 +575,56 @@ namespace FuncDoodle {
 		Application* app = Application::Get();
 
 		if (m_Popups.IsOpen("edit_proj")) {
-			ImGui::OpenPopup("EditProj");
+			ImGui::OpenPopup("Edit Project");
 		}
 
-		if (ImGui::BeginPopupModal("EditProj", m_Popups.Get("edit_proj"),
+		if (ImGui::BeginPopupModal("Edit Project", m_Popups.Get("edit_proj"),
 				ImGuiWindowFlags_AlwaysAutoResize) &&
 			app->GetCurProj()) {
+			SharedPtr<ProjectFile> proj = app->GetCurProj();
+			SharedPtr<ProjectFile> cacheProj = app->GetCacheProj();
+
+			ImGui::SeparatorText("Project");
+
 			char name[256];
-			strcpy(name, app->GetCurProj()->AnimName());
-			int width = app->GetCurProj()->AnimWidth();
-			int height = app->GetCurProj()->AnimHeight();
+			strcpy(name, proj->AnimName());
+
 			char author[100];
-			strcpy(author, app->GetCurProj()->AnimAuthor());
-			int fps = app->GetCurProj()->AnimFPS();
+			strcpy(author, proj->AnimAuthor());
+
 			char desc[512];
-			strcpy(desc, app->GetCurProj()->AnimDesc());
-			if (app->GetCacheProj()) {
-				strcpy(name, app->GetCacheProj()->AnimName());
-				width = app->GetCacheProj()->AnimWidth();
-				height = app->GetCacheProj()->AnimHeight();
-				strcpy(author, app->GetCacheProj()->AnimAuthor());
-				fps = app->GetCacheProj()->AnimFPS();
-				strcpy(desc, app->GetCacheProj()->AnimDesc());
-			} else {
-				strcpy(name, (char*)"Untitled Animation");
-				width = g_DefaultCanvasWidth;
-				height = g_DefaultCanvasHeight;
-				const char* username = ImUtil::GetUsername();
-				strncpy(author, username, sizeof(author) - 1);
-				author[sizeof(author) - 1] = '\0';
-				fps = 10;
-				strcpy(desc, "Simple test project");
-			}
+			strcpy(desc, proj->AnimDesc());
+
+			int width = proj->AnimWidth();
+			int height = proj->AnimHeight();
+			int fps = proj->AnimFPS();
+
+
 			if (ImGui::InputText("Name", name, sizeof(name))) {
-				app->GetCacheProj()->SetAnimName(name);
-			}
-			if (ImGui::InputInt("Width", &width)) {
-				app->GetCacheProj()->SetAnimWidth(width);
-			}
-			if (ImGui::InputInt("Height", &height)) {
-				app->GetCacheProj()->SetAnimHeight(height);
+				proj->SetAnimName(name);
 			}
 			if (ImGui::InputText("Author", author, sizeof(author))) {
-				app->GetCacheProj()->SetAnimAuthor(author);
-			}
-			if (ImGui::InputInt("FPS", &fps)) {
-				app->GetCacheProj()->SetAnimFPS(fps);
+				proj->SetAnimAuthor(author);
 			}
 			if (ImGui::InputText("Description", desc, sizeof(desc))) {
-				app->GetCacheProj()->SetAnimDesc(desc);
+				proj->SetAnimDesc(desc);
 			}
 
-			ImUtil::ButtonRowResult choice = ImUtil::CloseOkButtons();
+			ImGui::SeparatorText("Canvas");
+
+			if (ImGui::InputInt("Width", &width)) {
+				if (width < 1) width = 1;
+				proj->SetAnimWidth(width);
+			}
+			if (ImGui::InputInt("Height", &height)) {
+				if (height < 1) height = 1;
+				proj->SetAnimHeight(height);
+			}
+			if (ImGui::InputInt("FPS", &fps)) {
+				proj->SetAnimFPS(fps);
+			}
+
+			ImUtil::ButtonRowResult choice = ImUtil::OkCancelButtons();
 			if (choice == ImUtil::ButtonRowResult::Secondary ||
 				ImGui::IsKeyPressed(ImGuiKey_Escape, false)) {
 				m_Popups.Close("edit_proj");
@@ -634,7 +633,6 @@ namespace FuncDoodle {
 			if (choice == ImUtil::ButtonRowResult::Primary ||
 				ImGui::IsKeyPressed(ImGuiKey_Enter, false) ||
 				ImGui::IsKeyPressed(ImGuiKey_KeypadEnter, false)) {
-				app->GetCurProj() = app->GetCacheProj();
 				m_Popups.Close("edit_proj");
 				ImGui::CloseCurrentPopup();
 			}
@@ -646,44 +644,48 @@ namespace FuncDoodle {
 		Application* app = Application::Get();
 
 		if (m_Popups.IsOpen("new")) {
-			ImGui::OpenPopup("NewProj");
+			ImGui::OpenPopup("New project");
 		}
 
-		if (ImGui::BeginPopupModal("NewProj", m_Popups.Get("new"),
+		if (ImGui::BeginPopupModal("New project", m_Popups.Get("new"),
 				ImGuiWindowFlags_AlwaysAutoResize)) {
+			ImGui::SeparatorText("Project");
+
 			bool justOpened = ImGui::IsWindowAppearing();
-			char name[256] = "";
+			char name[256] = "Untitled Project";
 			int width = g_DefaultCanvasWidth;
 			int height = g_DefaultCanvasHeight;
-			char author[100] = "";
-			int fps = 0;
-			char desc[512] = "";
+			char* author = const_cast<char*>(ImUtil::GetUsername());
+			int fps = 10;
+			char desc[512] = "An Untitled FuncDoodle project";
 
 			if (!app->GetCacheProj()) {
-				strcpy(name, (char*)"testproj");
-				width = g_DefaultCanvasWidth;
-				height = g_DefaultCanvasHeight;
-				const char* username = ImUtil::GetUsername();
-				strncpy(author, username, sizeof(author) - 1);
-				author[sizeof(author) - 1] = '\0';
-				fps = 10;
-				strcpy(desc, "Simple test project");
-				app->SetCacheProj(std::make_shared<ProjectFile>(name, width,
-					height, author, fps, desc, app->GetWindow(), Col()));
+				app->SetCacheProj(std::make_shared<ProjectFile>(
+					name,
+					width,
+					height,
+					author,
+					fps,
+					desc,
+					app->GetWindow(),
+					Col()
+				));
 			} else {
-				strcpy(name, app->GetCacheProj()->AnimName());
-				width = app->GetCacheProj()->AnimWidth();
-				height = app->GetCacheProj()->AnimHeight();
-				strcpy(author, app->GetCacheProj()->AnimAuthor());
-				fps = app->GetCacheProj()->AnimFPS();
-				strcpy(desc, app->GetCacheProj()->AnimDesc());
+				SharedPtr<ProjectFile> cache = app->GetCacheProj();
 
-				float r =
-					(float)(app->GetCacheProj()->BgCol().r) / g_MaxColorValue;
-				float g =
-					(float)(app->GetCacheProj()->BgCol().g) / g_MaxColorValue;
-				float b =
-					(float)(app->GetCacheProj()->BgCol().b) / g_MaxColorValue;
+				strcpy(name, cache->AnimName());
+				width = cache->AnimWidth();
+				height = cache->AnimHeight();
+				strcpy(author, cache->AnimAuthor());
+				fps = cache->AnimFPS();
+				strcpy(desc, cache->AnimDesc());
+
+				Col bg = cache->BgCol();
+
+				float r = (float)(bg.r) / g_MaxColorValue;
+				float g = (float)(bg.g) / g_MaxColorValue;
+				float b = (float)(bg.b) / g_MaxColorValue;
+
 				m_CacheBGCol[0] = r;
 				m_CacheBGCol[1] = g;
 				m_CacheBGCol[2] = b;
@@ -693,7 +695,17 @@ namespace FuncDoodle {
 			if (ImGui::InputText("Name", name, sizeof(name))) {
 				app->GetCacheProj()->SetAnimName(name);
 			}
+			if (ImGui::InputText("Author", author, sizeof(author))) {
+				app->GetCacheProj()->SetAnimAuthor(author);
+			}
+			if (ImGui::InputText("Description", desc, sizeof(desc))) {
+				app->GetCacheProj()->SetAnimDesc(desc);
+			}
+
+			ImGui::SeparatorText("Canvas");
+
 			if (ImGui::InputInt("Width", &width)) {
+				if (width < 1) width = 1;
 				if (app->GetCurProj())
 					app->GetCacheProj()->SetAnimWidth(width, false);
 				else {
@@ -703,26 +715,32 @@ namespace FuncDoodle {
 				}
 			}
 			if (ImGui::InputInt("Height", &height)) {
+				if (height < 1) height = 1;
 				if (app->GetCurProj())
 					app->GetCacheProj()->SetAnimHeight(height, false);
 				else
 					app->GetCacheProj()->SetAnimHeight(height, true);
 			}
-			if (ImGui::InputText("Author", author, sizeof(author))) {
-				app->GetCacheProj()->SetAnimAuthor(author);
-			}
 			if (ImGui::InputInt("FPS", &fps)) {
 				app->GetCacheProj()->SetAnimFPS(fps);
 			}
-			if (ImGui::InputText("Description", desc, sizeof(desc))) {
-				app->GetCacheProj()->SetAnimDesc(desc);
+
+			if (ImGui::ColorButton("##bg", ImVec4(m_CacheBGCol[0], m_CacheBGCol[1], m_CacheBGCol[2], 1.0f))) {
+				ImGui::OpenPopup("BackgroundColorPicker");
 			}
-			if (ImGui::ColorPicker3("BG", m_CacheBGCol.data())) {
-				if (app->GetCacheProj())
-					app->GetCacheProj()->SetBgCol(m_CacheBGCol.data());
+			ImGui::SameLine();
+			ImGui::Text("Background");
+
+			if (ImGui::BeginPopup("BackgroundColorPicker")) {
+				if (ImGui::ColorPicker3("##background", m_CacheBGCol.data())) {
+					if (app->GetCacheProj())
+						app->GetCacheProj()->SetBgCol(m_CacheBGCol.data());
+				}
+
+				ImGui::EndPopup();
 			}
 
-			ImUtil::ButtonRowResult choice = ImUtil::CloseOkButtons();
+			ImUtil::ButtonRowResult choice = ImUtil::CreateCancelButtons();
 			if (choice == ImUtil::ButtonRowResult::Secondary ||
 				ImGui::IsKeyPressed(ImGuiKey_Escape, false)) {
 				m_Popups.Close("new");

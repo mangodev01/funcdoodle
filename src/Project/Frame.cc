@@ -64,25 +64,19 @@ namespace FuncDoodle {
 
 	void Frame::SetWidth(int width, bool clear) {
 		if (!clear) {
-			const std::vector<Col>& oldData = m_Pixels.Data();
+			std::vector<Col> oldData = m_Pixels.Data();
 			int oldWidth = m_Pixels.Width();
 			int oldHeight = m_Pixels.Height();
 			m_Pixels.SetWidth(width);
 			m_Pixels.Resize();
-			std::vector<Col> newData(width * oldHeight);
 			int xOffset = (width - oldWidth) / 2;
 			for (int y = 0; y < oldHeight; y++) {
 				for (int x = 0; x < oldWidth; x++) {
-					if (newData.size() >= oldData.size()) {
-						newData[(y * width) + (x + xOffset)] =
-							oldData[(y * oldWidth) + x];
-					} else {
-						newData[(y * oldWidth) + x] =
-							oldData[(y * oldWidth) + x];
-					}
+					int dstX = x + xOffset;
+					if (dstX >= 0 && dstX < width)
+						m_Pixels.Set(dstX, y, oldData[(y * oldWidth) + x]);
 				}
 			}
-			m_Pixels.SetData(newData);
 		} else {
 			ReInit(width, m_Pixels.Height(), m_Pixels.BgCol());
 		}
@@ -94,24 +88,16 @@ namespace FuncDoodle {
 			int oldHeight = m_Pixels.Height();
 			m_Pixels.SetHeight(height);
 			m_Pixels.Resize();
-			std::vector<Col> newData(oldWidth * height);
 			int yOffset = (height - oldHeight) / 2;
 			for (int y = 0; y < oldHeight; y++) {
-				for (int x = 0; x < oldWidth; x++) {
-					if (newData.size() >= oldData.size()) {
-						newData[((y + yOffset) * oldWidth) + x] =
-							oldData[(y * oldWidth) + x];
-					} else {
-						newData[(y * oldWidth) + x] =
-							oldData[(y * oldWidth) + x];
-					}
+				int dstY = y + yOffset;
+				if (dstY >= 0 && dstY < height) {
+					for (int x = 0; x < oldWidth; x++)
+						m_Pixels.Set(x, dstY, oldData[(y * oldWidth) + x]);
 				}
 			}
-			m_Pixels.SetData(newData);
 		} else {
-			m_Pixels.SetHeight(height);
-			m_Pixels.Resize();
-			m_Pixels.RedoColorAdjustment(m_Pixels.BgCol());
+			ReInit(m_Pixels.Width(), height, m_Pixels.BgCol());
 		}
 	}
 

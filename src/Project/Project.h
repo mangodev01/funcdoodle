@@ -23,17 +23,16 @@
  * Handles serialization to/from .fdp binary format.
  */
 
+#include "Conf/FuncPCH.h"
+
 #include "Project/DynArr.h"
 #include "Project/Frame.h"
 #include "Util/Ptr.h"
 
 #include <concepts>
-#include <filesystem>
 #include <stack>
 
 #include "Action/Action.h"
-
-#include "Conf/FuncPCH.h"
 
 #include <algorithm>
 #include <memory>

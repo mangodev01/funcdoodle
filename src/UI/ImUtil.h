@@ -177,6 +177,17 @@ namespace FuncDoodle::ImUtil {
 	}
 
 	/**
+	 * @fn CreateCancelButtons
+	 * @brief Renders a Create/Cancel button row.
+	 *
+	 * @return Which button the user pressed.
+	 */
+	inline ButtonRowResult CreateCancelButtons() {
+		return ConfirmButtons("Create", "Cancel");
+	}
+
+
+	/**
 	 * @fn ExportCloseButtons
 	 * @brief Renders an Export/Close button row.
 	 *
