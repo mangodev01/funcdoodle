@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include "Keybinds/Keybinds.h"
 #include "Registries/PopupRegistry.h"
 
 #include <array>
@@ -62,5 +63,8 @@ namespace FuncDoodle {
 		std::array<float, 3> m_CacheBGCol = {1.0f, 1.0f, 1.0f};
 		PopupRegistry m_Popups;
 		int m_Deg = 90;
+
+		Shortcut m_AssigningToShortcut;
+		char m_SearchQuery[256] = "";
 	};
 }  // namespace FuncDoodle

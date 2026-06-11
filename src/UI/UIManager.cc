@@ -6,7 +6,9 @@
 #include "UI/Themes.h"
 #include "Util/Ptr.h"
 #include "Util/TextUtil.h"
+#include <algorithm>
 #include <imgui.h>
+#include <optional>
 
 namespace FuncDoodle {
 	UIManager::UIManager() {
@@ -404,37 +406,44 @@ namespace FuncDoodle {
 								m_Popups.Open("rotate");
 							}
 
-
 							ImGui::EndMenu();
 						}
 
 						if (ImGui::BeginMenu("Move")) {
-							auto moveItem = [&](ImTextureID tex, const char* keybindId, Direction dir) {
+							auto moveItem = [&](ImTextureID tex,
+												const char* keybindId,
+												Direction dir) {
 								ImVec2 pos = ImGui::GetCursorScreenPos();
 
 								ImGui::PushID(keybindId);
 
-								bool clicked = ImGui::Selectable("##selectable", false);
+								bool clicked =
+									ImGui::Selectable("##selectable", false);
 
 								ImGui::PopID();
 
 								ImGui::SetCursorScreenPos(pos);
 								ImGui::Image(tex, ImVec2(20, 20));
 								ImGui::SameLine();
-								ImGui::TextUnformatted(m_WaitingForKey ? nullptr
+								ImGui::TextUnformatted(
+									m_WaitingForKey
+										? nullptr
 										: app->GetKeybinds().Get(keybindId));
 								if (clicked && app->GetController()->Sel())
 									app->MoveCurrentSelection(dir);
 							};
 
-							moveItem((ImTextureID)(intptr_t)s_Left, "move_selection_left", Direction::Left);
-							moveItem((ImTextureID)(intptr_t)s_Right, "move_selection_right", Direction::Right);
-							moveItem((ImTextureID)(intptr_t)s_Up, "move_selection_up", Direction::Up);
-							moveItem((ImTextureID)(intptr_t)s_Down, "move_selection_down", Direction::Down);
+							moveItem((ImTextureID)(intptr_t)s_Left,
+								"move_selection_left", Direction::Left);
+							moveItem((ImTextureID)(intptr_t)s_Right,
+								"move_selection_right", Direction::Right);
+							moveItem((ImTextureID)(intptr_t)s_Up,
+								"move_selection_up", Direction::Up);
+							moveItem((ImTextureID)(intptr_t)s_Down,
+								"move_selection_down", Direction::Down);
 
 							ImGui::EndMenu();
 						}
-
 
 						ImGui::EndMenu();
 					}
@@ -498,70 +507,224 @@ namespace FuncDoodle {
 
 		if (ImGui::BeginPopupModal("Keybinds", m_Popups.Get("keybinds"),
 				ImGuiWindowFlags_AlwaysAutoResize)) {
-			if (ImGui::BeginTable(
-					"keybinds", 3, ImGuiTableFlags_BordersInnerH)) {
-				ImGui::TableSetupColumn("Action");
-				ImGui::TableSetupColumn("Keybind");
-				ImGui::TableSetupColumn("Reset");
-				ImGui::TableHeadersRow();
+			const ImGuiStyle& style = ImGui::GetStyle();
+			const float keyboardWidth = 860.0f;
+			const float keyHeight = ImGui::GetFrameHeight() * 1.25f;
+			const float maxRowUnits = 15.0f;
 
-				for (auto& [k, v] : app->GetKeybinds().GetAll()) {
-					ImGui::TableNextRow();
-					ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg,
-						ImGui::GetColorU32(ImGuiCol_FrameBg));
+			auto keyLabel = [](ImGuiKey key) -> const char* {
+				return key == ImGuiKey_GraveAccent	  ? "`"
+					   : key == ImGuiKey_Escape		  ? "Esc"
+					   : key == ImGuiKey_Equal		  ? "="
+					   : key == ImGuiKey_Backspace	  ? "Backspace"
+					   : key == ImGuiKey_LeftShift	  ? "Shift"
+					   : key == ImGuiKey_RightShift	  ? "Shift"
+					   : key == ImGuiKey_LeftAlt	  ? "Alt"
+					   : key == ImGuiKey_RightAlt	  ? "Alt"
+					   : key == ImGuiKey_Apostrophe	  ? "'"
+					   : key == ImGuiKey_LeftSuper	  ? "Super"
+					   : key == ImGuiKey_RightSuper	  ? "Super"
+					   : key == ImGuiKey_LeftCtrl	  ? "Ctrl"
+					   : key == ImGuiKey_RightCtrl	  ? "Ctrl"
+					   : key == ImGuiKey_LeftBracket  ? "["
+					   : key == ImGuiKey_RightBracket ? "]"
+					   : key == ImGuiKey_Backslash	  ? "\\"
+					   : key == ImGuiKey_Semicolon	  ? ";"
+					   : key == ImGuiKey_CapsLock	  ? "Caps"
+					   : key == ImGuiKey_Minus		  ? "-"
+					   : key == ImGuiKey_Comma		  ? ","
+					   : key == ImGuiKey_Period		  ? "."
+					   : key == ImGuiKey_Slash		  ? "/"
+													  : ImGui::GetKeyName(key);
+			};
 
-					ImGui::TableSetColumnIndex(0);
-					ImGui::TextUnformatted(k);
+			auto keyUnits = [](ImGuiKey key) -> float {
+				return key == ImGuiKey_Backspace	? 2.0f
+					   : key == ImGuiKey_Tab		? 1.5f
+					   : key == ImGuiKey_Backslash	? 1.5f
+					   : key == ImGuiKey_CapsLock	? 1.75f
+					   : key == ImGuiKey_Enter		? 2.25f
+					   : key == ImGuiKey_LeftShift	? 2.25f
+					   : key == ImGuiKey_RightShift ? 2.75f
+					   : key == ImGuiKey_Space		? 6.25f
+					   : key == ImGuiKey_LeftCtrl	? 1.25f
+					   : key == ImGuiKey_RightCtrl	? 1.25f
+					   : key == ImGuiKey_LeftSuper	? 1.25f
+					   : key == ImGuiKey_RightSuper ? 1.25f
+					   : key == ImGuiKey_LeftAlt	? 1.25f
+					   : key == ImGuiKey_RightAlt	? 1.25f
+					   : key == ImGuiKey_Menu		? 1.25f
+													: 1.0f;
+			};
 
-					ImGui::TableSetColumnIndex(1);
-
-					ImGui::PushID(k);
-					const char* label = "...";
-					if (!m_WaitingForKey || strcmp(m_WaitingForKey, k) != 0) {
-						label = v.User.value_or(v.Default);
-					}
-					if (ImGui::Button(label)) {
-						m_WaitingForKey = k;
-					}
-
-					ImGuiKey key = ImUtil::GetAnyReleasedKey();
-
-					if (m_WaitingForKey != nullptr &&
-						strcmp(m_WaitingForKey, k) == 0 &&
-						key != ImGuiKey_None) {
-						ImGuiIO& io = ImGui::GetIO();
-						v.User =
-							Shortcut(io.KeyCtrl, io.KeyShift, io.KeySuper, key);
-						m_WaitingForKey = nullptr;
-						io.KeysData[key].Down = false;
-						io.KeyCtrl = false;
-						io.KeyShift = false;
-						io.KeySuper = false;
-						app->GetKeybinds().Write();
-					}
-
-					ImGui::PopID();
-
-					ImGui::TableSetColumnIndex(2);
-					if (!v.User.has_value() || v.User.value() == v.Default) {
-						ImGui::BeginDisabled(true);
-					} else {
-						ImGui::BeginDisabled(false);
-					}
-
-					ImGui::PushID(k);
-					if (ImGui::Button("Reset")) {
-						v.User = std::nullopt;
-					}
-					ImGui::PopID();
-
-					ImGui::EndDisabled();
+			auto rowUnits = [&](size_t rowStart, size_t rowEnd) {
+				float units = 0.0f;
+				for (size_t i = rowStart; i < rowEnd; ++i) {
+					units += keyUnits(c_Qwerty[i]);
 				}
-				ImGui::EndTable();
+				return units;
+			};
+
+			size_t rowStart = 0;
+			while (rowStart < c_Qwerty.size()) {
+				size_t rowEnd = rowStart;
+				while (rowEnd < c_Qwerty.size() &&
+					   c_Qwerty[rowEnd] != ImGuiKey_End) {
+					++rowEnd;
+				}
+
+				const size_t keyCount = rowEnd - rowStart;
+				const float rowSpacing =
+					style.ItemSpacing.x * (keyCount > 0 ? keyCount - 1 : 0);
+				const float unitWidth =
+					(keyboardWidth - rowSpacing) / maxRowUnits;
+				const float rowWidth =
+					(rowUnits(rowStart, rowEnd) * unitWidth) + rowSpacing;
+				ImGui::SetCursorPosX(ImGui::GetCursorPosX() +
+									 ((keyboardWidth - rowWidth) * 0.5f));
+
+				for (size_t i = rowStart; i < rowEnd; ++i) {
+					ImGuiKey key = c_Qwerty[i];
+					const char* keyName = keyLabel(key);
+					const ImVec2 keySize(keyUnits(key) * unitWidth, keyHeight);
+
+					ImGui::PushID(ImGui::GetKeyName(key));
+
+					bool styleVarPushed = false;
+
+					if (ImGui::IsKeyDown(key)) {
+						styleVarPushed = true;
+						ImGui::PushStyleColor(ImGuiCol_Button,
+							ImGui::GetStyleColorVec4(ImGuiCol_ButtonActive));
+					}
+
+					if (ImGui::Button(keyName, keySize)) {
+						ImGuiIO& io = ImGui::GetIO();
+						m_AssigningToShortcut =
+							Shortcut(io.KeyCtrl, io.KeyShift, io.KeySuper, key);
+						ImGui::OpenPopup("assign_keys_to");
+					}
+
+					if (styleVarPushed) {
+						ImGui::PopStyleColor();
+					}
+
+					if (ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
+						ImGuiIO& io = ImGui::GetIO();
+						auto& allKeybinds = app->GetKeybinds().GetAll();
+
+						auto assignedKeybind = std::ranges::find_if(
+							allKeybinds, [&](const auto& entry) {
+								auto resolved = entry.second.User.value_or(
+									entry.second.Default);
+
+								return resolved.Key == key &&
+									   resolved.RequiresCtrl == io.KeyCtrl &&
+									   resolved.RequiresShift == io.KeyShift &&
+									   resolved.RequiresSuper == io.KeySuper;
+							});
+
+						assignedKeybind->second.User = std::nullopt;
+					}
+
+					const bool keyHovered = ImGui::IsItemHovered();
+
+					if (ImGui::BeginPopup("assign_keys_to")) {
+						ImGui::InputTextWithHint("##search",
+							"Search actions...", m_SearchQuery, 256);
+
+						// if string isnt empty
+						if (strcmp(m_SearchQuery, "") != 0) {
+							for (auto& [k, v] : app->GetKeybinds().GetAll()) {
+								if (strcasestr(k, m_SearchQuery) ||
+									strcasestr(v.FriendlyName, m_SearchQuery) ||
+									strcasestr(v.Description, m_SearchQuery)) {
+									ImGui::PushID(k);
+
+									ImVec2 pos = ImGui::GetCursorScreenPos();
+									bool clicked = ImGui::Selectable(
+										"##keybind_selectable", false);
+
+									ImGui::PopID();
+
+									ImGui::SetCursorScreenPos(pos);
+									ImGui::SameLine();
+
+									ImGui::Text("%s", v.FriendlyName);
+
+									ImGui::PushFont(nullptr, 14.0f);
+									ImGui::Text("%s", v.Description);
+									ImGui::PopFont();
+
+									if (clicked) {
+										v.User = m_AssigningToShortcut;
+										ImGui::CloseCurrentPopup();
+										// lol
+										m_SearchQuery[0] = '\0';
+									}
+								}
+							}
+						}
+
+						ImGui::EndPopup();
+					}
+
+					if (keyHovered) {
+						ImGui::BeginTooltip();
+
+						auto allKeybinds = app->GetKeybinds().GetAll();
+
+						ImGuiIO& io = ImGui::GetIO();
+						auto assignedKeybind = std::ranges::find_if(
+							allKeybinds, [&](const auto& entry) {
+								if (entry.second.User.has_value())
+									return entry.second.User->Key == key &&
+										   entry.second.User->RequiresCtrl ==
+											   io.KeyCtrl &&
+										   entry.second.User->RequiresShift ==
+											   io.KeyShift &&
+										   entry.second.User->RequiresSuper ==
+											   io.KeySuper;
+
+								return entry.second.Default.Key == key &&
+									   entry.second.Default.RequiresCtrl ==
+										   io.KeyCtrl &&
+									   entry.second.Default.RequiresShift ==
+										   io.KeyShift &&
+									   entry.second.Default.RequiresSuper ==
+										   io.KeySuper;
+							});
+
+						if (assignedKeybind != allKeybinds.end()) {
+							ImGui::Text(
+								"%s", assignedKeybind->second.FriendlyName);
+						} else {
+							ImGui::Text("Unassigned");
+						}
+
+						ImGui::EndTooltip();
+					}
+
+					ImGui::PopID();
+
+					if (i + 1 < rowEnd) {
+						ImGui::SameLine();
+					}
+				}
+
+				rowStart = rowEnd + 1;
 			}
+
+			ImGui::PushFont(nullptr, 14.0f);
+			ImGui::Text("Hold Ctrl, Shift, or Super to preview shortcuts for "
+						"modified keys.");
+			ImGui::Text("Click a key to assign an action to that shortcut.");
+			ImGui::Text("Right click a key to reset its shortcut.");
+			ImGui::PopFont();
 
 			if (ImUtil::CloseButton() || ImUtil::EscPressed()) {
 				ImGui::CloseCurrentPopup();
+				m_Popups.Close("keybinds");
 			}
 			ImGui::EndPopup();
 		} else {
@@ -599,7 +762,6 @@ namespace FuncDoodle {
 			int height = proj->AnimHeight();
 			int fps = proj->AnimFPS();
 
-
 			if (ImGui::InputText("Name", name, sizeof(name))) {
 				proj->SetAnimName(name);
 			}
@@ -613,11 +775,13 @@ namespace FuncDoodle {
 			ImGui::SeparatorText("Canvas");
 
 			if (ImGui::InputInt("Width", &width)) {
-				if (width < 1) width = 1;
+				if (width < 1)
+					width = 1;
 				proj->SetAnimWidth(width);
 			}
 			if (ImGui::InputInt("Height", &height)) {
-				if (height < 1) height = 1;
+				if (height < 1)
+					height = 1;
 				proj->SetAnimHeight(height);
 			}
 			if (ImGui::InputInt("FPS", &fps)) {
@@ -660,16 +824,8 @@ namespace FuncDoodle {
 			char desc[512] = "An Untitled FuncDoodle project";
 
 			if (!app->GetCacheProj()) {
-				app->SetCacheProj(std::make_shared<ProjectFile>(
-					name,
-					width,
-					height,
-					author,
-					fps,
-					desc,
-					app->GetWindow(),
-					Col()
-				));
+				app->SetCacheProj(std::make_shared<ProjectFile>(name, width,
+					height, author, fps, desc, app->GetWindow(), Col()));
 			} else {
 				SharedPtr<ProjectFile> cache = app->GetCacheProj();
 
@@ -705,7 +861,8 @@ namespace FuncDoodle {
 			ImGui::SeparatorText("Canvas");
 
 			if (ImGui::InputInt("Width", &width)) {
-				if (width < 1) width = 1;
+				if (width < 1)
+					width = 1;
 				if (app->GetCurProj())
 					app->GetCacheProj()->SetAnimWidth(width, false);
 				else {
@@ -715,7 +872,8 @@ namespace FuncDoodle {
 				}
 			}
 			if (ImGui::InputInt("Height", &height)) {
-				if (height < 1) height = 1;
+				if (height < 1)
+					height = 1;
 				if (app->GetCurProj())
 					app->GetCacheProj()->SetAnimHeight(height, false);
 				else
@@ -725,7 +883,9 @@ namespace FuncDoodle {
 				app->GetCacheProj()->SetAnimFPS(fps);
 			}
 
-			if (ImGui::ColorButton("##bg", ImVec4(m_CacheBGCol[0], m_CacheBGCol[1], m_CacheBGCol[2], 1.0f))) {
+			if (ImGui::ColorButton(
+					"##bg", ImVec4(m_CacheBGCol[0], m_CacheBGCol[1],
+								m_CacheBGCol[2], 1.0f))) {
 				ImGui::OpenPopup("BackgroundColorPicker");
 			}
 			ImGui::SameLine();

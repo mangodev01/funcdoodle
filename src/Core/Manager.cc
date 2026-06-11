@@ -73,12 +73,19 @@ namespace FuncDoodle {
 	}
 
 	void AnimationManager::RegisterKeybinds() {
-		m_Keybinds.Register("rewind", {false, false, false, ImGuiKey_J});
-		m_Keybinds.Register("play", {false, false, false, ImGuiKey_K});
-		m_Keybinds.Register("end", {false, false, false, ImGuiKey_L});
+		m_Keybinds.Register("rewind", "Rewind", "Jump to the first frame",
+			{false, false, false, ImGuiKey_J});
+		m_Keybinds.Register("play", "Play", "Play or pause the animation",
+			{false, false, false, ImGuiKey_K});
+		m_Keybinds.Register("end", "End", "Jump to the last frame",
+			{false, false, false, ImGuiKey_L});
 
-		m_Keybinds.Register("import_before", {true, true, false, ImGuiKey_I});
-		m_Keybinds.Register("import_after", {true, false, false, ImGuiKey_I});
+		m_Keybinds.Register("import_before", "Import before",
+			"Import frames before the current frame",
+			{true, true, false, ImGuiKey_I});
+		m_Keybinds.Register("import_after", "Import after",
+			"Import frames after the current frame",
+			{true, false, false, ImGuiKey_I});
 		// false, ImGuiKey_H});
 		m_ToolManager->RegisterKeybinds();
 	}

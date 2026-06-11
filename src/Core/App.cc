@@ -244,19 +244,33 @@ namespace FuncDoodle {
 
 	void Application::RegisterKeybinds() {
 		// nose
-		m_Keybinds.Register("new", {true, false, false, ImGuiKey_N});
-		m_Keybinds.Register("open", {true, false, false, ImGuiKey_O});
-		m_Keybinds.Register("save", {true, false, false, ImGuiKey_S});
-		m_Keybinds.Register("save_as", {true, true, false, ImGuiKey_S});
-		m_Keybinds.Register("export", {true, false, false, ImGuiKey_E});
+		m_Keybinds.Register("new", "New project", "Create a new empty project",
+			{true, false, false, ImGuiKey_N});
+		m_Keybinds.Register("open", "Open project",
+			"Open an existing project from disk",
+			{true, false, false, ImGuiKey_O});
+		m_Keybinds.Register("save", "Save", "Save the current project",
+			{true, false, false, ImGuiKey_S});
+		m_Keybinds.Register("save_as", "Save as",
+			"Save the current project to a new file ",
+			{true, true, false, ImGuiKey_S});
+		m_Keybinds.Register("export", "Export",
+			"Export project to an output format",
+			{true, false, false, ImGuiKey_E});
 
-		m_Keybinds.Register("quit", {true, false, false, ImGuiKey_Q});
-		m_Keybinds.Register("pref", {true, false, false, ImGuiKey_Comma});
-		m_Keybinds.Register("theme", {true, false, false, ImGuiKey_T});
+		m_Keybinds.Register("quit", "Quit", "Close the application",
+			{true, false, false, ImGuiKey_Q});
+		m_Keybinds.Register("pref", "Preferences", "Open preferences",
+			{true, false, false, ImGuiKey_Comma});
+		m_Keybinds.Register("theme", "Themes", "Modify themes",
+			{true, false, false, ImGuiKey_T});
 
-		m_Keybinds.Register("keybinds", {true, false, false, ImGuiKey_H});
+		m_Keybinds.Register("keybinds", "Keybinds", "Modify keybinds",
+			{true, false, false, ImGuiKey_H});
 
-		m_Keybinds.Register("del", {false, false, false, ImGuiKey_Delete});
+		m_Keybinds.Register("del", "Delete",
+			"Delete everything under selection",
+			{false, false, false, ImGuiKey_Delete});
 
 		ToolKeybindsRegister(m_Keybinds);
 		KeyHandler::RegisterKeybinds(m_Keybinds);

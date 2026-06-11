@@ -16,11 +16,12 @@
 - [x] frame importing/exporting
 - [x] improvised new project popup
 - [x] improvised EDIT project popup
+- [x] ~~improve keybinds system with the ability to assign multiple keys to 1 action~~
+- [x] improve keybinds popup to use a key-to-action mapping rather than the opposite
 - [ ] replace .fdp unsigned long frame indices with uint64_t for more consistency across various systems
 - [ ] non-destructive moving of selections
 - [ ] copy & pasting selections
 - [ ] qol stuff
-- [ ] improve keybinds system with the ability to assign multiple keys to 1 action
 - [ ] i18n
 - [ ] fix infinite tech debt (wip)
 - [ ] sounds for animations

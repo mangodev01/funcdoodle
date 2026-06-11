@@ -34,7 +34,6 @@ inline ImGuiCol InvertedImCol(uint8_t r, uint8_t g, uint8_t b) {
 	return IM_COL32(255 - r, 255 - g, 255 - b, 255);
 }
 
-
 /**
  * @brief Streams a readable dump of an ImGui style object.
  *

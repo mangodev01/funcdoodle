@@ -236,6 +236,18 @@ namespace FuncDoodle {
 		 * @brief Optional user override loaded from configuration.
 		 */
 		std::optional<Shortcut> User;
+
+		/**
+		 * @var Description
+		 * @brief User-friendly DESCRIPTION of said shortcut.
+		 */
+		const char* Description;
+
+		/**
+		 * @var FriendlyName
+		 * @brief User-friendly name of said shortcut.
+		 */
+		const char* FriendlyName;
 	};
 
 	/**
@@ -272,8 +284,11 @@ namespace FuncDoodle {
 		 *
 		 * @param id Keybind identifier.
 		 * @param shortcut Default shortcut to store.
+		 * @param friendlyName User-friendly name to store.
+		 * @param desc User-friendly description to store.
 		 */
-		void Register(const char* id, Shortcut shortcut);
+		void Register(const char* id, const char* friendlyName,
+			const char* desc, Shortcut shortcut);
 		/**
 		 * @fn End
 		 * @brief Finalizes registration and loads any user overrides.

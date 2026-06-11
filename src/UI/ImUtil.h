@@ -186,7 +186,6 @@ namespace FuncDoodle::ImUtil {
 		return ConfirmButtons("Create", "Cancel");
 	}
 
-
 	/**
 	 * @fn ExportCloseButtons
 	 * @brief Renders an Export/Close button row.

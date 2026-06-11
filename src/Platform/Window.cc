@@ -4,10 +4,10 @@
 #include "Window.h"
 
 #include "Audio/AudioManager.h"
+#include "Conf/FuncPCH.h"
 #include "Test/Test.h"
 #include "UI/ImUtil.h"
 #include "UI/Themes.h"
-#include "Conf/FuncPCH.h"
 #include "imgui_impl_glfw.h"
 
 #include <GLFW/glfw3.h>
@@ -29,7 +29,8 @@ namespace FuncDoodle::Platform {
 		bool invalid = false;
 
 		if (spec.Monitor < 0 || spec.Monitor >= monitorCount) {
-			// FUNC_WARN("monitor {} is invalid, using primary...", spec.Monitor);
+			// FUNC_WARN("monitor {} is invalid, using primary...",
+			// spec.Monitor);
 			invalid = true;
 		}
 

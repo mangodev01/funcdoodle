@@ -140,11 +140,16 @@ namespace FuncDoodle {
 	// yea i really have nothing to say about this method idk why i put a
 	// comment here
 	static void ToolKeybindsRegister(KeybindsRegistry& keybinds) {
-		keybinds.Register("pencil", {false, false, false, ImGuiKey_1});
-		keybinds.Register("eraser", {false, false, false, ImGuiKey_2});
-		keybinds.Register("bucket", {false, false, false, ImGuiKey_3});
-		keybinds.Register("picker", {false, false, false, ImGuiKey_4});
-		keybinds.Register("select", {false, false, false, ImGuiKey_5});
+		keybinds.Register("pencil", "Pencil tool", "Switches to pencil tool",
+			{false, false, false, ImGuiKey_1});
+		keybinds.Register("eraser", "Eraser tool", "Switches to eraser tool",
+			{false, false, false, ImGuiKey_2});
+		keybinds.Register("bucket", "Bucket tool", "Switches to bucket tool",
+			{false, false, false, ImGuiKey_3});
+		keybinds.Register("picker", "Picker tool", "Switches to picker tool",
+			{false, false, false, ImGuiKey_4});
+		keybinds.Register("select", "Select tool", "Switches to select tool",
+			{false, false, false, ImGuiKey_5});
 	}
 
 	// perhaps use some sorta unordered_map too..?

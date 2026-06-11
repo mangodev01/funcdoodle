@@ -197,9 +197,12 @@ namespace FuncDoodle {
 		return {};
 	}
 
-	void KeybindsRegistry::Register(const char* id, Shortcut shortcut) {
-		m_Reg.emplace_back(
-			id, ShortcutWithUser{.Default = shortcut, .User = std::nullopt});
+	void KeybindsRegistry::Register(const char* id, const char* friendlyName,
+		const char* desc, Shortcut shortcut) {
+		m_Reg.emplace_back(id, ShortcutWithUser{.Default = shortcut,
+								   .User = std::nullopt,
+								   .Description = desc,
+								   .FriendlyName = friendlyName});
 	}
 
 	void KeybindsRegistry::End() {

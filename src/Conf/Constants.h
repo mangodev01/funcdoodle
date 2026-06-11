@@ -1,6 +1,8 @@
 #pragma once
 
+#include <array>
 #include <cstdint>
+#include <imgui.h>
 
 /**
  * @file Constants.h
@@ -189,4 +191,104 @@ namespace FuncDoodle {
 	 * Indicates minor changes in the .fdp file format.
 	 */
 	static constexpr uint8_t c_FdpVerMinor = 4;
+
+	/**
+	 * @brief QWERTY keyboard layout.
+	 *
+	 * Used for the keybinds popup.
+	 */
+	static constexpr std::array<ImGuiKey, 92> c_Qwerty = {
+		ImGuiKey_Escape,
+		ImGuiKey_F1,
+		ImGuiKey_F2,
+		ImGuiKey_F3,
+		ImGuiKey_F4,
+		ImGuiKey_F5,
+		ImGuiKey_F6,
+		ImGuiKey_F7,
+		ImGuiKey_F8,
+		ImGuiKey_F9,
+		ImGuiKey_F10,
+		ImGuiKey_F11,
+		ImGuiKey_F12,
+		ImGuiKey_End,
+		ImGuiKey_F13,
+		ImGuiKey_F14,
+		ImGuiKey_F15,
+		ImGuiKey_F16,
+		ImGuiKey_F17,
+		ImGuiKey_F18,
+		ImGuiKey_F19,
+		ImGuiKey_F20,
+		ImGuiKey_F21,
+		ImGuiKey_F22,
+		ImGuiKey_F23,
+		ImGuiKey_F24,
+		ImGuiKey_End,
+		ImGuiKey_GraveAccent,
+		ImGuiKey_1,
+		ImGuiKey_2,
+		ImGuiKey_3,
+		ImGuiKey_4,
+		ImGuiKey_5,
+		ImGuiKey_6,
+		ImGuiKey_7,
+		ImGuiKey_8,
+		ImGuiKey_9,
+		ImGuiKey_0,
+		ImGuiKey_Minus,
+		ImGuiKey_Equal,
+		ImGuiKey_Backspace,
+		ImGuiKey_End,
+		ImGuiKey_Tab,
+		ImGuiKey_Q,
+		ImGuiKey_W,
+		ImGuiKey_E,
+		ImGuiKey_R,
+		ImGuiKey_T,
+		ImGuiKey_Y,
+		ImGuiKey_U,
+		ImGuiKey_I,
+		ImGuiKey_O,
+		ImGuiKey_P,
+		ImGuiKey_LeftBracket,
+		ImGuiKey_RightBracket,
+		ImGuiKey_Backslash,
+		ImGuiKey_End,
+		ImGuiKey_CapsLock,
+		ImGuiKey_A,
+		ImGuiKey_S,
+		ImGuiKey_D,
+		ImGuiKey_F,
+		ImGuiKey_G,
+		ImGuiKey_H,
+		ImGuiKey_J,
+		ImGuiKey_K,
+		ImGuiKey_L,
+		ImGuiKey_Semicolon,
+		ImGuiKey_Apostrophe,
+		ImGuiKey_Enter,
+		ImGuiKey_End,
+		ImGuiKey_LeftShift,
+		ImGuiKey_Z,
+		ImGuiKey_X,
+		ImGuiKey_C,
+		ImGuiKey_V,
+		ImGuiKey_B,
+		ImGuiKey_N,
+		ImGuiKey_M,
+		ImGuiKey_Comma,
+		ImGuiKey_Period,
+		ImGuiKey_Slash,
+		ImGuiKey_RightShift,
+		ImGuiKey_End,
+		ImGuiKey_LeftCtrl,
+		ImGuiKey_LeftSuper,
+		ImGuiKey_LeftAlt,
+		ImGuiKey_Space,
+		ImGuiKey_RightAlt,
+		ImGuiKey_RightSuper,
+		ImGuiKey_Menu,
+		ImGuiKey_RightCtrl,
+	};
 }  // namespace FuncDoodle
