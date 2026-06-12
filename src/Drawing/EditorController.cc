@@ -184,15 +184,13 @@ namespace FuncDoodle {
 			return false;
 		}
 
-		std::vector<std::pair<int, int>> pixelsChangedByBucketTool;
-		FloodFill(pixelX, pixelY, curPixelCol, fillColor, frame,
-			pixelsChangedByBucketTool);
+		std::vector<std::tuple<int, int, Col>> pixelsChangedByBucketTool;
+		FloodFill(pixelX, pixelY, toolManager, curPixelCol, fillColor, frame, pixelsChangedByBucketTool);
 		if (pixelsChangedByBucketTool.empty()) {
 			return false;
 		}
 
-		FillAction action(curPixelCol, fillColor, frameI, player->Proj(),
-			pixelsChangedByBucketTool);
+		FillAction action(fillColor, frameI, player->Proj(), pixelsChangedByBucketTool);
 		player->Proj()->PushUndoable(action);
 		return true;
 	}
@@ -230,11 +228,19 @@ namespace FuncDoodle {
 		return true;
 	}
 
-	void EditorController::FloodFill(int x, int y, Col targetCol, Col fillCol,
-		Frame* targetFrame, std::vector<std::pair<int, int>>& changed) {
+	void EditorController::FloodFill(int x, int y, ToolManager* toolManager, Col targetCol, Col fillCol,
+		Frame* targetFrame, std::vector<std::tuple<int, int, Col>>& changed) {
 		if (!targetFrame || !targetFrame->Pixels()) {
 			return;
 		}
+
+		auto colDist = [](Col a, Col b) -> int {
+			int dr = (int)a.r - b.r;
+			int dg = (int)a.g - b.g;
+			int db = (int)a.b - b.b;
+
+			return std::abs(dr) + std::abs(dg) + std::abs(db);
+		};
 
 		std::stack<std::pair<int, int>> pixelStack;
 		pixelStack.emplace(x, y);
@@ -249,11 +255,11 @@ namespace FuncDoodle {
 			}
 
 			Col currentCol = targetFrame->Pixels()->Get(currentX, currentY);
-			if (currentCol != targetCol || currentCol == fillCol) {
+			if (colDist(currentCol, targetCol) > toolManager->GetTolerance() * 3 || currentCol == fillCol) {
 				continue;
 			}
 
-			changed.emplace_back(currentX, currentY);
+			changed.emplace_back(currentX, currentY, targetFrame->Pixels()->Get(currentX, currentY));
 			targetFrame->SetPixel(currentX, currentY, fillCol);
 
 			pixelStack.emplace(currentX + 1, currentY);

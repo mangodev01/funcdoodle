@@ -72,10 +72,10 @@ namespace FuncDoodle {
 		/**
 		 * @brief Creates a fill action from a flood-fill operation.
 		 */
-		FillAction(Col prev, Col next, unsigned long frameI,
+		FillAction(Col next, unsigned long frameI,
 			const SharedPtr<ProjectFile>& proj,
-			std::vector<std::pair<int, int>> affected)
-			: m_Prev(prev), m_Next(next), m_FrameIndex(frameI), m_Proj(proj),
+			std::vector<std::tuple<int, int, Col>> affected)
+			: m_Next(next), m_FrameIndex(frameI), m_Proj(proj),
 			  m_Pixels(std::move(affected)) {};
 
 		/**
@@ -101,11 +101,10 @@ namespace FuncDoodle {
 		void Redo() override;
 
 		private:
-		Col m_Prev;
 		Col m_Next;
 		unsigned long m_FrameIndex;
 		WeakPtr<ProjectFile> m_Proj;
-		std::vector<std::pair<int, int>> m_Pixels;
+		std::vector<std::tuple<int, int, Col>> m_Pixels;
 	};
 
 	/**

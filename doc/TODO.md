@@ -19,6 +19,7 @@
 - [x] ~~improve keybinds system with the ability to assign multiple keys to 1 action~~
 - [x] improve keybinds popup to use a key-to-action mapping rather than the opposite
 - [x] consistent first/secondary color swapping
+- [x] add bucket tool tolerance
 - [ ] replace .fdp unsigned long frame indices with uint64_t for more consistency across various systems
 - [ ] non-destructive moving of selections
 - [ ] copy & pasting selections

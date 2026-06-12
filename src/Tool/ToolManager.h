@@ -204,14 +204,23 @@ namespace FuncDoodle {
 		 * @fn GetSize
 		 * @brief Returns the current tool size.
 		 *
-		 * @return Brush or tool size.
+		 * @return Tool size.
 		 */
 		[[nodiscard]] int GetSize() const { return m_Size; }
+
+		/**
+		 * @fn GetTolerance
+		 * @brief Returns the current tool tolerance (only applicable to bucket tool).
+		 *
+		 * @return Tool tolerance.
+		 */
+		[[nodiscard]] int GetTolerance() const { return m_Tolerance; }
+
 		/**
 		 * @fn SetSize
 		 * @brief Sets the current tool size.
 		 *
-		 * @param size New brush or tool size.
+		 * @param size New tool size.
 		 */
 		void SetSize(int size) { m_Size = size; }
 
@@ -222,6 +231,7 @@ namespace FuncDoodle {
 		float m_SecondaryCol[3] = {0.0f, 0.0f, 0.0f};
 		ColorChoice m_CurrentColor = ColorChoice::First;
 		int m_Size = 1;
+		uint8_t m_Tolerance = 1;
 		KeybindsRegistry& m_Keybinds;
 	};
 }  // namespace FuncDoodle

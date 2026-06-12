@@ -25,8 +25,6 @@
 
 #include "Conf/FuncPCH.h"
 
-#include <functional>
-
 namespace FuncDoodle {
 	/**
 	 * @enum ToolType
@@ -97,40 +95,40 @@ namespace FuncDoodle {
 	// lol
 	// (could ALSO use an unordered_map)
 	// (this is old code, ok?)
-	static void Tooltips(ToolType tool) {
+	static void Tooltips(ToolType tool, KeybindsRegistry& keys) {
 		switch (tool) {
 			case ToolType::Pencil:
 				if (ImGui::IsItemHovered()) {
 					ImGui::BeginTooltip();
-					ImGui::Text("Pencil (1)");
+					ImGui::Text("Pencil (%s)", static_cast<const char*>(keys.Get("pencil")));
 					ImGui::EndTooltip();
 				}
 				break;
 			case ToolType::Eraser:
 				if (ImGui::IsItemHovered()) {
 					ImGui::BeginTooltip();
-					ImGui::Text("Eraser (2)");
+					ImGui::Text("Eraser (%s)", static_cast<const char*>(keys.Get("eraser")));
 					ImGui::EndTooltip();
 				}
 				break;
 			case ToolType::Bucket:
 				if (ImGui::IsItemHovered()) {
 					ImGui::BeginTooltip();
-					ImGui::Text("Bucket (3)");
+					ImGui::Text("Bucket (%s)", static_cast<const char*>(keys.Get("bucket")));
 					ImGui::EndTooltip();
 				}
 				break;
 			case ToolType::Picker:
 				if (ImGui::IsItemHovered()) {
 					ImGui::BeginTooltip();
-					ImGui::Text("Picker (4)");
+					ImGui::Text("Picker (%s)", static_cast<const char*>(keys.Get("picker")));
 					ImGui::EndTooltip();
 				}
 				break;
 			case ToolType::Select:
 				if (ImGui::IsItemHovered()) {
 					ImGui::BeginTooltip();
-					ImGui::Text("Select (5)");
+					ImGui::Text("Select (%s)", static_cast<const char*>(keys.Get("select")));
 					ImGui::EndTooltip();
 				}
 				break;

@@ -4,6 +4,8 @@
 
 #include "Project/Project.h"
 
+#include <tuple>
+
 namespace FuncDoodle {
 	void DrawAction::Undo() {
 		if (auto proj = m_Proj.lock()) {
@@ -18,19 +20,19 @@ namespace FuncDoodle {
 
 	void FillAction::Undo() {
 		if (auto proj = m_Proj.lock()) {
-			for (const std::pair<int, int>& xy : m_Pixels) {
+			for (const std::tuple<int, int, Col>& xyc : m_Pixels) {
 				proj->AnimFrames()
 					->Get(m_FrameIndex)
-					->SetPixel(xy.first, xy.second, m_Prev);
+					->SetPixel(std::get<0>(xyc), std::get<1>(xyc), std::get<2>(xyc));
 			}
 		}
 	}
 	void FillAction::Redo() {
 		if (auto proj = m_Proj.lock()) {
-			for (const std::pair<int, int>& xy : m_Pixels) {
+			for (const std::tuple<int, int, Col>& xyc : m_Pixels) {
 				proj->AnimFrames()
 					->Get(m_FrameIndex)
-					->SetPixel(xy.first, xy.second, m_Next);
+					->SetPixel(std::get<0>(xyc), std::get<1>(xyc), m_Next);
 			}
 		}
 	}

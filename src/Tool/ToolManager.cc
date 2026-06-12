@@ -42,7 +42,7 @@ namespace FuncDoodle {
 			if ((i + 1) % columns != 0 && i != (int)ToolTypes.size() - 1)
 				ImGui::SameLine();
 
-			Tooltips(t);
+			Tooltips(t, m_Keybinds);
 
 			// ImGui::PopID();
 			i++;
@@ -69,8 +69,20 @@ namespace FuncDoodle {
 		bool showSizePredicate = m_SelectedTool == ToolType::Pencil ||
 								 m_SelectedTool == ToolType::Eraser;
 
+		bool showTolerancePredicate = m_SelectedTool == ToolType::Bucket;
+
 		if (showSizePredicate) {
-			ImGui::SliderInt("##Size", &m_Size, 1, 100, "%dpx");
+			ImGui::SliderInt("##size", &m_Size, 1, 100, "%dpx");
+
+			if (showColorPredicate)
+				ImGui::SameLine();
+		}
+
+		if (showTolerancePredicate) {
+			static constexpr uint8_t minTolerance = 1;
+			static constexpr uint8_t maxTolerance = 255;
+
+			ImGui::SliderScalar("##tolerance", ImGuiDataType_U8, &m_Tolerance, &minTolerance, &maxTolerance);
 
 			if (showColorPredicate)
 				ImGui::SameLine();
