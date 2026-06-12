@@ -74,16 +74,6 @@ namespace FuncDoodle {
 	constexpr int g_DefaultWindowHeight = 1080;
 
 	/**
-	 * @brief Width of the timeline UI panel.
-	 */
-	constexpr int g_TimelineWidth = 1074;
-
-	/**
-	 * @brief Height of the timeline UI panel.
-	 */
-	constexpr int g_TimelineHeight = 160;
-
-	/**
 	 * @brief Maximum buffer size for menu name strings.
 	 */
 	constexpr int g_MenuNameBufferSize = 32;

@@ -7,16 +7,16 @@
 #include "Keybinds/KeyHandler.h"
 #include "Keybinds/Keybinds.h"
 
+#include "Asset/LoadedAssets.h"
 #include "Project/Project.h"
 
 #include "Rendering/FrameRenderer.h"
 
 #include "Tool/ToolManager.h"
 
-#include "Asset/LoadedAssets.h"
-
 #include "UI/Gui.h"
 #include "Util/Ptr.h"
+#include "imgui.h"
 
 #include <algorithm>
 #include <cstdint>
@@ -112,8 +112,9 @@ namespace FuncDoodle {
 		// Create a scrollable region
 		ImGuiStyle& style = ImGui::GetStyle();
 		float childHeight = ImGui::GetWindowHeight() - ImGui::GetCursorPosY() -
-							style.WindowPadding.y;
+							style.WindowPadding.y - 30.0f;
 		childHeight = std::max(childHeight, 0.0f);
+
 		ImGui::BeginChild("FrameScrollRegion",
 			ImVec2(ImGui::GetContentRegionAvail().x, childHeight), false,
 			ImGuiWindowFlags_HorizontalScrollbar);
@@ -204,47 +205,67 @@ namespace FuncDoodle {
 			}
 
 			if (ImGui::BeginPopup(menuNamePtr)) {
-				if (ImGui::MenuItem("Delete", "\\")) {
+				Shortcut deleteKey = m_Keybinds.Get("delete_frame");
+				Shortcut insertBeforeKey = m_Keybinds.Get("insert_before");
+				Shortcut insertAfterKey = m_Keybinds.Get("insert_after");
+				Shortcut moveForwardKey = m_Keybinds.Get("move_forward");
+				Shortcut moveBackwardKey = m_Keybinds.Get("move_backward");
+				Shortcut copyKey = m_Keybinds.Get("copy_frame");
+				Shortcut pasteBeforeKey = m_Keybinds.Get("paste_before");
+				Shortcut pasteAfterKey = m_Keybinds.Get("paste_after");
+
+				// deletion
+				if (ImGui::MenuItem("Delete", deleteKey)) {
 					if (m_Proj->AnimFrameCount() != 1) {
 						Frame deletedFrame =
 							*m_Proj->AnimFrames()->Get(m_SelectedFrame);
+
 						m_Proj->AnimFrames()->Remove(m_SelectedFrame);
-						DeleteFrameAction action = DeleteFrameAction(
+
+						DeleteFrameAction action(
 							m_SelectedFrame, &deletedFrame, m_Proj);
+
 						m_Proj->PushUndoable(action);
 						m_Proj->AnimFrames()->Remove(i);
 					}
 				}
-				if (ImGui::MenuItem("Insert before", "O")) {
+
+				// insertion
+				if (ImGui::MenuItem("Insert before", insertBeforeKey)) {
 					m_Proj->AnimFrames()->InsertBeforeEmpty(m_SelectedFrame);
 					m_SelectedFrame++;
-					InsertFrameAction action =
-						InsertFrameAction(m_SelectedFrame - 1, m_Proj);
+					InsertFrameAction action(m_SelectedFrame - 1, m_Proj);
 					m_Proj->PushUndoable(action);
 				}
-				if (ImGui::MenuItem("Insert after", "P")) {
+				if (ImGui::MenuItem("Insert after", insertAfterKey)) {
 					m_Proj->AnimFrames()->InsertAfterEmpty(m_SelectedFrame);
-					InsertFrameAction action =
-						InsertFrameAction(m_SelectedFrame + 1, m_Proj);
+					InsertFrameAction action(m_SelectedFrame + 1, m_Proj);
 					m_Proj->PushUndoable(action);
 				}
-				if (ImGui::MenuItem("Move forward", "I")) {
+
+				// moving
+				if (ImGui::MenuItem("Move forward", moveForwardKey)) {
 					m_Proj->AnimFrames()->MoveForward(i);
 				}
-				if (ImGui::MenuItem("Move backward", "U")) {
+				if (ImGui::MenuItem("Move backward", moveBackwardKey)) {
 					m_Proj->AnimFrames()->MoveBackward(i);
 				}
-				if (ImGui::MenuItem("Copy", ",")) {
+
+				// copy
+				if (ImGui::MenuItem("Copy", copyKey)) {
 					m_Proj->AnimFrames()->Get(i)->CopyToClipboard();
 				}
-				if (ImGui::MenuItem("Paste before", ".")) {
+
+				// paste
+				if (ImGui::MenuItem("Paste before", pasteBeforeKey)) {
 					Frame* frame = Frame::PastedFrame();
 					m_Proj->AnimFrames()->InsertBefore(i, frame);
 				}
-				if (ImGui::MenuItem("Paste after", "/")) {
+				if (ImGui::MenuItem("Paste after", pasteAfterKey)) {
 					Frame* frame = Frame::PastedFrame();
 					m_Proj->AnimFrames()->InsertAfter(i, frame);
 				}
+
 				ImGui::EndPopup();
 			}
 
@@ -255,7 +276,24 @@ namespace FuncDoodle {
 		// Ensure the scroll region size is based on total width of all frames
 		ImGui::Dummy(ImVec2(totalWidth - 25, frameHeight));
 
+		{
+			const ImVec2 addButtonSize(20, 20);
+			ImVec2 contentMax = ImGui::GetWindowContentRegionMax();
+			ImGui::SetCursorPos(ImVec2(ImGui::GetScrollX() + contentMax.x - 40 -
+										   ImGui::GetStyle().FramePadding.x,
+				ImGui::GetScrollY() + contentMax.y - 40 -
+					ImGui::GetStyle().FramePadding.y));
+
+			if (ImGui::ImageButton("##add", (ImTextureID)(intptr_t)s_AddTexId,
+					addButtonSize)) {
+				m_Proj->AnimFrames()->InsertAfterEmpty(m_SelectedFrame);
+				InsertFrameAction action(m_SelectedFrame + 1, m_Proj);
+				m_Proj->PushUndoable(action);
+			}
+		}
+
 		ImGui::EndChild();
+
 		ImGui::End();
 
 		m_ToolManager->RenderTools();
@@ -338,6 +376,7 @@ namespace FuncDoodle {
 		}
 
 		ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.1f, 0.1f, 0.1f, 1.0f));
+
 		ImGui::BeginChild("##logscroll", ImVec2(-1, -1), false,
 			ImGuiWindowFlags_HorizontalScrollbar);
 
