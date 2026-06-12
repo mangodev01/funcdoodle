@@ -76,6 +76,11 @@ namespace FuncDoodle {
 	 */
 	extern uint32_t s_SelectTexId;
 	/**
+	 * @var s_SwapTexId
+	 * @brief Swap colors icon texture.
+	 */
+	extern uint32_t s_SwapTexId;
+	/**
 	 * @var s_Left
 	 * @brief Left arrow icon texture.
 	 */

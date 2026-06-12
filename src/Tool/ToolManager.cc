@@ -2,6 +2,7 @@
 
 #include <algorithm>
 
+#include "Asset/LoadedAssets.h"
 #include "Core/App.h"
 #include "Keybinds/Keybinds.h"
 #include "Tool/Tool.h"
@@ -9,6 +10,7 @@
 #include "Conf/FuncPCH.h"
 
 #include "UI/Gui.h"
+#include "imgui.h"
 
 namespace FuncDoodle {
 	ToolManager::ToolManager(KeybindsRegistry& keybinds)
@@ -54,6 +56,10 @@ namespace FuncDoodle {
 		m_Keybinds.Register("increase_tool_size", "Increase tool size",
 			"Increase the current tool size",
 			{false, false, false, ImGuiKey_Apostrophe});
+
+		m_Keybinds.Register("swap_colors", "Swap",
+			"Swap between first/secondary colors",
+			{false, false, false, ImGuiKey_V});
 	}
 
 	void ToolManager::Widgets() {
@@ -78,17 +84,56 @@ namespace FuncDoodle {
 
 		m_Size = std::max(m_Size, 1);
 
+		float* col = GetCol();
+		float* secondaryCol = GetSecCol();
+
 		if (showColorPredicate) {
-			if (ImGui::ColorButton(
-					"Color", ImVec4(m_Col[0], m_Col[1], m_Col[2], 1.0f))) {
-				ImGui::OpenPopup("ColorPicker");
+			auto drawColorButton = [](const char* id, const float* color, const char* popupName)
+			{
+				if (ImGui::ColorButton(id, ImVec4(color[0], color[1], color[2], 1.0f))) {
+					ImGui::OpenPopup(popupName);
+				}
+			};
+
+			const bool firstIsPrimary = (m_CurrentColor == ColorChoice::First);
+
+			drawColorButton(
+				firstIsPrimary ? "##first_color" : "##secondary_color",
+				firstIsPrimary ? col : secondaryCol,
+				firstIsPrimary ? "ColorPickerFirst" : "ColorPickerSecondary");
+
+			ImGui::SameLine();
+
+			float prevCurX = ImGui::GetCursorPosX();
+
+			drawColorButton(
+				firstIsPrimary ? "##secondary_color" : "##first_color",
+				firstIsPrimary ? secondaryCol : col,
+				firstIsPrimary ? "ColorPickerSecondary" : "ColorPickerFirst");
+
+
+			ImGui::SetCursorPosX(prevCurX - 23);
+
+			if (ImGui::ImageButton("##swap", (ImTextureID)(intptr_t)s_SwapTexId, ImVec2(20, 20)) || m_Keybinds.Get("swap_colors").IsPressed()) {
+				if (m_CurrentColor == ColorChoice::Secondary) {
+					m_CurrentColor = ColorChoice::First;
+				} else if (m_CurrentColor == ColorChoice::First) {
+					m_CurrentColor = ColorChoice::Secondary;
+				}
 			}
 		}
 
-		if (ImGui::BeginPopup("ColorPicker")) {
+		if (ImGui::BeginPopup("ColorPickerFirst")) {
 			ImGui::PushItemWidth(250);
-			ImGui::ColorPicker3(
-				"##color", m_Col, ImGuiColorEditFlags_NoSidePreview);
+			ImGui::ColorPicker3("##color", col, ImGuiColorEditFlags_NoSidePreview);
+			ImGui::PopItemWidth();
+
+			ImGui::EndPopup();
+		}
+
+		if (ImGui::BeginPopup("ColorPickerSecondary")) {
+			ImGui::PushItemWidth(250);
+			ImGui::ColorPicker3("##secondary_color", secondaryCol, ImGuiColorEditFlags_NoSidePreview);
 			ImGui::PopItemWidth();
 
 			ImGui::EndPopup();
@@ -113,7 +158,7 @@ namespace FuncDoodle {
 		Application* app = Application::Get();
 		ImVec2 pos = ImGui::GetMousePos();
 		// sorry, selection tool, you just look pretty weird as a cursor  :(
-		if (!app->IsPosInFrame(pos) || m_SelectedTool == ToolType::Select) {
+		if (!Application::IsPosInFrame(pos) || m_SelectedTool == ToolType::Select) {
 			app->ShowCursor();
 		} else {
 			app->HideCursor();
@@ -133,13 +178,12 @@ namespace FuncDoodle {
 			(float)app->GetManager()->GetFrameRenderer()->GetCtx()->PixelScale;
 		float offsetFactor = scale / 2.0f;
 
-		// ImVec2 cursorOff(0, offsetFactor);
 		ImVec2 posWithoutOff(ImGui::GetMousePos());
-		ImVec2 pos =
-			ImVec2(posWithoutOff.x, posWithoutOff.y - 32 + (scale / 2.0f));
+		ImVec2 pos(posWithoutOff.x, posWithoutOff.y - 32 + (scale / 2.0f));
 
 		ImGui::SetMouseCursor(ImGuiMouseCursor_None);
 		float off = 1.5f;
+
 		// same as (ImTextureID)(intptr_t)ToolTexID(m_SelectedTool);
 		ImTextureID texID = (intptr_t)ToolTexID(m_SelectedTool);
 

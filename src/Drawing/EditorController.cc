@@ -77,7 +77,7 @@ namespace FuncDoodle {
 		if (!mouseDown) {
 			return false;
 		}
-		const float* colOld = toolManager->GetCol();
+		const float* colOld = toolManager->GetCurCol();
 		Col newColor = {.r = static_cast<unsigned char>(
 							(colOld[0] * g_MaxColorValue) + 0.5f),
 			.g = static_cast<unsigned char>(
@@ -171,7 +171,7 @@ namespace FuncDoodle {
 			return false;
 		}
 
-		const float* colOld = toolManager->GetCol();
+		const float* colOld = toolManager->GetCurCol();
 		Col fillColor = {.r = static_cast<unsigned char>(
 							 (colOld[0] * g_MaxColorValue) + 0.5f),
 			.g = static_cast<unsigned char>(
@@ -518,7 +518,7 @@ namespace FuncDoodle {
 
 						Col col =
 							tool == ToolType::Pencil
-								? Col::FromFloat3(context.ToolManager->GetCol())
+								? Col::FromFloat3(context.ToolManager->GetCurCol())
 								: context.Player->Proj()->BgCol();
 
 						ImGui::GetForegroundDrawList()->AddRectFilled(min, max,

@@ -15,6 +15,7 @@ namespace FuncDoodle {
 	uint32_t s_TextTexId = 0;
 	uint32_t s_AddTexId = 0;
 	uint32_t s_OpenTexId = 0;
+	uint32_t s_SwapTexId = 0;
 	uint32_t s_Left = 0;
 	uint32_t s_Down = 0;
 	uint32_t s_Up = 0;
@@ -39,6 +40,7 @@ namespace FuncDoodle {
 		s_AddTexId = LoadImage("add.png");
 		s_OpenTexId = LoadImage("folder.png");
 		s_SelectTexId = LoadImage("select.png");
+		s_SwapTexId = LoadImage("swap.png");
 		s_Left = LoadImage("left.png");
 		s_Down = LoadImage("down.png");
 		s_Up = LoadImage("up.png");

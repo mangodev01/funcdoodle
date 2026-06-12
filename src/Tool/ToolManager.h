@@ -37,6 +37,30 @@
 
 namespace FuncDoodle {
 	/**
+	 * @enum ColorChoice
+	 * @brief Selects one of the editor color slots.
+	 *
+	 * Used when an operation needs to specify whether it should affect the
+	 * primary or secondary color.
+	 */
+	enum class ColorChoice {
+		/**
+		 * @brief Primary drawing color.
+		 *
+		 * The main color used by drawing tools.
+		 */
+		First,
+
+		/**
+		 * @brief Secondary drawing color.
+		 *
+		 * An alternate color available for drawing operations.
+		 */
+		Secondary
+	};
+
+
+	/**
 	 * @class ToolManager
 	 * @brief Manages tools in FuncDoodle.
 	 *
@@ -92,23 +116,90 @@ namespace FuncDoodle {
 		ToolType GetSelectedTool() { return m_SelectedTool; }
 		/**
 		 * @fn GetCol
-		 * @brief Returns the current tool color as normalized RGB values.
+		 * @brief Returns the tool color under the first color slot as normalized RGB values.
 		 *
 		 * @return Pointer to a 3-float RGB array.
 		 */
-		const float* GetCol() { return m_Col; }
+		float* GetCol() { return m_FirstCol; }
+
+		/**
+		 * @fn GetSecCol
+		 * @brief Returns the tool color under the secondary color slot as normalized RGB values.
+		 *
+		 * @return Pointer to a 3-float RGB array.
+		 */
+		float* GetSecCol() { return m_SecondaryCol; }
+
 		/**
 		 * @fn SetCol
-		 * @brief Sets the current tool color from an 8-bit RGB color.
+		 * @brief Sets the tool color under the first color slot from an 8-bit RGB color.
 		 *
 		 * @param col New tool color.
 		 */
 		void SetCol(struct Col col) {
 			unsigned char colArr[3] = {col.r, col.g, col.b};
 			for (int j = 0; j < 3; j++) {
-				m_Col[j] = static_cast<float>(colArr[j]) / 255.0f;
+				m_FirstCol[j] = static_cast<float>(colArr[j]) / 255.0f;
 			}
 		}
+
+		/**
+		 * @fn SetSecCol
+		 * @brief Sets the tool color under the secondary color slot from an 8-bit RGB color.
+		 *
+		 * @param col New tool color.
+		 */
+		void SetSecCol(struct Col col) {
+			unsigned char colArr[3] = {col.r, col.g, col.b};
+			for (int j = 0; j < 3; j++) {
+				m_SecondaryCol[j] = static_cast<float>(colArr[j]) / 255.0f;
+			}
+		}
+
+		/**
+		 * @fn SetCurCol
+		 * @brief Sets the CURRENT tool color from an 8-bit RGB color.
+		 *
+		 * @param col New tool color.
+		 */
+		void SetCurCol(struct Col col) {
+			unsigned char colArr[3] = {col.r, col.g, col.b};
+
+			switch (m_CurrentColor) {
+				using enum ColorChoice;
+
+				case First:
+					for (int j = 0; j < 3; j++) {
+						m_FirstCol[j] = static_cast<float>(colArr[j]) / 255.0f;
+					}
+					break;
+				case Secondary:
+					for (int j = 0; j < 3; j++) {
+						m_SecondaryCol[j] = static_cast<float>(colArr[j]) / 255.0f;
+					}
+					break;
+			}
+
+		}
+
+		/**
+		 * @fn GetCurCol
+		 * @brief Returns the CURRENT tool color as normalized RGB values.
+		 *
+		 * @return Pointer to a 3-float RGB array.
+		 */
+		float* GetCurCol() { 
+			switch (m_CurrentColor) {
+				using enum ColorChoice;
+
+				case First:
+					return m_FirstCol;
+
+				case Secondary:
+					return m_SecondaryCol;
+			}
+		}
+
 		/**
 		 * @fn GetSize
 		 * @brief Returns the current tool size.
@@ -125,8 +216,11 @@ namespace FuncDoodle {
 		void SetSize(int size) { m_Size = size; }
 
 		private:
+
 		ToolType m_SelectedTool = ToolType::Pencil;
-		float m_Col[3] = {0.0f, 0.0f, 0.0f};
+		float m_FirstCol[3] = {0.0f, 0.0f, 0.0f};
+		float m_SecondaryCol[3] = {0.0f, 0.0f, 0.0f};
+		ColorChoice m_CurrentColor = ColorChoice::First;
 		int m_Size = 1;
 		KeybindsRegistry& m_Keybinds;
 	};
