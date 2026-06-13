@@ -158,7 +158,7 @@ namespace FuncDoodle {
 		 *
 		 * @return Current frame index.
 		 */
-		[[nodiscard]] unsigned long SelectedFrameI() const {
+		[[nodiscard]] uint64_t SelectedFrameI() const {
 			return m_SelectedFrame;
 		}
 		/**
@@ -185,7 +185,7 @@ namespace FuncDoodle {
 
 		private:
 		SharedPtr<ProjectFile> m_Proj;
-		unsigned long m_SelectedFrame{0};
+		uint64_t m_SelectedFrame{0};
 		UniquePtr<FrameRenderer> m_FrameRenderer;
 		UniquePtr<FrameRenderer> m_TimelineFrameRenderer;
 		UniquePtr<ToolManager> m_ToolManager;

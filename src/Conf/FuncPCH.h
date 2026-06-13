@@ -11,7 +11,6 @@
  * - Conditional compile-time utilities for C++20 std::format support
  * - Platform-specific helpers (file explorer opening, string comparisons)
  * - Global log storage (s_Logs)
- * - Versioning macros (FUNCVER, FDPVERMAJOR, FDPVERMINOR)
  * - Utility macros (e.g., color inversion helpers)
  *
  * @warning This file defines macros with side effects (logging, exiting, memory

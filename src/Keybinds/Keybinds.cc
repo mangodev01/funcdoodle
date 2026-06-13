@@ -13,13 +13,13 @@
 
 namespace FuncDoodle {
 	KeyMask::KeyMask() {
-		for (unsigned long long& m_Key : m_Keys) {
+		for (uint64_t& m_Key : m_Keys) {
 			m_Key = 0;
 		}
 	}
 
 	KeyMask::KeyMask(ImGuiKey key) {
-		for (unsigned long long& m_Key : m_Keys) {
+		for (uint64_t& m_Key : m_Keys) {
 			m_Key = 0;
 		}
 		if (key != ImGuiKey_None) {

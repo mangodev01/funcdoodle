@@ -6,10 +6,10 @@
 
 namespace FuncDoodle {
 	LongIndexArray::LongIndexArray(
-		int width, int height, Col bgCol, unsigned long initialcap)
+		int width, int height, Col bgCol, uint64_t initialcap)
 		: m_Capacity(initialcap), m_Width(width), m_Height(height),
 		  m_BG(bgCol) {
-		m_Capacity = std::max<unsigned long>(m_Capacity, 1);
+		m_Capacity = std::max<uint64_t>(m_Capacity, 1);
 		m_Width = std::max(m_Width, 1);
 		m_Height = std::max(m_Height, 1);
 		m_Data.reserve(m_Capacity);
@@ -40,7 +40,7 @@ namespace FuncDoodle {
 		size = m_Data.size();
 	}
 
-	void LongIndexArray::InsertAfterEmpty(unsigned long index) {
+	void LongIndexArray::InsertAfterEmpty(uint64_t index) {
 		if (index >= size) {
 			FUNC_ERR("index out of range");
 			return;
@@ -55,7 +55,7 @@ namespace FuncDoodle {
 		size = m_Data.size();
 	}
 
-	void LongIndexArray::InsertBeforeEmpty(unsigned long index) {
+	void LongIndexArray::InsertBeforeEmpty(uint64_t index) {
 		if (index >= size) {
 			FUNC_WARN("index out of range");
 			return;
@@ -70,7 +70,7 @@ namespace FuncDoodle {
 		size = m_Data.size();
 	}
 
-	void LongIndexArray::InsertAfter(unsigned long index, const Frame* value) {
+	void LongIndexArray::InsertAfter(uint64_t index, const Frame* value) {
 		if (!value) {
 			FUNC_WARN("Tried to insert invalid frame");
 			return;
@@ -89,7 +89,7 @@ namespace FuncDoodle {
 		size = m_Data.size();
 	}
 
-	void LongIndexArray::InsertAfter(unsigned long index, const Frame val) {
+	void LongIndexArray::InsertAfter(uint64_t index, const Frame val) {
 		if (index >= size) {
 			FUNC_WARN("index out of range");
 			return;
@@ -103,7 +103,7 @@ namespace FuncDoodle {
 		size = m_Data.size();
 	}
 
-	void LongIndexArray::InsertBefore(unsigned long index, const Frame* value) {
+	void LongIndexArray::InsertBefore(uint64_t index, const Frame* value) {
 		if (!value) {
 			FUNC_WARN("tried to add invalid frame");
 			return;
@@ -122,7 +122,7 @@ namespace FuncDoodle {
 		size = m_Data.size();
 	}
 
-	void LongIndexArray::InsertBefore(unsigned long index, const Frame val) {
+	void LongIndexArray::InsertBefore(uint64_t index, const Frame val) {
 		if (index >= size) {
 			FUNC_WARN("index out of range");
 			return;
@@ -136,7 +136,7 @@ namespace FuncDoodle {
 		size = m_Data.size();
 	}
 
-	void LongIndexArray::MoveBackward(unsigned long i) {
+	void LongIndexArray::MoveBackward(uint64_t i) {
 		if (i == 0 || i >= size)
 			return;
 		Frame temp = m_Data[i];
@@ -144,7 +144,7 @@ namespace FuncDoodle {
 		m_Data[i - 1] = temp;
 	}
 
-	void LongIndexArray::MoveForward(unsigned long i) {
+	void LongIndexArray::MoveForward(uint64_t i) {
 		if (i + 1 >= size)
 			return;
 		Frame temp = m_Data[i];
@@ -152,7 +152,7 @@ namespace FuncDoodle {
 		m_Data[i + 1] = temp;
 	}
 
-	void LongIndexArray::Remove(unsigned long index) {
+	void LongIndexArray::Remove(uint64_t index) {
 		if (index >= size) {
 			FUNC_WARN("index out of range");
 			return;
@@ -162,7 +162,7 @@ namespace FuncDoodle {
 		size = m_Data.size();
 	}
 
-	Frame* LongIndexArray::operator[](unsigned long index) {
+	Frame* LongIndexArray::operator[](uint64_t index) {
 		if (index >= size) {
 			FUNC_WARN("index out of range");
 			return nullptr;
@@ -170,7 +170,7 @@ namespace FuncDoodle {
 		return &m_Data[index];
 	}
 
-	const Frame* LongIndexArray::operator[](unsigned long index) const {
+	const Frame* LongIndexArray::operator[](uint64_t index) const {
 		if (index >= size) {
 			FUNC_WARN("index out of range");
 			return nullptr;
@@ -178,7 +178,7 @@ namespace FuncDoodle {
 		return &m_Data[index];
 	}
 
-	Frame* LongIndexArray::Get(unsigned long index) {
+	Frame* LongIndexArray::Get(uint64_t index) {
 		if (index >= size) {
 			FUNC_WARN("index out of range");
 			return nullptr;
@@ -186,7 +186,7 @@ namespace FuncDoodle {
 		return &m_Data[index];
 	}
 
-	void LongIndexArray::Resize(unsigned long newCap) {
+	void LongIndexArray::Resize(uint64_t newCap) {
 		if (newCap <= m_Capacity)
 			return;
 		m_Data.reserve(newCap);

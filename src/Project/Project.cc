@@ -63,7 +63,7 @@ namespace FuncDoodle {
 
 		char curFilePath[g_FilePathBufferSize];
 
-		for (unsigned long i = 0; i < AnimFrameCount(); i++) {
+		for (uint64_t i = 0; i < AnimFrameCount(); i++) {
 #ifndef _WIN32
 			snprintf(curFilePath, sizeof(curFilePath), "%s/frame_%lu.png",
 				filePath, i);
@@ -120,7 +120,7 @@ namespace FuncDoodle {
 	}
 
 	void ProjectFile::SetAnimWidth(int width, bool clear) {
-		for (unsigned long i = 0; i < AnimFrameCount(); ++i) {
+		for (uint64_t i = 0; i < AnimFrameCount(); ++i) {
 			m_Frames->Get(i)->SetWidth(width, clear);
 		}
 		m_Width = width;
@@ -130,7 +130,7 @@ namespace FuncDoodle {
 		return m_Height;
 	}
 	void ProjectFile::SetAnimHeight(int height, bool clear) {
-		for (unsigned long i = 0; i < AnimFrameCount(); ++i) {
+		for (uint64_t i = 0; i < AnimFrameCount(); ++i) {
 			m_Frames->Get(i)->SetHeight(height, clear);
 		}
 		m_Height = height;
@@ -157,7 +157,7 @@ namespace FuncDoodle {
 		strcpy(m_Desc, desc);
 	}
 
-	unsigned long ProjectFile::AnimFrameCount() const {
+	uint64_t ProjectFile::AnimFrameCount() const {
 		return m_Frames->Size();
 	}
 	SharedPtr<LongIndexArray> ProjectFile::AnimFrames() {
@@ -206,7 +206,7 @@ namespace FuncDoodle {
 		outFile << "FDProj";
 
 		// 0.3
-		unsigned long frames = m_Frames->Size();
+		uint64_t frames = m_Frames->Size();
 
 		int major = c_FdpVerMajor;
 		int minor = c_FdpVerMinor;
@@ -234,7 +234,7 @@ namespace FuncDoodle {
 		std::map<Col, int> colorToIndex;  // Map each color to its stable index
 
 		// First pass: collect unique colors with stable ordering
-		for (unsigned long i = 0; i < AnimFrameCount(); i++) {
+		for (uint64_t i = 0; i < AnimFrameCount(); i++) {
 			const auto* pixels = frameData->Get(i)->Pixels();
 			for (int x = 0; x < pixels->Width(); x++) {
 				for (int y = 0; y < pixels->Height(); y++) {
@@ -263,7 +263,7 @@ namespace FuncDoodle {
 		}
 
 		// Write frame data using stable indices
-		for (unsigned long i = 0; i < AnimFrameCount(); i++) {
+		for (uint64_t i = 0; i < AnimFrameCount(); i++) {
 			const auto* pixels = frameData->Get(i)->Pixels();
 			for (int y = 0; y < pixels->Height(); y++) {
 				for (int x = 0; x < pixels->Width(); x++) {
@@ -306,8 +306,16 @@ namespace FuncDoodle {
 		int verMinor = 0;
 		file.read(reinterpret_cast<char*>(&verMinor), sizeof(verMinor));
 
-		unsigned long frameCount = 0;  // temp val
-		file.read(reinterpret_cast<char*>(&frameCount), sizeof(frameCount));
+
+		uint64_t frameCount = 0; // temp val
+		if (verMinor >= 5) {
+			file.read(reinterpret_cast<char*>(&frameCount), sizeof(frameCount));
+		} else {
+			unsigned long oldCount = 0;
+			file.read(reinterpret_cast<char*>(&oldCount), sizeof(oldCount));
+			frameCount = static_cast<uint64_t>(oldCount);
+		}
+
 		int animWidth = 0;
 		file.read(reinterpret_cast<char*>(&animWidth), sizeof(animWidth));
 		int animHeight = 0;
@@ -378,8 +386,8 @@ namespace FuncDoodle {
 
 		m_Frames = std::make_shared<LongIndexArray>(m_Width, m_Height, m_BG);
 		if (verMajor >= 0 && verMinor >= 2) {
-			FUNC_GRAY("Reading {} frames...", (unsigned long)frameCount);
-			for (unsigned long i = 0; i < frameCount; i++) {
+			FUNC_GRAY("Reading {} frames...", (uint64_t)frameCount);
+			for (uint64_t i = 0; i < frameCount; i++) {
 				ImageArray img(animWidth, animHeight, m_BG);
 				for (int y = 0; y < animHeight; y++) {
 					for (int x = 0; x < animWidth; x++) {

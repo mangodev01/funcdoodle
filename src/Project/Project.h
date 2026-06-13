@@ -164,14 +164,14 @@ namespace FuncDoodle {
 		 *
 		 * @return Frame count.
 		 */
-		[[nodiscard]] unsigned long AnimFrameCount() const;
+		[[nodiscard]] uint64_t AnimFrameCount() const;
 		/**
 		 * @fn SetAnimFrameCount
 		 * @brief Resizes the animation frame count.
 		 *
 		 * @param count New frame count.
 		 */
-		void SetAnimFrameCount(unsigned long count);
+		void SetAnimFrameCount(uint64_t count);
 		/**
 		 * @fn SetBgCol
 		 * @brief Sets the project background color and rebuilds backing frame

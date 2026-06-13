@@ -88,7 +88,7 @@ namespace FuncDoodle {
 			return;
 		}
 
-		unsigned long& selectedFrame = *context.SelectedFrame;
+		uint64_t& selectedFrame = *context.SelectedFrame;
 
 		if (keybinds.Get("prev_frame").IsPressed()) {
 			if (selectedFrame > 0) {

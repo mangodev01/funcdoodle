@@ -35,8 +35,8 @@
  *
  * @section build Building
  * FuncDoodle uses CMake. Debug builds are tagged with the `-dev` version
- * suffix. The project file format is versioned via @ref FDPVERMAJOR and @ref
- * FDPVERMINOR.
+ * suffix. The project file format is versioned via @ref c_FdpVerMajor and @ref
+ * c_FdpVerMinor.
  *
  * @section structure Code Structure
  * - `src/` — application source

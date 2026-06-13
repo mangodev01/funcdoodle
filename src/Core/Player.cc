@@ -17,7 +17,7 @@ namespace FuncDoodle {
 		float dt = ImGui::GetIO().DeltaTime;
 		auto fps = static_cast<float>(m_Proj->AnimFPS());
 		m_TimeElapsed += dt;
-		m_CurFrame = static_cast<unsigned long>(m_TimeElapsed * fps) %
+		m_CurFrame = static_cast<uint64_t>(m_TimeElapsed * fps) %
 					 m_Proj->AnimFrameCount();
 	}
 	void AnimationPlayer::Rewind() {

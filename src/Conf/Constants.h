@@ -180,7 +180,7 @@ namespace FuncDoodle {
 	 *
 	 * Indicates minor changes in the .fdp file format.
 	 */
-	static constexpr uint8_t c_FdpVerMinor = 4;
+	static constexpr uint8_t c_FdpVerMinor = 5;
 
 	/**
 	 * @brief QWERTY keyboard layout.

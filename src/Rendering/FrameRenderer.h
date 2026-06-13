@@ -52,7 +52,7 @@ namespace FuncDoodle {
 		 * @param editorController Shared editor controller used for painting.
 		 * @param settings Application settings used for rendering behavior.
 		 */
-		FrameRenderer(Frame* frame, unsigned long index, ToolManager* manager,
+		FrameRenderer(Frame* frame, uint64_t index, ToolManager* manager,
 			AnimationPlayer* player,
 			const SharedPtr<EditorController>& editorController,
 			AppSettings& settings)

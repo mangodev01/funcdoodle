@@ -50,7 +50,7 @@ namespace FuncDoodle {
 		 * @var SelectedFrame
 		 * @brief Pointer to the active timeline frame index.
 		 */
-		unsigned long* SelectedFrame = nullptr;
+		uint64_t* SelectedFrame = nullptr;
 	};
 
 	/**

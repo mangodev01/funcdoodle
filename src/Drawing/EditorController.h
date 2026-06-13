@@ -63,7 +63,7 @@ namespace FuncDoodle {
 				nullptr;  ///< Frame currently being rendered and edited.
 			class Frame* PreviousFrame =
 				nullptr;  ///< Previous frame used for preview rendering.
-			unsigned long Index = 0;  ///< Timeline index of the active frame.
+			uint64_t Index = 0;  ///< Timeline index of the active frame.
 			ToolManager* ToolManager =
 				nullptr;  ///< Tool state used for painting.
 			AnimationPlayer* Player =
@@ -108,7 +108,7 @@ namespace FuncDoodle {
 		 * frame.
 		 * @return Whether the frame was modified.
 		 */
-		bool Paint(Frame* frame, unsigned long frameI, ToolManager* toolManager,
+		bool Paint(Frame* frame, uint64_t frameI, ToolManager* toolManager,
 			AnimationPlayer* player, int pixelX, int pixelY, bool mouseDown,
 			bool mouseClicked);
 		/**
@@ -149,13 +149,13 @@ namespace FuncDoodle {
 		SharedPtr<Selection> Sel() { return m_Sel; }
 
 		private:
-		bool PaintPencil(Frame* frame, unsigned long frameI,
+		bool PaintPencil(Frame* frame, uint64_t frameI,
 			ToolManager* toolManager, AnimationPlayer* player, int pixelX,
 			int pixelY, bool mouseDown);
-		bool PaintEraser(Frame* frame, unsigned long frameI,
+		bool PaintEraser(Frame* frame, uint64_t frameI,
 			ToolManager* toolManager, AnimationPlayer* player, int pixelX,
 			int pixelY, bool mouseDown);
-		bool PaintBucket(Frame* frame, unsigned long frameI,
+		bool PaintBucket(Frame* frame, uint64_t frameI,
 			ToolManager* toolManager, AnimationPlayer* player, int pixelX,
 			int pixelY, bool mouseClicked);
 		static bool PaintPicker(
@@ -164,7 +164,7 @@ namespace FuncDoodle {
 			Frame* frame, ToolManager* toolManager, int pixelX, int pixelY);
 		static void FloodFill(int x, int y, ToolManager* toolManager, Col targetCol, Col fillCol,
 			Frame* targetFrame, std::vector<std::tuple<int, int, Col>>& changed);
-		void RecordStrokeChange(unsigned long frameI, int x, int y,
+		void RecordStrokeChange(uint64_t frameI, int x, int y,
 			const Col& prev, const Col& next);
 		static void HandleCanvasInput(CanvasContext& context);
 		void ApplyToolAt(CanvasContext& context, const ImageArray* pixels,
@@ -176,9 +176,9 @@ namespace FuncDoodle {
 
 		bool m_UndoByStroke = false;
 		bool m_StrokeActive = false;
-		unsigned long m_StrokeFrameI = 0;
+		uint64_t m_StrokeFrameI = 0;
 		std::vector<StrokeAction::PixelChange> m_StrokeChanges;
-		std::unordered_map<unsigned long long, size_t> m_StrokeIndexByKey;
+		std::unordered_map<uint64_t, size_t> m_StrokeIndexByKey;
 		SharedPtr<Selection> m_Sel;
 		SquareSelection m_SquareSel;
 	};

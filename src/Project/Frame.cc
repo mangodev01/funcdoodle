@@ -239,7 +239,7 @@ namespace FuncDoodle {
 			m_Pixels.BgCol() != other.m_Pixels.BgCol()) {
 			return false;
 		}
-		for (unsigned long i = 0;
+		for (uint64_t i = 0;
 			std::cmp_less(i, m_Pixels.Width() * m_Pixels.Height()); i++) {
 			if (m_Pixels.Data()[i] != other.m_Pixels.Data()[i]) {
 				return false;

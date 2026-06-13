@@ -86,7 +86,7 @@ namespace FuncDoodle {
 		 * @brief Clears all keys from the mask.
 		 */
 		void Reset() {
-			for (unsigned long long& m_Key : m_Keys) {
+			for (uint64_t& m_Key : m_Keys) {
 				m_Key = 0;
 			}
 		}
@@ -134,7 +134,7 @@ namespace FuncDoodle {
 		}
 
 		private:
-		unsigned long long m_Keys[KEY_MASK_SIZE];
+		uint64_t m_Keys[KEY_MASK_SIZE];
 	};
 
 	/**

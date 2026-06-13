@@ -32,7 +32,7 @@ namespace FuncDoodle {
 		 * @param deg Rotation amount in degrees.
 		 * @param proj Owning project reference.
 		 */
-		RotateSelectionAction(unsigned long frameIndex, WeakPtr<Selection> sel,
+		RotateSelectionAction(uint64_t frameIndex, WeakPtr<Selection> sel,
 			int32_t deg, const SharedPtr<ProjectFile>& proj)
 			: m_FrameIndex(frameIndex), m_Sel(std::move(sel)), m_Proj(proj),
 			  m_Deg(deg) {}
@@ -58,7 +58,7 @@ namespace FuncDoodle {
 		[[nodiscard]] WeakPtr<Selection> Sel() const { return m_Sel; }
 
 		private:
-		unsigned long m_FrameIndex;	  ///< Frame index where action occurred
+		uint64_t m_FrameIndex;	  ///< Frame index where action occurred
 		WeakPtr<Selection> m_Sel;	  ///< Target selection
 		int32_t m_Deg;				  ///< Rotation in degrees
 		WeakPtr<ProjectFile> m_Proj;  ///< Owning project
@@ -77,7 +77,7 @@ namespace FuncDoodle {
 		 * @param prevPixels Pixels removed by deletion.
 		 * @param proj Owning project reference.
 		 */
-		DeleteSelectionAction(unsigned long frameIndex, WeakPtr<Selection> sel,
+		DeleteSelectionAction(uint64_t frameIndex, WeakPtr<Selection> sel,
 			std::vector<Col> prevPixels, const SharedPtr<ProjectFile>& proj)
 			: m_FrameIndex(frameIndex), m_Sel(std::move(sel)),
 			  m_PrevPixels(std::move(prevPixels)), m_Proj(proj) {}
@@ -98,7 +98,7 @@ namespace FuncDoodle {
 		[[nodiscard]] WeakPtr<Selection> Sel() const { return m_Sel; }
 
 		private:
-		unsigned long m_FrameIndex;		///< Frame index of action
+		uint64_t m_FrameIndex;		///< Frame index of action
 		WeakPtr<Selection> m_Sel;		///< Target selection
 		std::vector<Col> m_PrevPixels;	///< Stored pixels for undo
 		WeakPtr<ProjectFile> m_Proj;	///< Owning project
@@ -146,7 +146,7 @@ namespace FuncDoodle {
 		/**
 		 * @brief Returns frame index.
 		 */
-		[[nodiscard]] unsigned long FrameIndex() const {
+		[[nodiscard]] uint64_t FrameIndex() const {
 			return m_Ctx.FrameIndex;
 		}
 

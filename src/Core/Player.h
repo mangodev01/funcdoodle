@@ -97,7 +97,7 @@ namespace FuncDoodle {
 		 *
 		 * @return Current frame index.
 		 */
-		[[nodiscard]] constexpr unsigned long CurFrame() const {
+		[[nodiscard]] constexpr uint64_t CurFrame() const {
 			return m_CurFrame;
 		}
 		/**
@@ -106,12 +106,12 @@ namespace FuncDoodle {
 		 *
 		 * @param frame Frame index to jump to.
 		 */
-		constexpr void SetCurFrame(unsigned long frame) { m_CurFrame = frame; }
+		constexpr void SetCurFrame(uint64_t frame) { m_CurFrame = frame; }
 
 		private:
 		bool m_Playing;
 		SharedPtr<ProjectFile> m_Proj;
-		unsigned long m_CurFrame = 0L;
+		uint64_t m_CurFrame = 0L;
 		float m_TimeElapsed = 0.0f;
 	};
 }  // namespace FuncDoodle

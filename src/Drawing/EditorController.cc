@@ -19,7 +19,7 @@ namespace FuncDoodle {
 
 	EditorController::EditorController() = default;
 
-	bool EditorController::Paint(Frame* frame, unsigned long frameI,
+	bool EditorController::Paint(Frame* frame, uint64_t frameI,
 		ToolManager* toolManager, AnimationPlayer* player, int pixelX,
 		int pixelY, bool mouseDown, bool mouseClicked) {
 		if (!frame || !frame->Pixels() || !toolManager || !player ||
@@ -71,7 +71,7 @@ namespace FuncDoodle {
 		m_StrokeIndexByKey.clear();
 	}
 
-	bool EditorController::PaintPencil(Frame* frame, unsigned long frameI,
+	bool EditorController::PaintPencil(Frame* frame, uint64_t frameI,
 		ToolManager* toolManager, AnimationPlayer* player, int pixelX,
 		int pixelY, bool mouseDown) {
 		if (!mouseDown) {
@@ -120,7 +120,7 @@ namespace FuncDoodle {
 		return actionPerformed;
 	}
 
-	bool EditorController::PaintEraser(Frame* frame, unsigned long frameI,
+	bool EditorController::PaintEraser(Frame* frame, uint64_t frameI,
 		ToolManager* toolManager, AnimationPlayer* player, int pixelX,
 		int pixelY, bool mouseDown) {
 		if (!mouseDown) {
@@ -163,7 +163,7 @@ namespace FuncDoodle {
 		return actionPerformed;
 	}
 
-	bool EditorController::PaintBucket(Frame* frame, unsigned long frameI,
+	bool EditorController::PaintBucket(Frame* frame, uint64_t frameI,
 		ToolManager* toolManager, AnimationPlayer* player, int pixelX,
 		int pixelY, bool mouseClicked) {
 		if (!mouseClicked || pixelX < 0 || pixelX >= frame->Pixels()->Width() ||
@@ -270,7 +270,7 @@ namespace FuncDoodle {
 	}
 
 	void EditorController::RecordStrokeChange(
-		unsigned long frameI, int x, int y, const Col& prev, const Col& next) {
+		uint64_t frameI, int x, int y, const Col& prev, const Col& next) {
 		if (prev == next) {
 			return;
 		}
@@ -282,8 +282,8 @@ namespace FuncDoodle {
 			m_StrokeIndexByKey.clear();
 		}
 
-		const unsigned long long key =
-			(static_cast<unsigned long long>(static_cast<unsigned int>(y))
+		const uint64_t key =
+			(static_cast<uint64_t>(static_cast<unsigned int>(y))
 				<< 32U) |
 			static_cast<unsigned int>(x);
 		auto it = m_StrokeIndexByKey.find(key);

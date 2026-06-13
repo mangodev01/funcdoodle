@@ -140,7 +140,7 @@ namespace FuncDoodle {
 		}
 
 		// Render frames
-		for (unsigned long i = 0; i < m_Proj->AnimFrameCount(); i++) {
+		for (uint64_t i = 0; i < m_Proj->AnimFrameCount(); i++) {
 			drawList->AddText(font, fontSize,
 				m_SelectedFrame == i
 					? ImVec2(topLeft.x + (frameWidth / 2), bottomRight.y + 10)

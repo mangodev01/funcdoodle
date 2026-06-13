@@ -28,7 +28,7 @@ namespace FuncDoodle {
 		/**
 		 * @brief Creates a draw action for a single pixel change.
 		 */
-		DrawAction(int x, int y, Col prev, Col next, unsigned long frameI,
+		DrawAction(int x, int y, Col prev, Col next, uint64_t frameI,
 			const SharedPtr<ProjectFile>& proj)
 			: m_X(x), m_Y(y), m_Prev(prev), m_Next(next), m_FrameIndex(frameI),
 			  m_Proj(proj) {};
@@ -57,7 +57,7 @@ namespace FuncDoodle {
 		int m_X, m_Y;
 		Col m_Prev;
 		Col m_Next;
-		unsigned long m_FrameIndex;
+		uint64_t m_FrameIndex;
 		WeakPtr<ProjectFile> m_Proj;
 	};
 
@@ -72,7 +72,7 @@ namespace FuncDoodle {
 		/**
 		 * @brief Creates a fill action from a flood-fill operation.
 		 */
-		FillAction(Col next, unsigned long frameI,
+		FillAction(Col next, uint64_t frameI,
 			const SharedPtr<ProjectFile>& proj,
 			std::vector<std::tuple<int, int, Col>> affected)
 			: m_Next(next), m_FrameIndex(frameI), m_Proj(proj),
@@ -102,7 +102,7 @@ namespace FuncDoodle {
 
 		private:
 		Col m_Next;
-		unsigned long m_FrameIndex;
+		uint64_t m_FrameIndex;
 		WeakPtr<ProjectFile> m_Proj;
 		std::vector<std::tuple<int, int, Col>> m_Pixels;
 	};
@@ -129,7 +129,7 @@ namespace FuncDoodle {
 		/**
 		 * @brief Creates a stroke action from a list of pixel changes.
 		 */
-		StrokeAction(unsigned long frameI, const SharedPtr<ProjectFile>& proj,
+		StrokeAction(uint64_t frameI, const SharedPtr<ProjectFile>& proj,
 			std::vector<PixelChange> changes)
 			: m_FrameIndex(frameI), m_Proj(proj),
 			  m_Changes(std::move(changes)) {}
@@ -145,7 +145,7 @@ namespace FuncDoodle {
 		void Redo() override;
 
 		private:
-		unsigned long m_FrameIndex;
+		uint64_t m_FrameIndex;
 		WeakPtr<ProjectFile> m_Proj;
 		std::vector<PixelChange> m_Changes;
 	};

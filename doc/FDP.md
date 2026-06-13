@@ -1,4 +1,4 @@
-# .fdp file format specification
+# .fdp v0.5 file format specification
 
   
 
@@ -15,7 +15,7 @@
 | str  | Must be "FDProj". If it's not this, isn't an .fdp file |
 | int  | Version major |
 | int  | Version minor |
-| unsigned long  | Length of animation in frames |
+| uint64_t  | Length of animation in frames |
 | int  | Animation width |
 | int  | Animation height |
 | int  | Animation FPS |

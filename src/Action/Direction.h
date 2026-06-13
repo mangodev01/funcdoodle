@@ -32,7 +32,7 @@ namespace FuncDoodle {
 	struct MoveSelectionActionContext {
 		public:
 		/** Index of the frame being modified. */
-		unsigned long FrameIndex;
+		uint64_t FrameIndex;
 
 		/** Selection to move (weak reference). */
 		WeakPtr<Selection> Sel;

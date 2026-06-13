@@ -53,7 +53,7 @@ namespace FuncDoodle {
 		 * @param initial_capacity Initial reserved frame capacity.
 		 */
 		LongIndexArray(
-			int width, int height, Col bgCol, unsigned long initialcap = 10);
+			int width, int height, Col bgCol, uint64_t initialcap = 10);
 		~LongIndexArray();
 
 		/**
@@ -74,70 +74,70 @@ namespace FuncDoodle {
 		 *
 		 * @param index Index after which to insert.
 		 */
-		void InsertAfterEmpty(unsigned long index);
+		void InsertAfterEmpty(uint64_t index);
 		/**
 		 * @fn InsertBeforeEmpty
 		 * @brief Inserts an empty frame before an index.
 		 *
 		 * @param index Index before which to insert.
 		 */
-		void InsertBeforeEmpty(unsigned long index);
+		void InsertBeforeEmpty(uint64_t index);
 		/**
 		 * @brief Inserts a frame copy after an index.
 		 *
 		 * @param index Index after which to insert.
 		 * @param value Frame to copy.
 		 */
-		void InsertAfter(unsigned long index, const Frame* value);
+		void InsertAfter(uint64_t index, const Frame* value);
 		/**
 		 * @brief Inserts a frame value after an index.
 		 *
 		 * @param index Index after which to insert.
 		 * @param val Frame value to copy.
 		 */
-		void InsertAfter(unsigned long index, Frame val);
+		void InsertAfter(uint64_t index, Frame val);
 		/**
 		 * @brief Inserts a frame copy before an index.
 		 *
 		 * @param index Index before which to insert.
 		 * @param value Frame to copy.
 		 */
-		void InsertBefore(unsigned long index, const Frame* value);
+		void InsertBefore(uint64_t index, const Frame* value);
 		/**
 		 * @brief Inserts a frame value before an index.
 		 *
 		 * @param index Index before which to insert.
 		 * @param val Frame value to copy.
 		 */
-		void InsertBefore(unsigned long index, Frame val);
+		void InsertBefore(uint64_t index, Frame val);
 		/**
 		 * @fn MoveBackward
 		 * @brief Moves a frame one slot toward the beginning.
 		 *
 		 * @param i Index to move.
 		 */
-		void MoveBackward(unsigned long i);
+		void MoveBackward(uint64_t i);
 		/**
 		 * @fn MoveForward
 		 * @brief Moves a frame one slot toward the end.
 		 *
 		 * @param i Index to move.
 		 */
-		void MoveForward(unsigned long i);
+		void MoveForward(uint64_t i);
 		/**
 		 * @fn Remove
 		 * @brief Removes a frame at an index.
 		 *
 		 * @param index Index to remove.
 		 */
-		void Remove(unsigned long index);
+		void Remove(uint64_t index);
 
 		/** @brief Returns mutable frame access by index. @param index Frame
 		 * index. @return Pointer to the frame. */
-		Frame* operator[](unsigned long index);
+		Frame* operator[](uint64_t index);
 		/** @brief Returns immutable frame access by index. @param index Frame
 		 * index. @return Pointer to the frame. */
-		const Frame* operator[](unsigned long index) const;
+		const Frame* operator[](uint64_t index) const;
 		/**
 		 * @fn Get
 		 * @brief Returns mutable frame access by index.
@@ -145,7 +145,7 @@ namespace FuncDoodle {
 		 * @param index Frame index.
 		 * @return Pointer to the frame.
 		 */
-		Frame* Get(unsigned long index);
+		Frame* Get(uint64_t index);
 
 		/**
 		 * @fn Size
@@ -153,23 +153,23 @@ namespace FuncDoodle {
 		 *
 		 * @return Current frame count.
 		 */
-		[[nodiscard]] unsigned long Size() const { return size; }
+		[[nodiscard]] uint64_t Size() const { return size; }
 		/**
 		 * @fn Capacity
 		 * @brief Returns the reserved frame capacity.
 		 *
 		 * @return Current capacity.
 		 */
-		[[nodiscard]] unsigned long Capacity() const { return m_Capacity; }
+		[[nodiscard]] uint64_t Capacity() const { return m_Capacity; }
 
 		private:
 		std::vector<Frame> m_Data;
-		unsigned long m_Capacity;
-		unsigned long size = 0;
+		uint64_t m_Capacity;
+		uint64_t size = 0;
 		int m_Width;
 		int m_Height;
 		Col m_BG;
 
-		void Resize(unsigned long newCap);
+		void Resize(uint64_t newCap);
 	};
 }  // namespace FuncDoodle
