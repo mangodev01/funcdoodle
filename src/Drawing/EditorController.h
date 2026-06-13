@@ -62,8 +62,8 @@ namespace FuncDoodle {
 			class Frame* Frame =
 				nullptr;  ///< Frame currently being rendered and edited.
 			class Frame* PreviousFrame =
-				nullptr;  ///< Previous frame used for preview rendering.
-			uint64_t Index = 0;  ///< Timeline index of the active frame.
+				nullptr;		 ///< Previous frame used for preview rendering.
+			uint64_t Index = 0;	 ///< Timeline index of the active frame.
 			ToolManager* ToolManager =
 				nullptr;  ///< Tool state used for painting.
 			AnimationPlayer* Player =
@@ -147,6 +147,16 @@ namespace FuncDoodle {
 		 * @return Shared selection pointer.
 		 */
 		SharedPtr<Selection> Sel() { return m_Sel; }
+		/**
+		 * @fn SetSel
+		 * @brief Sets the active selection object.
+		 *
+		 * @param sel Selection to set from.
+		 */
+		void SetSel(SharedPtr<Selection> sel) {
+			m_Sel = sel;
+			m_SquareSel = SquareSelection{};
+		}
 
 		private:
 		bool PaintPencil(Frame* frame, uint64_t frameI,
@@ -162,10 +172,11 @@ namespace FuncDoodle {
 			Frame* frame, ToolManager* toolManager, int pixelX, int pixelY);
 		bool PaintSelect(
 			Frame* frame, ToolManager* toolManager, int pixelX, int pixelY);
-		static void FloodFill(int x, int y, ToolManager* toolManager, Col targetCol, Col fillCol,
-			Frame* targetFrame, std::vector<std::tuple<int, int, Col>>& changed);
-		void RecordStrokeChange(uint64_t frameI, int x, int y,
-			const Col& prev, const Col& next);
+		static void FloodFill(int x, int y, ToolManager* toolManager,
+			Col targetCol, Col fillCol, Frame* targetFrame,
+			std::vector<std::tuple<int, int, Col>>& changed);
+		void RecordStrokeChange(
+			uint64_t frameI, int x, int y, const Col& prev, const Col& next);
 		static void HandleCanvasInput(CanvasContext& context);
 		void ApplyToolAt(CanvasContext& context, const ImageArray* pixels,
 			float startX, float startY, float frameWidth, float frameHeight);

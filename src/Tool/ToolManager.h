@@ -59,7 +59,6 @@ namespace FuncDoodle {
 		Secondary
 	};
 
-
 	/**
 	 * @class ToolManager
 	 * @brief Manages tools in FuncDoodle.
@@ -116,7 +115,8 @@ namespace FuncDoodle {
 		ToolType GetSelectedTool() { return m_SelectedTool; }
 		/**
 		 * @fn GetCol
-		 * @brief Returns the tool color under the first color slot as normalized RGB values.
+		 * @brief Returns the tool color under the first color slot as
+		 * normalized RGB values.
 		 *
 		 * @return Pointer to a 3-float RGB array.
 		 */
@@ -124,7 +124,8 @@ namespace FuncDoodle {
 
 		/**
 		 * @fn GetSecCol
-		 * @brief Returns the tool color under the secondary color slot as normalized RGB values.
+		 * @brief Returns the tool color under the secondary color slot as
+		 * normalized RGB values.
 		 *
 		 * @return Pointer to a 3-float RGB array.
 		 */
@@ -132,7 +133,8 @@ namespace FuncDoodle {
 
 		/**
 		 * @fn SetCol
-		 * @brief Sets the tool color under the first color slot from an 8-bit RGB color.
+		 * @brief Sets the tool color under the first color slot from an 8-bit
+		 * RGB color.
 		 *
 		 * @param col New tool color.
 		 */
@@ -145,7 +147,8 @@ namespace FuncDoodle {
 
 		/**
 		 * @fn SetSecCol
-		 * @brief Sets the tool color under the secondary color slot from an 8-bit RGB color.
+		 * @brief Sets the tool color under the secondary color slot from an
+		 * 8-bit RGB color.
 		 *
 		 * @param col New tool color.
 		 */
@@ -175,11 +178,11 @@ namespace FuncDoodle {
 					break;
 				case Secondary:
 					for (int j = 0; j < 3; j++) {
-						m_SecondaryCol[j] = static_cast<float>(colArr[j]) / 255.0f;
+						m_SecondaryCol[j] =
+							static_cast<float>(colArr[j]) / 255.0f;
 					}
 					break;
 			}
-
 		}
 
 		/**
@@ -188,7 +191,7 @@ namespace FuncDoodle {
 		 *
 		 * @return Pointer to a 3-float RGB array.
 		 */
-		float* GetCurCol() { 
+		float* GetCurCol() {
 			switch (m_CurrentColor) {
 				using enum ColorChoice;
 
@@ -210,7 +213,8 @@ namespace FuncDoodle {
 
 		/**
 		 * @fn GetTolerance
-		 * @brief Returns the current tool tolerance (only applicable to bucket tool).
+		 * @brief Returns the current tool tolerance (only applicable to bucket
+		 * tool).
 		 *
 		 * @return Tool tolerance.
 		 */
@@ -225,7 +229,6 @@ namespace FuncDoodle {
 		void SetSize(int size) { m_Size = size; }
 
 		private:
-
 		ToolType m_SelectedTool = ToolType::Pencil;
 		float m_FirstCol[3] = {0.0f, 0.0f, 0.0f};
 		float m_SecondaryCol[3] = {0.0f, 0.0f, 0.0f};

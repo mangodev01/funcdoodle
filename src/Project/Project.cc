@@ -306,8 +306,7 @@ namespace FuncDoodle {
 		int verMinor = 0;
 		file.read(reinterpret_cast<char*>(&verMinor), sizeof(verMinor));
 
-
-		uint64_t frameCount = 0; // temp val
+		uint64_t frameCount = 0;  // temp val
 		if (verMinor >= 5) {
 			file.read(reinterpret_cast<char*>(&frameCount), sizeof(frameCount));
 		} else {

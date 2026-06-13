@@ -58,7 +58,7 @@ namespace FuncDoodle {
 		[[nodiscard]] WeakPtr<Selection> Sel() const { return m_Sel; }
 
 		private:
-		uint64_t m_FrameIndex;	  ///< Frame index where action occurred
+		uint64_t m_FrameIndex;		  ///< Frame index where action occurred
 		WeakPtr<Selection> m_Sel;	  ///< Target selection
 		int32_t m_Deg;				  ///< Rotation in degrees
 		WeakPtr<ProjectFile> m_Proj;  ///< Owning project
@@ -98,7 +98,7 @@ namespace FuncDoodle {
 		[[nodiscard]] WeakPtr<Selection> Sel() const { return m_Sel; }
 
 		private:
-		uint64_t m_FrameIndex;		///< Frame index of action
+		uint64_t m_FrameIndex;			///< Frame index of action
 		WeakPtr<Selection> m_Sel;		///< Target selection
 		std::vector<Col> m_PrevPixels;	///< Stored pixels for undo
 		WeakPtr<ProjectFile> m_Proj;	///< Owning project
@@ -146,9 +146,7 @@ namespace FuncDoodle {
 		/**
 		 * @brief Returns frame index.
 		 */
-		[[nodiscard]] uint64_t FrameIndex() const {
-			return m_Ctx.FrameIndex;
-		}
+		[[nodiscard]] uint64_t FrameIndex() const { return m_Ctx.FrameIndex; }
 
 		/**
 		 * @brief Returns full context snapshot.

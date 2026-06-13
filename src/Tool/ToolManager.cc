@@ -82,7 +82,8 @@ namespace FuncDoodle {
 			static constexpr uint8_t minTolerance = 1;
 			static constexpr uint8_t maxTolerance = 255;
 
-			ImGui::SliderScalar("##tolerance", ImGuiDataType_U8, &m_Tolerance, &minTolerance, &maxTolerance);
+			ImGui::SliderScalar("##tolerance", ImGuiDataType_U8, &m_Tolerance,
+				&minTolerance, &maxTolerance);
 
 			if (showColorPredicate)
 				ImGui::SameLine();
@@ -100,9 +101,10 @@ namespace FuncDoodle {
 		float* secondaryCol = GetSecCol();
 
 		if (showColorPredicate) {
-			auto drawColorButton = [](const char* id, const float* color, const char* popupName)
-			{
-				if (ImGui::ColorButton(id, ImVec4(color[0], color[1], color[2], 1.0f))) {
+			auto drawColorButton = [](const char* id, const float* color,
+									   const char* popupName) {
+				if (ImGui::ColorButton(
+						id, ImVec4(color[0], color[1], color[2], 1.0f))) {
 					ImGui::OpenPopup(popupName);
 				}
 			};
@@ -123,10 +125,11 @@ namespace FuncDoodle {
 				firstIsPrimary ? secondaryCol : col,
 				firstIsPrimary ? "ColorPickerSecondary" : "ColorPickerFirst");
 
-
 			ImGui::SetCursorPosX(prevCurX - 23);
 
-			if (ImGui::ImageButton("##swap", (ImTextureID)(intptr_t)s_SwapTexId, ImVec2(20, 20)) || m_Keybinds.Get("swap_colors").IsPressed()) {
+			if (ImGui::ImageButton("##swap", (ImTextureID)(intptr_t)s_SwapTexId,
+					ImVec2(20, 20)) ||
+				m_Keybinds.Get("swap_colors").IsPressed()) {
 				if (m_CurrentColor == ColorChoice::Secondary) {
 					m_CurrentColor = ColorChoice::First;
 				} else if (m_CurrentColor == ColorChoice::First) {
@@ -137,7 +140,8 @@ namespace FuncDoodle {
 
 		if (ImGui::BeginPopup("ColorPickerFirst")) {
 			ImGui::PushItemWidth(250);
-			ImGui::ColorPicker3("##color", col, ImGuiColorEditFlags_NoSidePreview);
+			ImGui::ColorPicker3(
+				"##color", col, ImGuiColorEditFlags_NoSidePreview);
 			ImGui::PopItemWidth();
 
 			ImGui::EndPopup();
@@ -145,7 +149,8 @@ namespace FuncDoodle {
 
 		if (ImGui::BeginPopup("ColorPickerSecondary")) {
 			ImGui::PushItemWidth(250);
-			ImGui::ColorPicker3("##secondary_color", secondaryCol, ImGuiColorEditFlags_NoSidePreview);
+			ImGui::ColorPicker3("##secondary_color", secondaryCol,
+				ImGuiColorEditFlags_NoSidePreview);
 			ImGui::PopItemWidth();
 
 			ImGui::EndPopup();
@@ -170,7 +175,8 @@ namespace FuncDoodle {
 		Application* app = Application::Get();
 		ImVec2 pos = ImGui::GetMousePos();
 		// sorry, selection tool, you just look pretty weird as a cursor  :(
-		if (!Application::IsPosInFrame(pos) || m_SelectedTool == ToolType::Select) {
+		if (!Application::IsPosInFrame(pos) ||
+			m_SelectedTool == ToolType::Select) {
 			app->ShowCursor();
 		} else {
 			app->HideCursor();

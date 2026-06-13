@@ -24,3 +24,10 @@ std::vector<ImVec2i> FuncDoodle::SquareSelection::All() {
 
 	return points;
 }
+
+std::vector<ImVec2i> FuncDoodle::ArbitrarySelection::All() {
+	if (!Active)
+		return {};
+
+	return All_;
+}

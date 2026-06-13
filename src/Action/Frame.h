@@ -24,8 +24,7 @@ namespace FuncDoodle {
 		/**
 		 * @brief Creates an empty delete-frame action.
 		 */
-		DeleteFrameAction(
-			uint64_t frameI, const SharedPtr<ProjectFile>& proj)
+		DeleteFrameAction(uint64_t frameI, const SharedPtr<ProjectFile>& proj)
 			: m_Proj(proj), m_FrameIndex(frameI), m_Empty(true),
 			  m_Frame(std::nullopt) {}
 
@@ -35,8 +34,8 @@ namespace FuncDoodle {
 		 * @param frame Frame to delete (copied internally).
 		 * @param proj Project that owns the frame.
 		 */
-		DeleteFrameAction(uint64_t frameI, Frame* frame,
-			const SharedPtr<ProjectFile>& proj)
+		DeleteFrameAction(
+			uint64_t frameI, Frame* frame, const SharedPtr<ProjectFile>& proj)
 			: m_Proj(proj), m_FrameIndex(frameI), m_Empty(frame == nullptr),
 			  m_Frame(frame ? std::optional<Frame>(*frame) : std::nullopt) {}
 
@@ -51,7 +50,7 @@ namespace FuncDoodle {
 		void Redo() override;
 
 		private:
-		uint64_t m_FrameIndex;	   ///< Frame index affected
+		uint64_t m_FrameIndex;		   ///< Frame index affected
 		bool m_Empty;				   ///< Whether frame data exists
 		std::optional<Frame> m_Frame;  ///< Stored frame data for undo
 		WeakPtr<ProjectFile> m_Proj;   ///< Owning project
@@ -66,16 +65,15 @@ namespace FuncDoodle {
 		/**
 		 * @brief Creates an empty insert-frame action.
 		 */
-		InsertFrameAction(
-			uint64_t frameI, const SharedPtr<ProjectFile>& proj)
+		InsertFrameAction(uint64_t frameI, const SharedPtr<ProjectFile>& proj)
 			: m_Proj(proj), m_FrameIndex(frameI), m_Empty(true),
 			  m_Frame(std::nullopt) {}
 
 		/**
 		 * @brief Creates an insert-frame action with frame data.
 		 */
-		InsertFrameAction(uint64_t frameI, Frame* frame,
-			const SharedPtr<ProjectFile>& proj)
+		InsertFrameAction(
+			uint64_t frameI, Frame* frame, const SharedPtr<ProjectFile>& proj)
 			: m_FrameIndex(frameI), m_Proj(proj), m_Empty(frame == nullptr),
 			  m_Frame(frame ? std::optional<Frame>(*frame) : std::nullopt) {}
 
@@ -90,7 +88,7 @@ namespace FuncDoodle {
 		void Redo() override;
 
 		private:
-		uint64_t m_FrameIndex;	   ///< Frame index affected
+		uint64_t m_FrameIndex;		   ///< Frame index affected
 		bool m_Empty;				   ///< Whether frame data exists
 		std::optional<Frame> m_Frame;  ///< Stored frame data
 		WeakPtr<ProjectFile> m_Proj;   ///< Owning project
@@ -104,15 +102,14 @@ namespace FuncDoodle {
 		public:
 		/** @brief Creates an action that shifts a frame one slot to the left.
 		 */
-		MoveFrameLeftAction(
-			uint64_t frameI, const SharedPtr<ProjectFile>& proj)
+		MoveFrameLeftAction(uint64_t frameI, const SharedPtr<ProjectFile>& proj)
 			: m_Proj(proj), m_FrameIndex(frameI) {}
 
 		void Undo() override;
 		void Redo() override;
 
 		private:
-		uint64_t m_FrameIndex;	  ///< Frame index
+		uint64_t m_FrameIndex;		  ///< Frame index
 		WeakPtr<ProjectFile> m_Proj;  ///< Owning project
 	};
 
@@ -132,7 +129,7 @@ namespace FuncDoodle {
 		void Redo() override;
 
 		private:
-		uint64_t m_FrameIndex;	  ///< Frame index
+		uint64_t m_FrameIndex;		  ///< Frame index
 		WeakPtr<ProjectFile> m_Proj;  ///< Owning project
 	};
 
@@ -161,7 +158,7 @@ namespace FuncDoodle {
 		[[nodiscard]] int32_t Deg() const { return m_Deg; }
 
 		private:
-		uint64_t m_FrameIndex;	  ///< Frame index
+		uint64_t m_FrameIndex;		  ///< Frame index
 		int32_t m_Deg;				  ///< Rotation angle
 		WeakPtr<ProjectFile> m_Proj;  ///< Owning project
 	};

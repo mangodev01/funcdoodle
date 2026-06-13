@@ -23,7 +23,8 @@ namespace FuncDoodle {
 			for (const std::tuple<int, int, Col>& xyc : m_Pixels) {
 				proj->AnimFrames()
 					->Get(m_FrameIndex)
-					->SetPixel(std::get<0>(xyc), std::get<1>(xyc), std::get<2>(xyc));
+					->SetPixel(
+						std::get<0>(xyc), std::get<1>(xyc), std::get<2>(xyc));
 			}
 		}
 	}

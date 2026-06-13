@@ -72,6 +72,33 @@ namespace FuncDoodle {
 		std::vector<ImVec2i> All() override;
 	};
 
+	/**
+	 * @struct ArbitrarySelection
+	 * @brief Arbitrary selection defined by a list of selected pixels.
+	 *
+	 * Represents an arbitrary selection region using an std::vector of pixel
+	 * coords. Computationally expensive, only used when you invert a selection.
+	 */
+	struct ArbitrarySelection : public Selection {
+		/**
+		 * @var Active
+		 * @brief Whether the arbitrary selection is currently active.
+		 */
+		bool Active;
+
+		/**
+		 * @var Coords
+		 * @brief Every selected coordinate
+		 */
+		std::vector<ImVec2i> All_;
+
+		/**
+		 * @fn All()
+		 * @brief Returns every selected coordinate.
+		 */
+		std::vector<ImVec2i> All() override;
+	};
+
 	// will add more selection types later on if i feel like it (eg
 	// CircleSelection, LassoSelection)
 }  // namespace FuncDoodle

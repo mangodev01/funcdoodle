@@ -97,9 +97,7 @@ namespace FuncDoodle {
 		 *
 		 * @return Current frame index.
 		 */
-		[[nodiscard]] constexpr uint64_t CurFrame() const {
-			return m_CurFrame;
-		}
+		[[nodiscard]] constexpr uint64_t CurFrame() const { return m_CurFrame; }
 		/**
 		 * @fn SetCurFrame
 		 * @brief Sets the current playback frame index.

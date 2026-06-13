@@ -1,7 +1,9 @@
 #include "UI/UIManager.h"
 #include "Asset/LoadedAssets.h"
 #include "Conf/Constants.h"
+#include "Conf/FuncPCH.h"
 #include "Core/App.h"
+#include "Selection/Selection.h"
 #include "UI/ImUtil.h"
 #include "UI/Themes.h"
 #include "Util/Ptr.h"
@@ -9,6 +11,7 @@
 #include <algorithm>
 #include <imgui.h>
 #include <optional>
+#include <unordered_set>
 
 namespace FuncDoodle {
 	UIManager::UIManager() {
@@ -462,6 +465,40 @@ namespace FuncDoodle {
 							app->Import(Application::Where::After);
 						}
 
+						ImGui::EndMenu();
+					}
+
+					if (ImGui::BeginMenu("Selection")) {
+						if (ImGui::MenuItem("Invert")) {
+							SharedPtr<Selection> selection =
+								app->GetController()->Sel();
+
+							std::vector<ImVec2i> all =
+								selection == nullptr ? std::vector<ImVec2i>{}
+													 : selection->All();
+							// hehe musescore reference whoa
+							std::vector<ImVec2i> newAll;
+
+							std::unordered_set<ImVec2i, ImUtil::ImVec2iHash,
+								ImUtil::ImVec2iEqual>
+								selSet(all.begin(), all.end());
+
+							SharedPtr<ProjectFile> proj = app->GetCurProj();
+
+							for (int y = 0; y < proj->AnimHeight(); y++) {
+								for (int x = 0; x < proj->AnimWidth(); x++) {
+									if (!selSet.contains(ImVec2i(x, y))) {
+										newAll.emplace_back(x, y);
+									}
+								}
+							}
+
+							auto sel = std::make_shared<ArbitrarySelection>();
+							sel->Active = true;
+							sel->All_ = newAll;
+
+							app->GetController()->SetSel(sel);
+						}
 						ImGui::EndMenu();
 					}
 

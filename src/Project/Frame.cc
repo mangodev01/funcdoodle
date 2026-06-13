@@ -383,6 +383,43 @@ namespace FuncDoodle {
 				case Direction::None:
 					break;
 			}
+		} else if (auto* arbSel =
+					   dynamic_cast<ArbitrarySelection*>(selPtr.get())) {
+			auto& pixels = arbSel->All_;
+			switch (moveDir) {
+				case Direction::Left:
+					if (std::ranges::all_of(
+							pixels, [](const ImVec2i& p) { return p.x > 0; })) {
+						for (auto& p : pixels)
+							p.x--;
+					}
+					break;
+				case Direction::Right:
+					if (std::ranges::all_of(pixels, [this](const ImVec2i& p) {
+							return p.x < Width() - 1;
+						})) {
+						for (auto& p : pixels)
+							p.x++;
+					}
+					break;
+				case Direction::Up:
+					if (std::ranges::all_of(
+							pixels, [](const ImVec2i& p) { return p.y > 0; })) {
+						for (auto& p : pixels)
+							p.y--;
+					}
+					break;
+				case Direction::Down:
+					if (std::ranges::all_of(pixels, [this](const ImVec2i& p) {
+							return p.y < Height() - 1;
+						})) {
+						for (auto& p : pixels)
+							p.y++;
+					}
+					break;
+				case Direction::None:
+					break;
+			}
 		}
 	}
 }  // namespace FuncDoodle

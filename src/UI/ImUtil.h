@@ -271,4 +271,16 @@ namespace FuncDoodle::ImUtil {
 
 		return username;
 	}
+
+	struct ImVec2iHash {
+		size_t operator()(const ImVec2i& v) const {
+			return std::hash<int>()(v.x) ^ (std::hash<int>()(v.y) << 32);
+		}
+	};
+	struct ImVec2iEqual {
+		bool operator()(const ImVec2i& a, const ImVec2i& b) const {
+			return a.x == b.x && a.y == b.y;
+		}
+	};
+
 }  // namespace FuncDoodle::ImUtil

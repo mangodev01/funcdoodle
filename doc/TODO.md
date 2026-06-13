@@ -21,8 +21,6 @@
 - [x] consistent first/secondary color swapping
 - [x] add bucket tool tolerance
 - [x] replace .fdp unsigned long frame indices with uint64_t for more consistency across various systems
-- [ ] non-destructive moving of selections
-- [ ] copy & pasting selections
 - [ ] qol stuff
 - [ ] i18n
 - [ ] fix infinite tech debt (wip)
@@ -33,3 +31,5 @@
 - [ ] gzip compression for .fdp
 - [ ] implement animations project-wide with ImAnim
 - [ ] shader system where you can select some frames, right click, click add shader, then literally **type out a GLSL shader** and AS you update it, the shader system will literally compile **what you're typing** and provide *real-time* ***imgui sliders and or imgui inputs***
+- [ ] non-destructive moving of selections (currently deemed too difficult due to the current overall project architecture)
+- [ ] copy & pasting selections (depends on moving)

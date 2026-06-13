@@ -100,35 +100,40 @@ namespace FuncDoodle {
 			case ToolType::Pencil:
 				if (ImGui::IsItemHovered()) {
 					ImGui::BeginTooltip();
-					ImGui::Text("Pencil (%s)", static_cast<const char*>(keys.Get("pencil")));
+					ImGui::Text("Pencil (%s)",
+						static_cast<const char*>(keys.Get("pencil")));
 					ImGui::EndTooltip();
 				}
 				break;
 			case ToolType::Eraser:
 				if (ImGui::IsItemHovered()) {
 					ImGui::BeginTooltip();
-					ImGui::Text("Eraser (%s)", static_cast<const char*>(keys.Get("eraser")));
+					ImGui::Text("Eraser (%s)",
+						static_cast<const char*>(keys.Get("eraser")));
 					ImGui::EndTooltip();
 				}
 				break;
 			case ToolType::Bucket:
 				if (ImGui::IsItemHovered()) {
 					ImGui::BeginTooltip();
-					ImGui::Text("Bucket (%s)", static_cast<const char*>(keys.Get("bucket")));
+					ImGui::Text("Bucket (%s)",
+						static_cast<const char*>(keys.Get("bucket")));
 					ImGui::EndTooltip();
 				}
 				break;
 			case ToolType::Picker:
 				if (ImGui::IsItemHovered()) {
 					ImGui::BeginTooltip();
-					ImGui::Text("Picker (%s)", static_cast<const char*>(keys.Get("picker")));
+					ImGui::Text("Picker (%s)",
+						static_cast<const char*>(keys.Get("picker")));
 					ImGui::EndTooltip();
 				}
 				break;
 			case ToolType::Select:
 				if (ImGui::IsItemHovered()) {
 					ImGui::BeginTooltip();
-					ImGui::Text("Select (%s)", static_cast<const char*>(keys.Get("select")));
+					ImGui::Text("Select (%s)",
+						static_cast<const char*>(keys.Get("select")));
 					ImGui::EndTooltip();
 				}
 				break;

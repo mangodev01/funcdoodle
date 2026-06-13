@@ -6,6 +6,7 @@
 #include "Core/Player.h"
 #include "Tool/Tool.h"
 #include "Tool/ToolManager.h"
+#include "UI/ImUtil.h"
 #include "imgui.h"
 #include "imgui_internal.h"
 
@@ -13,6 +14,7 @@
 #include <cmath>
 #include <cstring>
 #include <stack>
+#include <unordered_set>
 
 namespace FuncDoodle {
 	const float c_StatusBarHeight = 20.0f;
@@ -185,12 +187,14 @@ namespace FuncDoodle {
 		}
 
 		std::vector<std::tuple<int, int, Col>> pixelsChangedByBucketTool;
-		FloodFill(pixelX, pixelY, toolManager, curPixelCol, fillColor, frame, pixelsChangedByBucketTool);
+		FloodFill(pixelX, pixelY, toolManager, curPixelCol, fillColor, frame,
+			pixelsChangedByBucketTool);
 		if (pixelsChangedByBucketTool.empty()) {
 			return false;
 		}
 
-		FillAction action(fillColor, frameI, player->Proj(), pixelsChangedByBucketTool);
+		FillAction action(
+			fillColor, frameI, player->Proj(), pixelsChangedByBucketTool);
 		player->Proj()->PushUndoable(action);
 		return true;
 	}
@@ -228,8 +232,9 @@ namespace FuncDoodle {
 		return true;
 	}
 
-	void EditorController::FloodFill(int x, int y, ToolManager* toolManager, Col targetCol, Col fillCol,
-		Frame* targetFrame, std::vector<std::tuple<int, int, Col>>& changed) {
+	void EditorController::FloodFill(int x, int y, ToolManager* toolManager,
+		Col targetCol, Col fillCol, Frame* targetFrame,
+		std::vector<std::tuple<int, int, Col>>& changed) {
 		if (!targetFrame || !targetFrame->Pixels()) {
 			return;
 		}
@@ -255,11 +260,14 @@ namespace FuncDoodle {
 			}
 
 			Col currentCol = targetFrame->Pixels()->Get(currentX, currentY);
-			if (colDist(currentCol, targetCol) > toolManager->GetTolerance() * 3 || currentCol == fillCol) {
+			if (colDist(currentCol, targetCol) >
+					toolManager->GetTolerance() * 3 ||
+				currentCol == fillCol) {
 				continue;
 			}
 
-			changed.emplace_back(currentX, currentY, targetFrame->Pixels()->Get(currentX, currentY));
+			changed.emplace_back(currentX, currentY,
+				targetFrame->Pixels()->Get(currentX, currentY));
 			targetFrame->SetPixel(currentX, currentY, fillCol);
 
 			pixelStack.emplace(currentX + 1, currentY);
@@ -283,8 +291,7 @@ namespace FuncDoodle {
 		}
 
 		const uint64_t key =
-			(static_cast<uint64_t>(static_cast<unsigned int>(y))
-				<< 32U) |
+			(static_cast<uint64_t>(static_cast<unsigned int>(y)) << 32U) |
 			static_cast<unsigned int>(x);
 		auto it = m_StrokeIndexByKey.find(key);
 		if (it == m_StrokeIndexByKey.end()) {
@@ -522,10 +529,10 @@ namespace FuncDoodle {
 						ImVec2 max(
 							clipOriginX + clipWidth, clipOriginY + clipHeight);
 
-						Col col =
-							tool == ToolType::Pencil
-								? Col::FromFloat3(context.ToolManager->GetCurCol())
-								: context.Player->Proj()->BgCol();
+						Col col = tool == ToolType::Pencil
+									  ? Col::FromFloat3(
+											context.ToolManager->GetCurCol())
+									  : context.Player->Proj()->BgCol();
 
 						ImGui::GetForegroundDrawList()->AddRectFilled(min, max,
 							IM_COL32(col.r, col.g, col.b, g_AlphaOpaque));
@@ -589,12 +596,66 @@ namespace FuncDoodle {
 		float gap = 6.0f;
 		float offset = fmod(t * 60.0f, dash + gap);
 
-		float screenMinX = startX + (m_SquareSel.Min.x * context.PixelScale);
-		float screenMinY = startY + (m_SquareSel.Min.y * context.PixelScale);
-		float screenMaxX =
-			startX + ((m_SquareSel.Max.x + 1) * context.PixelScale);
-		float screenMaxY =
-			startY + ((m_SquareSel.Max.y + 1) * context.PixelScale);
+		int minX, minY, maxX, maxY;
+
+		if (m_SquareSel.Active) {
+			minX = m_SquareSel.Min.x;
+			minY = m_SquareSel.Min.y;
+			maxX = m_SquareSel.Max.x;
+			maxY = m_SquareSel.Max.y;
+		} else if (auto* sqSel = dynamic_cast<SquareSelection*>(m_Sel.get())) {
+			minX = std::min(sqSel->Min.x, sqSel->Max.x);
+			minY = std::min(sqSel->Min.y, sqSel->Max.y);
+			maxX = std::max(sqSel->Min.x, sqSel->Max.x);
+			maxY = std::max(sqSel->Min.y, sqSel->Max.y);
+		} else if (auto* arbSel =
+					   dynamic_cast<ArbitrarySelection*>(m_Sel.get())) {
+			auto& points = arbSel->All_;
+			if (points.empty())
+				return;
+			std::unordered_set<ImVec2i, ImUtil::ImVec2iHash,
+				ImUtil::ImVec2iEqual>
+				selPts(points.begin(), points.end());
+			float ps = context.PixelScale;
+			uint32_t antCol = IM_COL32(g_DashColorPrimary, g_DashColorPrimary,
+				g_DashColorPrimary, g_AlphaOpaque);
+			for (const auto& p : points) {
+				float px = startX + (p.x * ps);
+				float py = startY + (p.y * ps);
+				if (!selPts.contains(ImVec2i(p.x, p.y - 1)))
+					for (float x = px - offset; x < px + ps; x += dash + gap)
+						if (x < px + ps)
+							drawList->AddLine(ImVec2(std::max(x, px), py),
+								ImVec2(std::min(x + dash, px + ps), py),
+								antCol);
+				if (!selPts.contains(ImVec2i(p.x, p.y + 1)))
+					for (float x = px - offset; x < px + ps; x += dash + gap)
+						if (x < px + ps)
+							drawList->AddLine(ImVec2(std::max(x, px), py + ps),
+								ImVec2(std::min(x + dash, px + ps), py + ps),
+								antCol);
+				if (!selPts.contains(ImVec2i(p.x - 1, p.y)))
+					for (float y = py - offset; y < py + ps; y += dash + gap)
+						if (y < py + ps)
+							drawList->AddLine(ImVec2(px, std::max(y, py)),
+								ImVec2(px, std::min(y + dash, py + ps)),
+								antCol);
+				if (!selPts.contains(ImVec2i(p.x + 1, p.y)))
+					for (float y = py - offset; y < py + ps; y += dash + gap)
+						if (y < py + ps)
+							drawList->AddLine(ImVec2(px + ps, std::max(y, py)),
+								ImVec2(px + ps, std::min(y + dash, py + ps)),
+								antCol);
+			}
+			return;
+		} else {
+			return;
+		}
+
+		float screenMinX = startX + (minX * context.PixelScale);
+		float screenMinY = startY + (minY * context.PixelScale);
+		float screenMaxX = startX + ((maxX + 1) * context.PixelScale);
+		float screenMaxY = startY + ((maxY + 1) * context.PixelScale);
 
 		for (float x = screenMinX - offset; x < screenMaxX; x += dash + gap)
 			drawList->AddLine({x, screenMinY},
