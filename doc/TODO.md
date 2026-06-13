@@ -21,6 +21,7 @@
 - [x] consistent first/secondary color swapping
 - [x] add bucket tool tolerance
 - [x] replace .fdp unsigned long frame indices with uint64_t for more consistency across various systems
+- [x] implement selection invertion
 - [ ] qol stuff
 - [ ] i18n
 - [ ] fix infinite tech debt (wip)
